@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Governance Structure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #1a202c;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 1.2rem 2rem;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: #4a5568;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 100px 2rem 4rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #718096;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Organizational Chart Styles */
+        .org-chart {
+            background: white;
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .org-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #667eea;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .org-level {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .org-node {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .org-node:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+        }
+
+        .org-node-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .org-node-count {
+            font-size: 0.9rem;
+            color: #718096;
+        }
+
+        .org-connector {
+            width: 2px;
+            height: 30px;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            margin: 0 auto;
+            opacity: 0.3;
+        }
+
+        .org-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.15);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: #718096;
+            margin-top: 0.5rem;
+            font-weight: 600;
+        }
+
+        .legend-wrapper {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .legend-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #667eea;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f7fafc;
+            border-radius: 12px;
+        }
+
+        .badge {
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .badge-elected {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+        }
+
+        .badge-appointed {
+            background: linear-gradient(135deg, #ed8936, #dd6b20);
+            color: white;
+            box-shadow: 0 4px 12px rgba(237, 137, 54, 0.3);
+        }
+
+        .badge-hybrid {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #2d3748;
+        }
+
+        .cards-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.15);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .card-description {
+            color: #4a5568;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .card-details {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .card-details strong {
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+
+        .card-details ul {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .card-details li {
+            padding: 0.6rem 0;
+            padding-left: 1.8rem;
+            position: relative;
+            color: #2d3748;
+        }
+
+        .card-details li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .subsection {
+            margin-left: 2rem;
+            margin-top: 2rem;
+            padding-left: 2rem;
+            border-left: 3px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .subsection-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #764ba2;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #fef5e7 0%, #fdebd0 100%);
+            border-left: 4px solid #f59e0b;
+            border-radius: 12px;
+            padding: 1.8rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.1);
+        }
+
+        .info-box-title {
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .info-box-content {
+            color: #78350f;
+            line-height: 1.7;
+        }
+
+        .divider {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .divider-line {
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, #667eea, #764ba2, transparent);
+            border-radius: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: 4rem;
+            color: white;
+        }
+
+        footer p {
+            margin: 0.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .subsection {
+                margin-left: 1rem;
+                padding-left: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .org-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-content">
+            <div class="logo">🏛️ Server Governance</div>
+            <div class="nav-links">
+                <a href="#overview">Overview</a>
+                <a href="#leadership">Leadership</a>
+                <a href="#staff">Staff</a>
+                <a href="#sectors">Sectors</a>
+                <a href="#citizens">Citizens</a>
+                <a href="#ems">ems</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Server Governance</h1>
+            <p>democratic structure empowering</p>
+        </div>
+
+        <div class="stats-grid" id="overview">
+            <div class="stat-card">
+                <div class="stat-number">7</div>
+                <div class="stat-label">Leadership Tiers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">15+</div>
+                <div class="stat-label">Staff Positions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">4</div>
+                <div class="stat-label">City Sectors</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">2 Weeks</div>
+                <div class="stat-label">Election Cycle</div>
+            </div>
+        </div>
+
+        <div class="org-chart">
+            <div class="org-title">📊 Organizational Hierarchy</div>
+            
+            <div class="org-level">
+                <div class="org-node" style="max-width: 400px; margin: 0 auto; background: linear-gradient(135deg, #fef3c7, #fde68a);">
+                    <div class="org-node-title">👑 Server Owners</div>
+                    <div class="org-node-count">3 Positions • Hidden Authority</div>
+                </div>
+            </div>
+
+            <div class="org-connector"></div>
+
+            <div class="org-level">
+                <div class="org-node" style="max-width: 500px; margin: 0 auto; background: linear-gradient(135deg, #dbeafe, #bfdbfe);">
+                    <div class="org-node-title">⭐ Director/President</div>
+                    <div class="org-node-count">Elected • 2-Week Term</div>
+                </div>
+            </div>
+
+            <div class="org-connector"></div>
+
+            <div class="org-level">
+                <div class="org-grid">
+                    <div class="org-node" style="background: linear-gradient(135deg, #e0e7ff, #c7d2fe);">
+                        <div class="org-node-title">Management Layer</div>
+                        <div class="org-node-count">2 Positions</div>
+                    </div>
+                    <div class="org-node" style="background: linear-gradient(135deg, #ddd6fe, #c4b5fd);">
+                        <div class="org-node-title">Head of Staff</div>
+                        <div class="org-node-count">2 Positions</div>
+                    </div>
+                    <div class="org-node" style="background: linear-gradient(135deg, #fce7f3, #fbcfe8);">
+                        <div class="org-node-title">Staff Team</div>
+                        <div class="org-node-count">6 Positions</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="org-connector"></div>
+
+            <div class="org-level">
+                <div class="org-grid">
+                    <div class="org-node" style="background: linear-gradient(135deg, #d1fae5, #a7f3d0);">
+                        <div class="org-node-title">Business Sector</div>
+                        <div class="org-node-count">Licensed Operations</div>
+                    </div>
+                    <div class="org-node" style="background: linear-gradient(135deg, #fed7aa, #fdba74);">
+                        <div class="org-node-title">Industrial Sector</div>
+                        <div class="org-node-count">Open Employment</div>
+                    </div>
+                    <div class="org-node" style="background: linear-gradient(135deg, #fecaca, #fca5a5);">
+                        <div class="org-node-title">Emergency Services</div>
+                        <div class="org-node-count">Whitelisted</div>
+                    </div>
+                    <div class="org-node" style="background: linear-gradient(135deg, #e9d5ff, #d8b4fe);">
+                        <div class="org-node-title">Community Programs</div>
+                        <div class="org-node-count">Events & Engagement</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="org-connector"></div>
+
+            <div class="org-level">
+                <div class="org-node" style="max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #f3f4f6, #e5e7eb);">
+                    <div class="org-node-title">👥 Citizens / Players</div>
+                    <div class="org-node-count">All Server Members</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="legend-wrapper">
+            <div class="legend-title">🏷️ Position Types</div>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <span class="badge badge-elected">Elected</span>
+                    <span>Position filled by player vote</span>
+                </div>
+                <div class="legend-item">
+                    <span class="badge badge-appointed">Appointed</span>
+                    <span>Position filled by higher authority</span>
+                </div>
+                <div class="legend-item">
+                    <span class="badge badge-hybrid">Elected/Appointed</span>
+                    <span>Can be filled by either method</span>
+                </div>
+            </div>
+        </div>
+
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">👑</div>
+                <h2 class="section-title">Server Ownership</h2>
+            </div>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Owners (3)</div>
+                    </div>
+                    <div class="card-description">
+                        Hidden, ultimate authority over the entire FiveM server. Maintain complete oversight of all operations, infrastructure, and governance while remaining behind the scenes.
+                    </div>
+                    <div class="info-box">
+                        <div class="info-box-title">⚠️ Important Note</div>
+                        <div class="info-box-content">
+                            Ownership operates behind the scenes and rarely intervenes in day-to-day governance, allowing democratic processes to function independently.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider">
+            <div class="divider-line"></div>
+        </div>
+
+        <section class="section" id="leadership">
+            <div class="section-header">
+                <div class="section-icon">⭐</div>
+                <h2 class="section-title">Executive Leadership</h2>
+            </div>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Director / President</div>
+                        <span class="badge badge-elected">Elected</span>
+                    </div>
+                    <div class="card-description">
+                        Highest elected official serving 2-week terms. Leads the city government, sets policy direction, and represents all citizens.
+                    </div>
+                    <div class="card-details">
+                        <strong>Term & Selection</strong>
+                        <ul>
+                            <li>2-week term (renewable through re-election)</li>
+                            <li>Elected by player vote</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">📊 Executive Team</div>
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Deputy Director</div>
+                                <span class="badge badge-hybrid">Elected/Appointed</span>
+                            </div>
+                            <div class="card-description">
+                                Second-in-command to the Director/President. Assists with executive duties and assumes leadership in the Director's absence.
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Assistant Director</div>
+                                <span class="badge badge-appointed">Appointed</span>
+                            </div>
+                            <div class="card-description">
+                                Supports the Director and Deputy Director with administrative tasks, special projects, and departmental coordination.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider">
+            <div class="divider-line"></div>
+        </div>
+
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">🎯</div>
+                <h2 class="section-title">Management Layer</h2>
+            </div>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Director of Community Coordination</div>
+                        <span class="badge badge-hybrid">Elected/Appointed</span>
+                    </div>
+                    <div class="card-description">
+                        Senior management position responsible for ensuring effective coordination between all city departments and maintaining citizen engagement.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Community Coordinator</div>
+                        <span class="badge badge-hybrid">Elected/Appointed</span>
+                    </div>
+                    <div class="card-description">
+                        Works directly with citizens to facilitate engagement, gather feedback, and implement community programs under the Director's guidance.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider">
+            <div class="divider-line"></div>
+        </div>
+
+        <section class="section" id="staff">
+            <div class="section-header">
+                <div class="section-icon">🛡️</div>
+                <h2 class="section-title">Head of Staff</h2>
+            </div>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Head of Staff</div>
+                        <span class="badge badge-hybrid">Elected/Appointed</span>
+                    </div>
+                    <div class="card-description">
+                        Supreme authority over all staff operations. Manages the staff team, enforces server rules, and ensures quality gameplay experience.
+                    </div>
+                    <div class="card-details">
+                        <strong>Selection Method</strong>
+                        <ul>
+                            <li>Elected by players or appointed by Director</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Deputy Head of Staff</div>
+                                <span class="badge badge-appointed">Appointed</span>
+                            </div>
+                            <div class="card-description">
+                                Second-in-command of the staff team, supporting the Head of Staff and assuming leadership responsibilities in their absence.
+                            </div>
+                            <div class="card-details">
+                                <strong>Appointed By</strong>
+                                <ul>
+                                    <li>Head of Staff or Director</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider">
+            <div class="divider-line"></div>
+        </div>
+
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">👥</div>
+                <h2 class="section-title">Staff Team</h2>
+            </div>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Senior Administrator</div>
+                        <span class="badge badge-hybrid">Elected/Appointed</span>
+                    </div>
+                    <div class="card-description">
+                        Handles licensing, sector approvals, and major server operations.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Administrator</div>
+                        <span class="badge badge-hybrid">Elected/Appointed</span>
+                    </div>
+                    <div class="card-description">
+                        Supports Senior Admin with day-to-day administrative tasks and player support.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Senior Moderator</div>
+                        <span class="badge badge-hybrid">Elected/Appointed</span>
+                    </div>
+                    <div class="card-description">
+                        Rule enforcement leader who supervises Moderators and handles serious violations.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Moderator</div>
+                        <span class="badge badge-hybrid">Elected/Appointed</span>
+                    </div>
+                    <div class="card-description">
+                        Enforces server rules, assists with events, and maintains community standards.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Event Director</div>
+                        <span class="badge badge-hybrid">Elected/Appointed</span>
+                    </div>
+                    <div class="card-description">
+                        Plans and oversees all server events, festivals, and public gatherings.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Event Staff / Community Managers</div>
+                        <span class="badge badge-hybrid">Elected/Appointed</span>
+                    </div>
+                    <div class="card-description">
+                        Organizes events, engages citizens, and maintains community spirit through regular activities.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider">
+            <div class="divider-line"></div>
+        </div>
+
+        <section class="section" id="sectors">
+            <div class="section-header">
+                <div class="section-icon">🏙️</div>
+                <h2 class="section-title">City Sectors</h2>
+            </div>
+
+            <div class="info-box">
+                <div class="info-box-title">📋 Sector Overview</div>
+                <div class="info-box-content">
+                    All city sectors operate under government supervision to ensure proper licensing, compliance, and service to citizens.
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">💼 Business Sector</div>
+                <div class="card">
+                    <div class="card-title">Business Operations</div>
+                    <div class="card-description">
+                        The economic engine of the city, encompassing all commercial enterprises.
+                    </div>
+                    <div class="card-details">
+                        <strong>Key Points</strong>
+                        <ul>
+                            <li>All businesses require government licenses</li>
+                            <li>Admins approve new businesses and monitor compliance</li>
+                            <li>Includes shops, restaurants, dealerships, and services</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">⚙️ Industrial Sector</div>
+                <div class="card">
+                    <div class="card-title">Industrial Operations</div>
+                    <div class="card-description">
+                        Manual labor and resource production jobs.
+                    </div>
+                    <div class="card-details">
+                        <strong>Details</strong>
+                        <ul>
+                            <li>Jobs: Mining, factories, non-whitelisted labor</li>
+                            <li>Overseen by: Director of Industry & Resources (Appointed)</li>
+                            <li>Open to all citizens without application</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">🚨 Emergency Services</div>
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-title">Police Department</div>
+                        <div class="card-description">
+                            Law enforcement agency maintaining order and safety.
+                        </div>
+                        <div class="card-details">
+                            <strong>Leadership & Operations</strong>
+                            <ul>
+                                <li>Leadership: Chief of Police (Government Appointed)</li>
+                                <li>Whitelisted positions requiring applications</li>
+                                <li>Handles crime prevention, investigations, and arrests</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-title">Emergency Medical Services</div>
+                        <div class="card-description">
+                            Medical response team providing healthcare and emergency treatment.
+                        </div>
+                        <div class="card-details">
+                            <strong>Leadership & Operations</strong>
+                            <ul>
+                                <li>Leadership: Chief of EMS</li>
+                                <li>Whitelisted medical professionals</li>
+                                <li>Responds to injuries, accidents, and medical emergencies</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-title">Fire Department</div>
+                        <div class="card-description">
+                            Fire suppression and rescue operations.
+                        </div>
+                        <div class="card-details">
+                            <strong>Leadership & Operations</strong>
+                            <ul>
+                                <li>Leadership: Fire Chief</li>
+                                <li>Whitelisted firefighters and rescue personnel</li>
+                                <li>Handles fires, vehicle accidents, and rescue operations</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-title">Department of Justice (DOJ)</div>
+                        <div class="card-description">
+                            Legal system managing courts, prosecution, and judicial proceedings.
+                        </div>
+                        <div class="card-details">
+                            <strong>Leadership & Operations</strong>
+                            <ul>
+                                <li>Leadership: Attorney General / Chief Justice</li>
+                                <li>Whitelisted judges, attorneys, and legal staff</li>
+                                <li>Handles trials, legal cases, and constitutional matters</li>
+                                <li>Prosecutes criminals and defends citizens' rights</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">🎭 Community & Civic Engagement</div>
+                <div class="card">
+                    <div class="card-title">Community Programs</div>
+                    <div class="card-description">
+                        Public-facing initiatives to enhance citizen experience.
+                    </div>
+                    <div class="card-details">
+                        <strong>Activities</strong>
+                        <ul>
+                            <li>Public events managed by Event Staff</li>
+                            <li>Community programs overseen by Community Coordinator</li>
+                            <li>Citizen engagement initiatives and town halls</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider">
+            <div class="divider-line"></div>
+        </div>
+
+        <section class="section" id="citizens">
+            <div class="section-header">
+                <div class="section-icon">👤</div>
+                <h2 class="section-title">Citizens / Players</h2>
+            </div>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-title">Employed Citizens</div>
+                    <div class="card-description">
+                        Players actively working in various sectors of the economy.
+                    </div>
+                    <div class="card-details">
+                        <strong>Employment Categories</strong>
+                        <ul>
+                            <li>Business: Shop owners, employees, managers</li>
+                            <li>Industrial: Miners, factory workers, laborers</li>
+                            <li>Government: Administrative staff, officials</li>
+                            <li>Emergency Services: Police, EMS, Fire Department</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Unemployed / Gang Roles</div>
+                    <div class="card-description">
+                        Citizens not formally employed or involved in criminal organizations.
+                    </div>
+                    <div class="card-details">
+                        <strong>Roleplay Options</strong>
+                        <ul>
+                            <li>Freeform roleplay: Create your own story and activities</li>
+                            <li>Gang members: Organized crime groups with territory</li>
+                            <li>Monitored by: EMS and Police departments</li>
+                            <li>Can engage in legal or illegal activities (subject to RP rules)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-box-title">ℹ️ For New Players</div>
+                <div class="info-box-content">
+                    All players start as citizens and can apply for positions in any sector. Some roles require applications and interviews (whitelisted jobs), while others are open to all. Explore the city, meet people, and find your path!
+                </div>
+            </div>
+        </section>
+ <section class="section" id="ems">
+            <div class="divider-line"></div>
+        </div>
+\
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">🚑</div>
+                <h2 class="section-title">EMS & Medical Roleplay System</h2>
+            </div>
+
+            <div class="info-box">
+                <div class="info-box-title">🏥 Advanced Medical Roleplay</div>
+                <div class="info-box-content">
+                    Our server features a comprehensive medical roleplay system including realistic pregnancy care, advanced illness treatment, surgical procedures, and a fully integrated prescription system.
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-title">Pregnancy & Maternal Care</div>
+                    <div class="card-description">
+                        Comprehensive prenatal care system with realistic monitoring and consequences.
+                    </div>
+                    <div class="card-details">
+                        <strong>Features</strong>
+                        <ul>
+                            <li>3–5 pre-pregnancy checkups with doctor follow-ups</li>
+                            <li>Learning sessions on nutrition, exercise (yoga), and lifestyle</li>
+                            <li>Special guidance and monitoring during pregnancy</li>
+                            <li>Realistic consequences: improper care can result in loss</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Medical Facilities & Services</div>
+                    <div class="card-description">
+                        State-of-the-art medical facilities providing comprehensive care.
+                    </div>
+                    <div class="card-details">
+                        <strong>Available Services</strong>
+                        <ul>
+                            <li>Pediatrics center for EMS and child care</li>
+                            <li>Daycare system for children</li>
+                            <li>Advanced surgical procedures by doctors</li>
+                            <li>Relatives/assistants can interact and help patients</li>
+                            <li>Environmental injuries, accidents, infections managed realistically</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Illness, Injuries & Treatment</div>
+                    <div class="card-description">
+                        Realistic medical conditions with visual symptoms and proper treatment requirements.
+                    </div>
+                    <div class="card-details">
+                        <strong>System Features</strong>
+                        <ul>
+                            <li>Visual symptoms: coughing, sneezing, limping, vomiting, etc.</li>
+                            <li>Illnesses persist until correctly treated</li>
+                            <li>Advanced tools: Pulse Oximeter, Thermometer, Blood Pressure Cuff, MRI</li>
+                            <li>Interactive Medical Guidebook for diagnosis</li>
+                            <li>Correct prescriptions cure; wrong prescriptions worsen conditions</li>
+                            <li>Contagious illnesses spread if untreated</li>
+                        </ul>
+                    </div>
+                    <div style="text-align:center; margin-top:20px;">
+                        <iframe width="100%" height="315" style="max-width:560px; border-radius:12px;" 
+                            src="https://www.youtube.com/embed/GYl_NtPbpM4" 
+                            title="Advanced Ambulance Job 2.0" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div style="text-align:center; margin-top:20px;">
+                        <iframe width="100%" height="315" style="max-width:560px; border-radius:12px;" 
+                            src="https://www.youtube.com/embed/usnwkGGfu_M" 
+                            title="Advanced Illness & Treatment System" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Roleplay & Interaction</div>
+                    <div class="card-description">
+                        High-stakes medical roleplay with realistic consequences and interactions.
+                    </div>
+                    <div class="card-details">
+                        <strong>Interaction Requirements</strong>
+                        <ul>
+                            <li>Doctors must use /me and /do commands for interactions</li>
+                            <li>Ambulance transport with stretcher hand-off for surgeries</li>
+                            <li>Physical therapy required for certain treatments (e.g., crutches)</li>
+                            <li>High-stakes: mistakes can be fatal with realistic consequences</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Advanced Surgery System</div>
+                    <div class="card-description">
+                        Innovative surgical procedures with hand targeting and realistic outcomes.
+                    </div>
+                    <div class="card-details">
+                        <strong>Surgery Features</strong>
+                        <ul>
+                            <li>Innovative Hand Targeting: Use hands to grab and interact with props</li>
+                            <li>5 Custom Surgeries: Heart, Kidney, Lung, Arm, Leg (expandable)</li>
+                            <li>Surgical Tools: Scalpel, Saw, Syringe</li>
+                            <li>Perform on real players (supports dead players)</li>
+                            <li>Failing surgery kills the player - retry or leave</li>
+                            <li>Training Mode available for practice</li>
+                        </ul>
+                    </div>
+                    <div style="text-align:center; margin-top:20px;">
+                        <iframe width="100%" height="315" style="max-width:560px; border-radius:12px;" 
+                            src="https://www.youtube.com/embed/3JQbktesbm8" 
+                            title="Player & Training Surgeries" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Prescription & Health Insurance System</div>
+                    <div class="card-description">
+                        Realistic prescription system with health insurance integration.
+                    </div>
+                    <div class="card-details">
+                        <strong>How It Works</strong>
+                        <ul>
+                            <li>Players receive medicine from illness or doctor RP</li>
+                            <li>Prescription Pad: Realistic UI (UK, US, or Germany style)</li>
+                            <li>Doctors fill fields manually, select medicine and dosage</li>
+                            <li>Patients view full prescription details</li>
+                            <li>Pharmacy: NPC or player pharmacist dispenses medicine</li>
+                            <li>Health Insurance: Reduces or eliminates medicine costs</li>
+                            <li>Insurance duration configurable (temporary or indefinite)</li>
+                        </ul>
+                    </div>
+                    <div style="text-align:center; margin-top:20px;">
+                        <iframe width="100%" height="315" style="max-width:560px; border-radius:12px;" 
+                            src="https://www.youtube.com/embed/gJBH4tpWNAY" 
+                            title="Prescription System Demo" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div style="text-align:center; margin-top:20px;">
+                        <iframe width="100%" height="315" style="max-width:560px; border-radius:12px;" 
+                            src="https://www.youtube.com/embed/apzVoByrjXI" 
+                            title="Health Insurance System" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Court System & Child Support</div>
+                    <div class="card-description">
+                        Legal framework for family matters and child welfare cases.
+                    </div>
+                    <div class="card-details">
+                        <strong>Legal System</strong>
+                        <ul>
+                            <li>Courts handle child labor and welfare cases</li>
+                            <li>Child support rules enforced for parents/guardians</li>
+                            <li>Neglect or illegal activity results in fines/legal consequences</li>
+                            <li>Interactive roleplay for proceedings and verdicts</li>
+                        </ul>
+                    </div>
+                    <div class="info-box" style="margin-top:15px;">
+                        <div class="info-box-title">📺 Watch Demo</div>
+                        <div class="info-box-content">
+                            View the Child Support system in action: <a href="https://youtu.be/rqM1Qr5uiFE" target="_blank" style="color:#667eea; font-weight:600;">YouTube Demo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p><strong>Server Structure Document</strong></p>
+            <p>This hierarchy ensures democratic governance while maintaining quality roleplay standards.</p>
+            <p>Players have the power to elect leadership and influence server direction.</p>
+            <p style="margin-top: 1rem; opacity: 0.8;">© 2025 EMS Roleplay System | All Rights Reserved</p>
+        </footer>
+    </div>
+</body>
+</html>
