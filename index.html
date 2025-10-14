@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Server Governance - 3D Coverflow</title>
+    <title>XOXO Roleplay - Staff Handbook</title>
     
     <!-- Discord Embed Meta Tags -->
-    <meta property="og:title" content="FiveM Server Governance Structure">
-    <meta property="og:description" content="Democratic leadership • 7 tiers • 15+ staff positions • Advanced medical roleplay system">
+    <meta property="og:title" content="XOXO Roleplay Staff Handbook">
+    <meta property="og:description" content="Professional staff guidelines • Weekly requirements • Recognition programs">
     <meta property="og:image" content="https://i.imgur.com/8JZm3Ql.png">
     <meta property="og:url" content="https://killiumx.github.io">
     <meta property="og:type" content="website">
-    <meta name="theme-color" content="#667eea">
+    <meta name="theme-color" content="#FF69B4">
     
     <style>
         * {
@@ -28,7 +28,7 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             overflow-x: hidden;
             position: relative;
-            background: #000;
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e9 50%, #ffd4e0 100%);
         }
 
         .section {
@@ -40,11 +40,11 @@
         }
 
         #home {
-            background: radial-gradient(ellipse at center, #1a1a2e 0%, #0f0f0f 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #fff0f5 50%, #ffe4e9 100%);
         }
 
-        #leadership, #staff, #sectors, #ems {
-            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+        #rules, #requirements, #recognition, #guidelines {
+            background: linear-gradient(135deg, #ffffff 0%, #fff5f8 100%);
         }
 
         /* Header */
@@ -54,20 +54,22 @@
             left: 0;
             right: 0;
             height: 80px;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 2px solid #ffb3d9;
             z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 40px;
             transition: all 0.3s ease;
+            box-shadow: 0 2px 20px rgba(255, 105, 180, 0.1);
         }
 
         .header.scrolled {
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(255, 255, 255, 0.98);
             height: 70px;
+            box-shadow: 0 4px 30px rgba(255, 105, 180, 0.15);
         }
 
         .logo-container {
@@ -93,10 +95,13 @@
         }
 
         .logo-text {
-            color: white;
-            font-size: 24px;
-            font-weight: 600;
-            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 2px;
         }
 
         .main-menu {
@@ -106,17 +111,17 @@
         }
 
         .menu-item {
-            color: rgba(255, 255, 255, 0.8);
+            color: #FF69B4;
             text-decoration: none;
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 600;
             transition: all 0.3s ease;
             position: relative;
             padding: 8px 0;
         }
 
         .menu-item:hover {
-            color: white;
+            color: #FF1493;
             transform: translateY(-2px);
         }
 
@@ -127,7 +132,7 @@
             left: 0;
             width: 0;
             height: 2px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
+            background: linear-gradient(90deg, #FF69B4, #FF1493);
             transition: width 0.3s ease;
         }
 
@@ -149,184 +154,87 @@
         .menu-toggle span {
             width: 25px;
             height: 3px;
-            background: white;
+            background: #FF69B4;
             margin: 3px 0;
             transition: 0.3s;
             border-radius: 2px;
         }
 
-        /* Hero Section with Coverflow */
-        .coverflow-wrapper {
+        /* Hero Section */
+        .hero-wrapper {
             width: 100%;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding-top: 80px;
+            padding: 120px 40px 60px;
         }
 
-        .coverflow-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            perspective: 1200px;
-            position: relative;
-        }
-
-        .coverflow {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transform-style: preserve-3d;
-            position: relative;
-            width: 100%;
-            height: 400px;
-        }
-
-        .coverflow-item {
-            position: absolute;
-            width: 350px;
-            height: 350px;
-            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .coverflow-item .cover {
-            width: 100%;
-            height: 100%;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
-            position: relative;
-            overflow: hidden;
-            transform-style: preserve-3d;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
-            border: 2px solid rgba(102, 126, 234, 0.3);
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        .hero-content {
             text-align: center;
+            max-width: 900px;
         }
 
-        .cover-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-        }
-
-        .cover-title {
-            color: white;
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .cover-subtitle {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 16px;
-        }
-
-        .coverflow-item.active {
-            z-index: 100;
-            transform: translateX(0) translateZ(0) rotateY(0deg);
-        }
-
-        .coverflow-item.active .cover {
-            box-shadow: 0 30px 60px rgba(102, 126, 234, 0.6);
-        }
-
-        .nav-button {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            z-index: 200;
-        }
-
-        .nav-button:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .nav-button.prev {
-            left: 50px;
-        }
-
-        .nav-button.next {
-            right: 50px;
-        }
-
-        .dots-container {
-            position: absolute;
-            bottom: 60px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-            z-index: 200;
-        }
-
-        .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .dot.active {
-            background: rgba(255, 255, 255, 0.8);
-            transform: scale(1.3);
-        }
-
-        .info {
-            position: absolute;
-            top: 120px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            text-align: center;
-            z-index: 200;
-            max-width: 800px;
-            padding: 0 20px;
-        }
-
-        .info h2 {
-            font-size: 42px;
-            margin-bottom: 10px;
-            opacity: 0;
-            animation: fadeIn 0.6s forwards;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .hero-title {
+            font-size: 72px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
         }
 
-        .info p {
+        .hero-subtitle {
+            font-size: 28px;
+            color: #FF69B4;
+            margin-bottom: 40px;
+            font-weight: 600;
+        }
+
+        .hero-description {
             font-size: 18px;
-            opacity: 0.8;
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 50px;
         }
 
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .hero-stat {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(255, 105, 180, 0.15);
+            border: 2px solid #ffb3d9;
+            transition: all 0.3s ease;
+        }
+
+        .hero-stat:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(255, 105, 180, 0.25);
+        }
+
+        .hero-stat-number {
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .hero-stat-label {
+            font-size: 16px;
+            color: #666;
+            font-weight: 600;
         }
 
         /* Content Sections */
@@ -334,7 +242,6 @@
             max-width: 1400px;
             margin: 0 auto;
             padding: 100px 40px 60px;
-            color: white;
         }
 
         .section-header {
@@ -343,216 +250,148 @@
         }
 
         .section-header h2 {
-            font-size: 48px;
+            font-size: 56px;
             margin-bottom: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            font-weight: 900;
         }
 
         .section-header p {
             font-size: 20px;
-            color: rgba(255, 255, 255, 0.8);
+            color: #666;
             max-width: 600px;
             margin: 0 auto;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .stat-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
-        }
-
-        .stat-number {
-            font-size: 56px;
-            font-weight: 900;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-        }
-
-        .stat-label {
-            font-size: 18px;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
             gap: 30px;
             margin-bottom: 40px;
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.05);
+            background: white;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 40px;
-            transition: all 0.3s;
+            border: 2px solid #ffb3d9;
+            border-radius: 25px;
+            padding: 45px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(255, 105, 180, 0.1);
         }
 
         .card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
-            border-color: rgba(102, 126, 234, 0.5);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(255, 105, 180, 0.2);
+            border-color: #FF69B4;
         }
 
         .card-icon {
-            font-size: 48px;
-            margin-bottom: 20px;
+            font-size: 56px;
+            margin-bottom: 25px;
         }
 
         .card-title {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 700;
-            color: white;
-            margin-bottom: 15px;
-        }
-
-        .card-description {
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.8;
+            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 20px;
         }
 
-        .badge {
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 15px;
-        }
-
-        .badge-elected {
-            background: linear-gradient(135deg, #48bb78, #38a169);
-            color: white;
-        }
-
-        .badge-appointed {
-            background: linear-gradient(135deg, #ed8936, #dd6b20);
-            color: white;
-        }
-
-        .badge-hybrid {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
+        .card-description {
+            font-size: 17px;
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 25px;
         }
 
         .feature-list {
             list-style: none;
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
         .feature-list li {
-            padding: 12px 0;
-            padding-left: 35px;
+            padding: 14px 0;
+            padding-left: 40px;
             position: relative;
-            color: rgba(255, 255, 255, 0.8);
+            color: #555;
             font-size: 16px;
+            line-height: 1.6;
         }
 
         .feature-list li::before {
-            content: '✓';
+            content: '💝';
             position: absolute;
             left: 0;
-            width: 25px;
-            height: 25px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-
-        .video-container {
-            margin: 30px 0;
-            text-align: center;
-        }
-
-        .video-container iframe {
-            max-width: 100%;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            font-size: 24px;
         }
 
         .info-box {
-            background: rgba(245, 158, 11, 0.1);
-            border-left: 4px solid #f59e0b;
-            border-radius: 12px;
-            padding: 25px;
-            margin: 25px 0;
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e9 100%);
+            border-left: 5px solid #FF69B4;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 5px 20px rgba(255, 105, 180, 0.1);
         }
 
         .info-box-title {
             font-weight: 700;
-            color: #fbbf24;
-            margin-bottom: 10px;
-            font-size: 18px;
+            color: #FF1493;
+            margin-bottom: 15px;
+            font-size: 22px;
         }
 
         .info-box-content {
-            color: rgba(255, 255, 255, 0.8);
-            line-height: 1.7;
+            color: #555;
+            line-height: 1.8;
+            font-size: 16px;
         }
 
         footer {
-            background: rgba(0, 0, 0, 0.95);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 40px 20px;
+            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+            padding: 60px 20px;
             text-align: center;
-            color: rgba(255, 255, 255, 0.6);
+            color: white;
+        }
+
+        footer h3 {
+            font-size: 32px;
+            margin-bottom: 15px;
+            font-weight: 700;
         }
 
         footer p {
             margin: 10px 0;
+            font-size: 16px;
+            opacity: 0.9;
         }
 
         .scroll-to-top {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 20px;
+            font-size: 24px;
             cursor: pointer;
             opacity: 0;
             transform: translateY(100px);
             transition: all 0.3s ease;
             z-index: 999;
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
         }
 
         .scroll-to-top.visible {
@@ -561,8 +400,8 @@
         }
 
         .scroll-to-top:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 15px 40px rgba(255, 105, 180, 0.4);
         }
 
         @media (max-width: 768px) {
@@ -572,12 +411,12 @@
                 top: 100%;
                 left: 0;
                 right: 0;
-                background: rgba(0, 0, 0, 0.95);
+                background: rgba(255, 255, 255, 0.98);
                 backdrop-filter: blur(10px);
                 flex-direction: column;
                 padding: 20px;
                 gap: 20px;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                border-bottom: 2px solid #ffb3d9;
             }
 
             .main-menu.active {
@@ -588,26 +427,12 @@
                 display: flex;
             }
 
-            .coverflow-item {
-                width: 250px;
-                height: 250px;
+            .hero-title {
+                font-size: 48px;
             }
 
-            .nav-button {
-                width: 45px;
-                height: 45px;
-            }
-
-            .nav-button.prev {
-                left: 20px;
-            }
-
-            .nav-button.next {
-                right: 20px;
-            }
-
-            .info h2 {
-                font-size: 32px;
+            .hero-subtitle {
+                font-size: 20px;
             }
 
             .cards-grid {
@@ -617,6 +442,10 @@
             .content-wrapper {
                 padding: 80px 20px 40px;
             }
+
+            .section-header h2 {
+                font-size: 36px;
+            }
         }
     </style>
 </head>
@@ -624,16 +453,16 @@
     <!-- Header -->
     <header class="header" id="header">
         <a href="#home" class="logo-container">
-            <div class="logo">🏛️</div>
-            <div class="logo-text">Server Governance</div>
+            <div class="logo">🌸</div>
+            <div class="logo-text">XOXO</div>
         </a>
         
         <nav class="main-menu" id="mainMenu">
             <a href="#home" class="menu-item active">Home</a>
-            <a href="#leadership" class="menu-item">Leadership</a>
-            <a href="#staff" class="menu-item">Staff</a>
-            <a href="#sectors" class="menu-item">Sectors</a>
-            <a href="#ems" class="menu-item">EMS System</a>
+            <a href="#rules" class="menu-item">Staff Rules</a>
+            <a href="#requirements" class="menu-item">Requirements</a>
+            <a href="#recognition" class="menu-item">Recognition</a>
+            <a href="#guidelines" class="menu-item">Guidelines</a>
         </nav>
         
         <div class="menu-toggle" id="menuToggle">
@@ -643,360 +472,323 @@
         </div>
     </header>
 
-    <!-- Home Section with Coverflow -->
+    <!-- Hero Section -->
     <section id="home" class="section">
-        <div class="coverflow-wrapper">
-            <div class="info">
-                <h2 id="current-title">Democratic Governance Structure</h2>
-                <p id="current-description">7 leadership tiers empowering player-driven roleplay</p>
-            </div>
+        <div class="hero-wrapper">
+            <div class="hero-content">
+                <h1 class="hero-title">XOXO Roleplay</h1>
+                <p class="hero-subtitle">Staff Handbook 2025</p>
+                <p class="hero-description">
+                    Welcome to the XOXO Roleplay staff team! This handbook outlines everything you need to know about being a professional, effective staff member. Your dedication keeps our community safe and enjoyable for everyone.
+                </p>
 
-            <div class="coverflow-container" tabindex="0">
-                <div class="coverflow" id="coverflow">
-                    <div class="coverflow-item" data-index="0">
-                        <div class="cover">
-                            <div class="cover-icon">👑</div>
-                            <div class="cover-title">Server Owners</div>
-                            <div class="cover-subtitle">3 Hidden Positions</div>
-                        </div>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-number">70</div>
+                        <div class="hero-stat-label">Weekly Sits Required</div>
                     </div>
-                    <div class="coverflow-item" data-index="1">
-                        <div class="cover">
-                            <div class="cover-icon">⭐</div>
-                            <div class="cover-title">President</div>
-                            <div class="cover-subtitle">Elected Leader</div>
-                        </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-number">48hrs</div>
+                        <div class="hero-stat-label">Warning Decay Time</div>
                     </div>
-                    <div class="coverflow-item" data-index="2">
-                        <div class="cover">
-                            <div class="cover-icon">🎯</div>
-                            <div class="cover-title">Management</div>
-                            <div class="cover-subtitle">2 Positions</div>
-                        </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-number">£50</div>
+                        <div class="hero-stat-label">SMOTM Prize</div>
                     </div>
-                    <div class="coverflow-item" data-index="3">
-                        <div class="cover">
-                            <div class="cover-icon">🛡️</div>
-                            <div class="cover-title">Head of Staff</div>
-                            <div class="cover-subtitle">Staff Leadership</div>
-                        </div>
-                    </div>
-                    <div class="coverflow-item" data-index="4">
-                        <div class="cover">
-                            <div class="cover-icon">👥</div>
-                            <div class="cover-title">Staff Team</div>
-                            <div class="cover-subtitle">6+ Positions</div>
-                        </div>
-                    </div>
-                    <div class="coverflow-item" data-index="5">
-                        <div class="cover">
-                            <div class="cover-icon">🏙️</div>
-                            <div class="cover-title">City Sectors</div>
-                            <div class="cover-subtitle">4 Major Divisions</div>
-                        </div>
-                    </div>
-                    <div class="coverflow-item" data-index="6">
-                        <div class="cover">
-                            <div class="cover-icon">🚑</div>
-                            <div class="cover-title">Advanced EMS</div>
-                            <div class="cover-subtitle">Medical Roleplay</div>
-                        </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-number">200+</div>
+                        <div class="hero-stat-label">Sits for SMOTM</div>
                     </div>
                 </div>
-
-                <button class="nav-button prev" onclick="navigate(-1)">‹</button>
-                <button class="nav-button next" onclick="navigate(1)">›</button>
-
-                <div class="dots-container" id="dots"></div>
             </div>
         </div>
     </section>
 
-    <!-- Leadership Section -->
-    <section id="leadership" class="section">
+    <!-- Staff Rules Section -->
+    <section id="rules" class="section">
         <div class="content-wrapper">
             <div class="section-header">
-                <h2>Executive Leadership</h2>
-                <p>Democratic governance with elected officials and appointed staff</p>
+                <h2>Staff Rules</h2>
+                <p>Essential guidelines every staff member must follow</p>
             </div>
 
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number">7</div>
-                    <div class="stat-label">Leadership Tiers</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">2 Weeks</div>
-                    <div class="stat-label">Election Cycle</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">15+</div>
-                    <div class="stat-label">Staff Positions</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">4</div>
-                    <div class="stat-label">City Sectors</div>
+            <div class="info-box">
+                <div class="info-box-title">🌸 Core Values</div>
+                <div class="info-box-content">
+                    Treat everyone with respect, act as a role model, and maintain professionalism at all times. Your behavior represents XOXO Roleplay and sets the standard for the entire community.
                 </div>
             </div>
 
             <div class="cards-grid">
                 <div class="card">
-                    <div class="card-icon">⭐</div>
-                    <span class="badge badge-elected">Elected</span>
-                    <div class="card-title">Director / President</div>
+                    <div class="card-icon">👥</div>
+                    <div class="card-title">Professional Conduct</div>
                     <div class="card-description">
-                        Highest elected official serving 2-week terms. Leads city government, sets policy direction, and represents all citizens.
+                        Maintain the highest standards of professionalism in all interactions.
                     </div>
                     <ul class="feature-list">
-                        <li>2-week renewable term</li>
-                        <li>Elected by player vote</li>
-                        <li>Executive authority</li>
-                        <li>Policy direction</li>
+                        <li>Treat everyone in the community with respect</li>
+                        <li>Always act as a role model</li>
+                        <li>Never harass or provoke players</li>
+                        <li>Maintain a mature and calm demeanor</li>
+                        <li>Avoid vulgar or unprofessional language</li>
+                        <li>No toxicity within the staff team</li>
                     </ul>
                 </div>
 
-                <div class="card">
-                    <div class="card-icon">🎯</div>
-                    <span class="badge badge-hybrid">Elected/Appointed</span>
-                    <div class="card-title">Deputy Director</div>
-                    <div class="card-description">
-                        Second-in-command to the President. Assists with executive duties and assumes leadership in the Director's absence.
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon">📊</div>
-                    <span class="badge badge-appointed">Appointed</span>
-                    <div class="card-title">Assistant Director</div>
-                    <div class="card-description">
-                        Supports executive leadership with administrative tasks, special projects, and departmental coordination.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Staff Section -->
-    <section id="staff" class="section">
-        <div class="content-wrapper">
-            <div class="section-header">
-                <h2>Staff Team</h2>
-                <p>Dedicated team ensuring quality roleplay and server excellence</p>
-            </div>
-
-            <div class="cards-grid">
                 <div class="card">
                     <div class="card-icon">🛡️</div>
-                    <span class="badge badge-hybrid">Elected/Appointed</span>
-                    <div class="card-title">Head of Staff</div>
+                    <div class="card-title">Administrative Powers</div>
                     <div class="card-description">
-                        Supreme authority over all staff operations. Manages the staff team and ensures quality gameplay experience.
+                        Use your powers responsibly and only for their intended purposes.
                     </div>
+                    <ul class="feature-list">
+                        <li>Use powers only for administrative purposes</li>
+                        <li>Do not modify or interpret server rules</li>
+                        <li>Never scout bases or gain personal advantage</li>
+                        <li>No noclipping while building</li>
+                        <li>No RPing while on duty</li>
+                        <li>Don't play on duty while under influence</li>
+                    </ul>
                 </div>
 
                 <div class="card">
-                    <div class="card-icon">⚡</div>
-                    <span class="badge badge-appointed">Appointed</span>
-                    <div class="card-title">Senior Administrator</div>
+                    <div class="card-icon">⚖️</div>
+                    <div class="card-title">Handling Sits</div>
                     <div class="card-description">
-                        Handles licensing, sector approvals, and major server operations.
+                        Follow proper procedures when dealing with player issues.
                     </div>
+                    <ul class="feature-list">
+                        <li>Always open a sit before warning players</li>
+                        <li>Handle all sits in Adminland or Flatgrass</li>
+                        <li>List every rule broken when punishing</li>
+                        <li>Gather sufficient evidence before bans</li>
+                        <li>Don't handle sits involving friends/clan</li>
+                        <li>Mute/gag toxic players, don't escalate</li>
+                    </ul>
                 </div>
 
                 <div class="card">
-                    <div class="card-icon">🎭</div>
-                    <span class="badge badge-hybrid">Elected/Appointed</span>
-                    <div class="card-title">Event Director</div>
+                    <div class="card-icon">🔒</div>
+                    <div class="card-title">Confidentiality</div>
                     <div class="card-description">
-                        Plans and oversees all server events, festivals, and public gatherings.
+                        Protect sensitive information and maintain trust.
                     </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon">👮</div>
-                    <span class="badge badge-hybrid">Elected/Appointed</span>
-                    <div class="card-title">Moderator Team</div>
-                    <div class="card-description">
-                        Enforces server rules, assists with events, and maintains community standards.
-                    </div>
+                    <ul class="feature-list">
+                        <li>Never leak staff chat information</li>
+                        <li>Don't make anonymous staff reports</li>
+                        <li>Don't message players in DMs about issues</li>
+                        <li>Outside behavior affects standing if harmful</li>
+                        <li>Keep internal discussions private</li>
+                        <li>Maintain professionalism everywhere</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Sectors Section -->
-    <section id="sectors" class="section">
+    <!-- Requirements Section -->
+    <section id="requirements" class="section">
         <div class="content-wrapper">
             <div class="section-header">
-                <h2>City Sectors</h2>
-                <p>Four major divisions powering the city economy and services</p>
+                <h2>Weekly Requirements</h2>
+                <p>Activity expectations and role responsibilities</p>
+            </div>
+
+            <div class="info-box">
+                <div class="info-box-title">📅 Deadline: Saturday 7PM UTC</div>
+                <div class="info-box-content">
+                    All weekly requirements must be completed by Saturday at 7PM UTC. Staff meetings are held every Saturday - check the meeting countdown for exact times.
+                </div>
             </div>
 
             <div class="cards-grid">
                 <div class="card">
-                    <div class="card-icon">💼</div>
-                    <div class="card-title">Business Sector</div>
+                    <div class="card-icon">🎯</div>
+                    <div class="card-title">Activity Requirements</div>
                     <div class="card-description">
-                        The economic engine of the city, encompassing all commercial enterprises.
+                        Minimum weekly activity by rank (due Saturday 7PM UTC).
                     </div>
                     <ul class="feature-list">
-                        <li>Government licensed operations</li>
-                        <li>Shops, restaurants, dealerships</li>
-                        <li>Admin oversight and compliance</li>
+                        <li>Trial Moderator: 70 sits per week</li>
+                        <li>Moderator: 70 sits per week</li>
+                        <li>Senior Moderator: 70 sits per week</li>
+                        <li>Head Moderator: 70 sits per week</li>
+                        <li>Admin: 70 sits OR 8 forum reports/appeals</li>
                     </ul>
                 </div>
 
                 <div class="card">
-                    <div class="card-icon">⚙️</div>
-                    <div class="card-title">Industrial Sector</div>
+                    <div class="card-icon">🪞</div>
+                    <div class="card-title">Role Expectations</div>
                     <div class="card-description">
-                        Manual labor and resource production jobs open to all citizens.
+                        What's expected from each staff rank.
                     </div>
                     <ul class="feature-list">
-                        <li>Mining and factories</li>
-                        <li>Open employment</li>
-                        <li>No application required</li>
+                        <li>Trial Mod: Handle sits and assist players in-game</li>
+                        <li>Moderator: Maintain strong server presence</li>
+                        <li>Senior Mod: Train new staff, eligible as trainer</li>
+                        <li>Head Mod: Handle reports, train staff, forum work</li>
+                        <li>Admin: Forum and management-related duties</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">⚠️</div>
+                    <div class="card-title">Punishment System</div>
+                    <div class="card-description">
+                        Progressive discipline for staff misconduct.
+                    </div>
+                    <ul class="feature-list">
+                        <li>Warnings remain permanently on record</li>
+                        <li>Strikes last for 2 months</li>
+                        <li>Strikes issued for serious misconduct</li>
+                        <li>Multiple warnings lead to strikes</li>
+                        <li>Offenses during strikes = possible demotion</li>
+                        <li>Any punishment may impact promotion</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">💫</div>
+                    <div class="card-title">General Information</div>
+                    <div class="card-description">
+                        Important operational details for staff.
+                    </div>
+                    <ul class="feature-list">
+                        <li>Use tutorial channel for command references</li>
+                        <li>Use /managermsg to contact management</li>
+                        <li>Provide proof for all refunds</li>
+                        <li>MRDM defined by intent, not kill count</li>
+                        <li>LTAP applies only during punishment</li>
+                        <li>Active warnings decay after 48 hours</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recognition Section -->
+    <section id="recognition" class="section">
+        <div class="content-wrapper">
+            <div class="section-header">
+                <h2>Staff Recognition</h2>
+                <p>Rewarding excellence and dedication</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">🌟</div>
+                    <div class="card-title">Staff Member of the Month</div>
+                    <div class="card-description">
+                        Our premier recognition program for outstanding staff performance.
+                    </div>
+                    <ul class="feature-list">
+                        <li>Must have at least 2 weeks on the team</li>
+                        <li>No recent punishments or warnings</li>
+                        <li>Must show 200+ sits over 4 weeks</li>
+                        <li>Selected by Management & Ownership</li>
+                        <li>Considers performance AND behavior</li>
+                        <li>2-month cooldown between awards</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🎁</div>
+                    <div class="card-title">SMOTM Rewards</div>
+                    <div class="card-description">
+                        Exclusive rewards for Staff Member of the Month winners.
+                    </div>
+                    <ul class="feature-list">
+                        <li>Special Discord role and recognition</li>
+                        <li>£50 PayPal cash prize</li>
+                        <li>Permanent in-game reward item</li>
+                        <li>Recognition in staff meetings</li>
+                        <li>Priority consideration for promotions</li>
+                        <li>Community-wide announcement</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-box-title">❤️ Thank You</div>
+                <div class="info-box-content">
+                    Thank you for being part of the XOXO Roleplay Staff Team! Your professionalism, fairness, and consistency keep the community safe and enjoyable for everyone. We appreciate your dedication and hard work.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Guidelines Section -->
+    <section id="guidelines" class="section">
+        <div class="content-wrapper">
+            <div class="section-header">
+                <h2>Punishment Guidelines</h2>
+                <p>Best practices for handling player infractions</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">🧠</div>
+                    <div class="card-title">General Guidelines</div>
+                    <div class="card-description">
+                        Follow these principles when issuing punishments.
+                    </div>
+                    <ul class="feature-list">
+                        <li>Follow Warning → Kick → Ban progression</li>
+                        <li>Use discretion for minor first-time offenses</li>
+                        <li>Issue verbal warnings when appropriate</li>
+                        <li>Always include context in punishment logs</li>
+                        <li>Combine similar offenses appropriately</li>
+                        <li>Use common sense and professionalism</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">📝</div>
+                    <div class="card-title">Documentation</div>
+                    <div class="card-description">
+                        Proper logging and evidence requirements.
+                    </div>
+                    <ul class="feature-list">
+                        <li>Include context in all punishment logs</li>
+                        <li>Example: 'FailRP - suicided to avoid RP'</li>
+                        <li>Censor sensitive words properly</li>
+                        <li>Example: 'Called player an N-word'</li>
+                        <li>Always provide refund proof in channel</li>
+                        <li>Keep detailed records of serious issues</li>
                     </ul>
                 </div>
 
                 <div class="card">
                     <div class="card-icon">🚨</div>
-                    <div class="card-title">Emergency Services</div>
+                    <div class="card-title">Important Reminders</div>
                     <div class="card-description">
-                        Police, EMS, Fire, and DOJ maintaining safety and justice.
+                        Critical points to remember during your duties.
                     </div>
                     <ul class="feature-list">
-                        <li>Whitelisted positions</li>
-                        <li>Application required</li>
-                        <li>Professional training</li>
+                        <li>No refunds for client crashes</li>
+                        <li>Check for entity cramming during lag</li>
+                        <li>NLR bans need 2 prior warnings on record</li>
+                        <li>Not 3 warnings in same sit</li>
+                        <li>Normal citizens can base with criminals</li>
+                        <li>Former staff follow cooldown to reapply</li>
                     </ul>
                 </div>
 
                 <div class="card">
-                    <div class="card-icon">🎭</div>
-                    <div class="card-title">Community Programs</div>
+                    <div class="card-icon">💼</div>
+                    <div class="card-title">Professional Tips</div>
                     <div class="card-description">
-                        Events, engagement, and citizen initiatives.
+                        Additional guidance for effective staff work.
                     </div>
                     <ul class="feature-list">
-                        <li>Public events</li>
-                        <li>Town halls</li>
-                        <li>Community engagement</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- EMS Section -->
-    <section id="ems" class="section">
-        <div class="content-wrapper">
-            <div class="section-header">
-                <h2>Advanced EMS & Medical Roleplay</h2>
-                <p>Comprehensive medical system with realistic procedures and consequences</p>
-            </div>
-
-            <div class="info-box">
-                <div class="info-box-title">🏥 Advanced Medical Roleplay</div>
-                <div class="info-box-content">
-                    Our server features a comprehensive medical roleplay system including realistic pregnancy care, advanced illness treatment, surgical procedures, and a fully integrated prescription system.
-                </div>
-            </div>
-
-            <div class="cards-grid">
-                <div class="card">
-                    <div class="card-icon">👶</div>
-                    <div class="card-title">Pregnancy & Maternal Care</div>
-                    <div class="card-description">
-                        Comprehensive prenatal care system with realistic monitoring and consequences.
-                    </div>
-                    <ul class="feature-list">
-                        <li>3-5 pre-pregnancy checkups</li>
-                        <li>Nutrition and exercise guidance</li>
-                        <li>Special monitoring during pregnancy</li>
-                        <li>Realistic consequences for improper care</li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon">🏥</div>
-                    <div class="card-title">Illness & Treatment System</div>
-                    <div class="card-description">
-                        Realistic medical conditions with visual symptoms and proper treatment requirements.
-                    </div>
-                    <ul class="feature-list">
-                        <li>Visual symptoms (coughing, limping, etc.)</li>
-                        <li>Advanced diagnostic tools</li>
-                        <li>Interactive Medical Guidebook</li>
-                        <li>Contagious illness spread</li>
-                    </ul>
-                    <div class="video-container">
-                        <iframe width="560" height="315" src="https://www.youtube.com/embed/GYl_NtPbpM4" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon">🔬</div>
-                    <div class="card-title">Advanced Surgery System</div>
-                    <div class="card-description">
-                        Innovative surgical procedures with hand targeting and realistic outcomes.
-                    </div>
-                    <ul class="feature-list">
-                        <li>Hand targeting for props interaction</li>
-                        <li>5 custom surgeries (Heart, Kidney, Lung, Arm, Leg)</li>
-                        <li>Surgical tools: Scalpel, Saw, Syringe</li>
-                        <li>Training mode available</li>
-                        <li>High-stakes: mistakes can be fatal</li>
-                    </ul>
-                    <div class="video-container">
-                        <iframe width="560" height="315" src="https://www.youtube.com/embed/3JQbktesbm8" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon">💊</div>
-                    <div class="card-title">Prescription System</div>
-                    <div class="card-description">
-                        Realistic prescription system with health insurance integration.
-                    </div>
-                    <ul class="feature-list">
-                        <li>Realistic prescription pad UI</li>
-                        <li>Doctor fills fields manually</li>
-                        <li>Pharmacy dispensing system</li>
-                        <li>Health insurance reduces costs</li>
-                        <li>Correct prescriptions cure, wrong ones worsen</li>
-                    </ul>
-                    <div class="video-container">
-                        <iframe width="560" height="315" src="https://www.youtube.com/embed/gJBH4tpWNAY" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon">⚖️</div>
-                    <div class="card-title">Medical Facilities & Services</div>
-                    <div class="card-description">
-                        State-of-the-art medical facilities providing comprehensive care.
-                    </div>
-                    <ul class="feature-list">
-                        <li>Pediatrics center for child care</li>
-                        <li>Daycare system for children</li>
-                        <li>Advanced surgical procedures</li>
-                        <li>Interactive roleplay requirements</li>
-                        <li>Ambulance transport with stretchers</li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon">👨‍⚖️</div>
-                    <div class="card-title">Court System & Child Support</div>
-                    <div class="card-description">
-                        Legal framework for family matters and child welfare cases.
-                    </div>
-                    <ul class="feature-list">
-                        <li>Child labor and welfare cases</li>
-                        <li>Child support enforcement</li>
-                        <li>Neglect consequences</li>
-                        <li>Interactive court proceedings</li>
+                        <li>Stay calm even in heated situations</li>
+                        <li>Listen to both sides before deciding</li>
+                        <li>Be consistent with punishments</li>
+                        <li>Ask for help when unsure</li>
+                        <li>Learn from experienced staff members</li>
+                        <li>Always put the community first</li>
                     </ul>
                 </div>
             </div>
@@ -1005,10 +797,10 @@
 
     <!-- Footer -->
     <footer>
-        <p><strong>Server Governance Structure</strong></p>
-        <p>Democratic governance ensuring quality roleplay standards</p>
-        <p>Players have the power to elect leadership and influence server direction</p>
-        <p style="margin-top: 20px; opacity: 0.8;">© 2025 EMS Roleplay System | All Rights Reserved</p>
+        <h3>🌸 XOXO Roleplay</h3>
+        <p><strong>Staff Handbook 2025</strong></p>
+        <p>Your professionalism keeps our community thriving</p>
+        <p style="margin-top: 30px; font-size: 14px;">© 2025 XOXO Roleplay | All Rights Reserved</p>
     </footer>
 
     <!-- Scroll to top button -->
@@ -1017,16 +809,12 @@
     </div>
 
     <script>
-        // Coverflow functionality
-        const items = document.querySelectorAll('.coverflow-item');
-        const dotsContainer = document.getElementById('dots');
-        const currentTitle = document.getElementById('current-title');
-        const currentDescription = document.getElementById('current-description');
-        const container = document.querySelector('.coverflow-container');
         const menuToggle = document.getElementById('menuToggle');
         const mainMenu = document.getElementById('mainMenu');
-        let currentIndex = 3;
-        let isAnimating = false;
+        const header = document.getElementById('header');
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+        const sections = document.querySelectorAll('.section');
+        const menuItems = document.querySelectorAll('.menu-item');
 
         // Mobile menu toggle
         menuToggle.addEventListener('click', () => {
@@ -1035,181 +823,12 @@
         });
 
         // Close mobile menu when clicking on menu items
-        document.querySelectorAll('.menu-item').forEach(item => {
+        menuItems.forEach(item => {
             item.addEventListener('click', () => {
                 menuToggle.classList.remove('active');
                 mainMenu.classList.remove('active');
             });
         });
-
-        // Image data with titles and descriptions
-        const imageData = [
-            {
-                title: "Server Owners",
-                description: "Hidden authority maintaining ultimate oversight"
-            },
-            {
-                title: "Director / President",
-                description: "Elected leader serving 2-week terms"
-            },
-            {
-                title: "Management Layer",
-                description: "Community coordination and engagement"
-            },
-            {
-                title: "Head of Staff",
-                description: "Supreme authority over staff operations"
-            },
-            {
-                title: "Staff Team",
-                description: "Dedicated team ensuring quality roleplay"
-            },
-            {
-                title: "City Sectors",
-                description: "Four major divisions powering the economy"
-            },
-            {
-                title: "Advanced EMS System",
-                description: "Comprehensive medical roleplay with realistic procedures"
-            }
-        ];
-
-        // Create dots
-        items.forEach((_, index) => {
-            const dot = document.createElement('div');
-            dot.className = 'dot';
-            dot.onclick = () => goToIndex(index);
-            dotsContainer.appendChild(dot);
-        });
-
-        const dots = document.querySelectorAll('.dot');
-
-        function updateCoverflow() {
-            if (isAnimating) return;
-            isAnimating = true;
-
-            items.forEach((item, index) => {
-                let offset = index - currentIndex;
-                
-                if (offset > items.length / 2) {
-                    offset = offset - items.length;
-                }
-                else if (offset < -items.length / 2) {
-                    offset = offset + items.length;
-                }
-                
-                const absOffset = Math.abs(offset);
-                const sign = Math.sign(offset);
-                
-                let translateX = offset * 250;
-                let translateZ = -absOffset * 200;
-                let rotateY = -sign * Math.min(absOffset * 60, 60);
-                let opacity = 1 - (absOffset * 0.2);
-                let scale = 1 - (absOffset * 0.1);
-
-                if (absOffset > 3) {
-                    opacity = 0;
-                    translateX = sign * 900;
-                }
-
-                item.style.transform = `
-                    translateX(${translateX}px) 
-                    translateZ(${translateZ}px) 
-                    rotateY(${rotateY}deg)
-                    scale(${scale})
-                `;
-                item.style.opacity = opacity;
-                item.style.zIndex = 100 - absOffset;
-
-                item.classList.toggle('active', index === currentIndex);
-            });
-
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentIndex);
-            });
-
-            const currentData = imageData[currentIndex];
-            currentTitle.textContent = currentData.title;
-            currentDescription.textContent = currentData.description;
-            
-            currentTitle.style.animation = 'none';
-            currentDescription.style.animation = 'none';
-            setTimeout(() => {
-                currentTitle.style.animation = 'fadeIn 0.6s forwards';
-                currentDescription.style.animation = 'fadeIn 0.6s forwards';
-            }, 10);
-
-            setTimeout(() => {
-                isAnimating = false;
-            }, 600);
-        }
-
-        function navigate(direction) {
-            if (isAnimating) return;
-            
-            currentIndex = currentIndex + direction;
-            
-            if (currentIndex < 0) {
-                currentIndex = items.length - 1;
-            } else if (currentIndex >= items.length) {
-                currentIndex = 0;
-            }
-            
-            updateCoverflow();
-        }
-
-        function goToIndex(index) {
-            if (isAnimating || index === currentIndex) return;
-            currentIndex = index;
-            updateCoverflow();
-        }
-
-        // Keyboard navigation
-        container.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') navigate(-1);
-            if (e.key === 'ArrowRight') navigate(1);
-        });
-
-        // Click on items to select
-        items.forEach((item, index) => {
-            item.addEventListener('click', () => goToIndex(index));
-        });
-
-        // Touch/swipe support
-        let touchStartX = 0;
-        let touchEndX = 0;
-        let isSwiping = false;
-
-        container.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-            isSwiping = true;
-        }, { passive: true });
-
-        container.addEventListener('touchend', (e) => {
-            if (!isSwiping) return;
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-            isSwiping = false;
-        }, { passive: true });
-
-        function handleSwipe() {
-            const swipeThreshold = 30;
-            const diffX = touchStartX - touchEndX;
-            
-            if (Math.abs(diffX) > swipeThreshold) {
-                if (diffX > 0) {
-                    navigate(1);
-                } else {
-                    navigate(-1);
-                }
-            }
-        }
-
-        // Smooth scrolling and active menu item
-        const sections = document.querySelectorAll('.section');
-        const menuItems = document.querySelectorAll('.menu-item');
-        const header = document.getElementById('header');
-        const scrollToTopBtn = document.getElementById('scrollToTop');
 
         // Update active menu item on scroll
         function updateActiveMenuItem() {
@@ -1270,9 +889,7 @@
         });
 
         // Initialize
-        updateCoverflow();
-        container.focus();
+        updateActiveMenuItem();
     </script>
 </body>
 </html>
-                        
