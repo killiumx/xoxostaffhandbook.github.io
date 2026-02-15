@@ -3,947 +3,569 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XOXO Roleplay - Staff Handbook</title>
-    
-    <!-- Discord Embed Meta Tags -->
-    <meta property="og:title" content="XOXO Roleplay Staff Handbook">
-    <meta property="og:description" content="Professional staff guidelines • Weekly requirements • Recognition programs">
-    <meta property="og:image" content="https://i.imgur.com/8JZm3Ql.png">
-    <meta property="og:url" content="https://killiumx.github.io">
-    <meta property="og:type" content="website">
-    <meta name="theme-color" content="#FF69B4">
-    
+    <title>SwiftShip Logistics - Fast, Reliable Shipping Services</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #FF6B35;
+            --primary-dark: #E5592D;
+            --secondary: #004E89;
+            --dark: #1A1A2E;
+            --light: #F7F7F7;
+            --accent: #FFD23F;
+            --success: #06D6A0;
+            --shadow: rgba(0, 0, 0, 0.15);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Outfit', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
             overflow-x: hidden;
-            position: relative;
-            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e9 50%, #ffd4e0 100%);
-        }
-
-        .section {
-            min-height: 100vh;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #home {
-            background: linear-gradient(135deg, #ffffff 0%, #fff0f5 50%, #ffe4e9 100%);
-        }
-
-        #rules, #requirements, #recognition, #guidelines {
-            background: linear-gradient(135deg, #ffffff 0%, #fff5f8 100%);
         }
 
         /* Header */
-        .header {
-            position: fixed;
+        header {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--dark) 100%);
+            color: white;
+            padding: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 80px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 2px solid #ffb3d9;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 40px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 20px rgba(255, 105, 180, 0.1);
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="2" height="2" x="0" y="0" fill="white" opacity="0.1"/></svg>');
+            background-size: 50px 50px;
+            animation: slide 20s linear infinite;
         }
 
-        .header.scrolled {
-            background: rgba(255, 255, 255, 0.98);
-            height: 70px;
-            box-shadow: 0 4px 30px rgba(255, 105, 180, 0.15);
+        @keyframes slide {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(50px); }
         }
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .logo-container:hover {
-            transform: translateY(-2px);
-        }
-
-        .logo {
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-        }
-
-        .logo-text {
-            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-size: 28px;
-            font-weight: 700;
-            letter-spacing: 2px;
-        }
-
-        .main-menu {
-            display: flex;
-            align-items: center;
-            gap: 40px;
-        }
-
-        .menu-item {
-            color: #FF69B4;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s ease;
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
             position: relative;
-            padding: 8px 0;
+            z-index: 1;
         }
 
-        .menu-item:hover {
-            color: #FF1493;
-            transform: translateY(-2px);
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 4rem;
+            letter-spacing: 4px;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            animation: fadeInDown 0.8s ease;
         }
 
-        .menu-item::after {
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Features Section */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+            animation: fadeIn 1s ease 0.4s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 4px solid var(--primary);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 30px var(--shadow);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+
+        /* Form Section */
+        .form-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 40px var(--shadow);
+            animation: slideInRight 0.8s ease 0.6s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .form-section::before {
             content: '';
             position: absolute;
-            bottom: 0;
+            top: 0;
             left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #FF69B4, #FF1493);
-            transition: width 0.3s ease;
-        }
-
-        .menu-item:hover::after {
             width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease infinite;
         }
 
-        .menu-item.active::after {
-            width: 100%;
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
-        .menu-toggle {
-            display: none;
+        .form-section h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .form-section p {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        form {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
             flex-direction: column;
-            cursor: pointer;
-            padding: 4px;
         }
 
-        .menu-toggle span {
-            width: 25px;
-            height: 3px;
-            background: #FF69B4;
-            margin: 3px 0;
-            transition: 0.3s;
-            border-radius: 2px;
-        }
-
-        /* Hero Section */
-        .hero-wrapper {
-            width: 100%;
-            min-height: 100vh;
+        label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 120px 40px 60px;
+            gap: 0.5rem;
         }
 
-        .hero-content {
-            text-align: center;
-            max-width: 900px;
+        .required {
+            color: var(--primary);
         }
 
-        .hero-title {
-            font-size: 72px;
-            font-weight: 900;
-            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 20px;
-            letter-spacing: -2px;
-        }
-
-        .hero-subtitle {
-            font-size: 28px;
-            color: #FF69B4;
-            margin-bottom: 40px;
-            font-weight: 600;
-        }
-
-        .hero-description {
-            font-size: 18px;
-            color: #666;
-            line-height: 1.8;
-            margin-bottom: 50px;
-        }
-
-        .hero-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin-top: 60px;
-        }
-
-        .hero-stat {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(255, 105, 180, 0.15);
-            border: 2px solid #ffb3d9;
+        input, textarea, select {
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
             transition: all 0.3s ease;
+            background: var(--light);
         }
 
-        .hero-stat:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 60px rgba(255, 105, 180, 0.25);
-        }
-
-        .hero-stat-number {
-            font-size: 48px;
-            font-weight: 900;
-            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-        }
-
-        .hero-stat-label {
-            font-size: 16px;
-            color: #666;
-            font-weight: 600;
-        }
-
-        /* Content Sections */
-        .content-wrapper {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 100px 40px 60px;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .section-header h2 {
-            font-size: 56px;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-weight: 900;
-        }
-
-        .section-header p {
-            font-size: 20px;
-            color: #666;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        .card {
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
             background: white;
-            backdrop-filter: blur(10px);
-            border: 2px solid #ffb3d9;
-            border-radius: 25px;
-            padding: 45px;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 40px rgba(255, 105, 180, 0.1);
+            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
         }
 
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 60px rgba(255, 105, 180, 0.2);
-            border-color: #FF69B4;
+        textarea {
+            resize: vertical;
+            min-height: 120px;
         }
 
-        .card-icon {
-            font-size: 56px;
-            margin-bottom: 25px;
-        }
-
-        .card-title {
-            font-size: 32px;
+        button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1.2rem 3rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 20px;
-        }
-
-        .card-description {
-            font-size: 17px;
-            color: #666;
-            line-height: 1.8;
-            margin-bottom: 25px;
-        }
-
-        .feature-list {
-            list-style: none;
-            margin-top: 25px;
-        }
-
-        .feature-list li {
-            padding: 14px 0;
-            padding-left: 40px;
+            font-family: 'Outfit', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
             position: relative;
-            color: #555;
-            font-size: 16px;
-            line-height: 1.6;
+            overflow: hidden;
         }
 
-        .feature-list li::before {
-            content: '💝';
+        button::before {
+            content: '';
             position: absolute;
-            left: 0;
-            font-size: 24px;
-        }
-
-        .info-box {
-            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e9 100%);
-            border-left: 5px solid #FF69B4;
-            border-radius: 15px;
-            padding: 30px;
-            margin: 30px 0;
-            box-shadow: 0 5px 20px rgba(255, 105, 180, 0.1);
-        }
-
-        .info-box-title {
-            font-weight: 700;
-            color: #FF1493;
-            margin-bottom: 15px;
-            font-size: 22px;
-        }
-
-        .info-box-content {
-            color: #555;
-            line-height: 1.8;
-            font-size: 16px;
-        }
-
-        footer {
-            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
-            padding: 60px 20px;
-            text-align: center;
-            color: white;
-        }
-
-        footer h3 {
-            font-size: 32px;
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-
-        footer p {
-            margin: 10px 0;
-            font-size: 16px;
-            opacity: 0.9;
-        }
-
-        .scroll-to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            opacity: 0;
-            transform: translateY(100px);
-            transition: all 0.3s ease;
-            z-index: 999;
-            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
         }
 
-        .scroll-to-top.visible {
-            opacity: 1;
+        button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        button:active {
             transform: translateY(0);
         }
 
-        .scroll-to-top:hover {
-            transform: translateY(-5px) scale(1.1);
-            box-shadow: 0 15px 40px rgba(255, 105, 180, 0.4);
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
+        /* Alert Messages */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid var(--success);
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        button.loading .spinner {
+            display: inline-block;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .main-menu {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: rgba(255, 255, 255, 0.98);
-                backdrop-filter: blur(10px);
-                flex-direction: column;
-                padding: 20px;
-                gap: 20px;
-                border-bottom: 2px solid #ffb3d9;
+            h1 {
+                font-size: 2.5rem;
             }
 
-            .main-menu.active {
-                display: flex;
-            }
-
-            .menu-toggle {
-                display: flex;
-            }
-
-            .hero-title {
-                font-size: 48px;
-            }
-
-            .hero-subtitle {
-                font-size: 20px;
-            }
-
-            .cards-grid {
+            .form-row {
                 grid-template-columns: 1fr;
             }
 
-            .content-wrapper {
-                padding: 80px 20px 40px;
+            .form-section {
+                padding: 2rem 1.5rem;
             }
 
-            .section-header h2 {
-                font-size: 36px;
+            .features {
+                grid-template-columns: 1fr;
             }
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header" id="header">
-        <a href="#home" class="logo-container">
-            <div class="logo">🌸</div>
-            <div class="logo-text">XOXO</div>
-        </a>
-        
-        <nav class="main-menu" id="mainMenu">
-            <a href="#home" class="menu-item active">Home</a>
-            <a href="#rules" class="menu-item">Staff Rules</a>
-            <a href="#requirements" class="menu-item">Requirements</a>
-            <a href="#recognition" class="menu-item">Recognition</a>
-            <a href="#guidelines" class="menu-item">Guidelines</a>
-        </nav>
-        
-        <div class="menu-toggle" id="menuToggle">
-            <span></span>
-            <span></span>
-            <span></span>
+    <header>
+        <div class="header-content">
+            <h1>SwiftShip</h1>
+            <p class="tagline">Fast, Reliable, Global Shipping Solutions</p>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="section">
-        <div class="hero-wrapper">
-            <div class="hero-content">
-                <h1 class="hero-title">XOXO Roleplay</h1>
-                <p class="hero-subtitle">Staff Handbook 2025</p>
-                <p class="hero-description">
-                    Welcome to the XOXO Roleplay staff team! This handbook outlines everything you need to know about being a professional, effective staff member. Your dedication keeps our community safe and enjoyable for everyone.
-                </p>
+    <div class="container">
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🚚</div>
+                <h3>Express Delivery</h3>
+                <p>Lightning-fast shipping to anywhere in the world with real-time tracking</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📦</div>
+                <h3>Safe Handling</h3>
+                <p>Your packages are handled with utmost care and delivered safely</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3>Best Rates</h3>
+                <p>Competitive pricing with transparent costs and no hidden fees</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌍</div>
+                <h3>Global Reach</h3>
+                <p>We ship to over 200 countries and territories worldwide</p>
+            </div>
+        </div>
 
-                <div class="hero-stats">
-                    <div class="hero-stats">
-    <div class="hero-stat">
-        <div class="hero-stat-number">🤝</div>
-        <div class="hero-stat-label">Teamwork & Unity</div>
+        <div class="form-section">
+            <h2>Request a Quote</h2>
+            <p>Fill out the form below and we'll get back to you with the best shipping options for your needs.</p>
+            
+            <div id="alert" class="alert"></div>
+
+            <form id="shippingForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Full Name <span class="required">*</span></label>
+                        <input type="text" name="name" id="name" required placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address <span class="required">*</span></label>
+                        <input type="email" name="email" id="email" required placeholder="john@example.com">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Phone Number <span class="required">*</span></label>
+                        <input type="tel" name="number" id="number" required placeholder="+1 (555) 123-4567">
+                    </div>
+                    <div class="form-group">
+                        <label>WhatsApp Number</label>
+                        <input type="tel" name="whatsapp" id="whatsapp" placeholder="+1 (555) 123-4567">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Pickup Address <span class="required">*</span></label>
+                        <input type="text" name="pickup_address" id="pickup_address" required placeholder="123 Main St, City, State">
+                    </div>
+                    <div class="form-group">
+                        <label>Delivery Address <span class="required">*</span></label>
+                        <input type="text" name="delivery_address" id="delivery_address" required placeholder="456 Oak Ave, City, State">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Package Type <span class="required">*</span></label>
+                        <select name="package_type" id="package_type" required>
+                            <option value="">Select package type</option>
+                            <option value="Document">Document</option>
+                            <option value="Small Package">Small Package</option>
+                            <option value="Medium Package">Medium Package</option>
+                            <option value="Large Package">Large Package</option>
+                            <option value="Fragile">Fragile Item</option>
+                            <option value="Heavy">Heavy Item</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Estimated Weight (kg)</label>
+                        <input type="number" name="weight" id="weight" placeholder="5" step="0.1" min="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Shipping Service <span class="required">*</span></label>
+                    <select name="shipping_service" id="shipping_service" required>
+                        <option value="">Select shipping service</option>
+                        <option value="Standard (5-7 days)">Standard (5-7 days)</option>
+                        <option value="Express (2-3 days)">Express (2-3 days)</option>
+                        <option value="Overnight">Overnight</option>
+                        <option value="International">International</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Additional Notes</label>
+                    <textarea name="notes" id="notes" placeholder="Any special instructions or requirements..."></textarea>
+                </div>
+
+                <button type="submit">
+                    <span>Submit Quote Request</span>
+                    <span class="spinner"></span>
+                </button>
+            </form>
+        </div>
     </div>
-    <div class="hero-stat">
-        <div class="hero-stat-number">✨</div>
-        <div class="hero-stat-label">Positive Vibes Always</div>
-    </div>
-    <div class="hero-stat">
-        <div class="hero-stat-number">💬</div>
-        <div class="hero-stat-label">Respect & Communication</div>
-    </div>
-    <div class="hero-stat">
-        <div class="hero-stat-number">🚀</div>
-        <div class="hero-stat-label">Growth & Motivation</div>
-    </div>
 
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Staff Rules Section -->
-    <section id="rules" class="section">
-        <div class="content-wrapper">
-            <div class="section-header">
-                <h2>Staff Rules</h2>
-                <p>Essential guidelines every staff member must follow</p>
-            </div>
-
-            <div class="info-box">
-                <div class="info-box-title">🌸 Core Values</div>
-                <div class="info-box-content">
-                    Treat everyone with respect, act as a role model, and maintain professionalism at all times. Your behavior represents XOXO Roleplay and sets the standard for the entire community.
-                </div>
-            </div>
-
-            <div class="cards-grid">
-                <div class="card">
-                    <div class="card-icon">👥</div>
-                    <div class="card-title">Professional Conduct</div>
-                    <div class="card-description">
-                        Maintain the highest standards of professionalism in all interactions.
-                    </div>
-                    <ul class="feature-list">
-                        <li>Treat everyone in the community with respect</li>
-                        <li>Always act as a role model</li>
-                        <li>Never harass or provoke players</li>
-                        <li>Maintain a mature and calm demeanor</li>
-                        <li>Avoid vulgar or unprofessional language</li>
-                        <li>No toxicity within the staff team</li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon">🛡️</div>
-                    <div class="card-title">Administrative Powers</div>
-                    <div class="card-description">
-                        Use your powers responsibly and only for their intended purposes.
-                    </div>
-                    <ul class="feature-list">
-                        <li>Use powers only for administrative purposes</li>
-                        <li>Do not modify or interpret server rules</li>
-                        <li>Never scout bases or gain personal advantage</li>
-                        <li>No noclipping while building</li>
-                        <li>Don't play on duty while under influence</li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon">⚖️</div>
-                    <div class="card-title">Handling Sits</div>
-                    <div class="card-description">
-                        Follow proper procedures when dealing with player issues.
-                    </div>
-                    <ul class="feature-list">
-                        <li>Always open a sit before warning players</li>
-                        <li>Handle all sits at a sit location which will be given</li>
-                        <li>List every rule broken when punishing</li>
-                        <li>Gather sufficient evidence before bans</li>
-                        <li>Don't handle sits involving friends/clan</li>
-                        <li>Mute toxic players, don't escalate</li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon">🔒</div>
-                    <div class="card-title">Confidentiality</div>
-                    <div class="card-description">
-                        Protect sensitive information and maintain trust.
-                    </div>
-                    <ul class="feature-list">
-                        <li>Never leak staff chat information</li>
-                        <li>Don't make anonymous staff reports</li>
-                        <li>Don't message players in DMs about issues</li>
-                        <li>Outside behavior affects standing if harmful</li>
-                        <li>Keep internal discussions private</li>
-                        <li>Maintain professionalism everywhere</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-  <!-- Requirements Section -->
-<section id="requirements" class="section">
-    <div class="content-wrapper">
-        <!-- Section Header -->
-        <div class="section-header">
-            <h2>Staff Handbook</h2>
-            <p>Activity expectations and role responsibilities for every rank.</p>
-        </div>
-
-        <!-- Info Box -->
-        <div class="info-box">
-            <div class="info-box-title">Notice</div>
-            <div class="info-box-content">
-                All staff members are expected to maintain consistent activity, professionalism, and communication both in-game and on Discord.  
-                This handbook outlines the core responsibilities and expectations for each staff rank.
-            </div>
-        </div>
-
-        <!-- Cards Grid -->
-        <div class="cards-grid">
-            <!-- Trial Moderator -->
-            <div class="card">
-                <div class="card-icon">🌱</div>
-                <div class="card-title">Trial Moderator</div>
-                <div class="card-description">
-                    Entry-level staff learning the rules and moderation process.
-                </div>
-                <ul class="feature-list">
-                    <li>Learn and enforce server rules under supervision</li>
-                    <li>Assist players with questions and simple reports</li>
-                    <li>Participate in staff training and meetings</li>
-                    <li>Report bugs or issues to senior staff</li>
-                    <li>Remain active and professional during your trial period</li>
-                </ul>
-            </div>
-
-            <!-- Moderator -->
-            <div class="card">
-                <div class="card-icon">🛡️</div>
-                <div class="card-title">Moderator</div>
-                <div class="card-description">
-                    Core staff responsible for community moderation and support.
-                </div>
-                <ul class="feature-list">
-                    <li>Handle sits and player reports fairly and efficiently</li>
-                    <li>Maintain consistent in-game and Discord presence</li>
-                    <li>Resolve player disputes respectfully and objectively</li>
-                    <li>Help enforce roleplay and community standards</li>
-                    <li>Assist in bug reporting and feedback collection</li>
-                </ul>
-            </div>
-
-            <!-- Senior Moderator -->
-            <div class="card">
-                <div class="card-icon">⚙️</div>
-                <div class="card-title">Senior Moderator</div>
-                <div class="card-description">
-                    Experienced staff who lead training and enforce consistency.
-                </div>
-                <ul class="feature-list">
-                    <li>Train and mentor new staff members</li>
-                    <li>Handle complex reports and serious rule violations</li>
-                    <li>Ensure staff follow procedures and maintain standards</li>
-                    <li>Participate in testing and provide improvement feedback</li>
-                    <li>Support Head Moderators and Admins with staff oversight</li>
-                </ul>
-            </div>
-
-            <!-- Head Moderator -->
-            <div class="card">
-                <div class="card-icon">👑</div>
-                <div class="card-title">Head Moderator</div>
-                <div class="card-description">
-                    Leader of the moderation team, overseeing training and policy.
-                </div>
-                <ul class="feature-list">
-                    <li>Oversee staff training and evaluations</li>
-                    <li>Manage team performance and handle escalated issues</li>
-                    <li>Coordinate meetings and communicate policy updates</li>
-                    <li>Supervise forum moderation and appeal reviews</li>
-                    <li>Collaborate with Admins on long-term staff goals</li>
-                </ul>
-            </div>
-
-            <!-- Administrator -->
-            <div class="card">
-                <div class="card-icon">🧠</div>
-                <div class="card-title">Administrator</div>
-                <div class="card-description">
-                    Senior management overseeing server operations and staff leadership.
-                </div>
-                <ul class="feature-list">
-                    <li>Oversee all staff teams and enforce high-level policies</li>
-                    <li>Manage server performance, configuration, and updates</li>
-                    <li>Handle major appeals and internal investigations</li>
-                    <li>Lead development discussions and testing coordination</li>
-                    <li>Ensure community integrity and long-term stability</li>
-                </ul>
-            </div>
-
-                <div class="card">
-                    <div class="card-icon">🪞</div>
-                    <div class="card-title">Role Expectations</div>
-                    <div class="card-description">
-                        What's expected from each staff rank.
-                    </div>
-                    <ul class="feature-list">
-                         <li>Trial Moderator: Learn server rules, assist players, and gain experience</li>
-                            <li>Moderator: Stay active in-game, help resolve reports, and maintain roleplay standards</li>
-                            <li>Senior Moderator: Train junior staff, handle complex situations, and ensure rule consistency</li>
-                            <li>Head Moderator: Lead the moderation team, oversee staff performance, and manage appeals</li>
-                            <li>Admin: Support all staff ranks, handle server operations, and protect community integrity</li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon">⚠️</div>
-                    <div class="card-title">Punishment System</div>
-                    <div class="card-description">
-                        Progressive discipline for staff misconduct.
-                    </div>
-                    <ul class="feature-list">
-                        <li>Warnings remain permanently on record</li>
-                        <li>Strikes last for 2 months</li>
-                        <li>Strikes issued for serious misconduct</li>
-                        <li>Multiple warnings lead to strikes</li>
-                        <li>Offenses during strikes = possible demotion</li>
-                        <li>Any punishment may impact promotion</li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon">💫</div>
-                    <div class="card-title">General Information</div>
-                    <div class="card-description">
-                        Important operational details for staff.
-                    </div>
-                    <ul class="feature-list">
-                        <li>Provide proof for all refunds</li>
-                        <li>MRDM defined by intent, not kill count</li>
-                        <li>Active warnings decay after 48 hours</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Recognition Section -->
-    <section id="recognition" class="section">
-        <div class="content-wrapper">
-            <div class="section-header">
-                <h2>Staff Recognition</h2>
-                <p>Rewarding excellence and dedication</p>
-            </div>
-
-            <div class="cards-grid">
-                <div class="card">
-                    <div class="card-icon">🌟</div>
-                    <div class="card-title">Staff Member of the Month</div>
-                    <div class="card-description">
-                        Our premier recognition program for outstanding staff performance.
-                    </div>
-                    <ul class="feature-list">
-                        <li>Must have at least 2 weeks on the team</li>
-                        <li>No recent punishments or warnings</li>
-                        <li>Selected by Management & Ownership</li>
-                        <li>Considers performance AND behavior</li>
-                        <li>2-month cooldown between awards</li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon">🎁</div>
-                    <div class="card-title">SMOTM Rewards</div>
-                    <div class="card-description">
-                        Exclusive rewards for Staff Member of the Month winners.
-                    </div>
-                    <ul class="feature-list">
-                        <li>Special Discord role and recognition</li>
-                        <li>Permanent in-game reward item</li>
-                        <li>Recognition in staff meetings</li>
-                        <li>Priority consideration for promotions</li>
-                        <li>Community-wide announcement</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Guidelines Section -->
-    <section id="guidelines" class="section">
-        <div class="content-wrapper">
-            <div class="section-header">
-                <h2>Punishment Guidelines</h2>
-                <p>Best practices for handling player infractions</p>
-            </div>
-
-            <div class="cards-grid">
-                <div class="card">
-                    <div class="card-icon">🧠</div>
-                    <div class="card-title">General Guidelines</div>
-                    <div class="card-description">
-                        Follow these principles when issuing punishments.
-                    </div>
-                    <ul class="feature-list">
-                        <li>Follow Warning → Kick → Ban progression</li>
-                        <li>Use discretion for minor first-time offenses</li>
-                        <li>Issue verbal warnings when appropriate</li>
-                        <li>Always include context in punishment logs</li>
-                        <li>Combine similar offenses appropriately</li>
-                        <li>Use common sense and professionalism</li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon">📝</div>
-                    <div class="card-title">Documentation</div>
-                    <div class="card-description">
-                        Proper logging and evidence requirements.
-                    </div>
-                    <ul class="feature-list">
-                        <li>Include context in all punishment logs</li>
-                        <li>Example: 'FailRP - suicided to avoid RP'</li>
-                        <li>Censor sensitive words properly</li>
-                        <li>Example: 'Called player an N-word'</li>
-                        <li>Always provide refund proof in channel</li>
-                        <li>Keep detailed records of serious issues</li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon">🚨</div>
-                    <div class="card-title">Important Reminders</div>
-                    <div class="card-description">
-                        Critical points to remember during your duties.
-                    </div>
-                    <ul class="feature-list">
-                        <li>to be updated</li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon">💼</div>
-                    <div class="card-title">Professional Tips</div>
-                    <div class="card-description">
-                        Additional guidance for effective staff work.
-                    </div>
-                    <ul class="feature-list">
-                        <li>Stay calm even in heated situations</li>
-                        <li>Listen to both sides before deciding</li>
-                        <li>Be consistent with punishments</li>
-                        <li>Ask for help when unsure</li>
-                        <li>Learn from experienced staff members</li>
-                        <li>Always put the community first</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
     <footer>
-        <h3>🌸 XOXO Roleplay</h3>
-        <p><strong>Staff Handbook 2025</strong></p>
-        <p>Your professionalism keeps our community thriving</p>
-        <p>Website created by killium dev</p>
-        <p style="margin-top: 30px; font-size: 14px;">© 2025 XOXO Roleplay | All Rights Reserved</p>
+        <p>&copy; 2026 SwiftShip Logistics. All rights reserved.</p>
     </footer>
 
-    <!-- Scroll to top button -->
-    <div class="scroll-to-top" id="scrollToTop">
-        <span>↑</span>
-    </div>
-
     <script>
-        const menuToggle = document.getElementById('menuToggle');
-        const mainMenu = document.getElementById('mainMenu');
-        const header = document.getElementById('header');
-        const scrollToTopBtn = document.getElementById('scrollToTop');
-        const sections = document.querySelectorAll('.section');
-        const menuItems = document.querySelectorAll('.menu-item');
+        const form = document.getElementById('shippingForm');
+        const alertBox = document.getElementById('alert');
+        const submitButton = form.querySelector('button[type="submit"]');
 
-        // Mobile menu toggle
-        menuToggle.addEventListener('click', () => {
-            menuToggle.classList.toggle('active');
-            mainMenu.classList.toggle('active');
-        });
-
-        // Close mobile menu when clicking on menu items
-        menuItems.forEach(item => {
-            item.addEventListener('click', () => {
-                menuToggle.classList.remove('active');
-                mainMenu.classList.remove('active');
-            });
-        });
-
-        // Update active menu item on scroll
-        function updateActiveMenuItem() {
-            const scrollPosition = window.scrollY + 100;
-
-            sections.forEach((section, index) => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-
-                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                    menuItems.forEach(item => item.classList.remove('active'));
-                    if (menuItems[index]) {
-                        menuItems[index].classList.add('active');
-                    }
-                }
-            });
-
-            // Header background on scroll
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-
-            // Show/hide scroll to top button
-            if (window.scrollY > 500) {
-                scrollToTopBtn.classList.add('visible');
-            } else {
-                scrollToTopBtn.classList.remove('visible');
-            }
+        function showAlert(message, type) {
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type} show`;
+            
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 5000);
         }
 
-        window.addEventListener('scroll', updateActiveMenuItem);
-
-        // Smooth scroll to section
-        menuItems.forEach(item => {
-            item.addEventListener('click', (e) => {
-                const targetId = item.getAttribute('href');
-                if (targetId && targetId.startsWith('#')) {
-                    e.preventDefault();
-                    const targetSection = document.querySelector(targetId);
-                    if (targetSection) {
-                        targetSection.scrollIntoView({ behavior: 'smooth' });
-                    }
-                }
-            });
-        });
-
-        // Logo click to scroll to top
-        document.querySelector('.logo-container').addEventListener('click', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+            
+            // Disable button and show loading
+            submitButton.disabled = true;
+            submitButton.classList.add('loading');
+            
+            // Collect form data
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                number: document.getElementById('number').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                pickup_address: document.getElementById('pickup_address').value,
+                delivery_address: document.getElementById('delivery_address').value,
+                package_type: document.getElementById('package_type').value,
+                weight: document.getElementById('weight').value,
+                shipping_service: document.getElementById('shipping_service').value,
+                notes: document.getElementById('notes').value,
+                timestamp: new Date().toLocaleString()
+            };
 
-        // Scroll to top button
-        scrollToTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+            try {
+                const response = await fetch('https://sheetdb.io/api/v1/wr8g8nxcnri1f', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ data: formData })
+                });
 
-        // Initialize
-        updateActiveMenuItem();
+                if (response.ok) {
+                    showAlert('✓ Quote request submitted successfully! We\'ll contact you soon.', 'success');
+                    form.reset();
+                } else {
+                    throw new Error('Failed to submit form');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('✗ Failed to submit. Please try again or contact us directly.', 'error');
+            } finally {
+                // Re-enable button and hide loading
+                submitButton.disabled = false;
+                submitButton.classList.remove('loading');
+            }
+        });
     </script>
 </body>
 </html>
