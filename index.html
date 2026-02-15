@@ -139,6 +139,43 @@
             line-height: 1.7;
         }
 
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
         .hero-stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -177,6 +214,47 @@
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
         }
 
+        .card-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tracking-form {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .tracking-form input {
+            flex: 1;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .tracking-form input::placeholder {
+            color: #94a3b8;
+        }
+
+        .tracking-form button {
+            padding: 1rem 2rem;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tracking-form button:hover {
+            background: #0e7490;
+        }
+
         /* Services Section */
         .services {
             padding: 6rem 0;
@@ -200,35 +278,33 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             font-size: 0.875rem;
-            margin-bottom: 0.75rem;
         }
 
         .section-title {
             font-family: 'Sora', sans-serif;
-            font-size: 2.75rem;
+            font-size: 2.5rem;
             font-weight: 700;
+            margin-top: 1rem;
             color: var(--dark);
-            letter-spacing: -1px;
         }
 
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
         }
 
         .service-card {
             background: white;
-            border: 1px solid var(--border);
+            padding: 2.5rem;
             border-radius: 16px;
-            padding: 2.5rem 2rem;
-            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
         }
 
         .service-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         .service-icon {
@@ -243,25 +319,22 @@
         }
 
         .service-icon svg {
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             stroke: white;
-            stroke-width: 2;
             fill: none;
         }
 
         .service-card h3 {
             font-family: 'Sora', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
             color: var(--dark);
         }
 
         .service-card p {
             color: var(--gray);
-            font-size: 0.95rem;
-            line-height: 1.6;
+            line-height: 1.8;
         }
 
         /* Quote Form Section */
@@ -270,185 +343,20 @@
             background: white;
         }
 
-        .quote-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 4rem;
-            align-items: start;
-        }
-
-        .quote-info {
-            position: sticky;
-            top: 120px;
-        }
-
-        .quote-info h2 {
-            font-family: 'Sora', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 1.5rem;
-            letter-spacing: -1px;
-        }
-
-        .quote-info p {
-            color: var(--gray);
-            font-size: 1.05rem;
-            line-height: 1.7;
-            margin-bottom: 2rem;
-        }
-
-        .info-list {
-            list-style: none;
-            margin-top: 2.5rem;
-        }
-
-        .info-list li {
-            display: flex;
-            align-items: start;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            color: var(--gray);
-        }
-
-        .info-list svg {
-            width: 24px;
-            height: 24px;
-            stroke: var(--primary);
-            stroke-width: 2;
-            fill: none;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .form-card {
+        .form-container {
+            max-width: 800px;
+            margin: 3rem auto 0;
             background: white;
-            border: 1px solid var(--border);
-            border-radius: 20px;
             padding: 3rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
         }
 
-        .form-grid {
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-
-        label {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--dark);
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .required {
-            color: #dc2626;
-        }
-
-        input, select, textarea {
-            padding: 0.875rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            transition: all 0.2s;
-            background: white;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        /* Contact Method Selector */
-        .contact-methods {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-        }
-
-        .contact-method {
-            position: relative;
-        }
-
-        .contact-method input[type="checkbox"] {
-            position: absolute;
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .contact-method label {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 1.25rem 1rem;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: white;
-            text-align: center;
-            gap: 0.5rem;
-            font-weight: 500;
-            margin: 0;
-        }
-
-        .contact-method svg {
-            width: 28px;
-            height: 28px;
-            stroke: var(--gray);
-            stroke-width: 2;
-            fill: none;
-            transition: all 0.2s;
-        }
-
-        .contact-method input[type="checkbox"]:checked + label {
-            border-color: var(--primary);
-            background: rgba(26, 86, 219, 0.05);
-        }
-
-        .contact-method input[type="checkbox"]:checked + label svg {
-            stroke: var(--primary);
-        }
-
-        .contact-method label span {
-            font-size: 0.875rem;
-            color: var(--dark);
-        }
-
-        /* Alerts */
         .alert {
-            padding: 1rem 1.25rem;
-            border-radius: 10px;
+            padding: 1rem;
+            border-radius: 12px;
             margin-bottom: 1.5rem;
             display: none;
-            font-weight: 500;
-            font-size: 0.95rem;
         }
 
         .alert.show {
@@ -458,42 +366,122 @@
         .alert-success {
             background: #d1fae5;
             color: #065f46;
-            border: 1px solid #6ee7b7;
         }
 
         .alert-error {
             background: #fee2e2;
             color: #991b1b;
-            border: 1px solid #fca5a5;
         }
 
-        /* Submit Button */
+        .form-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .required {
+            color: #dc2626;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .contact-methods {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .contact-method {
+            position: relative;
+        }
+
+        .contact-method input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .contact-method label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .contact-method input[type="checkbox"]:checked + label {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .contact-method label svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            fill: none;
+        }
+
         .submit-btn {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            padding: 1rem 2.5rem;
+            padding: 1.25rem;
             border: none;
-            border-radius: 10px;
-            font-size: 1rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
             font-weight: 600;
-            font-family: 'Inter', sans-serif;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(26, 86, 219, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            width: 100%;
+            margin-top: 1rem;
+            position: relative;
         }
 
-        .submit-btn:hover {
+        .submit-btn:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(26, 86, 219, 0.4);
-        }
-
-        .submit-btn:active {
-            transform: translateY(0);
+            box-shadow: 0 10px 30px rgba(26, 86, 219, 0.3);
         }
 
         .submit-btn:disabled {
@@ -501,73 +489,200 @@
             cursor: not-allowed;
         }
 
+        .submit-btn.loading span:first-child {
+            opacity: 0;
+        }
+
         .spinner {
-            display: none;
-            width: 18px;
-            height: 18px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
             border-top-color: white;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+            opacity: 0;
         }
 
         .submit-btn.loading .spinner {
-            display: inline-block;
+            opacity: 1;
+        }
+
+        @keyframes spin {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Employee Login Section */
+        .employee-section {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .employee-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></svg>');
+            opacity: 0.5;
+        }
+
+        .employee-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .employee-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .employee-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        .employee-icon svg {
+            width: 40px;
+            height: 40px;
+            stroke: white;
+            fill: none;
+        }
+
+        .employee-card h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 0.75rem;
+        }
+
+        .employee-card p {
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        .employee-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: white;
+            color: var(--primary);
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .employee-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.3);
+        }
+
+        .employee-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            fill: none;
+        }
+
+        .employee-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+            text-align: left;
+        }
+
+        .employee-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .feature-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--secondary);
+            fill: none;
+        }
+
+        .feature-text {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            line-height: 1.6;
         }
 
         /* Footer */
         footer {
             background: var(--dark);
             color: #94a3b8;
-            padding: 3rem 0;
             text-align: center;
-        }
-
-        footer p {
-            font-size: 0.95rem;
+            padding: 2rem 0;
         }
 
         /* Responsive */
-        @media (max-width: 1200px) {
+        @media (max-width: 1024px) {
             .hero-container {
                 grid-template-columns: 1fr;
-                gap: 3rem;
+                text-align: center;
             }
 
             .hero-content h1 {
                 font-size: 3rem;
             }
 
-            .quote-container {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-            }
-
-            .quote-info {
-                position: static;
+            .hero-stats {
+                justify-content: center;
             }
 
             .services-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr;
             }
         }
 
         @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
             .hero-content h1 {
-                font-size: 2.25rem;
-            }
-
-            .hero-stats {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .services-grid {
-                grid-template-columns: 1fr;
+                font-size: 2.5rem;
             }
 
             .form-row {
@@ -578,12 +693,16 @@
                 grid-template-columns: 1fr;
             }
 
-            .form-card {
-                padding: 2rem 1.5rem;
+            .employee-features {
+                grid-template-columns: 1fr;
             }
 
-            .nav-links {
-                display: none;
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .tracking-form {
+                flex-direction: column;
             }
         }
     </style>
@@ -595,8 +714,9 @@
             <div class="logo">SwiftShip</div>
             <div class="nav-links">
                 <a href="#services">Services</a>
-                <a href="tracking.html" class="track-btn">Track Package</a>
                 <a href="#quote">Get Quote</a>
+                <a href="#employee">Employee Login</a>
+                <a href="#" class="track-btn">Track Shipment</a>
             </div>
         </div>
     </nav>
@@ -605,135 +725,96 @@
     <section class="hero">
         <div class="hero-container">
             <div class="hero-content">
-                <h1>Global Shipping Excellence</h1>
-                <p>Trusted by businesses worldwide for secure, fast, and reliable logistics solutions. We deliver your packages with precision and care.</p>
+                <h1>Global Shipping Made Simple</h1>
+                <p>Fast, reliable, and cost-effective shipping solutions for businesses worldwide. Track your packages in real-time and get instant quotes.</p>
                 
+                <div class="cta-buttons">
+                    <a href="#quote" class="btn btn-primary">Get Instant Quote</a>
+                    <a href="#services" class="btn btn-secondary">Our Services</a>
+                </div>
+
                 <div class="hero-stats">
                     <div class="stat">
-                        <span class="stat-number">200+</span>
+                        <span class="stat-number">150+</span>
                         <span class="stat-label">Countries Served</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">50K+</span>
+                        <span class="stat-label">Happy Customers</span>
                     </div>
                     <div class="stat">
                         <span class="stat-number">99.8%</span>
                         <span class="stat-label">On-Time Delivery</span>
                     </div>
-                    <div class="stat">
-                        <span class="stat-number">24/7</span>
-                        <span class="stat-label">Customer Support</span>
-                    </div>
                 </div>
             </div>
+
             <div class="hero-image">
                 <div class="hero-card">
-                    <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="heroGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#1a56db;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#0891b2;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <rect x="50" y="80" width="300" height="180" rx="12" fill="url(#heroGrad)" opacity="0.1"/>
-                        <rect x="70" y="100" width="260" height="140" rx="8" fill="url(#heroGrad)" opacity="0.2"/>
-                        <circle cx="200" cy="150" r="60" fill="url(#heroGrad)"/>
-                        <path d="M180 150 L195 165 L220 135" stroke="white" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+                    <div class="card-title">Track Your Shipment</div>
+                    <form class="tracking-form">
+                        <input type="text" placeholder="Enter tracking number" />
+                        <button type="submit">Track</button>
+                    </form>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Services Section -->
-    <section class="services" id="services">
+    <section id="services" class="services">
         <div class="section-container">
             <div class="section-header">
-                <div class="section-label">Our Services</div>
+                <div class="section-label">What We Offer</div>
                 <h2 class="section-title">Comprehensive Shipping Solutions</h2>
             </div>
-            
+
             <div class="services-grid">
                 <div class="service-card">
                     <div class="service-icon">
-                        <svg viewBox="0 0 24 24">
+                        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                         </svg>
                     </div>
                     <h3>Express Delivery</h3>
-                    <p>Fastest shipping options with guaranteed delivery times and real-time tracking</p>
+                    <p>Lightning-fast shipping for urgent packages. Get your items delivered within 1-3 business days anywhere in the world.</p>
                 </div>
-                
+
                 <div class="service-card">
                     <div class="service-icon">
-                        <svg viewBox="0 0 24 24">
-                            <rect x="3" y="11" width="18" height="11" rx="2"/>
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                        </svg>
-                    </div>
-                    <h3>Secure Handling</h3>
-                    <p>Advanced security protocols and insurance coverage for complete peace of mind</p>
-                </div>
-                
-                <div class="service-card">
-                    <div class="service-icon">
-                        <svg viewBox="0 0 24 24">
+                        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="10"/>
-                            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+                            <polyline points="12 6 12 12 16 14"/>
                         </svg>
                     </div>
-                    <h3>Global Network</h3>
-                    <p>Extensive coverage across 200+ countries with strategic distribution centers</p>
+                    <h3>Real-Time Tracking</h3>
+                    <p>Monitor your shipments every step of the way with our advanced GPS tracking system and instant notifications.</p>
                 </div>
-                
+
                 <div class="service-card">
                     <div class="service-icon">
-                        <svg viewBox="0 0 24 24">
+                        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
                             <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
                             <line x1="12" y1="22.08" x2="12" y2="12"/>
                         </svg>
                     </div>
-                    <h3>Custom Solutions</h3>
-                    <p>Tailored logistics services designed specifically for your business needs</p>
+                    <h3>Secure Packaging</h3>
+                    <p>Professional packaging services to ensure your items arrive safely. We handle fragile and valuable goods with extra care.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Quote Section -->
-    <section class="quote-section" id="quote">
-        <div class="quote-container">
-            <div class="quote-info">
-                <h2>Request a Shipping Quote</h2>
-                <p>Get an instant quote for your shipment. Our team will review your requirements and provide you with the best shipping options tailored to your needs.</p>
-                
-                <ul class="info-list">
-                    <li>
-                        <svg viewBox="0 0 24 24">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>Competitive pricing with no hidden fees</span>
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>Response within 2 hours during business hours</span>
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>Flexible payment and delivery options</span>
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>Dedicated account manager for your shipments</span>
-                    </li>
-                </ul>
+    <!-- Quote Form Section -->
+    <section id="quote" class="quote-section">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">Get Started</div>
+                <h2 class="section-title">Request a Shipping Quote</h2>
             </div>
 
-            <div class="form-card">
+            <div class="form-container">
                 <div id="alert" class="alert"></div>
 
                 <form id="shippingForm" class="form-grid">
@@ -855,9 +936,76 @@
         </div>
     </section>
 
+    <!-- Employee Login Section -->
+    <section id="employee" class="employee-section">
+        <div class="employee-container">
+            <div class="employee-card">
+                <div class="employee-icon">
+                    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </div>
+                
+                <h2>Employee Portal</h2>
+                <p>Access your dashboard to manage shipments, quotes, and customer data</p>
+                
+                <a href="dashboard.html" class="employee-btn">
+                    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="9" y1="3" x2="9" y2="21"/>
+                    </svg>
+                    Login to Dashboard
+                </a>
+
+                <div class="employee-features">
+                    <div class="employee-feature">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                            </svg>
+                        </div>
+                        <div class="feature-text">Real-time analytics and metrics</div>
+                    </div>
+                    
+                    <div class="employee-feature">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 13V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7m16 0v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-5m16 0h-2.586a1 1 0 0 0-.707.293l-2.414 2.414a1 1 0 0 1-.707.293h-3.172a1 1 0 0 1-.707-.293l-2.414-2.414A1 1 0 0 0 6.586 13H4"/>
+                            </svg>
+                        </div>
+                        <div class="feature-text">Manage all shipments</div>
+                    </div>
+                    
+                    <div class="employee-feature">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                            </svg>
+                        </div>
+                        <div class="feature-text">Track revenue & payments</div>
+                    </div>
+                    
+                    <div class="employee-feature">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 20h9"/>
+                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                            </svg>
+                        </div>
+                        <div class="feature-text">Respond to quote requests</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer>
         <p>&copy; 2026 SwiftShip Logistics. All rights reserved. | Privacy Policy | Terms of Service</p>
+        <div style="margin-top: 0.5rem; font-size: 0.75rem; opacity: 0.3;">
+            <a href="dashboard.html" style="color: #94a3b8; text-decoration: none;">Portal</a>
+        </div>
     </footer>
 
     <script>
@@ -933,6 +1081,20 @@
                 submitButton.disabled = false;
                 submitButton.classList.remove('loading');
             }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
         });
     </script>
 </body>
