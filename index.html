@@ -76,6 +76,21 @@
             color: var(--primary);
         }
 
+        .track-btn {
+            background: var(--primary);
+            color: white;
+            padding: 0.625rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .track-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
         /* Hero Section */
         .hero {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
@@ -580,9 +595,8 @@
             <div class="logo">SwiftShip</div>
             <div class="nav-links">
                 <a href="#services">Services</a>
-                <a href="#tracking">Tracking</a>
+                <a href="tracking.html" class="track-btn">Track Package</a>
                 <a href="#quote">Get Quote</a>
-                <a href="#contact">Contact</a>
             </div>
         </div>
     </nav>
