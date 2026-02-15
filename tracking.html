@@ -482,31 +482,95 @@
 
         async function trackPackage(trackingNumber) {
             try {
-                // Fetch shipment info from Active_Shipments tab
+                // Clean up the input tracking number
+                const cleanTrackingNumber = trackingNumber.trim().toUpperCase();
+                
+                console.log('=== SEARCHING FOR SHIPMENT ===');
+                console.log('Input:', trackingNumber);
+                console.log('Clean:', cleanTrackingNumber);
+                
+                // Fetch ALL shipments from Active_Shipments tab
                 const shipmentResponse = await fetch(
-                    `https://sheetdb.io/api/v1/wr8g8nxcnri1f?sheet=Active_Shipments&search=tracking_number&value=${trackingNumber.toUpperCase()}`
+                    `https://sheetdb.io/api/v1/wr8g8nxcnri1f?sheet=Active_Shipments`
                 );
                 
                 if (!shipmentResponse.ok) {
                     throw new Error('Failed to fetch shipment data');
                 }
                 
-                const shipments = await shipmentResponse.json();
+                const allShipments = await shipmentResponse.json();
+                console.log('Total shipments:', allShipments.length);
                 
-                if (!shipments || shipments.length === 0) {
+                // Show all tracking numbers
+                allShipments.forEach((s, i) => {
+                    console.log(`Shipment ${i}: "${s.tracking_number}" (${s.customer_name})`);
+                });
+                
+                // Find exact match for tracking number
+                const shipment = allShipments.find(s => {
+                    if (!s.tracking_number) return false;
+                    const cleanShipmentNumber = s.tracking_number.toString().trim().toUpperCase();
+                    const matches = cleanShipmentNumber === cleanTrackingNumber;
+                    console.log(`  Comparing "${cleanShipmentNumber}" === "${cleanTrackingNumber}": ${matches}`);
+                    return matches;
+                });
+                
+                console.log('Found shipment:', shipment ? shipment.customer_name : 'NONE');
+                
+                if (!shipment) {
                     throw new Error('Tracking number not found. Please check and try again.');
                 }
                 
-                const shipment = shipments[0];
-                
-                // Fetch tracking events from Tracking_Events tab
+                // Fetch ALL tracking events from Tracking_Events tab
                 const eventsResponse = await fetch(
-                    `https://sheetdb.io/api/v1/wr8g8nxcnri1f?sheet=Tracking_Events&search=tracking_number&value=${trackingNumber.toUpperCase()}`
+                    `https://sheetdb.io/api/v1/wr8g8nxcnri1f?sheet=Tracking_Events`
                 );
                 
                 let events = [];
                 if (eventsResponse.ok) {
-                    events = await eventsResponse.json();
+                    const allEvents = await eventsResponse.json();
+                    
+                    console.log('=== DEBUGGING TRACKING ===');
+                    console.log('Searching for:', cleanTrackingNumber);
+                    console.log('Total events in sheet:', allEvents.length);
+                    
+                    // Show all tracking numbers in the data
+                    allEvents.forEach((e, index) => {
+                        console.log(`Event ${index}: tracking_number = "${e.tracking_number}"`);
+                    });
+                    
+                    // Filter events for this specific tracking number (exact match)
+                    events = allEvents.filter(e => {
+                        // Skip if no tracking number
+                        if (!e.tracking_number) {
+                            console.log('Skipping event with no tracking number');
+                            return false;
+                        }
+                        
+                        // Skip if tracking number is empty or just whitespace
+                        const cleanEventNumber = e.tracking_number.toString().trim();
+                        if (cleanEventNumber === '') {
+                            console.log('Skipping event with empty tracking number');
+                            return false;
+                        }
+                        
+                        // Compare uppercase versions
+                        const matches = cleanEventNumber.toUpperCase() === cleanTrackingNumber;
+                        console.log(`Comparing "${cleanEventNumber}" with "${cleanTrackingNumber}": ${matches}`);
+                        return matches;
+                    });
+                    
+                    console.log('Filtered events count:', events.length);
+                    console.log('=== END DEBUGGING ===');
+                    
+                    // Sort events by timestamp (newest first)
+                    events.sort((a, b) => {
+                        // Handle invalid dates
+                        const dateA = new Date(a.event_timestamp);
+                        const dateB = new Date(b.event_timestamp);
+                        if (isNaN(dateA) || isNaN(dateB)) return 0;
+                        return dateB - dateA;
+                    });
                 }
                 
                 // Format data for display
