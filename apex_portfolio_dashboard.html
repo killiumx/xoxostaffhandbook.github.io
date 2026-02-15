@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APEX Trading Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* ===================================
+           LOGIN SCREEN
+        =================================== */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.3s ease;
+        }
+
+        .login-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .login-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 420px;
+            margin: 0 1.5rem;
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-logo h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-logo p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .form-input {
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .login-error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 0.875rem;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.875rem;
+            display: none;
+        }
+
+        .login-error.show {
+            display: block;
+        }
+
+        /* ===================================
+           DASHBOARD LAYOUT
+        =================================== */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard.show {
+            display: block;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .header-left p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* ===================================
+           STATS OVERVIEW
+        =================================== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-change {
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* ===================================
+           PROGRESS SECTION
+        =================================== */
+        .progress-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .progress-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .progress-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .progress-stats {
+            text-align: right;
+        }
+
+        .progress-main {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .progress-detail {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .progress-bar-section {
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar-container {
+            height: 32px;
+            background: var(--bg-main);
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .milestone-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .milestone {
+            text-align: center;
+            padding: 1rem;
+            background: var(--bg-main);
+            border-radius: 8px;
+        }
+
+        .milestone.achieved {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .milestone-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .milestone-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===================================
+           ACCOUNTS GRID
+        =================================== */
+        .accounts-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .accounts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .account-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .account-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .account-card.active {
+            border-color: var(--primary);
+            border-width: 2px;
+        }
+
+        .account-card.passed {
+            border-color: var(--success);
+            background: #f0fdf4;
+        }
+
+        .account-card.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .account-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .account-number {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .account-badge {
+            padding: 0.375rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-active {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-passed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-locked {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .account-goal {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: var(--bg-main);
+            border-radius: 8px;
+        }
+
+        .goal-text {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .goal-progress {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-mini {
+            height: 6px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-mini-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .account-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            font-size: 0.75rem;
+        }
+
+        .account-stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-item-label {
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .stat-item-value {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-top: 0.25rem;
+        }
+
+        /* ===================================
+           TRADE ENTRY FORM
+        =================================== */
+        .entry-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-select {
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+            background: white;
+            cursor: pointer;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* ===================================
+           ALERTS
+        =================================== */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: none;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .alert.show {
+            display: flex;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===================================
+           RESPONSIVE
+        =================================== */
+        @media (max-width: 1024px) {
+            .accounts-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+
+            .milestone-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .milestone-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .progress-stats {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN OVERLAY -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-card">
+            <div class="login-logo">
+                <h1>APEX Portfolio</h1>
+                <p>20 Account Trading Journey</p>
+            </div>
+            
+            <div class="login-error" id="loginError">Invalid password. Please try again.</div>
+            
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input 
+                        type="password" 
+                        class="form-input" 
+                        id="passwordInput" 
+                        placeholder="Enter your password"
+                        required
+                    >
+                </div>
+                <button type="submit" class="login-btn">Access Portfolio</button>
+            </form>
+            
+            <p style="text-align: center; color: var(--text-secondary); font-size: 0.8rem; margin-top: 1.5rem;">
+                Default password: <strong>trader2025</strong>
+            </p>
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="dashboard" id="dashboard">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>APEX Portfolio Dashboard</h1>
+                    <p>Pass 20 evaluation accounts • $3,000 profit per account • Path to PA status</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="refreshData()">
+                        <span id="refreshIcon">↻</span> Refresh
+                    </button>
+                    <button class="btn btn-ghost" onclick="logout()">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="container">
+            <!-- Alert -->
+            <div class="alert" id="alert"></div>
+
+            <!-- Stats Overview -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Total Portfolio P&L</span>
+                        <div class="stat-icon" style="background: #dbeafe; color: #2563eb;">💰</div>
+                    </div>
+                    <div class="stat-value" id="totalPnL">$0</div>
+                    <div class="stat-change" id="totalPnLChange">Across all accounts</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Accounts Passed</span>
+                        <div class="stat-icon" style="background: #d1fae5; color: #10b981;">✓</div>
+                    </div>
+                    <div class="stat-value" id="accountsPassed">0 / 20</div>
+                    <div class="stat-change">Goal: Pass all 20</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Current Active</span>
+                        <div class="stat-icon" style="background: #fef3c7; color: #f59e0b;">📊</div>
+                    </div>
+                    <div class="stat-value" id="currentActive">Account #1</div>
+                    <div class="stat-change" id="activeProgress">$0 / $3,000</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Combined Balance</span>
+                        <div class="stat-icon" style="background: #e0e7ff; color: #6366f1;">💵</div>
+                    </div>
+                    <div class="stat-value" id="totalBalance">$0</div>
+                    <div class="stat-change">Active accounts only</div>
+                </div>
+            </div>
+
+            <!-- Overall Progress -->
+            <div class="progress-section">
+                <div class="progress-header">
+                    <div>
+                        <h2 class="progress-title">Overall Progress to 20 Accounts</h2>
+                        <p class="progress-subtitle">Each account requires $3,000 profit to pass • Total goal: $60,000</p>
+                    </div>
+                    <div class="progress-stats">
+                        <div class="progress-main" id="overallProgress">0%</div>
+                        <div class="progress-detail" id="progressDetail">0 of 20 accounts passed</div>
+                    </div>
+                </div>
+
+                <div class="progress-bar-section">
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="mainProgressBar" style="width: 0%">
+                            <span id="progressBarText">0 / 20 Accounts</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="milestone-grid">
+                    <div class="milestone" id="milestone5">
+                        <div class="milestone-number">5</div>
+                        <div class="milestone-label">First Quarter</div>
+                    </div>
+                    <div class="milestone" id="milestone10">
+                        <div class="milestone-number">10</div>
+                        <div class="milestone-label">Halfway Point</div>
+                    </div>
+                    <div class="milestone" id="milestone15">
+                        <div class="milestone-number">15</div>
+                        <div class="milestone-label">Final Push</div>
+                    </div>
+                    <div class="milestone" id="milestone20">
+                        <div class="milestone-number">20</div>
+                        <div class="milestone-label">PA Status!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Active Accounts -->
+            <section class="accounts-section">
+                <h2 class="section-title">
+                    <span>📊</span> Current Active Accounts
+                </h2>
+                <div class="accounts-grid" id="activeAccountsGrid">
+                    <!-- Active accounts will be populated here -->
+                </div>
+            </section>
+
+            <!-- All Accounts Overview -->
+            <section class="accounts-section">
+                <h2 class="section-title">
+                    <span>📋</span> All 20 Evaluation Accounts
+                </h2>
+                <div class="accounts-grid" id="allAccountsGrid">
+                    <!-- All 20 accounts will be populated here -->
+                </div>
+            </section>
+
+            <!-- Trade Entry Form -->
+            <section class="entry-section">
+                <h2 class="section-title">Add Trade Entry</h2>
+                <form id="tradeForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Account Number</label>
+                            <select class="form-select" id="account" required>
+                                <option value="">Select Account</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Date</label>
+                            <input type="date" class="form-input" id="tradeDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Daily P&L ($)</label>
+                            <input type="number" step="0.01" class="form-input" id="dailyPnL" placeholder="0.00" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Contracts</label>
+                            <input type="number" class="form-input" id="contracts" placeholder="0" required>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label class="form-label">Trade Notes</label>
+                        <textarea class="form-input form-textarea" id="notes" placeholder="Strategy, setup, lessons learned..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <span id="submitText">Submit Trade Entry</span>
+                            <span id="submitLoading" class="loading-spinner" style="display: none;"></span>
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="document.getElementById('tradeForm').reset()">
+                            Clear Form
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // ===================================
+        // CONFIGURATION
+        // ===================================
+        const DASHBOARD_PASSWORD = 'trader2025';
+        const SHEET_API = 'https://sheetdb.io/api/v1/eltwz49i4x169';
+        const TOTAL_ACCOUNTS = 20;
+        const EVAL_GOAL = 3000; // $3k per account
+        const STARTING_BALANCE = 50000; // $50k per account
+
+        // ===================================
+        // LOGIN
+        // ===================================
+        const loginOverlay = document.getElementById('loginOverlay');
+        const dashboard = document.getElementById('dashboard');
+        const loginForm = document.getElementById('loginForm');
+        const passwordInput = document.getElementById('passwordInput');
+        const loginError = document.getElementById('loginError');
+
+        if (sessionStorage.getItem('apex_auth') === 'true') {
+            showDashboard();
+        }
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (passwordInput.value === DASHBOARD_PASSWORD) {
+                sessionStorage.setItem('apex_auth', 'true');
+                showDashboard();
+            } else {
+                loginError.classList.add('show');
+                passwordInput.value = '';
+                setTimeout(() => loginError.classList.remove('show'), 3000);
+            }
+        });
+
+        function showDashboard() {
+            loginOverlay.classList.add('hidden');
+            dashboard.classList.add('show');
+            loadDashboardData();
+        }
+
+        function logout() {
+            sessionStorage.removeItem('apex_auth');
+            location.reload();
+        }
+
+        // ===================================
+        // DATA LOADING
+        // ===================================
+        async function loadDashboardData() {
+            try {
+                showLoading(true);
+                const response = await fetch(SHEET_API);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+                
+                const data = await response.json();
+                updateDashboard(data);
+                
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showAlert('Failed to load data. Showing default view.', 'error');
+                updateDashboard([]);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // ===================================
+        // DASHBOARD UPDATE
+        // ===================================
+        function updateDashboard(data) {
+            // Calculate stats per account
+            const accountStats = {};
+            for (let i = 1; i <= TOTAL_ACCOUNTS; i++) {
+                const accountData = data.filter(entry => parseInt(entry.account) === i);
+                const pnl = calculateTotalPnL(accountData);
+                const balance = STARTING_BALANCE + pnl;
+                const days = accountData.length;
+                const winrate = calculateWinRate(accountData);
+                const progress = Math.min((pnl / EVAL_GOAL) * 100, 100);
+                const passed = pnl >= EVAL_GOAL;
+                
+                accountStats[i] = {
+                    pnl, balance, days, winrate, progress, passed
+                };
+            }
+
+            // Calculate overall stats
+            const passedCount = Object.values(accountStats).filter(s => s.passed).length;
+            const totalPnL = Object.values(accountStats).reduce((sum, s) => sum + s.pnl, 0);
+            const activeAccounts = Object.values(accountStats).filter(s => !s.passed);
+            const totalBalance = activeAccounts.reduce((sum, s) => sum + s.balance, 0);
+            
+            // Find current active account (first non-passed)
+            const currentActive = Object.keys(accountStats).find(num => !accountStats[num].passed) || TOTAL_ACCOUNTS;
+            
+            // Update top stats
+            document.getElementById('totalPnL').textContent = formatCurrency(totalPnL);
+            document.getElementById('totalPnL').style.color = totalPnL >= 0 ? 'var(--success)' : 'var(--danger)';
+            document.getElementById('accountsPassed').textContent = `${passedCount} / ${TOTAL_ACCOUNTS}`;
+            document.getElementById('currentActive').textContent = `Account #${currentActive}`;
+            document.getElementById('activeProgress').textContent = 
+                `${formatCurrency(accountStats[currentActive].pnl)} / ${formatCurrency(EVAL_GOAL)}`;
+            document.getElementById('totalBalance').textContent = formatCurrency(totalBalance);
+            
+            // Update overall progress
+            const overallProgress = (passedCount / TOTAL_ACCOUNTS) * 100;
+            document.getElementById('overallProgress').textContent = `${Math.round(overallProgress)}%`;
+            document.getElementById('progressDetail').textContent = `${passedCount} of ${TOTAL_ACCOUNTS} accounts passed`;
+            document.getElementById('mainProgressBar').style.width = `${overallProgress}%`;
+            document.getElementById('progressBarText').textContent = `${passedCount} / ${TOTAL_ACCOUNTS} Accounts`;
+            
+            // Update milestones
+            updateMilestone('milestone5', passedCount >= 5);
+            updateMilestone('milestone10', passedCount >= 10);
+            updateMilestone('milestone15', passedCount >= 15);
+            updateMilestone('milestone20', passedCount >= 20);
+            
+            // Render account grids
+            renderActiveAccounts(accountStats, currentActive);
+            renderAllAccounts(accountStats);
+            
+            // Populate account dropdown
+            populateAccountDropdown(accountStats);
+        }
+
+        function updateMilestone(id, achieved) {
+            const element = document.getElementById(id);
+            if (achieved) {
+                element.classList.add('achieved');
+            } else {
+                element.classList.remove('achieved');
+            }
+        }
+
+        function renderActiveAccounts(accountStats, currentActive) {
+            const grid = document.getElementById('activeAccountsGrid');
+            grid.innerHTML = '';
+            
+            // Show current account and next 2 upcoming
+            const activeNums = [currentActive];
+            for (let i = 1; i <= 2; i++) {
+                const next = parseInt(currentActive) + i;
+                if (next <= TOTAL_ACCOUNTS && !accountStats[next].passed) {
+                    activeNums.push(next);
+                }
+            }
+            
+            activeNums.forEach(num => {
+                grid.appendChild(createAccountCard(num, accountStats[num], num == currentActive));
+            });
+        }
+
+        function renderAllAccounts(accountStats) {
+            const grid = document.getElementById('allAccountsGrid');
+            grid.innerHTML = '';
+            
+            for (let i = 1; i <= TOTAL_ACCOUNTS; i++) {
+                grid.appendChild(createAccountCard(i, accountStats[i], false));
+            }
+        }
+
+        function createAccountCard(num, stats, isActive) {
+            const card = document.createElement('div');
+            card.className = `account-card ${isActive ? 'active' : ''} ${stats.passed ? 'passed' : ''} ${!isActive && !stats.passed && stats.days === 0 ? 'locked' : ''}`;
+            
+            const status = stats.passed ? 'passed' : (isActive ? 'active' : (stats.days > 0 ? 'active' : 'locked'));
+            const badgeClass = `badge-${status}`;
+            const badgeText = status.toUpperCase();
+            
+            card.innerHTML = `
+                <div class="account-header">
+                    <div class="account-number">Account #${num}</div>
+                    <span class="account-badge ${badgeClass}">${badgeText}</span>
+                </div>
+                
+                <div class="account-goal">
+                    <div class="goal-text">Goal: Pass at $3,000 profit</div>
+                    <div class="goal-progress">
+                        <span>${formatCurrency(stats.pnl)}</span>
+                        <span>${Math.round(stats.progress)}%</span>
+                    </div>
+                    <div class="progress-mini">
+                        <div class="progress-mini-fill" style="width: ${stats.progress}%"></div>
+                    </div>
+                </div>
+                
+                <div class="account-stats">
+                    <div class="account-stat-item">
+                        <span class="stat-item-label">Balance</span>
+                        <span class="stat-item-value">${formatCurrency(stats.balance)}</span>
+                    </div>
+                    <div class="account-stat-item">
+                        <span class="stat-item-label">Win Rate</span>
+                        <span class="stat-item-value">${Math.round(stats.winrate)}%</span>
+                    </div>
+                    <div class="account-stat-item">
+                        <span class="stat-item-label">Days</span>
+                        <span class="stat-item-value">${stats.days}</span>
+                    </div>
+                    <div class="account-stat-item">
+                        <span class="stat-item-label">To Goal</span>
+                        <span class="stat-item-value">${formatCurrency(Math.max(EVAL_GOAL - stats.pnl, 0))}</span>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function populateAccountDropdown(accountStats) {
+            const select = document.getElementById('account');
+            select.innerHTML = '<option value="">Select Account</option>';
+            
+            for (let i = 1; i <= TOTAL_ACCOUNTS; i++) {
+                if (!accountStats[i].passed) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = `Account #${i} (${formatCurrency(accountStats[i].pnl)} / $3,000)`;
+                    select.appendChild(option);
+                }
+            }
+        }
+
+        // ===================================
+        // CALCULATIONS
+        // ===================================
+        function calculateTotalPnL(entries) {
+            return entries.reduce((sum, entry) => {
+                const pnl = parseFloat(entry.daily_pnl || entry.dailyPnL || 0);
+                return sum + pnl;
+            }, 0);
+        }
+
+        function calculateWinRate(entries) {
+            if (entries.length === 0) return 0;
+            const wins = entries.filter(e => {
+                const pnl = parseFloat(e.daily_pnl || e.dailyPnL || 0);
+                return pnl > 0;
+            }).length;
+            return (wins / entries.length) * 100;
+        }
+
+        // ===================================
+        // FORM SUBMISSION
+        // ===================================
+        document.getElementById('tradeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = document.querySelector('.btn-primary');
+            const submitText = document.getElementById('submitText');
+            const submitLoading = document.getElementById('submitLoading');
+            
+            submitBtn.disabled = true;
+            submitText.style.display = 'none';
+            submitLoading.style.display = 'inline-block';
+            
+            const formData = {
+                account: document.getElementById('account').value,
+                trade_date: document.getElementById('tradeDate').value,
+                daily_pnl: parseFloat(document.getElementById('dailyPnL').value),
+                contracts: parseInt(document.getElementById('contracts').value),
+                notes: document.getElementById('notes').value,
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                const response = await fetch(SHEET_API, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ data: [formData] })
+                });
+
+                if (response.ok) {
+                    showAlert('✓ Trade entry added successfully!', 'success');
+                    document.getElementById('tradeForm').reset();
+                    document.getElementById('tradeDate').valueAsDate = new Date();
+                    setTimeout(() => loadDashboardData(), 1000);
+                } else {
+                    throw new Error('Failed to submit');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('✗ Failed to submit entry. Please try again.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitText.style.display = 'inline';
+                submitLoading.style.display = 'none';
+            }
+        });
+
+        // ===================================
+        // UTILITY FUNCTIONS
+        // ===================================
+        function formatCurrency(amount) {
+            const formatted = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(Math.abs(amount));
+            
+            return amount < 0 ? `(${formatted})` : formatted;
+        }
+
+        function showAlert(message, type) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.className = `alert alert-${type} show`;
+            
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 5000);
+        }
+
+        function showLoading(show) {
+            const icon = document.getElementById('refreshIcon');
+            if (show) {
+                icon.style.animation = 'spin 1s linear infinite';
+            } else {
+                icon.style.animation = '';
+            }
+        }
+
+        function refreshData() {
+            loadDashboardData();
+            showAlert('✓ Data refreshed', 'success');
+        }
+
+        // Set default date
+        document.getElementById('tradeDate').valueAsDate = new Date();
+    </script>
+</body>
+</html>
