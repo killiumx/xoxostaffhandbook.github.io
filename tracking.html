@@ -429,78 +429,6 @@
         const trackingInput = document.getElementById('trackingNumber');
         const submitBtn = form.querySelector('.search-btn');
 
-        // This is sample data - replace with actual API call to your tracking system
-        const sampleTrackingData = {
-            'SS123456789': {
-                trackingNumber: 'SS123456789',
-                status: 'In Transit',
-                from: 'Los Angeles, CA',
-                to: 'New York, NY',
-                service: 'Express (2-3 days)',
-                estimatedDelivery: 'Feb 16, 2026',
-                events: [
-                    {
-                        time: 'Feb 15, 2026 - 2:30 PM',
-                        status: 'In Transit',
-                        location: 'Chicago, IL - Distribution Center',
-                        active: true
-                    },
-                    {
-                        time: 'Feb 15, 2026 - 8:15 AM',
-                        status: 'Departed Facility',
-                        location: 'Denver, CO - Sorting Facility',
-                        active: false
-                    },
-                    {
-                        time: 'Feb 14, 2026 - 11:45 PM',
-                        status: 'Arrived at Facility',
-                        location: 'Denver, CO - Sorting Facility',
-                        active: false
-                    },
-                    {
-                        time: 'Feb 14, 2026 - 4:20 PM',
-                        status: 'Picked Up',
-                        location: 'Los Angeles, CA - Origin',
-                        active: false
-                    },
-                    {
-                        time: 'Feb 14, 2026 - 10:00 AM',
-                        status: 'Label Created',
-                        location: 'Los Angeles, CA',
-                        active: false
-                    }
-                ]
-            },
-            'SS987654321': {
-                trackingNumber: 'SS987654321',
-                status: 'Delivered',
-                from: 'Miami, FL',
-                to: 'Boston, MA',
-                service: 'Standard (5-7 days)',
-                estimatedDelivery: 'Feb 14, 2026',
-                events: [
-                    {
-                        time: 'Feb 14, 2026 - 3:45 PM',
-                        status: 'Delivered',
-                        location: 'Boston, MA - Left at front door',
-                        active: true
-                    },
-                    {
-                        time: 'Feb 14, 2026 - 9:20 AM',
-                        status: 'Out for Delivery',
-                        location: 'Boston, MA - Local Facility',
-                        active: false
-                    },
-                    {
-                        time: 'Feb 13, 2026 - 6:30 PM',
-                        status: 'Arrived at Facility',
-                        location: 'Boston, MA - Distribution Center',
-                        active: false
-                    }
-                ]
-            }
-        };
-
         function showError(message) {
             errorAlert.textContent = message;
             errorAlert.classList.add('show');
@@ -553,20 +481,54 @@
         }
 
         async function trackPackage(trackingNumber) {
-            // Simulate API call delay
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            // In production, replace this with actual API call:
-            // const response = await fetch(`https://sheetdb.io/api/v1/YOUR_TRACKING_SHEET_ID/search?tracking_number=${trackingNumber}`);
-            // const data = await response.json();
-
-            // For now, use sample data
-            const data = sampleTrackingData[trackingNumber.toUpperCase()];
-            
-            if (data) {
-                displayTrackingInfo(data);
-            } else {
-                throw new Error('Tracking number not found. Please check and try again.');
+            try {
+                // Fetch shipment info from Active_Shipments tab
+                const shipmentResponse = await fetch(
+                    `https://sheetdb.io/api/v1/wr8g8nxcnri1f?sheet=Active_Shipments&search=tracking_number&value=${trackingNumber.toUpperCase()}`
+                );
+                
+                if (!shipmentResponse.ok) {
+                    throw new Error('Failed to fetch shipment data');
+                }
+                
+                const shipments = await shipmentResponse.json();
+                
+                if (!shipments || shipments.length === 0) {
+                    throw new Error('Tracking number not found. Please check and try again.');
+                }
+                
+                const shipment = shipments[0];
+                
+                // Fetch tracking events from Tracking_Events tab
+                const eventsResponse = await fetch(
+                    `https://sheetdb.io/api/v1/wr8g8nxcnri1f?sheet=Tracking_Events&search=tracking_number&value=${trackingNumber.toUpperCase()}`
+                );
+                
+                let events = [];
+                if (eventsResponse.ok) {
+                    events = await eventsResponse.json();
+                }
+                
+                // Format data for display
+                const trackingData = {
+                    trackingNumber: shipment.tracking_number,
+                    status: shipment.current_status || 'Unknown',
+                    from: shipment.pickup_address || 'N/A',
+                    to: shipment.delivery_address || 'N/A',
+                    service: shipment.service_type || 'N/A',
+                    estimatedDelivery: shipment.estimated_delivery || 'N/A',
+                    events: events.map(e => ({
+                        time: e.event_timestamp,
+                        status: e.event_status,
+                        location: e.event_location,
+                        active: e.event_status === shipment.current_status
+                    }))
+                };
+                
+                displayTrackingInfo(trackingData);
+                
+            } catch (error) {
+                throw new Error(error.message || 'Failed to track package. Please try again.');
             }
         }
 
@@ -592,11 +554,6 @@
                 submitBtn.classList.remove('loading');
             }
         });
-
-        // Sample tracking numbers hint
-        console.log('Sample tracking numbers to try:');
-        console.log('- SS123456789 (In Transit)');
-        console.log('- SS987654321 (Delivered)');
     </script>
 </body>
 </html>
