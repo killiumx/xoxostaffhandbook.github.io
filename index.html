@@ -3,212 +3,322 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SwiftShip Logistics - Fast, Reliable Shipping Services</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>SwiftShip Logistics - Global Shipping Excellence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #FF6B35;
-            --primary-dark: #E5592D;
-            --secondary: #004E89;
-            --dark: #1A1A2E;
-            --light: #F7F7F7;
-            --accent: #FFD23F;
-            --success: #06D6A0;
-            --shadow: rgba(0, 0, 0, 0.15);
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #1a56db;
+            --primary-dark: #0f3a94;
+            --secondary: #0891b2;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --border: #e2e8f0;
+        }
+
         body {
-            font-family: 'Outfit', sans-serif;
-            background: var(--light);
+            font-family: 'Inter', sans-serif;
             color: var(--dark);
             line-height: 1.6;
+            background: #ffffff;
             overflow-x: hidden;
         }
 
-        /* Header */
-        header {
-            background: linear-gradient(135deg, var(--secondary) 0%, var(--dark) 100%);
+        /* Navigation */
+        nav {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: white;
-            padding: 2rem 0;
+            padding: 8rem 0 6rem;
             position: relative;
             overflow: hidden;
         }
 
-        header::before {
+        .hero::before {
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
             right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="2" height="2" x="0" y="0" fill="white" opacity="0.1"/></svg>');
-            background-size: 50px 50px;
-            animation: slide 20s linear infinite;
+            width: 50%;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(26, 86, 219, 0.2), transparent 70%);
+            pointer-events: none;
         }
 
-        @keyframes slide {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(50px); }
-        }
-
-        .header-content {
-            max-width: 1200px;
+        .hero-container {
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
             position: relative;
             z-index: 1;
         }
 
-        h1 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 4rem;
-            letter-spacing: 4px;
-            margin-bottom: 0.5rem;
+        .hero-content h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: 3.75rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-number {
+            font-family: 'Sora', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-top: 0.5rem;
+        }
+
+        .hero-image {
+            position: relative;
+        }
+
+        .hero-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Services Section */
+        .services {
+            padding: 6rem 0;
+            background: var(--light);
+        }
+
+        .section-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            color: var(--primary);
+            font-weight: 600;
             text-transform: uppercase;
-            animation: fadeInDown 0.8s ease;
+            letter-spacing: 1px;
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
         }
 
-        .tagline {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            font-weight: 300;
-            animation: fadeInUp 0.8s ease 0.2s both;
+        .section-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 2.75rem;
+            font-weight: 700;
+            color: var(--dark);
+            letter-spacing: -1px;
         }
 
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .service-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            transition: all 0.3s ease;
         }
 
-        /* Container */
-        .container {
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary);
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-icon svg {
+            width: 30px;
+            height: 30px;
+            stroke: white;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .service-card h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--dark);
+        }
+
+        .service-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Quote Form Section */
+        .quote-section {
+            padding: 6rem 0;
+            background: white;
+        }
+
+        .quote-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 3rem 2rem;
-        }
-
-        /* Features Section */
-        .features {
+            padding: 0 2rem;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 4rem;
-            animation: fadeIn 1s ease 0.4s both;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 4rem;
+            align-items: start;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .quote-info {
+            position: sticky;
+            top: 120px;
         }
 
-        .feature-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px var(--shadow);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-top: 4px solid var(--primary);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 8px 30px var(--shadow);
-        }
-
-        .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-card h3 {
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: var(--secondary);
-        }
-
-        /* Form Section */
-        .form-section {
-            background: white;
-            padding: 3rem;
-            border-radius: 16px;
-            box-shadow: 0 8px 40px var(--shadow);
-            animation: slideInRight 0.8s ease 0.6s both;
-            position: relative;
-            overflow: hidden;
-        }
-
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .form-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 6px;
-            background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
-            background-size: 200% 100%;
-            animation: gradientShift 3s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        .form-section h2 {
-            font-family: 'Bebas Neue', sans-serif;
+        .quote-info h2 {
+            font-family: 'Sora', sans-serif;
             font-size: 2.5rem;
-            letter-spacing: 2px;
-            color: var(--secondary);
-            margin-bottom: 1rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
         }
 
-        .form-section p {
-            color: #666;
+        .quote-info p {
+            color: var(--gray);
+            font-size: 1.05rem;
+            line-height: 1.7;
             margin-bottom: 2rem;
         }
 
-        form {
-            display: grid;
-            gap: 1.5rem;
+        .info-list {
+            list-style: none;
+            margin-top: 2.5rem;
         }
 
-        .form-row {
+        .info-list li {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            color: var(--gray);
+        }
+
+        .info-list svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--primary);
+            stroke-width: 2;
+            fill: none;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .form-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+        }
+
+        .form-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
             gap: 1.5rem;
         }
 
@@ -217,109 +327,113 @@
             flex-direction: column;
         }
 
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
         label {
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
             color: var(--dark);
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
         .required {
-            color: var(--primary);
+            color: #dc2626;
         }
 
-        input, textarea, select {
-            padding: 1rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: var(--light);
+        input, select, textarea {
+            padding: 0.875rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            background: white;
         }
 
-        input:focus, textarea:focus, select:focus {
+        input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--primary);
-            background: white;
-            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+            box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
         }
 
         textarea {
             resize: vertical;
-            min-height: 120px;
+            min-height: 100px;
         }
 
-        button {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 1.2rem 3rem;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            font-family: 'Outfit', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+        /* Contact Method Selector */
+        .contact-methods {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .contact-method {
             position: relative;
-            overflow: hidden;
         }
 
-        button::before {
-            content: '';
+        .contact-method input[type="checkbox"] {
             position: absolute;
-            top: 50%;
-            left: 50%;
+            opacity: 0;
             width: 0;
             height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
         }
 
-        button:hover::before {
-            width: 300px;
-            height: 300px;
+        .contact-method label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+            text-align: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            margin: 0;
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(255, 107, 53, 0.4);
+        .contact-method svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--gray);
+            stroke-width: 2;
+            fill: none;
+            transition: all 0.2s;
         }
 
-        button:active {
-            transform: translateY(0);
+        .contact-method input[type="checkbox"]:checked + label {
+            border-color: var(--primary);
+            background: rgba(26, 86, 219, 0.05);
         }
 
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
+        .contact-method input[type="checkbox"]:checked + label svg {
+            stroke: var(--primary);
         }
 
-        /* Alert Messages */
+        .contact-method label span {
+            font-size: 0.875rem;
+            color: var(--dark);
+        }
+
+        /* Alerts */
         .alert {
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            border-radius: 10px;
             margin-bottom: 1.5rem;
             display: none;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            font-weight: 500;
+            font-size: 0.95rem;
         }
 
         .alert.show {
@@ -327,189 +441,415 @@
         }
 
         .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border-left: 4px solid var(--success);
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
         }
 
         .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border-left: 4px solid #dc3545;
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
         }
 
-        /* Loading Spinner */
+        /* Submit Button */
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(26, 86, 219, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(26, 86, 219, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .spinner {
             display: none;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
             border-top-color: white;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            margin-left: 10px;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        button.loading .spinner {
+        .submit-btn.loading .spinner {
             display: inline-block;
         }
 
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: #94a3b8;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 0.95rem;
+        }
+
         /* Responsive */
+        @media (max-width: 1200px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .hero-content h1 {
+                font-size: 3rem;
+            }
+
+            .quote-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .quote-info {
+                position: static;
+            }
+
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
+            .hero-content h1 {
+                font-size: 2.25rem;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
             }
 
             .form-row {
                 grid-template-columns: 1fr;
             }
 
-            .form-section {
+            .contact-methods {
+                grid-template-columns: 1fr;
+            }
+
+            .form-card {
                 padding: 2rem 1.5rem;
             }
 
-            .features {
-                grid-template-columns: 1fr;
+            .nav-links {
+                display: none;
             }
-        }
-
-        /* Footer */
-        footer {
-            background: var(--dark);
-            color: white;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 4rem;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <h1>SwiftShip</h1>
-            <p class="tagline">Fast, Reliable, Global Shipping Solutions</p>
-        </div>
-    </header>
-
-    <div class="container">
-        <div class="features">
-            <div class="feature-card">
-                <div class="feature-icon">🚚</div>
-                <h3>Express Delivery</h3>
-                <p>Lightning-fast shipping to anywhere in the world with real-time tracking</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📦</div>
-                <h3>Safe Handling</h3>
-                <p>Your packages are handled with utmost care and delivered safely</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">💰</div>
-                <h3>Best Rates</h3>
-                <p>Competitive pricing with transparent costs and no hidden fees</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🌍</div>
-                <h3>Global Reach</h3>
-                <p>We ship to over 200 countries and territories worldwide</p>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">SwiftShip</div>
+            <div class="nav-links">
+                <a href="#services">Services</a>
+                <a href="#tracking">Tracking</a>
+                <a href="#quote">Get Quote</a>
+                <a href="#contact">Contact</a>
             </div>
         </div>
+    </nav>
 
-        <div class="form-section">
-            <h2>Request a Quote</h2>
-            <p>Fill out the form below and we'll get back to you with the best shipping options for your needs.</p>
-            
-            <div id="alert" class="alert"></div>
-
-            <form id="shippingForm">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Full Name <span class="required">*</span></label>
-                        <input type="text" name="name" id="name" required placeholder="John Doe">
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Global Shipping Excellence</h1>
+                <p>Trusted by businesses worldwide for secure, fast, and reliable logistics solutions. We deliver your packages with precision and care.</p>
+                
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">200+</span>
+                        <span class="stat-label">Countries Served</span>
                     </div>
-                    <div class="form-group">
-                        <label>Email Address <span class="required">*</span></label>
-                        <input type="email" name="email" id="email" required placeholder="john@example.com">
+                    <div class="stat">
+                        <span class="stat-number">99.8%</span>
+                        <span class="stat-label">On-Time Delivery</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">24/7</span>
+                        <span class="stat-label">Customer Support</span>
                     </div>
                 </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-card">
+                    <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="heroGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#1a56db;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#0891b2;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <rect x="50" y="80" width="300" height="180" rx="12" fill="url(#heroGrad)" opacity="0.1"/>
+                        <rect x="70" y="100" width="260" height="140" rx="8" fill="url(#heroGrad)" opacity="0.2"/>
+                        <circle cx="200" cy="150" r="60" fill="url(#heroGrad)"/>
+                        <path d="M180 150 L195 165 L220 135" stroke="white" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Phone Number <span class="required">*</span></label>
-                        <input type="tel" name="number" id="number" required placeholder="+1 (555) 123-4567">
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">Our Services</div>
+                <h2 class="section-title">Comprehensive Shipping Solutions</h2>
+            </div>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                        </svg>
                     </div>
+                    <h3>Express Delivery</h3>
+                    <p>Fastest shipping options with guaranteed delivery times and real-time tracking</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="3" y="11" width="18" height="11" rx="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                    </div>
+                    <h3>Secure Handling</h3>
+                    <p>Advanced security protocols and insurance coverage for complete peace of mind</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+                        </svg>
+                    </div>
+                    <h3>Global Network</h3>
+                    <p>Extensive coverage across 200+ countries with strategic distribution centers</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                            <line x1="12" y1="22.08" x2="12" y2="12"/>
+                        </svg>
+                    </div>
+                    <h3>Custom Solutions</h3>
+                    <p>Tailored logistics services designed specifically for your business needs</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quote Section -->
+    <section class="quote-section" id="quote">
+        <div class="quote-container">
+            <div class="quote-info">
+                <h2>Request a Shipping Quote</h2>
+                <p>Get an instant quote for your shipment. Our team will review your requirements and provide you with the best shipping options tailored to your needs.</p>
+                
+                <ul class="info-list">
+                    <li>
+                        <svg viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        <span>Competitive pricing with no hidden fees</span>
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        <span>Response within 2 hours during business hours</span>
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        <span>Flexible payment and delivery options</span>
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        <span>Dedicated account manager for your shipments</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="form-card">
+                <div id="alert" class="alert"></div>
+
+                <form id="shippingForm" class="form-grid">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name <span class="required">*</span></label>
+                            <input type="text" name="name" id="name" required placeholder="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label>Company Name</label>
+                            <input type="text" name="company" id="company" placeholder="Company Inc.">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email Address <span class="required">*</span></label>
+                            <input type="email" name="email" id="email" required placeholder="john@company.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number <span class="required">*</span></label>
+                            <input type="tel" name="phone" id="phone" required placeholder="+1 (555) 123-4567">
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label>WhatsApp Number</label>
                         <input type="tel" name="whatsapp" id="whatsapp" placeholder="+1 (555) 123-4567">
                     </div>
-                </div>
 
-                <div class="form-row">
                     <div class="form-group">
-                        <label>Pickup Address <span class="required">*</span></label>
-                        <input type="text" name="pickup_address" id="pickup_address" required placeholder="123 Main St, City, State">
+                        <label>Preferred Contact Method(s) <span class="required">*</span></label>
+                        <div class="contact-methods">
+                            <div class="contact-method">
+                                <input type="checkbox" id="contact_email" name="contact_method" value="Email">
+                                <label for="contact_email">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                        <polyline points="22,6 12,13 2,6"/>
+                                    </svg>
+                                    <span>Email</span>
+                                </label>
+                            </div>
+                            <div class="contact-method">
+                                <input type="checkbox" id="contact_phone" name="contact_method" value="Phone">
+                                <label for="contact_phone">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                                    </svg>
+                                    <span>Phone</span>
+                                </label>
+                            </div>
+                            <div class="contact-method">
+                                <input type="checkbox" id="contact_whatsapp" name="contact_method" value="WhatsApp">
+                                <label for="contact_whatsapp">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                                    </svg>
+                                    <span>WhatsApp</span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Delivery Address <span class="required">*</span></label>
-                        <input type="text" name="delivery_address" id="delivery_address" required placeholder="456 Oak Ave, City, State">
-                    </div>
-                </div>
 
-                <div class="form-row">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Pickup Address <span class="required">*</span></label>
+                            <input type="text" name="pickup_address" id="pickup_address" required placeholder="123 Main St, City, State, ZIP">
+                        </div>
+                        <div class="form-group">
+                            <label>Delivery Address <span class="required">*</span></label>
+                            <input type="text" name="delivery_address" id="delivery_address" required placeholder="456 Oak Ave, City, State, ZIP">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Package Type <span class="required">*</span></label>
+                            <select name="package_type" id="package_type" required>
+                                <option value="">Select package type</option>
+                                <option value="Document">Document</option>
+                                <option value="Small Package">Small Package (< 5kg)</option>
+                                <option value="Medium Package">Medium Package (5-20kg)</option>
+                                <option value="Large Package">Large Package (> 20kg)</option>
+                                <option value="Fragile">Fragile Item</option>
+                                <option value="Pallet">Pallet</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Estimated Weight (kg)</label>
+                            <input type="number" name="weight" id="weight" placeholder="5.0" step="0.1" min="0">
+                        </div>
+                    </div>
+
                     <div class="form-group">
-                        <label>Package Type <span class="required">*</span></label>
-                        <select name="package_type" id="package_type" required>
-                            <option value="">Select package type</option>
-                            <option value="Document">Document</option>
-                            <option value="Small Package">Small Package</option>
-                            <option value="Medium Package">Medium Package</option>
-                            <option value="Large Package">Large Package</option>
-                            <option value="Fragile">Fragile Item</option>
-                            <option value="Heavy">Heavy Item</option>
+                        <label>Shipping Service <span class="required">*</span></label>
+                        <select name="shipping_service" id="shipping_service" required>
+                            <option value="">Select shipping service</option>
+                            <option value="Economy (7-10 days)">Economy (7-10 days)</option>
+                            <option value="Standard (5-7 days)">Standard (5-7 days)</option>
+                            <option value="Express (2-3 days)">Express (2-3 days)</option>
+                            <option value="Overnight">Overnight</option>
+                            <option value="International Standard">International Standard</option>
+                            <option value="International Express">International Express</option>
                         </select>
                     </div>
+
                     <div class="form-group">
-                        <label>Estimated Weight (kg)</label>
-                        <input type="number" name="weight" id="weight" placeholder="5" step="0.1" min="0">
+                        <label>Additional Notes or Special Requirements</label>
+                        <textarea name="notes" id="notes" placeholder="Please provide any special instructions, handling requirements, or questions..."></textarea>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label>Shipping Service <span class="required">*</span></label>
-                    <select name="shipping_service" id="shipping_service" required>
-                        <option value="">Select shipping service</option>
-                        <option value="Standard (5-7 days)">Standard (5-7 days)</option>
-                        <option value="Express (2-3 days)">Express (2-3 days)</option>
-                        <option value="Overnight">Overnight</option>
-                        <option value="International">International</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Additional Notes</label>
-                    <textarea name="notes" id="notes" placeholder="Any special instructions or requirements..."></textarea>
-                </div>
-
-                <button type="submit">
-                    <span>Submit Quote Request</span>
-                    <span class="spinner"></span>
-                </button>
-            </form>
+                    <button type="submit" class="submit-btn">
+                        <span>Get Quote</span>
+                        <span class="spinner"></span>
+                    </button>
+                </form>
+            </div>
         </div>
-    </div>
+    </section>
 
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2026 SwiftShip Logistics. All rights reserved.</p>
+        <p>&copy; 2026 SwiftShip Logistics. All rights reserved. | Privacy Policy | Terms of Service</p>
     </footer>
 
     <script>
         const form = document.getElementById('shippingForm');
         const alertBox = document.getElementById('alert');
-        const submitButton = form.querySelector('button[type="submit"]');
+        const submitButton = form.querySelector('.submit-btn');
 
         function showAlert(message, type) {
             alertBox.textContent = message;
@@ -520,19 +860,31 @@
             }, 5000);
         }
 
+        function getSelectedContactMethods() {
+            const checkboxes = document.querySelectorAll('input[name="contact_method"]:checked');
+            return Array.from(checkboxes).map(cb => cb.value).join(', ');
+        }
+
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // Disable button and show loading
+            // Validate at least one contact method is selected
+            const contactMethods = getSelectedContactMethods();
+            if (!contactMethods) {
+                showAlert('Please select at least one preferred contact method.', 'error');
+                return;
+            }
+            
             submitButton.disabled = true;
             submitButton.classList.add('loading');
             
-            // Collect form data
             const formData = {
                 name: document.getElementById('name').value,
+                company: document.getElementById('company').value,
                 email: document.getElementById('email').value,
-                number: document.getElementById('number').value,
+                phone: document.getElementById('phone').value,
                 whatsapp: document.getElementById('whatsapp').value,
+                contact_methods: contactMethods,
                 pickup_address: document.getElementById('pickup_address').value,
                 delivery_address: document.getElementById('delivery_address').value,
                 package_type: document.getElementById('package_type').value,
@@ -555,16 +907,15 @@
                 console.log('API Response:', result);
 
                 if (response.ok && result.created) {
-                    showAlert('✓ Quote request submitted successfully! We\'ll contact you soon.', 'success');
+                    showAlert('✓ Quote request submitted successfully! We\'ll contact you via your preferred method within 2 hours.', 'success');
                     form.reset();
                 } else {
                     throw new Error(result.message || 'Failed to submit form');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                showAlert('✗ Failed to submit. Please try again or contact us directly. Error: ' + error.message, 'error');
+                showAlert('✗ Failed to submit request. Please try again or contact us directly at support@swiftship.com', 'error');
             } finally {
-                // Re-enable button and hide loading
                 submitButton.disabled = false;
                 submitButton.classList.remove('loading');
             }
