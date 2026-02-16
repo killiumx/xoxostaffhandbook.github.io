@@ -1789,6 +1789,17 @@
                     <div class="form-card">
                         <form id="tradeForm">
                             <div class="form-grid">
+                                <!-- NO-TRADE DAY MODE -->
+                                <div class="form-group" style="grid-column: 1/-1;">
+                                    <label class="form-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <input type="checkbox" id="noTradeDay" style="width: auto; cursor: pointer;">
+                                        <span>📅 No-Trade Day (Weekend, Holiday, Rest Day)</span>
+                                    </label>
+                                    <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                                        Check this to log a day when you didn't trade (market closed, personal break, etc.)
+                                    </p>
+                                </div>
+
                                 <!-- TRADE COPIER MODE -->
                                 <div class="form-group" style="grid-column: 1/-1;">
                                     <label class="form-label" style="display: flex; align-items: center; gap: 0.5rem;">
@@ -1948,7 +1959,7 @@
                                         <option value="500">$500</option>
                                         <option value="1000">$1,000</option>
                                         <option value="1500">$1,500</option>
-                                        <option value="2000">$2,000</option>
+                                        <option value="4600">$2,000</option>
                                         <option value="2500">$2,500</option>
                                         <option value="3000">$3,000</option>
                                         <option value="4000">$4,000</option>
@@ -2019,16 +2030,6 @@
                                         <option value="check">Check</option>
                                         <option value="other">Other</option>
                                     </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="form-label" style="display: flex; align-items: center; gap: 0.5rem;">
-                                        <input type="checkbox" id="noTradeDay" style="width: auto; cursor: pointer;">
-                                        <span>📅 Mark as No-Trade Day</span>
-                                    </label>
-                                    <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">
-                                        Check this if you didn't trade today (rest day, weekend, etc.)
-                                    </p>
                                 </div>
                             </div>
 
@@ -2120,7 +2121,7 @@
         // Payout Goals
         const FIRST_PAYOUT_GOAL = 54600;  // $4,600 profit = Full $2k withdrawal
         const FIRST_PAYOUT_MIN = 52600;   // $2,600 profit = Qualify for payout
-        const MONTHLY_PAYOUT_GOAL = 2000; // After first payout, $2k per month
+        const MONTHLY_PAYOUT_GOAL = 4600; // After first payout, $2k per month
         const DAILY_TARGET_MIN = 250;
         const DAILY_TARGET_MAX = 300;
         const FIRST_CYCLE_DAYS = 45;
@@ -2316,6 +2317,51 @@
             });
 
             document.getElementById('tradeForm').addEventListener('submit', handleFormSubmit);
+
+            // No-Trade Day toggle - disable/enable fields
+            document.getElementById('noTradeDay').addEventListener('change', (e) => {
+                const isNoTradeDay = e.target.checked;
+                
+                // Fields to disable when it's a no-trade day
+                const fieldsToDisable = [
+                    'account', 'leadAccount', 'copierMode',
+                    'marketCondition', 'riskTemplate', 'pnl', 'contracts'
+                ];
+                
+                fieldsToDisable.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        field.disabled = isNoTradeDay;
+                        if (isNoTradeDay) {
+                            field.required = false;
+                        }
+                    }
+                });
+                
+                // Disable follower checkboxes
+                document.querySelectorAll('.follower-checkbox').forEach(cb => {
+                    cb.disabled = isNoTradeDay;
+                });
+                
+                // Cycle and date stay enabled
+                // Notes stay enabled for explanation
+                
+                if (isNoTradeDay) {
+                    // Auto-fill notes
+                    const notesField = document.getElementById('notes');
+                    if (!notesField.value) {
+                        notesField.value = 'No trading today - market closed / rest day';
+                    }
+                    
+                    showAlert('📅 No-trade day mode enabled. Only date, cycle, and notes are needed.', 'info');
+                } else {
+                    // Re-enable required fields
+                    document.getElementById('account').required = !document.getElementById('copierMode').checked;
+                    document.getElementById('marketCondition').required = true;
+                    document.getElementById('riskTemplate').required = true;
+                    document.getElementById('pnl').required = true;
+                }
+            });
 
             // Trade copier mode toggle
             document.getElementById('copierMode').addEventListener('change', (e) => {
@@ -2804,7 +2850,7 @@
                 const acc = accountData[i];
                 
                 if (accountFilter === 'active' && acc.trades === 0) continue;
-                if (accountFilter === 'goal' && acc.pnl < 2000) continue;
+                if (accountFilter === 'goal' && acc.pnl < 4600) continue;
                 if (accountFilter === 'profitable' && acc.pnl <= 0) continue;
                 
                 const card = document.createElement('div');
@@ -2813,8 +2859,8 @@
                 card.innerHTML = `
                     <div class="account-header">
                         <div class="account-number">PA #${i}</div>
-                        <span class="account-badge ${acc.pnl >= 2000 ? 'badge-success' : 'badge-active'}">
-                            ${acc.pnl >= 2000 ? 'GOAL ✓' : 'ACTIVE'}
+                        <span class="account-badge ${acc.pnl >= 4600 ? 'badge-success' : 'badge-active'}">
+                            ${acc.pnl >= 4600 ? 'GOAL ✓' : 'ACTIVE'}
                         </span>
                     </div>
                     <div class="account-progress">
@@ -2837,7 +2883,7 @@
                         </div>
                         <div class="account-stat">
                             <span class="account-stat-label">To Goal</span>
-                            <span class="account-stat-value">${formatCurrency(Math.max(2000 - acc.pnl, 0))}</span>
+                            <span class="account-stat-value">${formatCurrency(Math.max(4600 - acc.pnl, 0))}</span>
                         </div>
                         <div class="account-stat">
                             <span class="account-stat-label">Balance</span>
@@ -2903,15 +2949,27 @@
             sorted.slice(0, 100).forEach(trade => {
                 const row = tbody.insertRow();
                 const pnl = parseFloat(trade.pnl || 0);
-                row.innerHTML = `
-                    <td>${trade.trade_date}</td>
-                    <td>PA #${trade.account}</td>
-                    <td>${trade.market_condition}</td>
-                    <td>$${trade.risk_template}</td>
-                    <td style="color: ${pnl >= 0 ? 'var(--success)' : 'var(--danger)'}"><strong>${formatCurrency(pnl)}</strong></td>
-                    <td>${trade.contracts}</td>
-                    <td>${trade.notes || '-'}</td>
-                `;
+                const isNoTradeDay = trade.no_trade_day || trade.market_condition === 'No Trade';
+                
+                if (isNoTradeDay) {
+                    row.style.background = 'rgba(148, 163, 184, 0.1)';
+                    row.innerHTML = `
+                        <td>${trade.trade_date}</td>
+                        <td colspan="6" style="text-align: center; color: var(--text-secondary); font-style: italic;">
+                            📅 No-Trade Day - ${trade.notes || 'Market closed / Rest day'}
+                        </td>
+                    `;
+                } else {
+                    row.innerHTML = `
+                        <td>${trade.trade_date}</td>
+                        <td>PA #${trade.account}</td>
+                        <td>${trade.market_condition}</td>
+                        <td>$${trade.risk_template}</td>
+                        <td style="color: ${pnl >= 0 ? 'var(--success)' : 'var(--danger)'}"><strong>${formatCurrency(pnl)}</strong></td>
+                        <td>${trade.contracts}</td>
+                        <td>${trade.notes || '-'}</td>
+                    `;
+                }
             });
         }
 
@@ -3056,13 +3114,13 @@
             let payoutCount = 0;
             
             if (totalPnL >= FIRST_PAYOUT_GOAL) {
-                totalPayouts = 2000;
+                totalPayouts = 4600;
                 payoutCount = 1;
                 
                 // Add subsequent $2k payouts
                 const afterFirst = totalPnL - FIRST_PAYOUT_GOAL;
                 const additionalPayouts = Math.floor(afterFirst / MONTHLY_PAYOUT_GOAL);
-                totalPayouts += (additionalPayouts * 2000);
+                totalPayouts += (additionalPayouts * 4600);
                 payoutCount += additionalPayouts;
             }
             
@@ -3389,12 +3447,12 @@
             if (totalPnL >= FIRST_PAYOUT_GOAL) {
                 const afterPayouts = totalPnL - totalWithdrawn;
                 if (afterPayouts >= MONTHLY_PAYOUT_GOAL) {
-                    available = Math.floor(afterPayouts / MONTHLY_PAYOUT_GOAL) * 2000;
+                    available = Math.floor(afterPayouts / MONTHLY_PAYOUT_GOAL) * 4600;
                     status = `✅ ${Math.floor(afterPayouts / MONTHLY_PAYOUT_GOAL)} payout(s) ready`;
                     statusClass = 'positive';
                 }
             } else if (totalPnL >= FIRST_PAYOUT_MIN) {
-                available = 2000;
+                available = 4600;
                 status = '✅ First payout qualified';
                 statusClass = 'positive';
             }
@@ -3442,18 +3500,16 @@
             
             sorted.forEach(payout => {
                 const row = tbody.insertRow();
-                const noTradeIndicator = payout.no_trade_day ? ' 📅' : '';
-                const typeDisplay = payout.type + noTradeIndicator;
                 
                 row.innerHTML = `
                     <td>${payout.date}</td>
-                    <td><strong>${typeDisplay}</strong></td>
+                    <td><strong>${payout.type}</strong></td>
                     <td style="color: var(--success)"><strong>${formatCurrency(parseFloat(payout.amount))}</strong></td>
                     <td>${payout.account}</td>
                     <td>Cycle ${payout.cycle_completed || 1}</td>
                     <td>Cycle ${payout.new_cycle || 2}</td>
                     <td>${payout.payment_method || '-'}</td>
-                    <td>${payout.notes || '-'}${payout.no_trade_day ? ' (No-trade day)' : ''}</td>
+                    <td>${payout.notes || '-'}</td>
                 `;
             });
         }
@@ -3493,14 +3549,14 @@
                     switch(e.target.value) {
                         case 'first_min':
                         case 'first_full':
-                            templateSelect.value = '2000';
-                            amountInput.value = '2000';
+                            templateSelect.value = '4600';
+                            amountInput.value = '4600';
                             cycleCompletedSelect.value = '1';
                             newCycleSelect.value = '2';
                             break;
                         case 'monthly':
-                            templateSelect.value = '2000';
-                            amountInput.value = '2000';
+                            templateSelect.value = '4600';
+                            amountInput.value = '4600';
                             cycleCompletedSelect.value = lastCycle;
                             newCycleSelect.value = Math.min(lastCycle + 1, 12);
                             break;
@@ -3550,7 +3606,6 @@
             const newCycle = document.getElementById('newCycle').value;
             const paymentMethod = document.getElementById('paymentMethod').value;
             const notes = document.getElementById('payoutNotes').value;
-            const noTradeDay = document.getElementById('noTradeDay').checked;
             
             const payout = {
                 date,
@@ -3564,7 +3619,6 @@
                 new_cycle: parseInt(newCycle),
                 payment_method: paymentMethod,
                 notes,
-                no_trade_day: noTradeDay,
                 timestamp: new Date().toISOString()
             };
             
@@ -3575,9 +3629,8 @@
                 payoutData.push(payout);
                 localStorage.setItem('prop_farm_payouts', JSON.stringify(payoutData));
                 
-                const noTradeMsg = noTradeDay ? ' (No-trade day marked)' : '';
-                debugMsg(`✓ Payout logged: ${formatCurrency(payout.amount)}${noTradeMsg}`, 'success');
-                showAlert(`✓ Payout logged successfully! Cycle ${newCycle} is now active.${noTradeMsg}`, 'success');
+                debugMsg(`✓ Payout logged: ${formatCurrency(payout.amount)}`, 'success');
+                showAlert(`✓ Payout logged successfully! Cycle ${newCycle} is now active.`, 'success');
                 
                 // Reset form
                 document.getElementById('payoutForm').reset();
@@ -3589,7 +3642,7 @@
                 // Show info about new cycle
                 setTimeout(() => {
                     showAlert(`🌾 Cycle ${newCycle} started! Future trades will use this cycle by default.`, 'info');
-                }, 2000);
+                }, 4600);
                 
             } catch (error) {
                 debugMsg(`✗ Payout error: ${error.message}`, 'error');
@@ -3618,6 +3671,60 @@
             document.getElementById('submitLoading').style.display = 'inline-block';
 
             const copierMode = document.getElementById('copierMode').checked;
+            const noTradeDay = document.getElementById('noTradeDay').checked;
+            
+            // If it's a no-trade day, log it differently
+            if (noTradeDay) {
+                const trade_date = document.getElementById('tradeDate').value;
+                const cycle = document.getElementById('cycle').value;
+                const notes = document.getElementById('notes').value || 'No-trade day';
+                const timestamp = new Date().toISOString();
+                
+                const noTradeDayEntry = {
+                    "account": "N/A",
+                    "account_type": "no_trade",
+                    "copy_group": "",
+                    "market_condition": "No Trade",
+                    "risk_template": 0,
+                    "trade_date": trade_date,
+                    "cycle": cycle,
+                    "pnl": 0,
+                    "contracts": 0,
+                    "notes": "📅 " + notes,
+                    "timestamp": timestamp,
+                    "no_trade_day": true
+                };
+                
+                try {
+                    const response = await fetch(SHEET_API, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ data: [noTradeDayEntry] })
+                    });
+
+                    if (response.ok || response.status === 201) {
+                        debugMsg('✓ No-trade day logged', 'success');
+                        showAlert('✓ No-trade day logged successfully!', 'success');
+                        document.getElementById('tradeForm').reset();
+                        setTodayDate();
+                        setTimeout(() => {
+                            loadDashboardData();
+                            navigateTo('overview');
+                        }, 1000);
+                    } else {
+                        throw new Error('Failed to log no-trade day');
+                    }
+                } catch (error) {
+                    debugMsg(`✗ Error: ${error.message}`, 'error');
+                    showAlert('✗ Failed to log no-trade day', 'error');
+                } finally {
+                    btn.disabled = false;
+                    document.getElementById('submitText').style.display = 'inline';
+                    document.getElementById('submitLoading').style.display = 'none';
+                }
+                return;
+            }
+
             const market_condition = document.getElementById('marketCondition').value;
             const risk_template = document.getElementById('riskTemplate').value;
             const trade_date = document.getElementById('tradeDate').value;
@@ -3666,7 +3773,8 @@
                     "pnl": pnl,
                     "contracts": contracts,
                     "notes": notes,
-                    "timestamp": timestamp
+                    "timestamp": timestamp,
+                    "no_trade_day": false
                 });
 
                 // Add follower trades
@@ -3682,7 +3790,8 @@
                         "pnl": pnl,
                         "contracts": contracts,
                         "notes": notes,
-                        "timestamp": timestamp
+                        "timestamp": timestamp,
+                        "no_trade_day": false
                     });
                 });
 
@@ -3701,7 +3810,8 @@
                     "pnl": pnl,
                     "contracts": contracts,
                     "notes": notes,
-                    "timestamp": timestamp
+                    "timestamp": timestamp,
+                    "no_trade_day": false
                 });
             }
 
@@ -4001,7 +4111,7 @@
             for (let i = 1; i <= 20; i++) {
                 const trades = allData.filter(t => t.account == i);
                 const pnl = trades.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
-                if (pnl >= 2000) count++;
+                if (pnl >= 4600) count++;
             }
             return count;
         }
@@ -4026,7 +4136,7 @@
                     pnl,
                     trades: trades.length,
                     winRate: trades.length > 0 ? (wins / trades.length) * 100 : 0,
-                    progress: Math.min((pnl / 2000) * 100, 100),
+                    progress: Math.min((pnl / 4600) * 100, 100),
                     highestBalance
                 };
             }
