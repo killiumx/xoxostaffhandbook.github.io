@@ -1218,6 +1218,10 @@
                     <span class="nav-icon">📈</span>
                     <span>Analytics</span>
                 </div>
+                <div class="nav-item" data-page="riskMonitor">
+                    <span class="nav-icon">⚠️</span>
+                    <span>Risk Monitor</span>
+                </div>
             </nav>
 
             <nav class="nav-section">
@@ -1229,6 +1233,10 @@
                 <div class="nav-item" data-page="tradeLog">
                     <span class="nav-icon">📝</span>
                     <span>Trade Log</span>
+                </div>
+                <div class="nav-item" data-page="deleteData">
+                    <span class="nav-icon">🗑️</span>
+                    <span>Delete Data</span>
                 </div>
             </nav>
 
@@ -1539,6 +1547,75 @@
                     </div>
                 </div>
 
+                <!-- PAGE: RISK MONITOR -->
+                <div class="page" id="riskMonitorPage">
+                    <h2 class="section-title" style="margin-bottom: 1.5rem;">⚠️ Account Risk Monitor</h2>
+                    
+                    <div class="alert alert-info show" style="margin-bottom: 2rem;">
+                        <strong>Trailing Drawdown Rules:</strong><br>
+                        • Starting Balance: $50,000 | Max Drawdown: $2,500 | Fail Line: $47,500<br>
+                        • Safety Net: $52,600 (Once reached, fail line locks at $50,100 forever)<br>
+                        • Before safety net: Fail line trails your highest balance
+                    </div>
+
+                    <div class="accounts-grid" id="riskMonitorGrid"></div>
+                </div>
+
+                <!-- PAGE: DELETE DATA -->
+                <div class="page" id="deleteDataPage">
+                    <h2 class="section-title" style="margin-bottom: 1.5rem;">🗑️ Delete Data</h2>
+                    
+                    <div class="alert alert-error show" style="margin-bottom: 2rem;">
+                        <strong>⚠️ Warning:</strong> Deleted data cannot be recovered. Please be careful!
+                    </div>
+
+                    <div class="form-card">
+                        <h3 style="margin-bottom: 1.5rem;">Delete Options</h3>
+                        
+                        <div style="display: grid; gap: 1.5rem;">
+                            <div style="padding: 1.5rem; border: 2px solid var(--border); border-radius: 12px;">
+                                <h4 style="margin-bottom: 0.5rem;">🔄 Delete by Cycle</h4>
+                                <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.875rem;">Remove all trades from a specific cycle/month</p>
+                                <div style="display: flex; gap: 1rem;">
+                                    <select class="form-select" id="deleteCycleSelect" style="flex: 1;">
+                                        <option value="">Select cycle to delete</option>
+                                        <option value="1">Cycle 1</option>
+                                        <option value="2">Cycle 2</option>
+                                        <option value="3">Cycle 3</option>
+                                        <option value="4">Cycle 4</option>
+                                        <option value="5">Cycle 5</option>
+                                        <option value="6">Cycle 6</option>
+                                        <option value="7">Cycle 7</option>
+                                        <option value="8">Cycle 8</option>
+                                        <option value="9">Cycle 9</option>
+                                        <option value="10">Cycle 10</option>
+                                        <option value="11">Cycle 11</option>
+                                        <option value="12">Cycle 12</option>
+                                    </select>
+                                    <button class="btn btn-secondary" onclick="deleteByCycle()">Delete Cycle</button>
+                                </div>
+                            </div>
+
+                            <div style="padding: 1.5rem; border: 2px solid var(--border); border-radius: 12px;">
+                                <h4 style="margin-bottom: 0.5rem;">💼 Delete by Account</h4>
+                                <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.875rem;">Remove all trades from a specific account</p>
+                                <div style="display: flex; gap: 1rem;">
+                                    <select class="form-select" id="deleteAccountSelect" style="flex: 1;">
+                                        <option value="">Select account to delete</option>
+                                    </select>
+                                    <button class="btn btn-secondary" onclick="deleteByAccount()">Delete Account</button>
+                                </div>
+                            </div>
+
+                            <div style="padding: 1.5rem; border: 2px solid #ef4444; border-radius: 12px; background: rgba(239, 68, 68, 0.05);">
+                                <h4 style="margin-bottom: 0.5rem; color: var(--danger);">💣 Delete ALL Data</h4>
+                                <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.875rem;">⚠️ This will permanently delete ALL trades from ALL accounts!</p>
+                                <button class="btn btn-secondary" onclick="confirmDeleteAll()" style="background: var(--danger); color: white; border: none;">Delete Everything</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- PAGE: ADD TRADE -->
                 <div class="page" id="addTradePage">
                     <h2 class="section-title" style="margin-bottom: 1.5rem;">Add New Trade</h2>
@@ -1546,10 +1623,55 @@
                     <div class="form-card">
                         <form id="tradeForm">
                             <div class="form-grid">
-                                <div class="form-group">
-                                    <label class="form-label">PA Account *</label>
-                                    <select class="form-select" id="account" required></select>
+                                <!-- TRADE COPIER MODE -->
+                                <div class="form-group" style="grid-column: 1/-1;">
+                                    <label class="form-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <input type="checkbox" id="copierMode" style="width: auto; cursor: pointer;">
+                                        <span>🔄 Trade Copier Mode (Copy to multiple accounts)</span>
+                                    </label>
                                 </div>
+
+                                <!-- SINGLE ACCOUNT MODE -->
+                                <div id="singleAccountMode">
+                                    <div class="form-group">
+                                        <label class="form-label">PA Account *</label>
+                                        <select class="form-select" id="account" required></select>
+                                    </div>
+                                </div>
+
+                                <!-- MULTI ACCOUNT MODE -->
+                                <div id="multiAccountMode" style="display: none; grid-column: 1/-1;">
+                                    <div class="form-group">
+                                        <label class="form-label">Lead Account *</label>
+                                        <select class="form-select" id="leadAccount"></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Follower Accounts (Select multiple) *</label>
+                                        <div style="border: 2px solid var(--border); border-radius: 12px; padding: 1rem; background: var(--bg-secondary); max-height: 200px; overflow-y: auto;">
+                                            <div id="followerCheckboxes" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Cycle (Month) *</label>
+                                    <select class="form-select" id="cycle" required>
+                                        <option value="">Select cycle</option>
+                                        <option value="1">Cycle 1 (Month 1)</option>
+                                        <option value="2">Cycle 2 (Month 2)</option>
+                                        <option value="3">Cycle 3 (Month 3)</option>
+                                        <option value="4">Cycle 4 (Month 4)</option>
+                                        <option value="5">Cycle 5 (Month 5)</option>
+                                        <option value="6">Cycle 6 (Month 6)</option>
+                                        <option value="7">Cycle 7 (Month 7)</option>
+                                        <option value="8">Cycle 8 (Month 8)</option>
+                                        <option value="9">Cycle 9 (Month 9)</option>
+                                        <option value="10">Cycle 10 (Month 10)</option>
+                                        <option value="11">Cycle 11 (Month 11)</option>
+                                        <option value="12">Cycle 12 (Month 12)</option>
+                                    </select>
+                                </div>
+
                                 <div class="form-group">
                                     <label class="form-label">Market Condition *</label>
                                     <select class="form-select" id="marketCondition" required>
@@ -1768,9 +1890,28 @@
 
         function populateAccountDropdown() {
             const select = document.getElementById('account');
+            const leadSelect = document.getElementById('leadAccount');
+            const deleteSelect = document.getElementById('deleteAccountSelect');
+            const followerDiv = document.getElementById('followerCheckboxes');
+            
+            // Single account select
             select.innerHTML = '<option value="">Select account</option>';
+            leadSelect.innerHTML = '<option value="">Select lead account</option>';
+            deleteSelect.innerHTML = '<option value="">Select account</option>';
+            followerDiv.innerHTML = '';
+            
             for (let i = 1; i <= 20; i++) {
                 select.innerHTML += `<option value="${i}">PA Account #${i}</option>`;
+                leadSelect.innerHTML += `<option value="${i}">PA Account #${i}</option>`;
+                deleteSelect.innerHTML += `<option value="${i}">PA Account #${i}</option>`;
+                
+                // Follower checkboxes
+                followerDiv.innerHTML += `
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem; border-radius: 6px; background: var(--bg-primary);">
+                        <input type="checkbox" class="follower-checkbox" value="${i}" style="cursor: pointer;">
+                        <span style="font-size: 0.875rem;">PA #${i}</span>
+                    </label>
+                `;
             }
         }
 
@@ -1799,6 +1940,17 @@
             });
 
             document.getElementById('tradeForm').addEventListener('submit', handleFormSubmit);
+
+            // Trade copier mode toggle
+            document.getElementById('copierMode').addEventListener('change', (e) => {
+                const isChecked = e.target.checked;
+                document.getElementById('singleAccountMode').style.display = isChecked ? 'none' : 'block';
+                document.getElementById('multiAccountMode').style.display = isChecked ? 'block' : 'none';
+                
+                // Toggle required attributes
+                document.getElementById('account').required = !isChecked;
+                document.getElementById('leadAccount').required = isChecked;
+            });
         }
 
         function navigateTo(page) {
@@ -1813,8 +1965,10 @@
                 templates: 'Templates',
                 accounts: 'Accounts',
                 analytics: 'Analytics',
+                riskMonitor: 'Risk Monitor',
                 addTrade: 'Add Trade',
-                tradeLog: 'Trade Log'
+                tradeLog: 'Trade Log',
+                deleteData: 'Delete Data'
             };
             document.getElementById('pageTitle').textContent = titles[page];
 
@@ -1867,6 +2021,7 @@
             updateAccounts();
             updateAnalytics();
             updateTradeLog();
+            updateRiskMonitor();
         }
 
         function updateHeroStats() {
@@ -2235,7 +2390,7 @@
                 const acc = accountData[i];
                 
                 if (accountFilter === 'active' && acc.trades === 0) continue;
-                if (accountFilter === 'goal' && acc.pnl < 4000) continue;
+                if (accountFilter === 'goal' && acc.pnl < 2000) continue;
                 if (accountFilter === 'profitable' && acc.pnl <= 0) continue;
                 
                 const card = document.createElement('div');
@@ -2244,8 +2399,8 @@
                 card.innerHTML = `
                     <div class="account-header">
                         <div class="account-number">PA #${i}</div>
-                        <span class="account-badge ${acc.pnl >= 4000 ? 'badge-success' : 'badge-active'}">
-                            ${acc.pnl >= 4000 ? 'GOAL ✓' : 'ACTIVE'}
+                        <span class="account-badge ${acc.pnl >= 2000 ? 'badge-success' : 'badge-active'}">
+                            ${acc.pnl >= 2000 ? 'GOAL ✓' : 'ACTIVE'}
                         </span>
                     </div>
                     <div class="account-progress">
@@ -2268,7 +2423,7 @@
                         </div>
                         <div class="account-stat">
                             <span class="account-stat-label">To Goal</span>
-                            <span class="account-stat-value">${formatCurrency(Math.max(4000 - acc.pnl, 0))}</span>
+                            <span class="account-stat-value">${formatCurrency(Math.max(2000 - acc.pnl, 0))}</span>
                         </div>
                         <div class="account-stat">
                             <span class="account-stat-label">Balance</span>
@@ -2355,10 +2510,11 @@
             document.getElementById('submitText').style.display = 'none';
             document.getElementById('submitLoading').style.display = 'inline-block';
 
-            const account = document.getElementById('account').value;
+            const copierMode = document.getElementById('copierMode').checked;
             const market_condition = document.getElementById('marketCondition').value;
             const risk_template = document.getElementById('riskTemplate').value;
             const trade_date = document.getElementById('tradeDate').value;
+            const cycle = document.getElementById('cycle').value;
             const pnl = document.getElementById('pnl').value;
             const contracts = document.getElementById('contracts').value;
             const notes = document.getElementById('notes').value || '';
@@ -2366,18 +2522,83 @@
 
             debugMsg('Submitting trade...', 'info');
 
-            const payload = {
-                data: [{
-                    "account": account,
+            const trades = [];
+
+            if (copierMode) {
+                // Multi-account mode
+                const leadAccount = document.getElementById('leadAccount').value;
+                const followers = Array.from(document.querySelectorAll('.follower-checkbox:checked')).map(cb => cb.value);
+                
+                if (!leadAccount) {
+                    showAlert('Please select a lead account', 'error');
+                    btn.disabled = false;
+                    document.getElementById('submitText').style.display = 'inline';
+                    document.getElementById('submitLoading').style.display = 'none';
+                    return;
+                }
+                
+                if (followers.length === 0) {
+                    showAlert('Please select at least one follower account', 'error');
+                    btn.disabled = false;
+                    document.getElementById('submitText').style.display = 'inline';
+                    document.getElementById('submitLoading').style.display = 'none';
+                    return;
+                }
+
+                const copyGroup = timestamp;
+
+                // Add lead trade
+                trades.push({
+                    "account": leadAccount,
+                    "account_type": "lead",
+                    "copy_group": copyGroup,
                     "market_condition": market_condition,
                     "risk_template": risk_template,
                     "trade_date": trade_date,
+                    "cycle": cycle,
                     "pnl": pnl,
                     "contracts": contracts,
                     "notes": notes,
                     "timestamp": timestamp
-                }]
-            };
+                });
+
+                // Add follower trades
+                followers.forEach(follower => {
+                    trades.push({
+                        "account": follower,
+                        "account_type": "follower",
+                        "copy_group": copyGroup,
+                        "market_condition": market_condition,
+                        "risk_template": risk_template,
+                        "trade_date": trade_date,
+                        "cycle": cycle,
+                        "pnl": pnl,
+                        "contracts": contracts,
+                        "notes": notes,
+                        "timestamp": timestamp
+                    });
+                });
+
+                debugMsg(`Trade copier: 1 lead + ${followers.length} followers = ${trades.length} total trades`, 'info');
+            } else {
+                // Single account mode
+                const account = document.getElementById('account').value;
+                trades.push({
+                    "account": account,
+                    "account_type": "single",
+                    "copy_group": "",
+                    "market_condition": market_condition,
+                    "risk_template": risk_template,
+                    "trade_date": trade_date,
+                    "cycle": cycle,
+                    "pnl": pnl,
+                    "contracts": contracts,
+                    "notes": notes,
+                    "timestamp": timestamp
+                });
+            }
+
+            const payload = { data: trades };
 
             try {
                 const response = await fetch(SHEET_API, {
@@ -2389,9 +2610,14 @@
                 const responseText = await response.text();
                 
                 if (response.ok || response.status === 201) {
-                    debugMsg('✓ Trade submitted successfully', 'success');
-                    showAlert('✓ Trade added successfully!', 'success');
+                    debugMsg(`✓ ${trades.length} trade(s) submitted successfully`, 'success');
+                    showAlert(`✓ ${trades.length} trade(s) added successfully!`, 'success');
                     document.getElementById('tradeForm').reset();
+                    document.getElementById('copierMode').checked = false;
+                    document.getElementById('singleAccountMode').style.display = 'block';
+                    document.getElementById('multiAccountMode').style.display = 'none';
+                    document.getElementById('account').required = true;
+                    document.getElementById('leadAccount').required = false;
                     setTodayDate();
                     setTimeout(() => {
                         loadDashboardData();
@@ -2496,7 +2722,7 @@
             for (let i = 1; i <= 20; i++) {
                 const trades = allData.filter(t => t.account == i);
                 const pnl = trades.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
-                if (pnl >= 4000) count++;
+                if (pnl >= 2000) count++;
             }
             return count;
         }
@@ -2511,7 +2737,7 @@
                     pnl,
                     trades: trades.length,
                     winRate: trades.length > 0 ? (wins / trades.length) * 100 : 0,
-                    progress: Math.min((pnl / 4000) * 100, 100)
+                    progress: Math.min((pnl / 2000) * 100, 100)
                 };
             }
             return grouped;
