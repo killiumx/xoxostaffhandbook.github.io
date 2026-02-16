@@ -2783,20 +2783,175 @@
             }
         }
 
-        // DELETE FUNCTIONS (placeholders - implement if needed)
-        function deleteByCycle() {
-            showAlert('Delete by Cycle feature coming soon', 'info');
-        }
-
-        function deleteByAccount() {
-            showAlert('Delete by Account feature coming soon', 'info');
-        }
-
-        function confirmDeleteAll() {
-            if (confirm('⚠️ Are you ABSOLUTELY SURE you want to delete ALL data? This cannot be undone!')) {
-                if (confirm('⚠️ FINAL WARNING: This will permanently delete everything. Continue?')) {
-                    showAlert('Delete All feature coming soon', 'info');
+        // DELETE FUNCTIONS
+        async function deleteByCycle() {
+            const cycleSelect = document.getElementById('deleteCycleSelect');
+            const cycle = cycleSelect.value;
+            
+            if (!cycle) {
+                showAlert('Please select a cycle to delete', 'error');
+                return;
+            }
+            
+            if (!confirm(`⚠️ Delete ALL trades from Cycle ${cycle}? This cannot be undone!`)) {
+                return;
+            }
+            
+            debugMsg(`Deleting trades from Cycle ${cycle}...`, 'info');
+            
+            try {
+                // Find all trades from this cycle
+                const tradesToDelete = allData.filter(t => t.cycle == cycle);
+                
+                if (tradesToDelete.length === 0) {
+                    showAlert(`No trades found in Cycle ${cycle}`, 'info');
+                    return;
                 }
+                
+                debugMsg(`Found ${tradesToDelete.length} trades to delete`, 'info');
+                
+                // Delete each trade
+                let deleteCount = 0;
+                for (const trade of tradesToDelete) {
+                    try {
+                        const response = await fetch(`${SHEET_API}/timestamp/${trade.timestamp}`, {
+                            method: 'DELETE'
+                        });
+                        
+                        if (response.ok) {
+                            deleteCount++;
+                        } else {
+                            debugMsg(`Failed to delete trade: ${trade.timestamp}`, 'error');
+                        }
+                    } catch (error) {
+                        debugMsg(`Error deleting trade: ${error.message}`, 'error');
+                    }
+                }
+                
+                debugMsg(`✓ Deleted ${deleteCount} trades from Cycle ${cycle}`, 'success');
+                showAlert(`✓ Deleted ${deleteCount} trades from Cycle ${cycle}`, 'success');
+                
+                // Reset select and reload
+                cycleSelect.value = '';
+                setTimeout(() => loadDashboardData(), 1000);
+                
+            } catch (error) {
+                debugMsg(`✗ Delete error: ${error.message}`, 'error');
+                showAlert(`✗ Delete failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function deleteByAccount() {
+            const accountSelect = document.getElementById('deleteAccountSelect');
+            const account = accountSelect.value;
+            
+            if (!account) {
+                showAlert('Please select an account to delete', 'error');
+                return;
+            }
+            
+            if (!confirm(`⚠️ Delete ALL trades from PA Account #${account}? This cannot be undone!`)) {
+                return;
+            }
+            
+            debugMsg(`Deleting trades from Account ${account}...`, 'info');
+            
+            try {
+                // Find all trades from this account
+                const tradesToDelete = allData.filter(t => t.account == account);
+                
+                if (tradesToDelete.length === 0) {
+                    showAlert(`No trades found for Account #${account}`, 'info');
+                    return;
+                }
+                
+                debugMsg(`Found ${tradesToDelete.length} trades to delete`, 'info');
+                
+                // Delete each trade
+                let deleteCount = 0;
+                for (const trade of tradesToDelete) {
+                    try {
+                        const response = await fetch(`${SHEET_API}/timestamp/${trade.timestamp}`, {
+                            method: 'DELETE'
+                        });
+                        
+                        if (response.ok) {
+                            deleteCount++;
+                        } else {
+                            debugMsg(`Failed to delete trade: ${trade.timestamp}`, 'error');
+                        }
+                    } catch (error) {
+                        debugMsg(`Error deleting trade: ${error.message}`, 'error');
+                    }
+                }
+                
+                debugMsg(`✓ Deleted ${deleteCount} trades from Account ${account}`, 'success');
+                showAlert(`✓ Deleted ${deleteCount} trades from Account #${account}`, 'success');
+                
+                // Reset select and reload
+                accountSelect.value = '';
+                setTimeout(() => loadDashboardData(), 1000);
+                
+            } catch (error) {
+                debugMsg(`✗ Delete error: ${error.message}`, 'error');
+                showAlert(`✗ Delete failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function confirmDeleteAll() {
+            if (!confirm('⚠️ Are you ABSOLUTELY SURE you want to delete ALL data? This cannot be undone!')) {
+                return;
+            }
+            
+            if (!confirm('⚠️ FINAL WARNING: This will permanently delete ALL ' + allData.length + ' trades. Type YES to continue.')) {
+                return;
+            }
+            
+            // Extra confirmation with text input
+            const confirmation = prompt('Type "DELETE ALL" to confirm (case sensitive):');
+            if (confirmation !== 'DELETE ALL') {
+                showAlert('Deletion cancelled - confirmation text did not match', 'info');
+                return;
+            }
+            
+            debugMsg('Deleting ALL data...', 'info');
+            showAlert('Deleting all trades... This may take a moment.', 'info');
+            
+            try {
+                const totalTrades = allData.length;
+                let deleteCount = 0;
+                
+                // Delete each trade one by one
+                for (const trade of allData) {
+                    try {
+                        const response = await fetch(`${SHEET_API}/timestamp/${trade.timestamp}`, {
+                            method: 'DELETE'
+                        });
+                        
+                        if (response.ok) {
+                            deleteCount++;
+                            
+                            // Show progress every 10 deletions
+                            if (deleteCount % 10 === 0) {
+                                debugMsg(`Progress: ${deleteCount}/${totalTrades} deleted`, 'info');
+                            }
+                        } else {
+                            debugMsg(`Failed to delete trade: ${trade.timestamp}`, 'error');
+                        }
+                    } catch (error) {
+                        debugMsg(`Error deleting trade: ${error.message}`, 'error');
+                    }
+                }
+                
+                debugMsg(`✓ Deleted ${deleteCount} of ${totalTrades} trades`, 'success');
+                showAlert(`✓ Successfully deleted ${deleteCount} trades`, 'success');
+                
+                // Reload dashboard
+                setTimeout(() => loadDashboardData(), 1500);
+                
+            } catch (error) {
+                debugMsg(`✗ Delete all error: ${error.message}`, 'error');
+                showAlert(`✗ Delete failed: ${error.message}`, 'error');
             }
         }
 
