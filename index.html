@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -1795,7 +1795,7 @@
             });
         }
 
-        // FORM SUBMIT - CORRECT SHEETDB FORMAT
+        // FORM SUBMIT - FINAL CORRECT FORMAT
         async function handleFormSubmit(e) {
             e.preventDefault();
 
@@ -1804,20 +1804,42 @@
             document.getElementById('submitText').style.display = 'none';
             document.getElementById('submitLoading').style.display = 'inline-block';
 
-            // SheetDB requires ALL fields as strings and data as ARRAY
-            const tradeData = {
-                account: String(document.getElementById('account').value),
-                market_condition: String(document.getElementById('marketCondition').value),
-                risk_template: String(document.getElementById('riskTemplate').value),
-                trade_date: String(document.getElementById('tradeDate').value),
-                pnl: String(document.getElementById('pnl').value),
-                contracts: String(document.getElementById('contracts').value),
-                notes: String(document.getElementById('notes').value || ''),
-                timestamp: String(new Date().toISOString())
+            // Get all form values (they're already strings from form inputs)
+            const account = document.getElementById('account').value;
+            const market_condition = document.getElementById('marketCondition').value;
+            const risk_template = document.getElementById('riskTemplate').value;
+            const trade_date = document.getElementById('tradeDate').value;
+            const pnl = document.getElementById('pnl').value;
+            const contracts = document.getElementById('contracts').value;
+            const notes = document.getElementById('notes').value || '';
+            const timestamp = new Date().toISOString();
+
+            console.log('=== FORM VALUES ===');
+            console.log('account:', account, '(type:', typeof account + ')');
+            console.log('market_condition:', market_condition);
+            console.log('risk_template:', risk_template);
+            console.log('trade_date:', trade_date);
+            console.log('pnl:', pnl);
+            console.log('contracts:', contracts);
+
+            // SheetDB POST format: {data: [object with quoted keys]}
+            const payload = {
+                data: [
+                    {
+                        "account": account,
+                        "market_condition": market_condition,
+                        "risk_template": risk_template,
+                        "trade_date": trade_date,
+                        "pnl": pnl,
+                        "contracts": contracts,
+                        "notes": notes,
+                        "timestamp": timestamp
+                    }
+                ]
             };
 
-            console.log('=== SUBMITTING ===');
-            console.log('Trade data:', tradeData);
+            console.log('=== SENDING TO SHEETDB ===');
+            console.log(JSON.stringify(payload, null, 2));
 
             try {
                 const response = await fetch(SHEET_API, {
@@ -1825,15 +1847,14 @@
                     headers: { 
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        data: [tradeData]  // MUST be array for SheetDB POST
-                    })
+                    body: JSON.stringify(payload)
                 });
 
+                console.log('Response status:', response.status);
                 const responseText = await response.text();
-                console.log('Response:', response.status, responseText);
+                console.log('Response body:', responseText);
                 
-                if (response.ok) {
+                if (response.ok || response.status === 201) {
                     showAlert('✓ Trade added successfully!', 'success');
                     document.getElementById('tradeForm').reset();
                     setTodayDate();
@@ -1845,8 +1866,9 @@
                     throw new Error(responseText);
                 }
             } catch (error) {
-                console.error('Error:', error);
-                showAlert('✗ Submission failed. See console (F12).', 'error');
+                console.error('=== SUBMISSION ERROR ===');
+                console.error(error);
+                showAlert('✗ Submission failed. Check console (F12)', 'error');
             } finally {
                 btn.disabled = false;
                 document.getElementById('submitText').style.display = 'inline';
