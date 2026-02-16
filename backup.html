@@ -1202,6 +1202,16 @@
         <button class="debug-btn" onclick="exportDebugLog()">Export Debug Log</button>
         <button class="debug-btn secondary" onclick="exportCSV()">Export CSV Data</button>
 
+         <div class="debug-section">
+            <div class="debug-label">CURRENT USER</div>
+            <div class="debug-value" id="debugCurrentUser">Not logged in</div>
+        </div>
+
+        <div class="debug-section">
+            <div class="debug-label">API URL</div>
+            <div class="debug-value" id="debugApiUrl">Not set</div>
+        </div>
+
         <div class="debug-section">
             <div class="debug-label">API STATUS</div>
             <div class="debug-value" id="debugApiStatus">Not tested</div>
@@ -1245,9 +1255,11 @@
     <div class="dashboard" id="dashboard">
         <!-- SIDEBAR -->
         <aside class="sidebar" id="sidebar">
-            <div class="logo">🌾 Prop Farm</div>
+              <div class="logo">🌾 Prop Farm</div>
+            <div class="user-badge" id="userBadge">User Dashboard</div>
             
             <nav class="nav-section">
+```
                 <div class="nav-title">Main</div>
                 <div class="nav-item active" data-page="overview">
                     <span class="nav-icon">📊</span>
@@ -1332,7 +1344,7 @@
                     <!-- HERO BANNER -->
                     <div class="hero-banner">
                         <div class="hero-content">
-                            <div class="hero-greeting">Welcome back, Trader</div>
+                           <div class="hero-greeting">Welcome back, <span id="heroUserName">Trader</span></div>
                             <div class="hero-title" id="heroTitle">Building Your Trading Empire</div>
                             <div class="hero-stats">
                                 <div class="hero-stat">
@@ -2112,8 +2124,22 @@
     </div>
 
     <script>
-        const PASSWORD = 'trader2025';
-        const SHEET_API = 'https://sheetdb.io/api/v1/eltwz49i4x169';
+        // ✅ MULTI-USER CONFIGURATION
+        const USERS = {
+            'trader2025': {
+                sheetAPI: 'https://sheetdb.io/api/v1/eltwz49i4x169',
+                name: 'Trader One',
+                accountsOwned: 20
+            },
+            'trader2026': {
+                sheetAPI: 'https://sheetdb.io/api/v1/3if5pdgxfo1p2',
+                name: 'Trader Two',
+                accountsOwned: 20
+            }
+        };
+
+        let CURRENT_USER = null;
+        let SHEET_API = null;
         const STARTING_BALANCE = 50000;
         const MAX_DRAWDOWN = 2500;
         const SAFETY_NET = 52600;
@@ -2229,13 +2255,26 @@
             showAlert('✓ Debug log exported', 'success');
         }
 
-        // LOGIN
-        if (sessionStorage.getItem('farm_auth') === 'true') showDashboard();
+        // LOGIN - MULTI USER
+        if (sessionStorage.getItem('farm_auth') === 'true') {
+            const storedPassword = sessionStorage.getItem('farm_password');
+            if (storedPassword && USERS[storedPassword]) {
+                CURRENT_USER = USERS[storedPassword];
+                SHEET_API = CURRENT_USER.sheetAPI;
+                showDashboard();
+            }
+        }
 
         document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            if (document.getElementById('passwordInput').value === PASSWORD) {
+            const password = document.getElementById('passwordInput').value;
+            
+            if (USERS[password]) {
+                CURRENT_USER = USERS[password];
+                SHEET_API = CURRENT_USER.sheetAPI;
                 sessionStorage.setItem('farm_auth', 'true');
+                sessionStorage.setItem('farm_password', password);
+                debugMsg(`User logged in: ${CURRENT_USER.name}`, 'success');
                 showDashboard();
             } else {
                 document.getElementById('loginError').classList.add('show');
@@ -2246,11 +2285,22 @@
         function showDashboard() {
             document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('dashboard').classList.add('show');
+            
+            // Update user display
+            document.getElementById('userBadge').textContent = `👤 ${CURRENT_USER.name}`;
+            document.getElementById('heroUserName').textContent = CURRENT_USER.name;
+            document.getElementById('debugCurrentUser').textContent = CURRENT_USER.name;
+            document.getElementById('debugApiUrl').textContent = SHEET_API;
+            
             initDashboard();
         }
 
-        function logout() {
+       function logout() {
             sessionStorage.removeItem('farm_auth');
+            sessionStorage.removeItem('farm_password');
+            if (CURRENT_USER) {
+                localStorage.removeItem(`prop_farm_payouts_${CURRENT_USER.name}`);
+            }
             location.reload();
         }
 
@@ -3421,12 +3471,13 @@
         }
 
         // PAYOUT MANAGEMENT
-        async function loadPayoutData() {
+         async function loadPayoutData() {
             try {
-                // For now, store payouts in localStorage until user creates separate sheet
-                const stored = localStorage.getItem('prop_farm_payouts');
+                // Store payouts per user
+                const storageKey = `prop_farm_payouts_${CURRENT_USER.name}`;
+                const stored = localStorage.getItem(storageKey);
                 payoutData = stored ? JSON.parse(stored) : [];
-                debugMsg(`Loaded ${payoutData.length} payouts from storage`, 'info');
+                debugMsg(`Loaded ${payoutData.length} payouts for ${CURRENT_USER.name}`, 'info');
             } catch (error) {
                 debugMsg(`Error loading payouts: ${error.message}`, 'error');
                 payoutData = [];
@@ -3627,7 +3678,8 @@
             try {
                 // Store in localStorage
                 payoutData.push(payout);
-                localStorage.setItem('prop_farm_payouts', JSON.stringify(payoutData));
+                const storageKey = `prop_farm_payouts_${CURRENT_USER.name}`;
+                localStorage.setItem(storageKey, JSON.stringify(payoutData));
                 
                 debugMsg(`✓ Payout logged: ${formatCurrency(payout.amount)}`, 'success');
                 showAlert(`✓ Payout logged successfully! Cycle ${newCycle} is now active.`, 'success');
@@ -4013,8 +4065,19 @@
                     }
                 }
                 
-                debugMsg(`✓ Deleted ${deleteCount} of ${totalTrades} trades`, 'success');
-                showAlert(`✓ Successfully deleted ${deleteCount} trades`, 'success');
+               debugMsg(`✓ Deleted ${deleteCount} of ${totalTrades} trades`, 'success');
+                
+                // Also delete all payouts for this user
+                try {
+                    const storageKey = `prop_farm_payouts_${CURRENT_USER.name}`;
+                    localStorage.removeItem(storageKey);
+                    payoutData = [];
+                    debugMsg(`✓ Deleted all payout records`, 'success');
+                    showAlert(`✓ Successfully deleted ${deleteCount} trades and all payout records`, 'success');
+                } catch (error) {
+                    debugMsg(`✗ Error deleting payouts: ${error.message}`, 'error');
+                    showAlert(`✓ Deleted ${deleteCount} trades (payout deletion failed)`, 'info');
+                }
                 
                 // Reload dashboard
                 setTimeout(() => loadDashboardData(), 1500);
