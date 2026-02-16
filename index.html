@@ -1937,12 +1937,25 @@
                                         <option value="first_min">First Payout - Minimum ($2,600 qualified)</option>
                                         <option value="first_full">First Payout - Full ($4,600 = $2k withdrawal)</option>
                                         <option value="monthly">Monthly Payout ($2,000)</option>
+                                        <option value="custom">Custom Amount</option>
                                     </select>
                                 </div>
 
                                 <div class="form-group">
                                     <label class="form-label">Withdrawal Amount ($) *</label>
-                                    <input type="number" step="0.01" class="form-input" id="withdrawalAmount" placeholder="2000.00" required>
+                                    <select class="form-select" id="withdrawalTemplate">
+                                        <option value="">Quick amounts...</option>
+                                        <option value="500">$500</option>
+                                        <option value="1000">$1,000</option>
+                                        <option value="1500">$1,500</option>
+                                        <option value="2000">$2,000</option>
+                                        <option value="2500">$2,500</option>
+                                        <option value="3000">$3,000</option>
+                                        <option value="4000">$4,000</option>
+                                        <option value="5000">$5,000</option>
+                                        <option value="custom">Custom...</option>
+                                    </select>
+                                    <input type="number" step="0.01" class="form-input" id="withdrawalAmount" placeholder="0.00" required style="margin-top: 0.5rem;">
                                 </div>
 
                                 <div class="form-group">
@@ -1955,6 +1968,25 @@
                                     <select class="form-select" id="payoutAccount" required>
                                         <option value="">Select account</option>
                                         <option value="all">All 20 Accounts (Portfolio)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Cycle Completed *</label>
+                                    <select class="form-select" id="cycleCompleted" required>
+                                        <option value="">Which cycle finished?</option>
+                                        <option value="1">Cycle 1</option>
+                                        <option value="2">Cycle 2</option>
+                                        <option value="3">Cycle 3</option>
+                                        <option value="4">Cycle 4</option>
+                                        <option value="5">Cycle 5</option>
+                                        <option value="6">Cycle 6</option>
+                                        <option value="7">Cycle 7</option>
+                                        <option value="8">Cycle 8</option>
+                                        <option value="9">Cycle 9</option>
+                                        <option value="10">Cycle 10</option>
+                                        <option value="11">Cycle 11</option>
+                                        <option value="12">Cycle 12</option>
                                     </select>
                                 </div>
 
@@ -1984,8 +2016,19 @@
                                         <option value="paypal">PayPal</option>
                                         <option value="wise">Wise</option>
                                         <option value="crypto">Crypto</option>
+                                        <option value="check">Check</option>
                                         <option value="other">Other</option>
                                     </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <input type="checkbox" id="noTradeDay" style="width: auto; cursor: pointer;">
+                                        <span>📅 Mark as No-Trade Day</span>
+                                    </label>
+                                    <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                                        Check this if you didn't trade today (rest day, weekend, etc.)
+                                    </p>
                                 </div>
                             </div>
 
@@ -2088,6 +2131,8 @@
         let charts = {};
         let accountFilter = 'all';
         let debugLog = [];
+        let payoutData = [];
+        const PAYOUT_API = 'https://sheetdb.io/api/v1/your_payout_sheet_id'; // User can create separate sheet later
 
         // DEBUG FUNCTIONS
         function debugMsg(message, type = 'info') {
@@ -3318,9 +3363,6 @@
         }
 
         // PAYOUT MANAGEMENT
-        let payoutData = [];
-        const PAYOUT_API = 'https://sheetdb.io/api/v1/your_payout_sheet_id'; // User needs to create separate sheet
-
         async function loadPayoutData() {
             try {
                 // For now, store payouts in localStorage until user creates separate sheet
@@ -3400,15 +3442,18 @@
             
             sorted.forEach(payout => {
                 const row = tbody.insertRow();
+                const noTradeIndicator = payout.no_trade_day ? ' 📅' : '';
+                const typeDisplay = payout.type + noTradeIndicator;
+                
                 row.innerHTML = `
                     <td>${payout.date}</td>
-                    <td><strong>${payout.type}</strong></td>
+                    <td><strong>${typeDisplay}</strong></td>
                     <td style="color: var(--success)"><strong>${formatCurrency(parseFloat(payout.amount))}</strong></td>
                     <td>${payout.account}</td>
                     <td>Cycle ${payout.cycle_completed || 1}</td>
                     <td>Cycle ${payout.new_cycle || 2}</td>
                     <td>${payout.payment_method || '-'}</td>
-                    <td>${payout.notes || '-'}</td>
+                    <td>${payout.notes || '-'}${payout.no_trade_day ? ' (No-trade day)' : ''}</td>
                 `;
             });
         }
@@ -3424,27 +3469,45 @@
                 form.addEventListener('submit', handlePayoutSubmit);
                 setTodayPayoutDate();
                 
-                // Auto-populate withdrawal amount based on type
+                // Withdrawal template selector
+                document.getElementById('withdrawalTemplate').addEventListener('change', (e) => {
+                    const amountInput = document.getElementById('withdrawalAmount');
+                    if (e.target.value && e.target.value !== 'custom') {
+                        amountInput.value = e.target.value;
+                    } else if (e.target.value === 'custom') {
+                        amountInput.value = '';
+                        amountInput.focus();
+                    }
+                });
+                
+                // Auto-populate based on payout type
                 document.getElementById('payoutType').addEventListener('change', (e) => {
                     const amountInput = document.getElementById('withdrawalAmount');
+                    const templateSelect = document.getElementById('withdrawalTemplate');
                     const newCycleSelect = document.getElementById('newCycle');
+                    const cycleCompletedSelect = document.getElementById('cycleCompleted');
+                    
+                    const lastPayout = payoutData.length > 0 ? payoutData[payoutData.length - 1] : null;
+                    const lastCycle = lastPayout ? parseInt(lastPayout.new_cycle) : 1;
                     
                     switch(e.target.value) {
                         case 'first_min':
-                            amountInput.value = '2000';
-                            newCycleSelect.value = '2';
-                            break;
                         case 'first_full':
+                            templateSelect.value = '2000';
                             amountInput.value = '2000';
+                            cycleCompletedSelect.value = '1';
                             newCycleSelect.value = '2';
                             break;
                         case 'monthly':
+                            templateSelect.value = '2000';
                             amountInput.value = '2000';
-                            // Auto-increment cycle
-                            const currentCycle = payoutData.length > 0 
-                                ? parseInt(payoutData[payoutData.length - 1].new_cycle) 
-                                : 1;
-                            newCycleSelect.value = Math.min(currentCycle + 1, 12);
+                            cycleCompletedSelect.value = lastCycle;
+                            newCycleSelect.value = Math.min(lastCycle + 1, 12);
+                            break;
+                        case 'custom':
+                            templateSelect.value = 'custom';
+                            amountInput.value = '';
+                            amountInput.focus();
                             break;
                     }
                 });
@@ -3456,6 +3519,17 @@
                     option.value = i;
                     option.textContent = `PA Account #${i}`;
                     payoutAccountSelect.appendChild(option);
+                }
+                
+                // Auto-suggest current cycle
+                const lastPayout = payoutData.length > 0 ? payoutData[payoutData.length - 1] : null;
+                if (lastPayout) {
+                    const lastCycle = parseInt(lastPayout.new_cycle) || 1;
+                    document.getElementById('cycleCompleted').value = lastCycle;
+                    document.getElementById('newCycle').value = Math.min(lastCycle + 1, 12);
+                } else {
+                    document.getElementById('cycleCompleted').value = '1';
+                    document.getElementById('newCycle').value = '2';
                 }
             }
         }
@@ -3472,39 +3546,38 @@
             const amount = document.getElementById('withdrawalAmount').value;
             const date = document.getElementById('payoutDate').value;
             const account = document.getElementById('payoutAccount').value;
+            const cycleCompleted = document.getElementById('cycleCompleted').value;
             const newCycle = document.getElementById('newCycle').value;
             const paymentMethod = document.getElementById('paymentMethod').value;
             const notes = document.getElementById('payoutNotes').value;
-            
-            // Determine cycle completed
-            let cycleCompleted = 1;
-            if (payoutData.length > 0) {
-                cycleCompleted = parseInt(payoutData[payoutData.length - 1].new_cycle) || 1;
-            }
+            const noTradeDay = document.getElementById('noTradeDay').checked;
             
             const payout = {
                 date,
                 type: payoutType === 'first_min' ? 'First Payout (Min)' 
                     : payoutType === 'first_full' ? 'First Payout (Full)' 
-                    : 'Monthly Payout',
+                    : payoutType === 'monthly' ? 'Monthly Payout'
+                    : 'Custom Payout',
                 amount: parseFloat(amount),
                 account: account === 'all' ? 'All 20 Accounts' : `PA Account #${account}`,
-                cycle_completed: cycleCompleted,
+                cycle_completed: parseInt(cycleCompleted),
                 new_cycle: parseInt(newCycle),
                 payment_method: paymentMethod,
                 notes,
+                no_trade_day: noTradeDay,
                 timestamp: new Date().toISOString()
             };
             
             debugMsg('Logging payout...', 'info');
             
             try {
-                // Store in localStorage (user can later migrate to separate sheet)
+                // Store in localStorage
                 payoutData.push(payout);
                 localStorage.setItem('prop_farm_payouts', JSON.stringify(payoutData));
                 
-                debugMsg(`✓ Payout logged: ${formatCurrency(payout.amount)}`, 'success');
-                showAlert(`✓ Payout logged successfully! Cycle ${newCycle} is now active.`, 'success');
+                const noTradeMsg = noTradeDay ? ' (No-trade day marked)' : '';
+                debugMsg(`✓ Payout logged: ${formatCurrency(payout.amount)}${noTradeMsg}`, 'success');
+                showAlert(`✓ Payout logged successfully! Cycle ${newCycle} is now active.${noTradeMsg}`, 'success');
                 
                 // Reset form
                 document.getElementById('payoutForm').reset();
