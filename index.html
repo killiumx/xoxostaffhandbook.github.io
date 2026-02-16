@@ -3149,7 +3149,7 @@
             // Calculate goal based on number of accounts owned
             const accountsOwned = CURRENT_USER.accountsOwned || 20;
             const firstPayoutGoalAdjusted = 4600 * accountsOwned;
-            const firstPayoutMinAdjusted = 2600 * accountsOwned;
+            const firstPayoutMinAdjusted = 4600 * accountsOwned;
             
             // First Payout Progress
             const firstPayoutProg = Math.min((totalPnL / firstPayoutGoalAdjusted) * 100, 100);
