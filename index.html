@@ -1959,7 +1959,7 @@
                                         <option value="500">$500</option>
                                         <option value="1000">$1,000</option>
                                         <option value="1500">$1,500</option>
-                                        <option value="2000">$2,000</option>
+                                        <option value="4600">$2,000</option>
                                         <option value="2500">$2,500</option>
                                         <option value="3000">$3,000</option>
                                         <option value="4000">$4,000</option>
@@ -2121,7 +2121,7 @@
         // Payout Goals
         const FIRST_PAYOUT_GOAL = 54600;  // $4,600 profit = Full $2k withdrawal
         const FIRST_PAYOUT_MIN = 52600;   // $2,600 profit = Qualify for payout
-        const MONTHLY_PAYOUT_GOAL = 2000; // After first payout, $2k per month
+        const MONTHLY_PAYOUT_GOAL = 4600; // After first payout, $2k per month
         const DAILY_TARGET_MIN = 250;
         const DAILY_TARGET_MAX = 300;
         const FIRST_CYCLE_DAYS = 45;
@@ -2850,7 +2850,7 @@
                 const acc = accountData[i];
                 
                 if (accountFilter === 'active' && acc.trades === 0) continue;
-                if (accountFilter === 'goal' && acc.pnl < 2000) continue;
+                if (accountFilter === 'goal' && acc.pnl < 4600) continue;
                 if (accountFilter === 'profitable' && acc.pnl <= 0) continue;
                 
                 const card = document.createElement('div');
@@ -2859,8 +2859,8 @@
                 card.innerHTML = `
                     <div class="account-header">
                         <div class="account-number">PA #${i}</div>
-                        <span class="account-badge ${acc.pnl >= 2000 ? 'badge-success' : 'badge-active'}">
-                            ${acc.pnl >= 2000 ? 'GOAL ✓' : 'ACTIVE'}
+                        <span class="account-badge ${acc.pnl >= 4600 ? 'badge-success' : 'badge-active'}">
+                            ${acc.pnl >= 4600 ? 'GOAL ✓' : 'ACTIVE'}
                         </span>
                     </div>
                     <div class="account-progress">
@@ -2883,7 +2883,7 @@
                         </div>
                         <div class="account-stat">
                             <span class="account-stat-label">To Goal</span>
-                            <span class="account-stat-value">${formatCurrency(Math.max(2000 - acc.pnl, 0))}</span>
+                            <span class="account-stat-value">${formatCurrency(Math.max(4600 - acc.pnl, 0))}</span>
                         </div>
                         <div class="account-stat">
                             <span class="account-stat-label">Balance</span>
@@ -3114,13 +3114,13 @@
             let payoutCount = 0;
             
             if (totalPnL >= FIRST_PAYOUT_GOAL) {
-                totalPayouts = 2000;
+                totalPayouts = 4600;
                 payoutCount = 1;
                 
                 // Add subsequent $2k payouts
                 const afterFirst = totalPnL - FIRST_PAYOUT_GOAL;
                 const additionalPayouts = Math.floor(afterFirst / MONTHLY_PAYOUT_GOAL);
-                totalPayouts += (additionalPayouts * 2000);
+                totalPayouts += (additionalPayouts * 4600);
                 payoutCount += additionalPayouts;
             }
             
@@ -3447,12 +3447,12 @@
             if (totalPnL >= FIRST_PAYOUT_GOAL) {
                 const afterPayouts = totalPnL - totalWithdrawn;
                 if (afterPayouts >= MONTHLY_PAYOUT_GOAL) {
-                    available = Math.floor(afterPayouts / MONTHLY_PAYOUT_GOAL) * 2000;
+                    available = Math.floor(afterPayouts / MONTHLY_PAYOUT_GOAL) * 4600;
                     status = `✅ ${Math.floor(afterPayouts / MONTHLY_PAYOUT_GOAL)} payout(s) ready`;
                     statusClass = 'positive';
                 }
             } else if (totalPnL >= FIRST_PAYOUT_MIN) {
-                available = 2000;
+                available = 4600;
                 status = '✅ First payout qualified';
                 statusClass = 'positive';
             }
@@ -3549,14 +3549,14 @@
                     switch(e.target.value) {
                         case 'first_min':
                         case 'first_full':
-                            templateSelect.value = '2000';
-                            amountInput.value = '2000';
+                            templateSelect.value = '4600';
+                            amountInput.value = '4600';
                             cycleCompletedSelect.value = '1';
                             newCycleSelect.value = '2';
                             break;
                         case 'monthly':
-                            templateSelect.value = '2000';
-                            amountInput.value = '2000';
+                            templateSelect.value = '4600';
+                            amountInput.value = '4600';
                             cycleCompletedSelect.value = lastCycle;
                             newCycleSelect.value = Math.min(lastCycle + 1, 12);
                             break;
@@ -3642,7 +3642,7 @@
                 // Show info about new cycle
                 setTimeout(() => {
                     showAlert(`🌾 Cycle ${newCycle} started! Future trades will use this cycle by default.`, 'info');
-                }, 2000);
+                }, 4600);
                 
             } catch (error) {
                 debugMsg(`✗ Payout error: ${error.message}`, 'error');
@@ -4111,7 +4111,7 @@
             for (let i = 1; i <= 20; i++) {
                 const trades = allData.filter(t => t.account == i);
                 const pnl = trades.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
-                if (pnl >= 2000) count++;
+                if (pnl >= 4600) count++;
             }
             return count;
         }
@@ -4136,7 +4136,7 @@
                     pnl,
                     trades: trades.length,
                     winRate: trades.length > 0 ? (wins / trades.length) * 100 : 0,
-                    progress: Math.min((pnl / 2000) * 100, 100),
+                    progress: Math.min((pnl / 4600) * 100, 100),
                     highestBalance
                 };
             }
