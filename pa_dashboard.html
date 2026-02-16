@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PA Farm - 20 Account Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0ea5e9;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --bg-elevated: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+            --accent: #06b6d4;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* LOGIN */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .login-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .login-card {
+            background: var(--bg-card);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 440px;
+            margin: 0 1.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-logo h1 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-logo p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .login-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            padding: 0.875rem;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 0.875rem;
+            display: none;
+            margin-bottom: 1rem;
+            border: 1px solid var(--danger);
+        }
+
+        .login-error.show {
+            display: block;
+        }
+
+        /* DASHBOARD */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard.show {
+            display: block;
+        }
+
+        .header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            max-width: 1800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-left p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* FARM OVERVIEW */
+        .farm-overview {
+            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .farm-overview::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .farm-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .farm-subtitle {
+            text-align: center;
+            opacity: 0.95;
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+
+        .farm-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            position: relative;
+        }
+
+        .farm-stat {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .farm-stat-value {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .farm-stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+        }
+
+        /* TABS */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab:hover {
+            color: var(--text-primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ACCOUNTS GRID */
+        .accounts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .account-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .account-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+
+        .account-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .account-number {
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .account-badge {
+            padding: 0.375rem 0.875rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .account-goal {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: var(--bg-elevated);
+            border-radius: 10px;
+        }
+
+        .goal-text {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .goal-progress {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-main);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.5s ease;
+        }
+
+        .account-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.875rem;
+            margin-top: 1rem;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-top: 0.25rem;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        /* TEMPLATE CARDS */
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .template-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .template-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent);
+        }
+
+        .template-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .template-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+        }
+
+        .template-info h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .template-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .template-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .template-stat {
+            text-align: center;
+            padding: 1rem;
+            background: var(--bg-elevated);
+            border-radius: 10px;
+        }
+
+        .template-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .template-stat-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .template-details {
+            display: grid;
+            gap: 0.75rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .template-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+        }
+
+        .template-row-label {
+            color: var(--text-secondary);
+        }
+
+        .template-row-value {
+            font-weight: 600;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        /* COMPARISON TABLE */
+        .comparison-section {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .comparison-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th {
+            text-align: left;
+            padding: 1rem;
+            background: var(--bg-elevated);
+            font-weight: 700;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .comparison-table tr:hover {
+            background: var(--bg-elevated);
+        }
+
+        .best-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* TRADE FORM */
+        .entry-section {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            display: none;
+            font-size: 0.875rem;
+            border: 1px solid;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success);
+            border-color: var(--success);
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .farm-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .template-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .farm-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .accounts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                overflow-x: auto;
+            }
+
+            .comparison-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-card">
+            <div class="login-logo">
+                <h1>🌾 PA Farm Portfolio</h1>
+                <p>20 Funded Accounts · $2k Monthly Per Account</p>
+            </div>
+            
+            <div class="login-error" id="loginError">Invalid password. Try again.</div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Enter Password</label>
+                    <input type="password" class="form-input" id="passwordInput" placeholder="trader2025" required>
+                </div>
+                <button type="submit" class="login-btn">Access Dashboard</button>
+            </form>
+            
+            <p style="text-align: center; color: var(--text-secondary); font-size: 0.8rem; margin-top: 1.5rem;">
+                Secure access to your trading portfolio
+            </p>
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="dashboard" id="dashboard">
+        <header class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>🌾 PA Farm Portfolio</h1>
+                    <p>20 Performance Accounts · Target: $40,000/month</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="refreshData()">↻ Refresh</button>
+                    <button class="btn btn-secondary" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="container">
+            <!-- FARM OVERVIEW -->
+            <div class="farm-overview">
+                <h2 class="farm-title">Portfolio Overview</h2>
+                <p class="farm-subtitle">20 PA Accounts × $2,000/month = $40,000 monthly income goal</p>
+                
+                <div class="farm-stats">
+                    <div class="farm-stat">
+                        <div class="farm-stat-value" id="totalPnL">$0</div>
+                        <div class="farm-stat-label">Total P&L</div>
+                    </div>
+                    <div class="farm-stat">
+                        <div class="farm-stat-value" id="monthlyIncome">$0</div>
+                        <div class="farm-stat-label">This Month</div>
+                    </div>
+                    <div class="farm-stat">
+                        <div class="farm-stat-value" id="avgWinRate">0%</div>
+                        <div class="farm-stat-label">Avg Win Rate</div>
+                    </div>
+                    <div class="farm-stat">
+                        <div class="farm-stat-value" id="totalTrades">0</div>
+                        <div class="farm-stat-label">Total Trades</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ALERT -->
+            <div class="alert" id="alert"></div>
+
+            <!-- TABS -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('accounts')">📊 Accounts</button>
+                <button class="tab" onclick="switchTab('templates')">📋 Templates</button>
+                <button class="tab" onclick="switchTab('comparison')">📈 Comparison</button>
+                <button class="tab" onclick="switchTab('entry')">➕ Add Trade</button>
+            </div>
+
+            <!-- TAB: ACCOUNTS -->
+            <div class="tab-content active" id="accountsTab">
+                <h2 class="section-title">20 PA Accounts (Target: $2,000/month each)</h2>
+                <div class="accounts-grid" id="accountsGrid">
+                    <!-- Accounts populated here -->
+                </div>
+            </div>
+
+            <!-- TAB: TEMPLATES -->
+            <div class="tab-content" id="templatesTab">
+                <h2 class="section-title">Trading Templates</h2>
+                <div class="template-grid" id="templatesGrid">
+                    <!-- Templates populated here -->
+                </div>
+            </div>
+
+            <!-- TAB: COMPARISON -->
+            <div class="tab-content" id="comparisonTab">
+                <div class="comparison-section">
+                    <h2 class="comparison-title">Template Performance Comparison</h2>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Template</th>
+                                <th>Total P&L</th>
+                                <th>Trades</th>
+                                <th>Win Rate</th>
+                                <th>Avg Win</th>
+                                <th>Avg Loss</th>
+                                <th>Best Trade</th>
+                            </tr>
+                        </thead>
+                        <tbody id="comparisonTableBody">
+                            <!-- Comparison data here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB: ENTRY -->
+            <div class="tab-content" id="entryTab">
+                <div class="entry-section">
+                    <h2 class="section-title">Add Trade Entry</h2>
+                    <form id="tradeForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">PA Account</label>
+                                <select class="form-select" id="account" required>
+                                    <option value="">Select Account</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Template</label>
+                                <select class="form-select" id="template" required>
+                                    <option value="">Select Template</option>
+                                    <option value="High Impact News">High Impact News</option>
+                                    <option value="No Impact">No Impact</option>
+                                    <option value="300 Risk (1:1)">300 Risk (1:1)</option>
+                                    <option value="100 Risk (1:1)">100 Risk (1:1)</option>
+                                    <option value="Custom">Custom</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Date</label>
+                                <input type="date" class="form-input" id="tradeDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">P&L ($)</label>
+                                <input type="number" step="0.01" class="form-input" id="pnl" placeholder="0.00" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Contracts</label>
+                                <input type="number" class="form-input" id="contracts" placeholder="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Risk ($)</label>
+                                <input type="number" step="0.01" class="form-input" id="risk" placeholder="0.00">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Notes</label>
+                            <textarea class="form-input form-textarea" id="notes" placeholder="Trade notes and analysis..."></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <span id="submitText">Submit Trade</span>
+                                <span id="submitLoading" class="spinner" style="display: none;"></span>
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="document.getElementById('tradeForm').reset()">Clear Form</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CONFIG
+        const PASSWORD = 'trader2025';
+        const SHEET_API = 'https://sheetdb.io/api/v1/eltwz49i4x169';
+        const TOTAL_ACCOUNTS = 20;
+        const MONTHLY_TARGET = 2000;
+
+        // TEMPLATES
+        const TEMPLATES = {
+            'High Impact News': {
+                icon: '📰',
+                description: 'High volatility news trading',
+                risk: 300,
+                reward: 300,
+                ratio: '1:1',
+                contracts: 3
+            },
+            'No Impact': {
+                icon: '📉',
+                description: 'Low volatility sessions',
+                risk: 150,
+                reward: 150,
+                ratio: '1:1',
+                contracts: 2
+            },
+            '300 Risk (1:1)': {
+                icon: '🎯',
+                description: '$300 risk, $300 target',
+                risk: 300,
+                reward: 300,
+                ratio: '1:1',
+                contracts: 3
+            },
+            '100 Risk (1:1)': {
+                icon: '💰',
+                description: '$100 risk, $100 target',
+                risk: 100,
+                reward: 100,
+                ratio: '1:1',
+                contracts: 1
+            },
+            'Custom': {
+                icon: '⚡',
+                description: 'Custom strategy',
+                risk: 0,
+                reward: 0,
+                ratio: 'Variable',
+                contracts: 0
+            }
+        };
+
+        // LOGIN
+        if (sessionStorage.getItem('pa_auth') === 'true') {
+            showDashboard();
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (document.getElementById('passwordInput').value === PASSWORD) {
+                sessionStorage.setItem('pa_auth', 'true');
+                showDashboard();
+            } else {
+                document.getElementById('loginError').classList.add('show');
+                setTimeout(() => document.getElementById('loginError').classList.remove('show'), 3000);
+            }
+        });
+
+        function showDashboard() {
+            document.getElementById('loginOverlay').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('show');
+            populateAccountDropdown();
+            loadDashboardData();
+        }
+
+        function logout() {
+            sessionStorage.removeItem('pa_auth');
+            location.reload();
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Tab').classList.add('active');
+        }
+
+        function populateAccountDropdown() {
+            const select = document.getElementById('account');
+            for (let i = 1; i <= TOTAL_ACCOUNTS; i++) {
+                select.innerHTML += `<option value="${i}">PA Account #${i}</option>`;
+            }
+        }
+
+        // LOAD DATA
+        async function loadDashboardData() {
+            try {
+                const response = await fetch(SHEET_API);
+                if (!response.ok) throw new Error('Failed to fetch');
+                const data = await response.json();
+                updateDashboard(data);
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Failed to load data. Check connection.', 'error');
+                updateDashboard([]);
+            }
+        }
+
+        function updateDashboard(data) {
+            // Calculate account stats
+            const accountStats = {};
+            let totalPnL = 0;
+            let totalTrades = 0;
+            let totalWins = 0;
+
+            for (let i = 1; i <= TOTAL_ACCOUNTS; i++) {
+                const accountData = data.filter(e => e.account == i);
+                const pnl = calculatePnL(accountData);
+                const winRate = calculateWinRate(accountData);
+                
+                totalPnL += pnl;
+                totalTrades += accountData.length;
+                totalWins += accountData.filter(e => parseFloat(e.pnl || 0) > 0).length;
+
+                accountStats[i] = {
+                    pnl,
+                    trades: accountData.length,
+                    winRate,
+                    progress: Math.min((pnl / MONTHLY_TARGET) * 100, 100)
+                };
+            }
+
+            // Update overview
+            document.getElementById('totalPnL').textContent = formatCurrency(totalPnL);
+            document.getElementById('monthlyIncome').textContent = formatCurrency(totalPnL);
+            document.getElementById('avgWinRate').textContent = totalTrades > 0 ? Math.round((totalWins / totalTrades) * 100) + '%' : '0%';
+            document.getElementById('totalTrades').textContent = totalTrades;
+
+            // Render accounts
+            renderAccounts(accountStats);
+
+            // Calculate template stats
+            const templateStats = calculateTemplateStats(data);
+            renderTemplates(templateStats);
+            renderComparison(templateStats);
+        }
+
+        function renderAccounts(accountStats) {
+            const grid = document.getElementById('accountsGrid');
+            grid.innerHTML = '';
+
+            for (let i = 1; i <= TOTAL_ACCOUNTS; i++) {
+                const stats = accountStats[i];
+                const card = document.createElement('div');
+                card.className = 'account-card';
+
+                card.innerHTML = `
+                    <div class="account-header">
+                        <div class="account-number">PA #${i}</div>
+                        <span class="account-badge">FUNDED</span>
+                    </div>
+                    <div class="account-goal">
+                        <div class="goal-text">Monthly Target: $2,000</div>
+                        <div class="goal-progress">
+                            <span>${formatCurrency(stats.pnl)}</span>
+                            <span>${Math.round(stats.progress)}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${stats.progress}%"></div>
+                        </div>
+                    </div>
+                    <div class="account-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Trades</span>
+                            <span class="stat-value">${stats.trades}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Win Rate</span>
+                            <span class="stat-value">${Math.round(stats.winRate)}%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">To Goal</span>
+                            <span class="stat-value">${formatCurrency(Math.max(MONTHLY_TARGET - stats.pnl, 0))}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Status</span>
+                            <span class="stat-value">${stats.pnl >= MONTHLY_TARGET ? '✓' : '→'}</span>
+                        </div>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            }
+        }
+
+        function calculateTemplateStats(data) {
+            const stats = {};
+
+            Object.keys(TEMPLATES).forEach(templateName => {
+                const templateData = data.filter(e => e.template === templateName);
+                const pnl = calculatePnL(templateData);
+                const winRate = calculateWinRate(templateData);
+                const wins = templateData.filter(e => parseFloat(e.pnl || 0) > 0);
+                const losses = templateData.filter(e => parseFloat(e.pnl || 0) < 0);
+
+                stats[templateName] = {
+                    ...TEMPLATES[templateName],
+                    totalPnL: pnl,
+                    trades: templateData.length,
+                    winRate,
+                    avgWin: wins.length > 0 ? wins.reduce((sum, t) => sum + parseFloat(t.pnl), 0) / wins.length : 0,
+                    avgLoss: losses.length > 0 ? losses.reduce((sum, t) => sum + parseFloat(t.pnl), 0) / losses.length : 0,
+                    bestTrade: templateData.length > 0 ? Math.max(...templateData.map(t => parseFloat(t.pnl || 0))) : 0
+                };
+            });
+
+            return stats;
+        }
+
+        function renderTemplates(templateStats) {
+            const grid = document.getElementById('templatesGrid');
+            grid.innerHTML = '';
+
+            Object.entries(templateStats).forEach(([name, stats]) => {
+                const card = document.createElement('div');
+                card.className = 'template-card';
+
+                card.innerHTML = `
+                    <div class="template-header">
+                        <div class="template-icon">${stats.icon}</div>
+                        <div class="template-info">
+                            <h3>${name}</h3>
+                            <p>${stats.description}</p>
+                        </div>
+                    </div>
+                    <div class="template-stats">
+                        <div class="template-stat">
+                            <div class="template-stat-value">${formatCurrency(stats.totalPnL)}</div>
+                            <div class="template-stat-label">Total P&L</div>
+                        </div>
+                        <div class="template-stat">
+                            <div class="template-stat-value">${stats.trades}</div>
+                            <div class="template-stat-label">Trades</div>
+                        </div>
+                        <div class="template-stat">
+                            <div class="template-stat-value">${Math.round(stats.winRate)}%</div>
+                            <div class="template-stat-label">Win Rate</div>
+                        </div>
+                    </div>
+                    <div class="template-details">
+                        <div class="template-row">
+                            <span class="template-row-label">Risk:Reward</span>
+                            <span class="template-row-value">${stats.ratio}</span>
+                        </div>
+                        <div class="template-row">
+                            <span class="template-row-label">Standard Contracts</span>
+                            <span class="template-row-value">${stats.contracts}</span>
+                        </div>
+                        <div class="template-row">
+                            <span class="template-row-label">Avg Win</span>
+                            <span class="template-row-value">${formatCurrency(stats.avgWin)}</span>
+                        </div>
+                        <div class="template-row">
+                            <span class="template-row-label">Avg Loss</span>
+                            <span class="template-row-value">${formatCurrency(stats.avgLoss)}</span>
+                        </div>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        function renderComparison(templateStats) {
+            const tbody = document.getElementById('comparisonTableBody');
+            tbody.innerHTML = '';
+
+            const sortedTemplates = Object.entries(templateStats).sort((a, b) => b[1].totalPnL - a[1].totalPnL);
+            const bestPnL = sortedTemplates.length > 0 ? sortedTemplates[0][1].totalPnL : 0;
+
+            sortedTemplates.forEach(([name, stats]) => {
+                const row = document.createElement('tr');
+                const isBest = stats.totalPnL === bestPnL && stats.totalPnL > 0;
+
+                row.innerHTML = `
+                    <td>${stats.icon} ${name} ${isBest ? '<span class="best-badge">Best</span>' : ''}</td>
+                    <td>${formatCurrency(stats.totalPnL)}</td>
+                    <td>${stats.trades}</td>
+                    <td>${Math.round(stats.winRate)}%</td>
+                    <td>${formatCurrency(stats.avgWin)}</td>
+                    <td>${formatCurrency(stats.avgLoss)}</td>
+                    <td>${formatCurrency(stats.bestTrade)}</td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+        // FORM SUBMIT
+        document.getElementById('tradeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const btn = document.querySelector('#tradeForm .btn-primary');
+            btn.disabled = true;
+            document.getElementById('submitText').style.display = 'none';
+            document.getElementById('submitLoading').style.display = 'inline-block';
+
+            const formData = {
+                account: document.getElementById('account').value,
+                template: document.getElementById('template').value,
+                trade_date: document.getElementById('tradeDate').value,
+                pnl: parseFloat(document.getElementById('pnl').value),
+                contracts: parseInt(document.getElementById('contracts').value),
+                risk: parseFloat(document.getElementById('risk').value) || 0,
+                notes: document.getElementById('notes').value,
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                const response = await fetch(SHEET_API, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ data: [formData] })
+                });
+
+                if (response.ok) {
+                    showAlert('✓ Trade added successfully!', 'success');
+                    document.getElementById('tradeForm').reset();
+                    document.getElementById('tradeDate').valueAsDate = new Date();
+                    setTimeout(() => {
+                        loadDashboardData();
+                        switchTab('accounts');
+                    }, 1000);
+                } else {
+                    throw new Error('Failed');
+                }
+            } catch (error) {
+                showAlert('✗ Failed to submit trade', 'error');
+            } finally {
+                btn.disabled = false;
+                document.getElementById('submitText').style.display = 'inline';
+                document.getElementById('submitLoading').style.display = 'none';
+            }
+        });
+
+        // HELPERS
+        function calculatePnL(entries) {
+            return entries.reduce((sum, e) => sum + parseFloat(e.pnl || 0), 0);
+        }
+
+        function calculateWinRate(entries) {
+            if (entries.length === 0) return 0;
+            const wins = entries.filter(e => parseFloat(e.pnl || 0) > 0).length;
+            return (wins / entries.length) * 100;
+        }
+
+        function formatCurrency(amount) {
+            const formatted = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(Math.abs(amount));
+            return amount < 0 ? `(${formatted})` : formatted;
+        }
+
+        function showAlert(message, type) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.className = `alert alert-${type} show`;
+            setTimeout(() => alert.classList.remove('show'), 5000);
+        }
+
+        function refreshData() {
+            loadDashboardData();
+            showAlert('✓ Data refreshed', 'success');
+        }
+
+        document.getElementById('tradeDate').valueAsDate = new Date();
+    </script>
+</body>
+</html>
