@@ -777,6 +777,16 @@
             transform: translateY(-2px);
         }
 
+        .account-card.at-risk {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.02);
+        }
+
+        .account-card.warning {
+            border-color: var(--warning);
+            background: rgba(245, 158, 11, 0.02);
+        }
+
         .account-header {
             display: flex;
             justify-content: space-between;
@@ -808,6 +818,16 @@
             color: var(--accent);
         }
 
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
         .account-progress {
             margin-bottom: 1.25rem;
         }
@@ -831,6 +851,10 @@
             height: 100%;
             background: linear-gradient(90deg, #667eea, #764ba2);
             transition: width 0.5s ease;
+        }
+
+        .progress-fill.danger {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
         }
 
         .account-stats {
@@ -857,6 +881,29 @@
             font-size: 1.125rem;
             font-weight: 800;
             font-family: 'JetBrains Mono', monospace;
+        }
+
+        .risk-info {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            font-size: 0.8125rem;
+        }
+
+        .risk-info.danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .risk-info.warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .risk-info.safe {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
         }
 
         /* FORM */
@@ -1206,6 +1253,10 @@
                     <span class="nav-icon">📊</span>
                     <span>Overview</span>
                 </div>
+                <div class="nav-item" data-page="cyclePerformance">
+                    <span class="nav-icon">🔄</span>
+                    <span>Cycle Performance</span>
+                </div>
                 <div class="nav-item" data-page="templates">
                     <span class="nav-icon">📋</span>
                     <span>Templates</span>
@@ -1218,6 +1269,10 @@
                     <span class="nav-icon">📈</span>
                     <span>Analytics</span>
                 </div>
+                <div class="nav-item" data-page="riskMonitor">
+                    <span class="nav-icon">⚠️</span>
+                    <span>Risk Monitor</span>
+                </div>
             </nav>
 
             <nav class="nav-section">
@@ -1226,9 +1281,17 @@
                     <span class="nav-icon">➕</span>
                     <span>Add Trade</span>
                 </div>
+                <div class="nav-item" data-page="logPayout">
+                    <span class="nav-icon">💰</span>
+                    <span>Log Payout</span>
+                </div>
                 <div class="nav-item" data-page="tradeLog">
                     <span class="nav-icon">📝</span>
                     <span>Trade Log</span>
+                </div>
+                <div class="nav-item" data-page="deleteData">
+                    <span class="nav-icon">🗑️</span>
+                    <span>Delete Data</span>
                 </div>
             </nav>
 
@@ -1264,7 +1327,7 @@
                 <!-- ALERT -->
                 <div class="alert" id="alert"></div>
 
-                <!-- PAGE: OVERVIEW (ULTIMATE VERSION) -->
+                <!-- PAGE: OVERVIEW -->
                 <div class="page active" id="overviewPage">
                     <!-- HERO BANNER -->
                     <div class="hero-banner">
@@ -1396,7 +1459,7 @@
                         </div>
                         <div class="stat-mini-card">
                             <div class="stat-mini-value" id="monthlyProgress">0%</div>
-                            <div class="stat-mini-label">To $40k Goal</div>
+                            <div class="stat-mini-label">Payout Progress</div>
                         </div>
                     </div>
 
@@ -1475,6 +1538,117 @@
                     </div>
                 </div>
 
+                <!-- PAGE: CYCLE PERFORMANCE -->
+                <div class="page" id="cyclePerformancePage">
+                    <h2 class="section-title" style="margin-bottom: 1rem;">🔄 Cycle Performance Tracker</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                        Track your farming journey: First cycle target is $4,600 profit in 45 days ($250-$300/day). 
+                        After first payout, monthly cycles need $2,000 in 8-20 days.
+                    </p>
+
+                    <!-- Payout Summary Cards -->
+                    <div class="metrics-grid" style="margin-bottom: 2rem;">
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-label">First Payout Progress</span>
+                                <div class="metric-icon blue">🎯</div>
+                            </div>
+                            <div class="metric-value" id="firstPayoutProgress">0%</div>
+                            <div class="metric-change neutral" id="firstPayoutStatus">Not yet qualified</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-label">Total Payouts Earned</span>
+                                <div class="metric-icon green">💰</div>
+                            </div>
+                            <div class="metric-value" id="totalPayouts">$0</div>
+                            <div class="metric-change neutral" id="payoutCount">0 payouts</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-label">Current Cycle Status</span>
+                                <div class="metric-icon purple">📅</div>
+                            </div>
+                            <div class="metric-value" id="currentCycleStatus">Cycle 1</div>
+                            <div class="metric-change neutral" id="currentCycleInfo">Building to first payout</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-label">Daily Average</span>
+                                <div class="metric-icon orange">📊</div>
+                            </div>
+                            <div class="metric-value" id="dailyAverage">$0</div>
+                            <div class="metric-change neutral" id="dailyTarget">Target: $250-$300</div>
+                        </div>
+                    </div>
+
+                    <!-- Farming Strategy Info -->
+                    <div class="alert alert-info show" style="margin-bottom: 2rem;">
+                        <strong>🌾 The Farmer Mentality:</strong><br>
+                        Plant daily wins ($250-$300). Protect the field (stay out of red folder news). Stay patient (45 days first cycle). 
+                        Take the harvest when the account matures ($54,600 = full $2k payout). After first harvest, monthly cycles are easier (just $2k in 8-20 days).
+                    </div>
+
+                    <!-- Cycle Comparison Table -->
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3 class="chart-title">Cycle-by-Cycle Comparison</h3>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Cycle</th>
+                                        <th>Total P&L</th>
+                                        <th>Trades</th>
+                                        <th>Trading Days</th>
+                                        <th>Avg Per Day</th>
+                                        <th>Win Rate</th>
+                                        <th>Best Day</th>
+                                        <th>Worst Day</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cycleComparisonBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Cycle Charts -->
+                    <div class="chart-grid" style="margin-top: 2rem;">
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <div>
+                                    <h3 class="chart-title">Cycle P&L Comparison</h3>
+                                    <p class="chart-subtitle">Total profit per cycle</p>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="cyclePnLChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <div>
+                                    <h3 class="chart-title">Daily Average by Cycle</h3>
+                                    <p class="chart-subtitle">Average daily profit</p>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="cycleDailyAvgChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Individual Cycle Details -->
+                    <div class="templates-section" style="margin-top: 2rem;">
+                        <div class="section-header">
+                            <h2 class="section-title">Cycle Details</h2>
+                        </div>
+                        <div class="templates-grid" id="cycleDetailsGrid"></div>
+                    </div>
+                </div>
+
                 <!-- PAGE: TEMPLATES -->
                 <div class="page" id="templatesPage">
                     <div class="templates-section">
@@ -1539,6 +1713,75 @@
                     </div>
                 </div>
 
+                <!-- PAGE: RISK MONITOR -->
+                <div class="page" id="riskMonitorPage">
+                    <h2 class="section-title" style="margin-bottom: 1.5rem;">⚠️ Account Risk Monitor</h2>
+                    
+                    <div class="alert alert-info show" style="margin-bottom: 2rem;">
+                        <strong>Trailing Drawdown Rules:</strong><br>
+                        • Starting Balance: $50,000 | Max Drawdown: $2,500 | Fail Line: $47,500<br>
+                        • Safety Net: $52,600 (Once reached, fail line locks at $50,100 forever)<br>
+                        • Before safety net: Fail line trails your highest balance
+                    </div>
+
+                    <div class="accounts-grid" id="riskMonitorGrid"></div>
+                </div>
+
+                <!-- PAGE: DELETE DATA -->
+                <div class="page" id="deleteDataPage">
+                    <h2 class="section-title" style="margin-bottom: 1.5rem;">🗑️ Delete Data</h2>
+                    
+                    <div class="alert alert-error show" style="margin-bottom: 2rem;">
+                        <strong>⚠️ Warning:</strong> Deleted data cannot be recovered. Please be careful!
+                    </div>
+
+                    <div class="form-card">
+                        <h3 style="margin-bottom: 1.5rem;">Delete Options</h3>
+                        
+                        <div style="display: grid; gap: 1.5rem;">
+                            <div style="padding: 1.5rem; border: 2px solid var(--border); border-radius: 12px;">
+                                <h4 style="margin-bottom: 0.5rem;">🔄 Delete by Cycle</h4>
+                                <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.875rem;">Remove all trades from a specific cycle/month</p>
+                                <div style="display: flex; gap: 1rem;">
+                                    <select class="form-select" id="deleteCycleSelect" style="flex: 1;">
+                                        <option value="">Select cycle to delete</option>
+                                        <option value="1">Cycle 1</option>
+                                        <option value="2">Cycle 2</option>
+                                        <option value="3">Cycle 3</option>
+                                        <option value="4">Cycle 4</option>
+                                        <option value="5">Cycle 5</option>
+                                        <option value="6">Cycle 6</option>
+                                        <option value="7">Cycle 7</option>
+                                        <option value="8">Cycle 8</option>
+                                        <option value="9">Cycle 9</option>
+                                        <option value="10">Cycle 10</option>
+                                        <option value="11">Cycle 11</option>
+                                        <option value="12">Cycle 12</option>
+                                    </select>
+                                    <button class="btn btn-secondary" onclick="deleteByCycle()">Delete Cycle</button>
+                                </div>
+                            </div>
+
+                            <div style="padding: 1.5rem; border: 2px solid var(--border); border-radius: 12px;">
+                                <h4 style="margin-bottom: 0.5rem;">💼 Delete by Account</h4>
+                                <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.875rem;">Remove all trades from a specific account</p>
+                                <div style="display: flex; gap: 1rem;">
+                                    <select class="form-select" id="deleteAccountSelect" style="flex: 1;">
+                                        <option value="">Select account to delete</option>
+                                    </select>
+                                    <button class="btn btn-secondary" onclick="deleteByAccount()">Delete Account</button>
+                                </div>
+                            </div>
+
+                            <div style="padding: 1.5rem; border: 2px solid #ef4444; border-radius: 12px; background: rgba(239, 68, 68, 0.05);">
+                                <h4 style="margin-bottom: 0.5rem; color: var(--danger);">💣 Delete ALL Data</h4>
+                                <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.875rem;">⚠️ This will permanently delete ALL trades from ALL accounts!</p>
+                                <button class="btn btn-secondary" onclick="confirmDeleteAll()" style="background: var(--danger); color: white; border: none;">Delete Everything</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- PAGE: ADD TRADE -->
                 <div class="page" id="addTradePage">
                     <h2 class="section-title" style="margin-bottom: 1.5rem;">Add New Trade</h2>
@@ -1546,10 +1789,58 @@
                     <div class="form-card">
                         <form id="tradeForm">
                             <div class="form-grid">
-                                <div class="form-group">
-                                    <label class="form-label">PA Account *</label>
-                                    <select class="form-select" id="account" required></select>
+                                <!-- TRADE COPIER MODE -->
+                                <div class="form-group" style="grid-column: 1/-1;">
+                                    <label class="form-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <input type="checkbox" id="copierMode" style="width: auto; cursor: pointer;">
+                                        <span>🔄 Trade Copier Mode (Copy to multiple accounts)</span>
+                                    </label>
                                 </div>
+
+                                <!-- SINGLE ACCOUNT MODE -->
+                                <div id="singleAccountMode">
+                                    <div class="form-group">
+                                        <label class="form-label">PA Account *</label>
+                                        <select class="form-select" id="account" required></select>
+                                    </div>
+                                </div>
+
+                                <!-- MULTI ACCOUNT MODE -->
+                                <div id="multiAccountMode" style="display: none; grid-column: 1/-1;">
+                                    <div class="form-group">
+                                        <label class="form-label">Lead Account *</label>
+                                        <select class="form-select" id="leadAccount"></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Follower Accounts (Select multiple) *</label>
+                                        <div style="border: 2px solid var(--border); border-radius: 12px; padding: 1rem; background: var(--bg-secondary); max-height: 200px; overflow-y: auto;">
+                                            <div id="followerCheckboxes" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Cycle (Month) *
+                                        <span id="suggestedCycleHint" style="color: var(--success); font-weight: 400; font-size: 0.75rem;"></span>
+                                    </label>
+                                    <select class="form-select" id="cycle" required>
+                                        <option value="">Select cycle</option>
+                                        <option value="1">Cycle 1 (Month 1)</option>
+                                        <option value="2">Cycle 2 (Month 2)</option>
+                                        <option value="3">Cycle 3 (Month 3)</option>
+                                        <option value="4">Cycle 4 (Month 4)</option>
+                                        <option value="5">Cycle 5 (Month 5)</option>
+                                        <option value="6">Cycle 6 (Month 6)</option>
+                                        <option value="7">Cycle 7 (Month 7)</option>
+                                        <option value="8">Cycle 8 (Month 8)</option>
+                                        <option value="9">Cycle 9 (Month 9)</option>
+                                        <option value="10">Cycle 10 (Month 10)</option>
+                                        <option value="11">Cycle 11 (Month 11)</option>
+                                        <option value="12">Cycle 12 (Month 12)</option>
+                                    </select>
+                                </div>
+
                                 <div class="form-group">
                                     <label class="form-label">Market Condition *</label>
                                     <select class="form-select" id="marketCondition" required>
@@ -1598,6 +1889,197 @@
                     </div>
                 </div>
 
+                <!-- PAGE: LOG PAYOUT -->
+                <div class="page" id="logPayoutPage">
+                    <h2 class="section-title" style="margin-bottom: 1rem;">💰 Log Payout / Withdrawal</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                        Record when you take a payout from your prop firm. This helps track your farming progress and cycles.
+                    </p>
+
+                    <!-- Current Status Summary -->
+                    <div class="metrics-grid" style="margin-bottom: 2rem;">
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-label">Available for Withdrawal</span>
+                                <div class="metric-icon green">💵</div>
+                            </div>
+                            <div class="metric-value" id="availableWithdrawal">$0</div>
+                            <div class="metric-change neutral" id="withdrawalStatus">Not qualified yet</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-label">Total Withdrawn</span>
+                                <div class="metric-icon blue">💰</div>
+                            </div>
+                            <div class="metric-value" id="totalWithdrawn">$0</div>
+                            <div class="metric-change neutral" id="withdrawalCount">0 payouts</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-label">Current Cycle Phase</span>
+                                <div class="metric-icon purple">🔄</div>
+                            </div>
+                            <div class="metric-value" id="cyclePhase">First Cycle</div>
+                            <div class="metric-change neutral" id="phaseInfo">Building to first payout</div>
+                        </div>
+                    </div>
+
+                    <!-- Payout Form -->
+                    <div class="form-card">
+                        <h3 style="margin-bottom: 1.5rem;">Record New Payout</h3>
+                        
+                        <form id="payoutForm">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Payout Type *</label>
+                                    <select class="form-select" id="payoutType" required>
+                                        <option value="">Select payout type</option>
+                                        <option value="first_min">First Payout - Minimum ($2,600 qualified)</option>
+                                        <option value="first_full">First Payout - Full ($4,600 = $2k withdrawal)</option>
+                                        <option value="monthly">Monthly Payout ($2,000)</option>
+                                        <option value="custom">Custom Amount</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Withdrawal Amount ($) *</label>
+                                    <select class="form-select" id="withdrawalTemplate">
+                                        <option value="">Quick amounts...</option>
+                                        <option value="500">$500</option>
+                                        <option value="1000">$1,000</option>
+                                        <option value="1500">$1,500</option>
+                                        <option value="2000">$2,000</option>
+                                        <option value="2500">$2,500</option>
+                                        <option value="3000">$3,000</option>
+                                        <option value="4000">$4,000</option>
+                                        <option value="5000">$5,000</option>
+                                        <option value="custom">Custom...</option>
+                                    </select>
+                                    <input type="number" step="0.01" class="form-input" id="withdrawalAmount" placeholder="0.00" required style="margin-top: 0.5rem;">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Payout Date *</label>
+                                    <input type="date" class="form-input" id="payoutDate" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Account(s) *</label>
+                                    <select class="form-select" id="payoutAccount" required>
+                                        <option value="">Select account</option>
+                                        <option value="all">All 20 Accounts (Portfolio)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Cycle Completed *</label>
+                                    <select class="form-select" id="cycleCompleted" required>
+                                        <option value="">Which cycle finished?</option>
+                                        <option value="1">Cycle 1</option>
+                                        <option value="2">Cycle 2</option>
+                                        <option value="3">Cycle 3</option>
+                                        <option value="4">Cycle 4</option>
+                                        <option value="5">Cycle 5</option>
+                                        <option value="6">Cycle 6</option>
+                                        <option value="7">Cycle 7</option>
+                                        <option value="8">Cycle 8</option>
+                                        <option value="9">Cycle 9</option>
+                                        <option value="10">Cycle 10</option>
+                                        <option value="11">Cycle 11</option>
+                                        <option value="12">Cycle 12</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">New Cycle Starting *</label>
+                                    <select class="form-select" id="newCycle" required>
+                                        <option value="">Select new cycle</option>
+                                        <option value="2">Cycle 2</option>
+                                        <option value="3">Cycle 3</option>
+                                        <option value="4">Cycle 4</option>
+                                        <option value="5">Cycle 5</option>
+                                        <option value="6">Cycle 6</option>
+                                        <option value="7">Cycle 7</option>
+                                        <option value="8">Cycle 8</option>
+                                        <option value="9">Cycle 9</option>
+                                        <option value="10">Cycle 10</option>
+                                        <option value="11">Cycle 11</option>
+                                        <option value="12">Cycle 12</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Payment Method</label>
+                                    <select class="form-select" id="paymentMethod">
+                                        <option value="">Select method (optional)</option>
+                                        <option value="bank_transfer">Bank Transfer</option>
+                                        <option value="paypal">PayPal</option>
+                                        <option value="wise">Wise</option>
+                                        <option value="crypto">Crypto</option>
+                                        <option value="check">Check</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <input type="checkbox" id="noTradeDay" style="width: auto; cursor: pointer;">
+                                        <span>📅 Mark as No-Trade Day</span>
+                                    </label>
+                                    <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                                        Check this if you didn't trade today (rest day, weekend, etc.)
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Payout Notes</label>
+                                <textarea class="form-input form-textarea" id="payoutNotes" placeholder="e.g., First milestone reached! Ready for monthly farming cycle..."></textarea>
+                            </div>
+
+                            <div class="alert alert-info show" style="margin-bottom: 1rem;">
+                                <strong>📝 What happens when you log a payout:</strong><br>
+                                • Your withdrawal is recorded in the payout history<br>
+                                • The system marks this cycle as complete<br>
+                                • Future trades will automatically use the new cycle number<br>
+                                • Your progress tracker adjusts to the next goal
+                            </div>
+
+                            <div class="form-footer">
+                                <button type="submit" class="btn btn-primary" id="payoutSubmitBtn">
+                                    <span id="payoutSubmitText">💰 Log Payout</span>
+                                    <span id="payoutSubmitLoading" class="loading" style="display: none;"></span>
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="document.getElementById('payoutForm').reset(); setTodayPayoutDate();">Clear</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Payout History -->
+                    <div class="table-card" style="margin-top: 2rem;">
+                        <div class="table-header">
+                            <h3 class="chart-title">Payout History</h3>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Account</th>
+                                        <th>Cycle Completed</th>
+                                        <th>New Cycle</th>
+                                        <th>Payment Method</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payoutHistoryBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- PAGE: TRADE LOG -->
                 <div class="page" id="tradeLogPage">
                     <h2 class="section-title" style="margin-bottom: 1.5rem;">Complete Trade Log</h2>
@@ -1631,12 +2113,26 @@
     <script>
         const PASSWORD = 'trader2025';
         const SHEET_API = 'https://sheetdb.io/api/v1/eltwz49i4x169';
-        const MONTHLY_TARGET = 40000;
+        const STARTING_BALANCE = 50000;
+        const MAX_DRAWDOWN = 2500;
+        const SAFETY_NET = 52600;
+        
+        // Payout Goals
+        const FIRST_PAYOUT_GOAL = 54600;  // $4,600 profit = Full $2k withdrawal
+        const FIRST_PAYOUT_MIN = 52600;   // $2,600 profit = Qualify for payout
+        const MONTHLY_PAYOUT_GOAL = 2000; // After first payout, $2k per month
+        const DAILY_TARGET_MIN = 250;
+        const DAILY_TARGET_MAX = 300;
+        const FIRST_CYCLE_DAYS = 45;
+        const TYPICAL_CYCLE_DAYS_MIN = 8;
+        const TYPICAL_CYCLE_DAYS_MAX = 20;
 
         let allData = [];
         let charts = {};
         let accountFilter = 'all';
         let debugLog = [];
+        let payoutData = [];
+        const PAYOUT_API = 'https://sheetdb.io/api/v1/your_payout_sheet_id'; // User can create separate sheet later
 
         // DEBUG FUNCTIONS
         function debugMsg(message, type = 'info') {
@@ -1762,15 +2258,36 @@
             debugMsg('Dashboard initializing...', 'info');
             populateAccountDropdown();
             setupEventListeners();
+            setupPayoutForm();
             setTodayDate();
             loadDashboardData();
+            loadPayoutData();
         }
 
         function populateAccountDropdown() {
             const select = document.getElementById('account');
+            const leadSelect = document.getElementById('leadAccount');
+            const deleteSelect = document.getElementById('deleteAccountSelect');
+            const followerDiv = document.getElementById('followerCheckboxes');
+            
+            // Single account select
             select.innerHTML = '<option value="">Select account</option>';
+            leadSelect.innerHTML = '<option value="">Select lead account</option>';
+            deleteSelect.innerHTML = '<option value="">Select account</option>';
+            followerDiv.innerHTML = '';
+            
             for (let i = 1; i <= 20; i++) {
                 select.innerHTML += `<option value="${i}">PA Account #${i}</option>`;
+                leadSelect.innerHTML += `<option value="${i}">PA Account #${i}</option>`;
+                deleteSelect.innerHTML += `<option value="${i}">PA Account #${i}</option>`;
+                
+                // Follower checkboxes
+                followerDiv.innerHTML += `
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem; border-radius: 6px; background: var(--bg-primary);">
+                        <input type="checkbox" class="follower-checkbox" value="${i}" style="cursor: pointer;">
+                        <span style="font-size: 0.875rem;">PA #${i}</span>
+                    </label>
+                `;
             }
         }
 
@@ -1799,6 +2316,27 @@
             });
 
             document.getElementById('tradeForm').addEventListener('submit', handleFormSubmit);
+
+            // Trade copier mode toggle
+            document.getElementById('copierMode').addEventListener('change', (e) => {
+                const isChecked = e.target.checked;
+                document.getElementById('singleAccountMode').style.display = isChecked ? 'none' : 'block';
+                document.getElementById('multiAccountMode').style.display = isChecked ? 'block' : 'none';
+                
+                // Toggle required attributes
+                document.getElementById('account').required = !isChecked;
+                document.getElementById('leadAccount').required = isChecked;
+            });
+            
+            // Set suggested cycle when opening add trade page
+            const cycleSelect = document.getElementById('cycle');
+            const suggestedCycle = getSuggestedCycle();
+            cycleSelect.value = suggestedCycle;
+            
+            const hint = document.getElementById('suggestedCycleHint');
+            if (hint && suggestedCycle > 1) {
+                hint.textContent = `(Current active cycle)`;
+            }
         }
 
         function navigateTo(page) {
@@ -1810,11 +2348,15 @@
 
             const titles = {
                 overview: 'Ultimate Overview',
+                cyclePerformance: 'Cycle Performance',
                 templates: 'Templates',
                 accounts: 'Accounts',
                 analytics: 'Analytics',
+                riskMonitor: 'Risk Monitor',
                 addTrade: 'Add Trade',
-                tradeLog: 'Trade Log'
+                logPayout: 'Log Payout',
+                tradeLog: 'Trade Log',
+                deleteData: 'Delete Data'
             };
             document.getElementById('pageTitle').textContent = titles[page];
 
@@ -1867,23 +2409,40 @@
             updateAccounts();
             updateAnalytics();
             updateTradeLog();
+            updateRiskMonitor();
+            updateCyclePerformance();
+            updatePayoutPage();
         }
 
         function updateHeroStats() {
             const totalPnL = allData.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
-            const progress = Math.min((totalPnL / MONTHLY_TARGET) * 100, 100);
             const accountsAtGoal = getAccountsAtGoal();
+            
+            // Calculate progress toward first payout
+            let progress, goalText;
+            if (totalPnL < FIRST_PAYOUT_MIN) {
+                progress = Math.min((totalPnL / FIRST_PAYOUT_GOAL) * 100, 100);
+                goalText = 'To First Payout';
+            } else {
+                // After first payout, track monthly $2k goals
+                const afterFirstPayout = totalPnL - FIRST_PAYOUT_GOAL;
+                const monthlyGoals = Math.floor(afterFirstPayout / MONTHLY_PAYOUT_GOAL);
+                const currentProgress = afterFirstPayout % MONTHLY_PAYOUT_GOAL;
+                progress = (currentProgress / MONTHLY_PAYOUT_GOAL) * 100;
+                goalText = `Payout ${monthlyGoals + 2} Progress`;
+            }
 
             document.getElementById('heroTotalPnL').textContent = formatCurrency(totalPnL);
             document.getElementById('heroProgress').textContent = Math.round(progress) + '%';
             document.getElementById('heroAccounts').textContent = `${accountsAtGoal}/20`;
 
-            const messages = [
-                'Building Your Trading Empire',
-                'Consistency is Key',
-                'One Trade at a Time',
-                'Scale What Works'
-            ];
+            // Update hero title based on progress
+            const messages = totalPnL >= FIRST_PAYOUT_GOAL
+                ? ['Harvesting Monthly Payouts', 'Farmer Mentality Proven', 'Steady Monthly Income']
+                : totalPnL >= FIRST_PAYOUT_MIN
+                ? ['First Payout Qualified!', 'Ready for Harvest', 'Unlock That $2k!']
+                : ['Building Your Trading Empire', 'Plant Daily Wins', 'Protect the Field', 'Stay Patient'];
+            
             document.getElementById('heroTitle').textContent = messages[Math.floor(Math.random() * messages.length)];
         }
 
@@ -1899,10 +2458,20 @@
 
             const avgTrade = totalTrades > 0 ? totalPnL / totalTrades : 0;
             const streak = calculateStreak(allData);
-            const progress = Math.min((totalPnL / MONTHLY_TARGET) * 100, 100);
+            
+            // Calculate progress toward payout goals
+            let progress;
+            if (totalPnL < FIRST_PAYOUT_MIN) {
+                progress = Math.min((totalPnL / FIRST_PAYOUT_GOAL) * 100, 100);
+            } else {
+                // After first payout, track monthly $2k goals
+                const afterFirstPayout = totalPnL - FIRST_PAYOUT_GOAL;
+                const currentProgress = afterFirstPayout % MONTHLY_PAYOUT_GOAL;
+                progress = (currentProgress / MONTHLY_PAYOUT_GOAL) * 100;
+            }
 
             document.getElementById('totalPnL').textContent = formatCurrency(totalPnL);
-            document.getElementById('pnlChange').textContent = formatCurrency(totalPnL) + ' this month';
+            document.getElementById('pnlChange').textContent = formatCurrency(totalPnL) + ' total';
             document.getElementById('pnlChange').className = `metric-change ${totalPnL >= 0 ? 'positive' : 'negative'}`;
             
             document.getElementById('winRate').textContent = Math.round(winRate) + '%';
@@ -2235,7 +2804,7 @@
                 const acc = accountData[i];
                 
                 if (accountFilter === 'active' && acc.trades === 0) continue;
-                if (accountFilter === 'goal' && acc.pnl < 4000) continue;
+                if (accountFilter === 'goal' && acc.pnl < 2000) continue;
                 if (accountFilter === 'profitable' && acc.pnl <= 0) continue;
                 
                 const card = document.createElement('div');
@@ -2244,8 +2813,8 @@
                 card.innerHTML = `
                     <div class="account-header">
                         <div class="account-number">PA #${i}</div>
-                        <span class="account-badge ${acc.pnl >= 4000 ? 'badge-success' : 'badge-active'}">
-                            ${acc.pnl >= 4000 ? 'GOAL ✓' : 'ACTIVE'}
+                        <span class="account-badge ${acc.pnl >= 2000 ? 'badge-success' : 'badge-active'}">
+                            ${acc.pnl >= 2000 ? 'GOAL ✓' : 'ACTIVE'}
                         </span>
                     </div>
                     <div class="account-progress">
@@ -2268,7 +2837,7 @@
                         </div>
                         <div class="account-stat">
                             <span class="account-stat-label">To Goal</span>
-                            <span class="account-stat-value">${formatCurrency(Math.max(4000 - acc.pnl, 0))}</span>
+                            <span class="account-stat-value">${formatCurrency(Math.max(2000 - acc.pnl, 0))}</span>
                         </div>
                         <div class="account-stat">
                             <span class="account-stat-label">Balance</span>
@@ -2346,6 +2915,699 @@
             });
         }
 
+        // RISK MONITOR - FIXED VERSION
+        function updateRiskMonitor() {
+            const grid = document.getElementById('riskMonitorGrid');
+            grid.innerHTML = '';
+
+            const accountData = groupByAccount(allData);
+            let accountsAtRisk = 0;
+            let accountsWarning = 0;
+            
+            for (let i = 1; i <= 20; i++) {
+                const acc = accountData[i];
+                const currentBalance = STARTING_BALANCE + acc.pnl;
+                const highestBalance = acc.highestBalance || STARTING_BALANCE;
+                
+                // Calculate fail line based on rules
+                let failLine;
+                if (highestBalance >= SAFETY_NET) {
+                    // Safety net reached - fail line is locked at $50,100
+                    failLine = STARTING_BALANCE + (SAFETY_NET - STARTING_BALANCE) - MAX_DRAWDOWN;
+                } else {
+                    // Before safety net - fail line trails highest balance
+                    failLine = highestBalance - MAX_DRAWDOWN;
+                }
+                
+                const cushion = currentBalance - failLine;
+                const cushionPercent = (cushion / MAX_DRAWDOWN) * 100;
+                
+                let riskLevel = 'safe';
+                let riskClass = '';
+                let badgeClass = 'badge-active';
+                let badgeText = 'SAFE';
+                
+                if (cushion <= 0) {
+                    riskLevel = 'danger';
+                    riskClass = 'at-risk';
+                    badgeClass = 'badge-danger';
+                    badgeText = 'AT RISK';
+                    accountsAtRisk++;
+                } else if (cushion <= 500) {
+                    riskLevel = 'warning';
+                    riskClass = 'warning';
+                    badgeClass = 'badge-warning';
+                    badgeText = 'WARNING';
+                    accountsWarning++;
+                }
+                
+                const card = document.createElement('div');
+                card.className = `account-card ${riskClass}`;
+                
+                card.innerHTML = `
+                    <div class="account-header">
+                        <div class="account-number">PA #${i}</div>
+                        <span class="account-badge ${badgeClass}">${badgeText}</span>
+                    </div>
+                    <div class="account-progress">
+                        <div class="progress-header">
+                            <span>Balance: ${formatCurrency(currentBalance)}</span>
+                            <span>${Math.round(cushionPercent)}% Cushion</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill ${riskLevel === 'danger' ? 'danger' : ''}" style="width: ${Math.max(0, Math.min(100, cushionPercent))}%"></div>
+                        </div>
+                    </div>
+                    <div class="account-stats">
+                        <div class="account-stat">
+                            <span class="account-stat-label">Current P&L</span>
+                            <span class="account-stat-value" style="color: ${acc.pnl >= 0 ? 'var(--success)' : 'var(--danger)'}">${formatCurrency(acc.pnl)}</span>
+                        </div>
+                        <div class="account-stat">
+                            <span class="account-stat-label">Fail Line</span>
+                            <span class="account-stat-value">${formatCurrency(failLine)}</span>
+                        </div>
+                        <div class="account-stat">
+                            <span class="account-stat-label">Cushion</span>
+                            <span class="account-stat-value" style="color: ${riskLevel === 'danger' ? 'var(--danger)' : riskLevel === 'warning' ? 'var(--warning)' : 'var(--success)'}">${formatCurrency(cushion)}</span>
+                        </div>
+                        <div class="account-stat">
+                            <span class="account-stat-label">Highest Balance</span>
+                            <span class="account-stat-value">${formatCurrency(highestBalance)}</span>
+                        </div>
+                    </div>
+                    <div class="risk-info ${riskLevel}">
+                        ${riskLevel === 'danger' 
+                            ? '⚠️ CRITICAL: Account at or below fail line!' 
+                            : riskLevel === 'warning' 
+                            ? '⚠️ WARNING: Less than $500 from fail line' 
+                            : highestBalance >= SAFETY_NET 
+                            ? '✓ Safety net reached! Fail line locked at $50,100' 
+                            : `✓ Safe - ${formatCurrency(Math.abs(SAFETY_NET - highestBalance))} from safety net`}
+                    </div>
+                `;
+                grid.appendChild(card);
+            }
+            
+            debugMsg(`Risk Monitor: ${accountsAtRisk} at risk, ${accountsWarning} warning, ${20 - accountsAtRisk - accountsWarning} safe`, 'info');
+        }
+
+        // CYCLE PERFORMANCE
+        function updateCyclePerformance() {
+            const totalPnL = allData.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
+            
+            // Update payout summary cards
+            updatePayoutSummary(totalPnL);
+            
+            // Group data by cycle
+            const cycleData = groupByCycle(allData);
+            
+            // Update comparison table
+            updateCycleComparisonTable(cycleData);
+            
+            // Update cycle charts
+            updateCycleCharts(cycleData);
+            
+            // Update cycle detail cards
+            updateCycleDetails(cycleData);
+        }
+
+        function updatePayoutSummary(totalPnL) {
+            // First Payout Progress
+            const firstPayoutProg = Math.min((totalPnL / FIRST_PAYOUT_GOAL) * 100, 100);
+            document.getElementById('firstPayoutProgress').textContent = Math.round(firstPayoutProg) + '%';
+            
+            let status, statusClass;
+            if (totalPnL >= FIRST_PAYOUT_GOAL) {
+                status = `✓ Qualified! Full $2,000 withdrawal unlocked`;
+                statusClass = 'positive';
+            } else if (totalPnL >= FIRST_PAYOUT_MIN) {
+                status = `✓ Min qualified. ${formatCurrency(FIRST_PAYOUT_GOAL - totalPnL)} to full payout`;
+                statusClass = 'positive';
+            } else {
+                status = `${formatCurrency(FIRST_PAYOUT_MIN - totalPnL)} to qualify`;
+                statusClass = 'neutral';
+            }
+            document.getElementById('firstPayoutStatus').textContent = status;
+            document.getElementById('firstPayoutStatus').className = `metric-change ${statusClass}`;
+            
+            // Total Payouts Earned
+            let totalPayouts = 0;
+            let payoutCount = 0;
+            
+            if (totalPnL >= FIRST_PAYOUT_GOAL) {
+                totalPayouts = 2000;
+                payoutCount = 1;
+                
+                // Add subsequent $2k payouts
+                const afterFirst = totalPnL - FIRST_PAYOUT_GOAL;
+                const additionalPayouts = Math.floor(afterFirst / MONTHLY_PAYOUT_GOAL);
+                totalPayouts += (additionalPayouts * 2000);
+                payoutCount += additionalPayouts;
+            }
+            
+            document.getElementById('totalPayouts').textContent = formatCurrency(totalPayouts);
+            document.getElementById('payoutCount').textContent = payoutCount === 0 
+                ? 'No payouts yet' 
+                : `${payoutCount} payout${payoutCount > 1 ? 's' : ''} earned`;
+            
+            // Current Cycle Status
+            const activeCycles = Object.keys(groupByCycle(allData)).filter(c => c !== 'undefined');
+            const currentCycle = activeCycles.length > 0 ? Math.max(...activeCycles.map(c => parseInt(c))) : 1;
+            
+            let cycleStatus, cycleInfo;
+            if (totalPnL < FIRST_PAYOUT_MIN) {
+                cycleStatus = `Cycle ${currentCycle}`;
+                cycleInfo = 'Building to first payout';
+            } else if (totalPnL < FIRST_PAYOUT_GOAL) {
+                cycleStatus = `Cycle ${currentCycle}`;
+                cycleInfo = `${formatCurrency(FIRST_PAYOUT_GOAL - totalPnL)} to full $2k`;
+            } else {
+                cycleStatus = `Cycle ${currentCycle}`;
+                const afterFirst = totalPnL - FIRST_PAYOUT_GOAL;
+                const currentMonthlyProgress = afterFirst % MONTHLY_PAYOUT_GOAL;
+                cycleInfo = `${formatCurrency(MONTHLY_PAYOUT_GOAL - currentMonthlyProgress)} to next payout`;
+            }
+            
+            document.getElementById('currentCycleStatus').textContent = cycleStatus;
+            document.getElementById('currentCycleInfo').textContent = cycleInfo;
+            
+            // Daily Average
+            const tradingDays = [...new Set(allData.map(t => t.trade_date))].length;
+            const dailyAvg = tradingDays > 0 ? totalPnL / tradingDays : 0;
+            
+            document.getElementById('dailyAverage').textContent = formatCurrency(dailyAvg);
+            
+            let targetClass = 'neutral';
+            if (dailyAvg >= DAILY_TARGET_MIN && dailyAvg <= DAILY_TARGET_MAX) {
+                targetClass = 'positive';
+            } else if (dailyAvg > DAILY_TARGET_MAX) {
+                targetClass = 'positive';
+            } else if (dailyAvg < DAILY_TARGET_MIN && dailyAvg > 0) {
+                targetClass = 'neutral';
+            } else {
+                targetClass = 'negative';
+            }
+            
+            document.getElementById('dailyTarget').textContent = `Target: $${DAILY_TARGET_MIN}-$${DAILY_TARGET_MAX}`;
+            document.getElementById('dailyTarget').className = `metric-change ${targetClass}`;
+        }
+
+        function groupByCycle(data) {
+            const grouped = {};
+            
+            for (let cycle = 1; cycle <= 12; cycle++) {
+                const cycleTrades = data.filter(t => parseInt(t.cycle) === cycle);
+                
+                if (cycleTrades.length === 0) continue;
+                
+                const pnl = cycleTrades.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
+                const wins = cycleTrades.filter(t => parseFloat(t.pnl || 0) > 0);
+                const losses = cycleTrades.filter(t => parseFloat(t.pnl || 0) < 0);
+                
+                const tradingDays = [...new Set(cycleTrades.map(t => t.trade_date))].length;
+                const dailyAvg = tradingDays > 0 ? pnl / tradingDays : 0;
+                
+                // Calculate daily P&L for best/worst day
+                const dailyPnL = {};
+                cycleTrades.forEach(t => {
+                    const date = t.trade_date;
+                    dailyPnL[date] = (dailyPnL[date] || 0) + parseFloat(t.pnl || 0);
+                });
+                
+                const days = Object.values(dailyPnL);
+                const bestDay = days.length > 0 ? Math.max(...days) : 0;
+                const worstDay = days.length > 0 ? Math.min(...days) : 0;
+                
+                grouped[cycle] = {
+                    cycle,
+                    totalPnL: pnl,
+                    trades: cycleTrades.length,
+                    tradingDays,
+                    dailyAvg,
+                    winRate: cycleTrades.length > 0 ? (wins.length / cycleTrades.length) * 100 : 0,
+                    bestDay,
+                    worstDay,
+                    avgWin: wins.length > 0 ? wins.reduce((sum, t) => sum + parseFloat(t.pnl), 0) / wins.length : 0,
+                    avgLoss: losses.length > 0 ? losses.reduce((sum, t) => sum + parseFloat(t.pnl), 0) / losses.length : 0
+                };
+            }
+            
+            return grouped;
+        }
+
+        function updateCycleComparisonTable(cycleData) {
+            const tbody = document.getElementById('cycleComparisonBody');
+            tbody.innerHTML = '';
+            
+            const cycles = Object.keys(cycleData).sort((a, b) => parseInt(a) - parseInt(b));
+            
+            if (cycles.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: var(--text-secondary); padding: 2rem;">No cycle data yet</td></tr>';
+                return;
+            }
+            
+            cycles.forEach(cycleNum => {
+                const data = cycleData[cycleNum];
+                const row = tbody.insertRow();
+                
+                // Determine status
+                let status = '';
+                if (data.totalPnL >= MONTHLY_PAYOUT_GOAL) {
+                    status = '✅ Payout Ready';
+                } else if (data.totalPnL >= MONTHLY_PAYOUT_GOAL * 0.75) {
+                    status = '🟡 Near Goal';
+                } else {
+                    status = '🔵 In Progress';
+                }
+                
+                row.innerHTML = `
+                    <td><strong>Cycle ${cycleNum}</strong></td>
+                    <td style="color: ${data.totalPnL >= 0 ? 'var(--success)' : 'var(--danger)'}"><strong>${formatCurrency(data.totalPnL)}</strong></td>
+                    <td>${data.trades}</td>
+                    <td>${data.tradingDays}</td>
+                    <td>${formatCurrency(data.dailyAvg)}</td>
+                    <td>${Math.round(data.winRate)}%</td>
+                    <td>${formatCurrency(data.bestDay)}</td>
+                    <td>${formatCurrency(data.worstDay)}</td>
+                    <td>${status}</td>
+                `;
+            });
+        }
+
+        function updateCycleCharts(cycleData) {
+            const cycles = Object.keys(cycleData).sort((a, b) => parseInt(a) - parseInt(b));
+            
+            if (cycles.length === 0) return;
+            
+            // Destroy existing charts
+            if (charts.cyclePnL) charts.cyclePnL.destroy();
+            if (charts.cycleDailyAvg) charts.cycleDailyAvg.destroy();
+            
+            // Cycle P&L Chart
+            const pnlData = cycles.map(c => cycleData[c].totalPnL);
+            
+            charts.cyclePnL = new Chart(document.getElementById('cyclePnLChart'), {
+                type: 'bar',
+                data: {
+                    labels: cycles.map(c => `Cycle ${c}`),
+                    datasets: [{
+                        label: 'Total P&L',
+                        data: pnlData,
+                        backgroundColor: pnlData.map(v => v >= 0 ? '#10b981' : '#ef4444'),
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 500 },
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: context => 'P&L: $' + context.parsed.y.toLocaleString()
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: { callback: value => '$' + value.toLocaleString() },
+                            grid: { color: '#e2e8f0' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+            
+            // Daily Average Chart
+            const dailyAvgData = cycles.map(c => cycleData[c].dailyAvg);
+            
+            charts.cycleDailyAvg = new Chart(document.getElementById('cycleDailyAvgChart'), {
+                type: 'line',
+                data: {
+                    labels: cycles.map(c => `Cycle ${c}`),
+                    datasets: [{
+                        label: 'Daily Average',
+                        data: dailyAvgData,
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 3,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 500 },
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: context => 'Avg: $' + context.parsed.y.toFixed(2)
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: { callback: value => '$' + value.toLocaleString() },
+                            grid: { color: '#e2e8f0' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        function updateCycleDetails(cycleData) {
+            const grid = document.getElementById('cycleDetailsGrid');
+            grid.innerHTML = '';
+            
+            const cycles = Object.keys(cycleData).sort((a, b) => parseInt(b) - parseInt(a));
+            
+            if (cycles.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary);">No cycle data yet</p>';
+                return;
+            }
+            
+            cycles.forEach(cycleNum => {
+                const data = cycleData[cycleNum];
+                const card = document.createElement('div');
+                card.className = 'template-card';
+                
+                let icon = '🌱';
+                let statusText = 'In Progress';
+                let statusColor = '#3b82f6';
+                
+                if (data.totalPnL >= MONTHLY_PAYOUT_GOAL) {
+                    icon = '🌾';
+                    statusText = 'Payout Ready';
+                    statusColor = '#10b981';
+                } else if (data.totalPnL >= MONTHLY_PAYOUT_GOAL * 0.75) {
+                    icon = '🌿';
+                    statusText = 'Near Goal';
+                    statusColor = '#f59e0b';
+                }
+                
+                card.innerHTML = `
+                    <div class="template-header">
+                        <div class="template-icon" style="background: ${statusColor}">${icon}</div>
+                        <div class="template-info">
+                            <div class="template-name">Cycle ${cycleNum}</div>
+                            <div class="template-desc">${statusText} • ${data.tradingDays} trading days</div>
+                        </div>
+                    </div>
+                    <div class="template-stats-grid">
+                        <div class="template-stat">
+                            <div class="template-stat-value">${formatCurrency(data.totalPnL)}</div>
+                            <div class="template-stat-label">Total P&L</div>
+                        </div>
+                        <div class="template-stat">
+                            <div class="template-stat-value">${data.trades}</div>
+                            <div class="template-stat-label">Trades</div>
+                        </div>
+                        <div class="template-stat">
+                            <div class="template-stat-value">${Math.round(data.winRate)}%</div>
+                            <div class="template-stat-label">Win Rate</div>
+                        </div>
+                    </div>
+                    <div class="template-details">
+                        <div class="template-detail-row">
+                            <span class="template-detail-label">Daily Average</span>
+                            <span class="template-detail-value">${formatCurrency(data.dailyAvg)}</span>
+                        </div>
+                        <div class="template-detail-row">
+                            <span class="template-detail-label">Best Day</span>
+                            <span class="template-detail-value">${formatCurrency(data.bestDay)}</span>
+                        </div>
+                        <div class="template-detail-row">
+                            <span class="template-detail-label">Worst Day</span>
+                            <span class="template-detail-value">${formatCurrency(data.worstDay)}</span>
+                        </div>
+                        <div class="template-detail-row">
+                            <span class="template-detail-label">Avg Win</span>
+                            <span class="template-detail-value">${formatCurrency(data.avgWin)}</span>
+                        </div>
+                        <div class="template-detail-row">
+                            <span class="template-detail-label">Avg Loss</span>
+                            <span class="template-detail-value">${formatCurrency(data.avgLoss)}</span>
+                        </div>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // PAYOUT MANAGEMENT
+        async function loadPayoutData() {
+            try {
+                // For now, store payouts in localStorage until user creates separate sheet
+                const stored = localStorage.getItem('prop_farm_payouts');
+                payoutData = stored ? JSON.parse(stored) : [];
+                debugMsg(`Loaded ${payoutData.length} payouts from storage`, 'info');
+            } catch (error) {
+                debugMsg(`Error loading payouts: ${error.message}`, 'error');
+                payoutData = [];
+            }
+        }
+
+        function updatePayoutPage() {
+            loadPayoutData();
+            
+            const totalPnL = allData.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
+            const totalWithdrawn = payoutData.reduce((sum, p) => sum + parseFloat(p.amount || 0), 0);
+            
+            // Calculate available for withdrawal
+            let available = 0;
+            let status = 'Not qualified yet';
+            let statusClass = 'neutral';
+            
+            if (totalPnL >= FIRST_PAYOUT_GOAL) {
+                const afterPayouts = totalPnL - totalWithdrawn;
+                if (afterPayouts >= MONTHLY_PAYOUT_GOAL) {
+                    available = Math.floor(afterPayouts / MONTHLY_PAYOUT_GOAL) * 2000;
+                    status = `✅ ${Math.floor(afterPayouts / MONTHLY_PAYOUT_GOAL)} payout(s) ready`;
+                    statusClass = 'positive';
+                }
+            } else if (totalPnL >= FIRST_PAYOUT_MIN) {
+                available = 2000;
+                status = '✅ First payout qualified';
+                statusClass = 'positive';
+            }
+            
+            document.getElementById('availableWithdrawal').textContent = formatCurrency(available);
+            document.getElementById('withdrawalStatus').textContent = status;
+            document.getElementById('withdrawalStatus').className = `metric-change ${statusClass}`;
+            
+            // Total withdrawn
+            document.getElementById('totalWithdrawn').textContent = formatCurrency(totalWithdrawn);
+            document.getElementById('withdrawalCount').textContent = payoutData.length === 0 
+                ? 'No payouts yet' 
+                : `${payoutData.length} payout${payoutData.length > 1 ? 's' : ''}`;
+            
+            // Cycle phase
+            let phase = 'First Cycle';
+            let phaseInfo = 'Building to first payout';
+            
+            if (payoutData.length === 0) {
+                phase = 'First Cycle';
+                phaseInfo = `${formatCurrency(FIRST_PAYOUT_GOAL - totalPnL)} to full payout`;
+            } else {
+                const lastPayout = payoutData[payoutData.length - 1];
+                phase = `Cycle ${lastPayout.new_cycle || 2}`;
+                phaseInfo = 'Monthly farming cycle';
+            }
+            
+            document.getElementById('cyclePhase').textContent = phase;
+            document.getElementById('phaseInfo').textContent = phaseInfo;
+            
+            // Update payout history table
+            updatePayoutHistory();
+        }
+
+        function updatePayoutHistory() {
+            const tbody = document.getElementById('payoutHistoryBody');
+            tbody.innerHTML = '';
+            
+            if (payoutData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: var(--text-secondary); padding: 2rem;">No payouts recorded yet</td></tr>';
+                return;
+            }
+            
+            const sorted = [...payoutData].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            sorted.forEach(payout => {
+                const row = tbody.insertRow();
+                const noTradeIndicator = payout.no_trade_day ? ' 📅' : '';
+                const typeDisplay = payout.type + noTradeIndicator;
+                
+                row.innerHTML = `
+                    <td>${payout.date}</td>
+                    <td><strong>${typeDisplay}</strong></td>
+                    <td style="color: var(--success)"><strong>${formatCurrency(parseFloat(payout.amount))}</strong></td>
+                    <td>${payout.account}</td>
+                    <td>Cycle ${payout.cycle_completed || 1}</td>
+                    <td>Cycle ${payout.new_cycle || 2}</td>
+                    <td>${payout.payment_method || '-'}</td>
+                    <td>${payout.notes || '-'}${payout.no_trade_day ? ' (No-trade day)' : ''}</td>
+                `;
+            });
+        }
+
+        function setTodayPayoutDate() {
+            document.getElementById('payoutDate').valueAsDate = new Date();
+        }
+
+        // Setup payout form listener
+        function setupPayoutForm() {
+            const form = document.getElementById('payoutForm');
+            if (form) {
+                form.addEventListener('submit', handlePayoutSubmit);
+                setTodayPayoutDate();
+                
+                // Withdrawal template selector
+                document.getElementById('withdrawalTemplate').addEventListener('change', (e) => {
+                    const amountInput = document.getElementById('withdrawalAmount');
+                    if (e.target.value && e.target.value !== 'custom') {
+                        amountInput.value = e.target.value;
+                    } else if (e.target.value === 'custom') {
+                        amountInput.value = '';
+                        amountInput.focus();
+                    }
+                });
+                
+                // Auto-populate based on payout type
+                document.getElementById('payoutType').addEventListener('change', (e) => {
+                    const amountInput = document.getElementById('withdrawalAmount');
+                    const templateSelect = document.getElementById('withdrawalTemplate');
+                    const newCycleSelect = document.getElementById('newCycle');
+                    const cycleCompletedSelect = document.getElementById('cycleCompleted');
+                    
+                    const lastPayout = payoutData.length > 0 ? payoutData[payoutData.length - 1] : null;
+                    const lastCycle = lastPayout ? parseInt(lastPayout.new_cycle) : 1;
+                    
+                    switch(e.target.value) {
+                        case 'first_min':
+                        case 'first_full':
+                            templateSelect.value = '2000';
+                            amountInput.value = '2000';
+                            cycleCompletedSelect.value = '1';
+                            newCycleSelect.value = '2';
+                            break;
+                        case 'monthly':
+                            templateSelect.value = '2000';
+                            amountInput.value = '2000';
+                            cycleCompletedSelect.value = lastCycle;
+                            newCycleSelect.value = Math.min(lastCycle + 1, 12);
+                            break;
+                        case 'custom':
+                            templateSelect.value = 'custom';
+                            amountInput.value = '';
+                            amountInput.focus();
+                            break;
+                    }
+                });
+                
+                // Add "All 20 Accounts" plus individual accounts to dropdown
+                const payoutAccountSelect = document.getElementById('payoutAccount');
+                for (let i = 1; i <= 20; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = `PA Account #${i}`;
+                    payoutAccountSelect.appendChild(option);
+                }
+                
+                // Auto-suggest current cycle
+                const lastPayout = payoutData.length > 0 ? payoutData[payoutData.length - 1] : null;
+                if (lastPayout) {
+                    const lastCycle = parseInt(lastPayout.new_cycle) || 1;
+                    document.getElementById('cycleCompleted').value = lastCycle;
+                    document.getElementById('newCycle').value = Math.min(lastCycle + 1, 12);
+                } else {
+                    document.getElementById('cycleCompleted').value = '1';
+                    document.getElementById('newCycle').value = '2';
+                }
+            }
+        }
+
+        async function handlePayoutSubmit(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('payoutSubmitBtn');
+            btn.disabled = true;
+            document.getElementById('payoutSubmitText').style.display = 'none';
+            document.getElementById('payoutSubmitLoading').style.display = 'inline-block';
+            
+            const payoutType = document.getElementById('payoutType').value;
+            const amount = document.getElementById('withdrawalAmount').value;
+            const date = document.getElementById('payoutDate').value;
+            const account = document.getElementById('payoutAccount').value;
+            const cycleCompleted = document.getElementById('cycleCompleted').value;
+            const newCycle = document.getElementById('newCycle').value;
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            const notes = document.getElementById('payoutNotes').value;
+            const noTradeDay = document.getElementById('noTradeDay').checked;
+            
+            const payout = {
+                date,
+                type: payoutType === 'first_min' ? 'First Payout (Min)' 
+                    : payoutType === 'first_full' ? 'First Payout (Full)' 
+                    : payoutType === 'monthly' ? 'Monthly Payout'
+                    : 'Custom Payout',
+                amount: parseFloat(amount),
+                account: account === 'all' ? 'All 20 Accounts' : `PA Account #${account}`,
+                cycle_completed: parseInt(cycleCompleted),
+                new_cycle: parseInt(newCycle),
+                payment_method: paymentMethod,
+                notes,
+                no_trade_day: noTradeDay,
+                timestamp: new Date().toISOString()
+            };
+            
+            debugMsg('Logging payout...', 'info');
+            
+            try {
+                // Store in localStorage
+                payoutData.push(payout);
+                localStorage.setItem('prop_farm_payouts', JSON.stringify(payoutData));
+                
+                const noTradeMsg = noTradeDay ? ' (No-trade day marked)' : '';
+                debugMsg(`✓ Payout logged: ${formatCurrency(payout.amount)}${noTradeMsg}`, 'success');
+                showAlert(`✓ Payout logged successfully! Cycle ${newCycle} is now active.${noTradeMsg}`, 'success');
+                
+                // Reset form
+                document.getElementById('payoutForm').reset();
+                setTodayPayoutDate();
+                
+                // Update views
+                updatePayoutPage();
+                
+                // Show info about new cycle
+                setTimeout(() => {
+                    showAlert(`🌾 Cycle ${newCycle} started! Future trades will use this cycle by default.`, 'info');
+                }, 2000);
+                
+            } catch (error) {
+                debugMsg(`✗ Payout error: ${error.message}`, 'error');
+                showAlert(`✗ Failed to log payout: ${error.message}`, 'error');
+            } finally {
+                btn.disabled = false;
+                document.getElementById('payoutSubmitText').style.display = 'inline';
+                document.getElementById('payoutSubmitLoading').style.display = 'none';
+            }
+        }
+
+        // Get suggested cycle for new trades
+        function getSuggestedCycle() {
+            if (payoutData.length === 0) return 1;
+            const lastPayout = payoutData[payoutData.length - 1];
+            return parseInt(lastPayout.new_cycle) || 1;
+        }
+
         // FORM SUBMIT
         async function handleFormSubmit(e) {
             e.preventDefault();
@@ -2355,10 +3617,11 @@
             document.getElementById('submitText').style.display = 'none';
             document.getElementById('submitLoading').style.display = 'inline-block';
 
-            const account = document.getElementById('account').value;
+            const copierMode = document.getElementById('copierMode').checked;
             const market_condition = document.getElementById('marketCondition').value;
             const risk_template = document.getElementById('riskTemplate').value;
             const trade_date = document.getElementById('tradeDate').value;
+            const cycle = document.getElementById('cycle').value;
             const pnl = document.getElementById('pnl').value;
             const contracts = document.getElementById('contracts').value;
             const notes = document.getElementById('notes').value || '';
@@ -2366,18 +3629,83 @@
 
             debugMsg('Submitting trade...', 'info');
 
-            const payload = {
-                data: [{
-                    "account": account,
+            const trades = [];
+
+            if (copierMode) {
+                // Multi-account mode
+                const leadAccount = document.getElementById('leadAccount').value;
+                const followers = Array.from(document.querySelectorAll('.follower-checkbox:checked')).map(cb => cb.value);
+                
+                if (!leadAccount) {
+                    showAlert('Please select a lead account', 'error');
+                    btn.disabled = false;
+                    document.getElementById('submitText').style.display = 'inline';
+                    document.getElementById('submitLoading').style.display = 'none';
+                    return;
+                }
+                
+                if (followers.length === 0) {
+                    showAlert('Please select at least one follower account', 'error');
+                    btn.disabled = false;
+                    document.getElementById('submitText').style.display = 'inline';
+                    document.getElementById('submitLoading').style.display = 'none';
+                    return;
+                }
+
+                const copyGroup = timestamp;
+
+                // Add lead trade
+                trades.push({
+                    "account": leadAccount,
+                    "account_type": "lead",
+                    "copy_group": copyGroup,
                     "market_condition": market_condition,
                     "risk_template": risk_template,
                     "trade_date": trade_date,
+                    "cycle": cycle,
                     "pnl": pnl,
                     "contracts": contracts,
                     "notes": notes,
                     "timestamp": timestamp
-                }]
-            };
+                });
+
+                // Add follower trades
+                followers.forEach(follower => {
+                    trades.push({
+                        "account": follower,
+                        "account_type": "follower",
+                        "copy_group": copyGroup,
+                        "market_condition": market_condition,
+                        "risk_template": risk_template,
+                        "trade_date": trade_date,
+                        "cycle": cycle,
+                        "pnl": pnl,
+                        "contracts": contracts,
+                        "notes": notes,
+                        "timestamp": timestamp
+                    });
+                });
+
+                debugMsg(`Trade copier: 1 lead + ${followers.length} followers = ${trades.length} total trades`, 'info');
+            } else {
+                // Single account mode
+                const account = document.getElementById('account').value;
+                trades.push({
+                    "account": account,
+                    "account_type": "single",
+                    "copy_group": "",
+                    "market_condition": market_condition,
+                    "risk_template": risk_template,
+                    "trade_date": trade_date,
+                    "cycle": cycle,
+                    "pnl": pnl,
+                    "contracts": contracts,
+                    "notes": notes,
+                    "timestamp": timestamp
+                });
+            }
+
+            const payload = { data: trades };
 
             try {
                 const response = await fetch(SHEET_API, {
@@ -2389,9 +3717,14 @@
                 const responseText = await response.text();
                 
                 if (response.ok || response.status === 201) {
-                    debugMsg('✓ Trade submitted successfully', 'success');
-                    showAlert('✓ Trade added successfully!', 'success');
+                    debugMsg(`✓ ${trades.length} trade(s) submitted successfully`, 'success');
+                    showAlert(`✓ ${trades.length} trade(s) added successfully!`, 'success');
                     document.getElementById('tradeForm').reset();
+                    document.getElementById('copierMode').checked = false;
+                    document.getElementById('singleAccountMode').style.display = 'block';
+                    document.getElementById('multiAccountMode').style.display = 'none';
+                    document.getElementById('account').required = true;
+                    document.getElementById('leadAccount').required = false;
                     setTodayDate();
                     setTimeout(() => {
                         loadDashboardData();
@@ -2407,6 +3740,178 @@
                 btn.disabled = false;
                 document.getElementById('submitText').style.display = 'inline';
                 document.getElementById('submitLoading').style.display = 'none';
+            }
+        }
+
+        // DELETE FUNCTIONS
+        async function deleteByCycle() {
+            const cycleSelect = document.getElementById('deleteCycleSelect');
+            const cycle = cycleSelect.value;
+            
+            if (!cycle) {
+                showAlert('Please select a cycle to delete', 'error');
+                return;
+            }
+            
+            if (!confirm(`⚠️ Delete ALL trades from Cycle ${cycle}? This cannot be undone!`)) {
+                return;
+            }
+            
+            debugMsg(`Deleting trades from Cycle ${cycle}...`, 'info');
+            
+            try {
+                // Find all trades from this cycle
+                const tradesToDelete = allData.filter(t => t.cycle == cycle);
+                
+                if (tradesToDelete.length === 0) {
+                    showAlert(`No trades found in Cycle ${cycle}`, 'info');
+                    return;
+                }
+                
+                debugMsg(`Found ${tradesToDelete.length} trades to delete`, 'info');
+                
+                // Delete each trade
+                let deleteCount = 0;
+                for (const trade of tradesToDelete) {
+                    try {
+                        const response = await fetch(`${SHEET_API}/timestamp/${trade.timestamp}`, {
+                            method: 'DELETE'
+                        });
+                        
+                        if (response.ok) {
+                            deleteCount++;
+                        } else {
+                            debugMsg(`Failed to delete trade: ${trade.timestamp}`, 'error');
+                        }
+                    } catch (error) {
+                        debugMsg(`Error deleting trade: ${error.message}`, 'error');
+                    }
+                }
+                
+                debugMsg(`✓ Deleted ${deleteCount} trades from Cycle ${cycle}`, 'success');
+                showAlert(`✓ Deleted ${deleteCount} trades from Cycle ${cycle}`, 'success');
+                
+                // Reset select and reload
+                cycleSelect.value = '';
+                setTimeout(() => loadDashboardData(), 1000);
+                
+            } catch (error) {
+                debugMsg(`✗ Delete error: ${error.message}`, 'error');
+                showAlert(`✗ Delete failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function deleteByAccount() {
+            const accountSelect = document.getElementById('deleteAccountSelect');
+            const account = accountSelect.value;
+            
+            if (!account) {
+                showAlert('Please select an account to delete', 'error');
+                return;
+            }
+            
+            if (!confirm(`⚠️ Delete ALL trades from PA Account #${account}? This cannot be undone!`)) {
+                return;
+            }
+            
+            debugMsg(`Deleting trades from Account ${account}...`, 'info');
+            
+            try {
+                // Find all trades from this account
+                const tradesToDelete = allData.filter(t => t.account == account);
+                
+                if (tradesToDelete.length === 0) {
+                    showAlert(`No trades found for Account #${account}`, 'info');
+                    return;
+                }
+                
+                debugMsg(`Found ${tradesToDelete.length} trades to delete`, 'info');
+                
+                // Delete each trade
+                let deleteCount = 0;
+                for (const trade of tradesToDelete) {
+                    try {
+                        const response = await fetch(`${SHEET_API}/timestamp/${trade.timestamp}`, {
+                            method: 'DELETE'
+                        });
+                        
+                        if (response.ok) {
+                            deleteCount++;
+                        } else {
+                            debugMsg(`Failed to delete trade: ${trade.timestamp}`, 'error');
+                        }
+                    } catch (error) {
+                        debugMsg(`Error deleting trade: ${error.message}`, 'error');
+                    }
+                }
+                
+                debugMsg(`✓ Deleted ${deleteCount} trades from Account ${account}`, 'success');
+                showAlert(`✓ Deleted ${deleteCount} trades from Account #${account}`, 'success');
+                
+                // Reset select and reload
+                accountSelect.value = '';
+                setTimeout(() => loadDashboardData(), 1000);
+                
+            } catch (error) {
+                debugMsg(`✗ Delete error: ${error.message}`, 'error');
+                showAlert(`✗ Delete failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function confirmDeleteAll() {
+            if (!confirm('⚠️ Are you ABSOLUTELY SURE you want to delete ALL data? This cannot be undone!')) {
+                return;
+            }
+            
+            if (!confirm('⚠️ FINAL WARNING: This will permanently delete ALL ' + allData.length + ' trades. Type YES to continue.')) {
+                return;
+            }
+            
+            // Extra confirmation with text input
+            const confirmation = prompt('Type "DELETE ALL" to confirm (case sensitive):');
+            if (confirmation !== 'DELETE ALL') {
+                showAlert('Deletion cancelled - confirmation text did not match', 'info');
+                return;
+            }
+            
+            debugMsg('Deleting ALL data...', 'info');
+            showAlert('Deleting all trades... This may take a moment.', 'info');
+            
+            try {
+                const totalTrades = allData.length;
+                let deleteCount = 0;
+                
+                // Delete each trade one by one
+                for (const trade of allData) {
+                    try {
+                        const response = await fetch(`${SHEET_API}/timestamp/${trade.timestamp}`, {
+                            method: 'DELETE'
+                        });
+                        
+                        if (response.ok) {
+                            deleteCount++;
+                            
+                            // Show progress every 10 deletions
+                            if (deleteCount % 10 === 0) {
+                                debugMsg(`Progress: ${deleteCount}/${totalTrades} deleted`, 'info');
+                            }
+                        } else {
+                            debugMsg(`Failed to delete trade: ${trade.timestamp}`, 'error');
+                        }
+                    } catch (error) {
+                        debugMsg(`Error deleting trade: ${error.message}`, 'error');
+                    }
+                }
+                
+                debugMsg(`✓ Deleted ${deleteCount} of ${totalTrades} trades`, 'success');
+                showAlert(`✓ Successfully deleted ${deleteCount} trades`, 'success');
+                
+                // Reload dashboard
+                setTimeout(() => loadDashboardData(), 1500);
+                
+            } catch (error) {
+                debugMsg(`✗ Delete all error: ${error.message}`, 'error');
+                showAlert(`✗ Delete failed: ${error.message}`, 'error');
             }
         }
 
@@ -2496,7 +4001,7 @@
             for (let i = 1; i <= 20; i++) {
                 const trades = allData.filter(t => t.account == i);
                 const pnl = trades.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
-                if (pnl >= 4000) count++;
+                if (pnl >= 2000) count++;
             }
             return count;
         }
@@ -2507,11 +4012,22 @@
                 const trades = data.filter(t => t.account == i);
                 const pnl = trades.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
                 const wins = trades.filter(t => parseFloat(t.pnl || 0) > 0).length;
+                
+                // Calculate highest balance by sorting trades chronologically and tracking max
+                let runningBalance = STARTING_BALANCE;
+                let highestBalance = STARTING_BALANCE;
+                
+                trades.sort((a, b) => new Date(a.trade_date) - new Date(b.trade_date)).forEach(t => {
+                    runningBalance += parseFloat(t.pnl || 0);
+                    highestBalance = Math.max(highestBalance, runningBalance);
+                });
+                
                 grouped[i] = {
                     pnl,
                     trades: trades.length,
                     winRate: trades.length > 0 ? (wins / trades.length) * 100 : 0,
-                    progress: Math.min((pnl / 4000) * 100, 100)
+                    progress: Math.min((pnl / 2000) * 100, 100),
+                    highestBalance
                 };
             }
             return grouped;
