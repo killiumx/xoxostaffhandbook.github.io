@@ -2235,7 +2235,7 @@
                 const acc = accountData[i];
                 
                 if (accountFilter === 'active' && acc.trades === 0) continue;
-                if (accountFilter === 'goal' && acc.pnl < 2000) continue;
+                if (accountFilter === 'goal' && acc.pnl < 4000) continue;
                 if (accountFilter === 'profitable' && acc.pnl <= 0) continue;
                 
                 const card = document.createElement('div');
@@ -2244,8 +2244,8 @@
                 card.innerHTML = `
                     <div class="account-header">
                         <div class="account-number">PA #${i}</div>
-                        <span class="account-badge ${acc.pnl >= 2000 ? 'badge-success' : 'badge-active'}">
-                            ${acc.pnl >= 2000 ? 'GOAL ✓' : 'ACTIVE'}
+                        <span class="account-badge ${acc.pnl >= 4000 ? 'badge-success' : 'badge-active'}">
+                            ${acc.pnl >= 4000 ? 'GOAL ✓' : 'ACTIVE'}
                         </span>
                     </div>
                     <div class="account-progress">
@@ -2268,7 +2268,7 @@
                         </div>
                         <div class="account-stat">
                             <span class="account-stat-label">To Goal</span>
-                            <span class="account-stat-value">${formatCurrency(Math.max(2000 - acc.pnl, 0))}</span>
+                            <span class="account-stat-value">${formatCurrency(Math.max(4000 - acc.pnl, 0))}</span>
                         </div>
                         <div class="account-stat">
                             <span class="account-stat-label">Balance</span>
@@ -2496,7 +2496,7 @@
             for (let i = 1; i <= 20; i++) {
                 const trades = allData.filter(t => t.account == i);
                 const pnl = trades.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
-                if (pnl >= 2000) count++;
+                if (pnl >= 4000) count++;
             }
             return count;
         }
@@ -2511,7 +2511,7 @@
                     pnl,
                     trades: trades.length,
                     winRate: trades.length > 0 ? (wins / trades.length) * 100 : 0,
-                    progress: Math.min((pnl / 2000) * 100, 100)
+                    progress: Math.min((pnl / 4000) * 100, 100)
                 };
             }
             return grouped;
