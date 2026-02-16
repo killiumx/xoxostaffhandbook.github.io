@@ -1281,6 +1281,10 @@
                     <span class="nav-icon">➕</span>
                     <span>Add Trade</span>
                 </div>
+                <div class="nav-item" data-page="logPayout">
+                    <span class="nav-icon">💰</span>
+                    <span>Log Payout</span>
+                </div>
                 <div class="nav-item" data-page="tradeLog">
                     <span class="nav-icon">📝</span>
                     <span>Trade Log</span>
@@ -1455,7 +1459,7 @@
                         </div>
                         <div class="stat-mini-card">
                             <div class="stat-mini-value" id="monthlyProgress">0%</div>
-                            <div class="stat-mini-label">To $40k Goal</div>
+                            <div class="stat-mini-label">Payout Progress</div>
                         </div>
                     </div>
 
@@ -1816,7 +1820,10 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="form-label">Cycle (Month) *</label>
+                                    <label class="form-label">
+                                        Cycle (Month) *
+                                        <span id="suggestedCycleHint" style="color: var(--success); font-weight: 400; font-size: 0.75rem;"></span>
+                                    </label>
                                     <select class="form-select" id="cycle" required>
                                         <option value="">Select cycle</option>
                                         <option value="1">Cycle 1 (Month 1)</option>
@@ -1879,6 +1886,154 @@
                                 <button type="button" class="btn btn-secondary" onclick="document.getElementById('tradeForm').reset(); setTodayDate();">Clear</button>
                             </div>
                         </form>
+                    </div>
+                </div>
+
+                <!-- PAGE: LOG PAYOUT -->
+                <div class="page" id="logPayoutPage">
+                    <h2 class="section-title" style="margin-bottom: 1rem;">💰 Log Payout / Withdrawal</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                        Record when you take a payout from your prop firm. This helps track your farming progress and cycles.
+                    </p>
+
+                    <!-- Current Status Summary -->
+                    <div class="metrics-grid" style="margin-bottom: 2rem;">
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-label">Available for Withdrawal</span>
+                                <div class="metric-icon green">💵</div>
+                            </div>
+                            <div class="metric-value" id="availableWithdrawal">$0</div>
+                            <div class="metric-change neutral" id="withdrawalStatus">Not qualified yet</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-label">Total Withdrawn</span>
+                                <div class="metric-icon blue">💰</div>
+                            </div>
+                            <div class="metric-value" id="totalWithdrawn">$0</div>
+                            <div class="metric-change neutral" id="withdrawalCount">0 payouts</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-label">Current Cycle Phase</span>
+                                <div class="metric-icon purple">🔄</div>
+                            </div>
+                            <div class="metric-value" id="cyclePhase">First Cycle</div>
+                            <div class="metric-change neutral" id="phaseInfo">Building to first payout</div>
+                        </div>
+                    </div>
+
+                    <!-- Payout Form -->
+                    <div class="form-card">
+                        <h3 style="margin-bottom: 1.5rem;">Record New Payout</h3>
+                        
+                        <form id="payoutForm">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Payout Type *</label>
+                                    <select class="form-select" id="payoutType" required>
+                                        <option value="">Select payout type</option>
+                                        <option value="first_min">First Payout - Minimum ($2,600 qualified)</option>
+                                        <option value="first_full">First Payout - Full ($4,600 = $2k withdrawal)</option>
+                                        <option value="monthly">Monthly Payout ($2,000)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Withdrawal Amount ($) *</label>
+                                    <input type="number" step="0.01" class="form-input" id="withdrawalAmount" placeholder="2000.00" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Payout Date *</label>
+                                    <input type="date" class="form-input" id="payoutDate" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Account(s) *</label>
+                                    <select class="form-select" id="payoutAccount" required>
+                                        <option value="">Select account</option>
+                                        <option value="all">All 20 Accounts (Portfolio)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">New Cycle Starting *</label>
+                                    <select class="form-select" id="newCycle" required>
+                                        <option value="">Select new cycle</option>
+                                        <option value="2">Cycle 2</option>
+                                        <option value="3">Cycle 3</option>
+                                        <option value="4">Cycle 4</option>
+                                        <option value="5">Cycle 5</option>
+                                        <option value="6">Cycle 6</option>
+                                        <option value="7">Cycle 7</option>
+                                        <option value="8">Cycle 8</option>
+                                        <option value="9">Cycle 9</option>
+                                        <option value="10">Cycle 10</option>
+                                        <option value="11">Cycle 11</option>
+                                        <option value="12">Cycle 12</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Payment Method</label>
+                                    <select class="form-select" id="paymentMethod">
+                                        <option value="">Select method (optional)</option>
+                                        <option value="bank_transfer">Bank Transfer</option>
+                                        <option value="paypal">PayPal</option>
+                                        <option value="wise">Wise</option>
+                                        <option value="crypto">Crypto</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Payout Notes</label>
+                                <textarea class="form-input form-textarea" id="payoutNotes" placeholder="e.g., First milestone reached! Ready for monthly farming cycle..."></textarea>
+                            </div>
+
+                            <div class="alert alert-info show" style="margin-bottom: 1rem;">
+                                <strong>📝 What happens when you log a payout:</strong><br>
+                                • Your withdrawal is recorded in the payout history<br>
+                                • The system marks this cycle as complete<br>
+                                • Future trades will automatically use the new cycle number<br>
+                                • Your progress tracker adjusts to the next goal
+                            </div>
+
+                            <div class="form-footer">
+                                <button type="submit" class="btn btn-primary" id="payoutSubmitBtn">
+                                    <span id="payoutSubmitText">💰 Log Payout</span>
+                                    <span id="payoutSubmitLoading" class="loading" style="display: none;"></span>
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="document.getElementById('payoutForm').reset(); setTodayPayoutDate();">Clear</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Payout History -->
+                    <div class="table-card" style="margin-top: 2rem;">
+                        <div class="table-header">
+                            <h3 class="chart-title">Payout History</h3>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Account</th>
+                                        <th>Cycle Completed</th>
+                                        <th>New Cycle</th>
+                                        <th>Payment Method</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payoutHistoryBody"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
@@ -2058,8 +2213,10 @@
             debugMsg('Dashboard initializing...', 'info');
             populateAccountDropdown();
             setupEventListeners();
+            setupPayoutForm();
             setTodayDate();
             loadDashboardData();
+            loadPayoutData();
         }
 
         function populateAccountDropdown() {
@@ -2125,6 +2282,16 @@
                 document.getElementById('account').required = !isChecked;
                 document.getElementById('leadAccount').required = isChecked;
             });
+            
+            // Set suggested cycle when opening add trade page
+            const cycleSelect = document.getElementById('cycle');
+            const suggestedCycle = getSuggestedCycle();
+            cycleSelect.value = suggestedCycle;
+            
+            const hint = document.getElementById('suggestedCycleHint');
+            if (hint && suggestedCycle > 1) {
+                hint.textContent = `(Current active cycle)`;
+            }
         }
 
         function navigateTo(page) {
@@ -2142,6 +2309,7 @@
                 analytics: 'Analytics',
                 riskMonitor: 'Risk Monitor',
                 addTrade: 'Add Trade',
+                logPayout: 'Log Payout',
                 tradeLog: 'Trade Log',
                 deleteData: 'Delete Data'
             };
@@ -2198,6 +2366,7 @@
             updateTradeLog();
             updateRiskMonitor();
             updateCyclePerformance();
+            updatePayoutPage();
         }
 
         function updateHeroStats() {
@@ -2244,10 +2413,20 @@
 
             const avgTrade = totalTrades > 0 ? totalPnL / totalTrades : 0;
             const streak = calculateStreak(allData);
-            const progress = Math.min((totalPnL / MONTHLY_TARGET) * 100, 100);
+            
+            // Calculate progress toward payout goals
+            let progress;
+            if (totalPnL < FIRST_PAYOUT_MIN) {
+                progress = Math.min((totalPnL / FIRST_PAYOUT_GOAL) * 100, 100);
+            } else {
+                // After first payout, track monthly $2k goals
+                const afterFirstPayout = totalPnL - FIRST_PAYOUT_GOAL;
+                const currentProgress = afterFirstPayout % MONTHLY_PAYOUT_GOAL;
+                progress = (currentProgress / MONTHLY_PAYOUT_GOAL) * 100;
+            }
 
             document.getElementById('totalPnL').textContent = formatCurrency(totalPnL);
-            document.getElementById('pnlChange').textContent = formatCurrency(totalPnL) + ' this month';
+            document.getElementById('pnlChange').textContent = formatCurrency(totalPnL) + ' total';
             document.getElementById('pnlChange').className = `metric-change ${totalPnL >= 0 ? 'positive' : 'negative'}`;
             
             document.getElementById('winRate').textContent = Math.round(winRate) + '%';
@@ -3136,6 +3315,224 @@
                 
                 grid.appendChild(card);
             });
+        }
+
+        // PAYOUT MANAGEMENT
+        let payoutData = [];
+        const PAYOUT_API = 'https://sheetdb.io/api/v1/your_payout_sheet_id'; // User needs to create separate sheet
+
+        async function loadPayoutData() {
+            try {
+                // For now, store payouts in localStorage until user creates separate sheet
+                const stored = localStorage.getItem('prop_farm_payouts');
+                payoutData = stored ? JSON.parse(stored) : [];
+                debugMsg(`Loaded ${payoutData.length} payouts from storage`, 'info');
+            } catch (error) {
+                debugMsg(`Error loading payouts: ${error.message}`, 'error');
+                payoutData = [];
+            }
+        }
+
+        function updatePayoutPage() {
+            loadPayoutData();
+            
+            const totalPnL = allData.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
+            const totalWithdrawn = payoutData.reduce((sum, p) => sum + parseFloat(p.amount || 0), 0);
+            
+            // Calculate available for withdrawal
+            let available = 0;
+            let status = 'Not qualified yet';
+            let statusClass = 'neutral';
+            
+            if (totalPnL >= FIRST_PAYOUT_GOAL) {
+                const afterPayouts = totalPnL - totalWithdrawn;
+                if (afterPayouts >= MONTHLY_PAYOUT_GOAL) {
+                    available = Math.floor(afterPayouts / MONTHLY_PAYOUT_GOAL) * 2000;
+                    status = `✅ ${Math.floor(afterPayouts / MONTHLY_PAYOUT_GOAL)} payout(s) ready`;
+                    statusClass = 'positive';
+                }
+            } else if (totalPnL >= FIRST_PAYOUT_MIN) {
+                available = 2000;
+                status = '✅ First payout qualified';
+                statusClass = 'positive';
+            }
+            
+            document.getElementById('availableWithdrawal').textContent = formatCurrency(available);
+            document.getElementById('withdrawalStatus').textContent = status;
+            document.getElementById('withdrawalStatus').className = `metric-change ${statusClass}`;
+            
+            // Total withdrawn
+            document.getElementById('totalWithdrawn').textContent = formatCurrency(totalWithdrawn);
+            document.getElementById('withdrawalCount').textContent = payoutData.length === 0 
+                ? 'No payouts yet' 
+                : `${payoutData.length} payout${payoutData.length > 1 ? 's' : ''}`;
+            
+            // Cycle phase
+            let phase = 'First Cycle';
+            let phaseInfo = 'Building to first payout';
+            
+            if (payoutData.length === 0) {
+                phase = 'First Cycle';
+                phaseInfo = `${formatCurrency(FIRST_PAYOUT_GOAL - totalPnL)} to full payout`;
+            } else {
+                const lastPayout = payoutData[payoutData.length - 1];
+                phase = `Cycle ${lastPayout.new_cycle || 2}`;
+                phaseInfo = 'Monthly farming cycle';
+            }
+            
+            document.getElementById('cyclePhase').textContent = phase;
+            document.getElementById('phaseInfo').textContent = phaseInfo;
+            
+            // Update payout history table
+            updatePayoutHistory();
+        }
+
+        function updatePayoutHistory() {
+            const tbody = document.getElementById('payoutHistoryBody');
+            tbody.innerHTML = '';
+            
+            if (payoutData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: var(--text-secondary); padding: 2rem;">No payouts recorded yet</td></tr>';
+                return;
+            }
+            
+            const sorted = [...payoutData].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            sorted.forEach(payout => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${payout.date}</td>
+                    <td><strong>${payout.type}</strong></td>
+                    <td style="color: var(--success)"><strong>${formatCurrency(parseFloat(payout.amount))}</strong></td>
+                    <td>${payout.account}</td>
+                    <td>Cycle ${payout.cycle_completed || 1}</td>
+                    <td>Cycle ${payout.new_cycle || 2}</td>
+                    <td>${payout.payment_method || '-'}</td>
+                    <td>${payout.notes || '-'}</td>
+                `;
+            });
+        }
+
+        function setTodayPayoutDate() {
+            document.getElementById('payoutDate').valueAsDate = new Date();
+        }
+
+        // Setup payout form listener
+        function setupPayoutForm() {
+            const form = document.getElementById('payoutForm');
+            if (form) {
+                form.addEventListener('submit', handlePayoutSubmit);
+                setTodayPayoutDate();
+                
+                // Auto-populate withdrawal amount based on type
+                document.getElementById('payoutType').addEventListener('change', (e) => {
+                    const amountInput = document.getElementById('withdrawalAmount');
+                    const newCycleSelect = document.getElementById('newCycle');
+                    
+                    switch(e.target.value) {
+                        case 'first_min':
+                            amountInput.value = '2000';
+                            newCycleSelect.value = '2';
+                            break;
+                        case 'first_full':
+                            amountInput.value = '2000';
+                            newCycleSelect.value = '2';
+                            break;
+                        case 'monthly':
+                            amountInput.value = '2000';
+                            // Auto-increment cycle
+                            const currentCycle = payoutData.length > 0 
+                                ? parseInt(payoutData[payoutData.length - 1].new_cycle) 
+                                : 1;
+                            newCycleSelect.value = Math.min(currentCycle + 1, 12);
+                            break;
+                    }
+                });
+                
+                // Add "All 20 Accounts" plus individual accounts to dropdown
+                const payoutAccountSelect = document.getElementById('payoutAccount');
+                for (let i = 1; i <= 20; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = `PA Account #${i}`;
+                    payoutAccountSelect.appendChild(option);
+                }
+            }
+        }
+
+        async function handlePayoutSubmit(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('payoutSubmitBtn');
+            btn.disabled = true;
+            document.getElementById('payoutSubmitText').style.display = 'none';
+            document.getElementById('payoutSubmitLoading').style.display = 'inline-block';
+            
+            const payoutType = document.getElementById('payoutType').value;
+            const amount = document.getElementById('withdrawalAmount').value;
+            const date = document.getElementById('payoutDate').value;
+            const account = document.getElementById('payoutAccount').value;
+            const newCycle = document.getElementById('newCycle').value;
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            const notes = document.getElementById('payoutNotes').value;
+            
+            // Determine cycle completed
+            let cycleCompleted = 1;
+            if (payoutData.length > 0) {
+                cycleCompleted = parseInt(payoutData[payoutData.length - 1].new_cycle) || 1;
+            }
+            
+            const payout = {
+                date,
+                type: payoutType === 'first_min' ? 'First Payout (Min)' 
+                    : payoutType === 'first_full' ? 'First Payout (Full)' 
+                    : 'Monthly Payout',
+                amount: parseFloat(amount),
+                account: account === 'all' ? 'All 20 Accounts' : `PA Account #${account}`,
+                cycle_completed: cycleCompleted,
+                new_cycle: parseInt(newCycle),
+                payment_method: paymentMethod,
+                notes,
+                timestamp: new Date().toISOString()
+            };
+            
+            debugMsg('Logging payout...', 'info');
+            
+            try {
+                // Store in localStorage (user can later migrate to separate sheet)
+                payoutData.push(payout);
+                localStorage.setItem('prop_farm_payouts', JSON.stringify(payoutData));
+                
+                debugMsg(`✓ Payout logged: ${formatCurrency(payout.amount)}`, 'success');
+                showAlert(`✓ Payout logged successfully! Cycle ${newCycle} is now active.`, 'success');
+                
+                // Reset form
+                document.getElementById('payoutForm').reset();
+                setTodayPayoutDate();
+                
+                // Update views
+                updatePayoutPage();
+                
+                // Show info about new cycle
+                setTimeout(() => {
+                    showAlert(`🌾 Cycle ${newCycle} started! Future trades will use this cycle by default.`, 'info');
+                }, 2000);
+                
+            } catch (error) {
+                debugMsg(`✗ Payout error: ${error.message}`, 'error');
+                showAlert(`✗ Failed to log payout: ${error.message}`, 'error');
+            } finally {
+                btn.disabled = false;
+                document.getElementById('payoutSubmitText').style.display = 'inline';
+                document.getElementById('payoutSubmitLoading').style.display = 'none';
+            }
+        }
+
+        // Get suggested cycle for new trades
+        function getSuggestedCycle() {
+            if (payoutData.length === 0) return 1;
+            const lastPayout = payoutData[payoutData.length - 1];
+            return parseInt(lastPayout.new_cycle) || 1;
         }
 
         // FORM SUBMIT
