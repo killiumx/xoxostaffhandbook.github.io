@@ -1,4 +1,4 @@
-\<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -41,7 +41,115 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Keep all previous CSS styles from the original... */
+        /* DEBUG PANEL */
+        .debug-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 1rem;
+            max-width: 350px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            z-index: 9998;
+            display: none;
+        }
+
+        .debug-panel.show {
+            display: block;
+        }
+
+        .debug-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .debug-title {
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .debug-close {
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .debug-section {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .debug-label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .debug-value {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-primary);
+            word-break: break-all;
+        }
+
+        .debug-btn {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .debug-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .debug-btn.secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .debug-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .debug-toggle:hover {
+            background: var(--accent-hover);
+            transform: scale(1.05);
+        }
+
         /* LOGIN */
         .login-screen {
             position: fixed;
@@ -153,16 +261,6 @@
         }
 
         .login-error.show {
-            display: block;
-        }
-
-        /* DASHBOARD */
-        .dashboard {
-            display: none;
-            min-height: 100vh;
-        }
-
-        .dashboard.show {
             display: block;
         }
 
@@ -424,273 +522,33 @@
             font-weight: 700;
         }
 
-        /* TEMPLATES & ACCOUNTS - Keep all existing styles */
-        .templates-section {
-            margin-bottom: 3rem;
+        .chart-container {
+            position: relative;
+            height: 300px;
         }
 
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
+        /* LOADING */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
         }
 
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 800;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
-        .templates-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 1.5rem;
+        /* PAGE CONTENT */
+        .page {
+            display: none;
         }
 
-        .template-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 1.75rem;
-            transition: all 0.2s;
-        }
-
-        .template-card:hover {
-            border-color: var(--accent);
-            box-shadow: var(--shadow-lg);
-            transform: translateY(-2px);
-        }
-
-        .template-header {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .template-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.75rem;
-            flex-shrink: 0;
-        }
-
-        .template-info {
-            flex: 1;
-        }
-
-        .template-name {
-            font-size: 1.125rem;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-        }
-
-        .template-desc {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        .template-stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .template-stat {
-            text-align: center;
-        }
-
-        .template-stat-value {
-            font-size: 1.5rem;
-            font-weight: 800;
-            font-family: 'JetBrains Mono', monospace;
-            margin-bottom: 0.25rem;
-        }
-
-        .template-stat-label {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .template-details {
-            padding-top: 1.25rem;
-            border-top: 1px solid var(--border);
-            display: grid;
-            gap: 0.75rem;
-        }
-
-        .template-detail-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.875rem;
-        }
-
-        .template-detail-label {
-            color: var(--text-secondary);
-        }
-
-        .template-detail-value {
-            font-weight: 700;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* ACCOUNTS */
-        .accounts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .account-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 1.5rem;
-            transition: all 0.2s;
-        }
-
-        .account-card:hover {
-            border-color: var(--accent);
-            box-shadow: var(--shadow);
-            transform: translateY(-2px);
-        }
-
-        .account-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.25rem;
-        }
-
-        .account-number {
-            font-size: 1.125rem;
-            font-weight: 800;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .account-badge {
-            padding: 0.375rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .badge-success {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--success);
-        }
-
-        .badge-active {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--accent);
-        }
-
-        .account-progress {
-            margin-bottom: 1.25rem;
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-
-        .progress-bar {
-            height: 8px;
-            background: var(--bg-secondary);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            transition: width 0.5s ease;
-        }
-
-        .account-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-
-        .account-stat {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .account-stat-label {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.25rem;
-        }
-
-        .account-stat-value {
-            font-size: 1.125rem;
-            font-weight: 800;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* FORM */
-        .form-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 2rem;
-            max-width: 1200px;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .form-select {
-            width: 100%;
-            padding: 0.875rem 1rem;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.2s;
-            font-family: inherit;
-            background: var(--bg-primary);
-            cursor: pointer;
-        }
-
-        .form-select:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .form-textarea {
-            min-height: 120px;
-            resize: vertical;
-            font-family: inherit;
-        }
-
-        .form-footer {
-            display: flex;
-            gap: 1rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border);
+        .page.active {
+            display: block;
         }
 
         .alert {
@@ -736,79 +594,7 @@
             border: 1px solid rgba(59, 130, 246, 0.3);
         }
 
-        /* TABLE */
-        .table-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            overflow: hidden;
-        }
-
-        .table-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .table-container {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
-            text-align: left;
-            padding: 1rem 1.5rem;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-secondary);
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border);
-        }
-
-        td {
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.9375rem;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tr:hover {
-            background: var(--bg-secondary);
-        }
-
-        /* LOADING */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* PAGE CONTENT */
-        .page {
-            display: none;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        /* NEW: Statistics Cards */
+        /* Stats */
         .stats-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -835,36 +621,6 @@
             font-size: 0.8125rem;
             color: var(--text-secondary);
             font-weight: 600;
-        }
-
-        /* NEW: Filter Pills */
-        .filter-pills {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-pill {
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--border);
-            background: var(--bg-card);
-            border-radius: 20px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .filter-pill:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        .filter-pill.active {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
         }
 
         /* RESPONSIVE */
@@ -898,27 +654,54 @@
             .metrics-grid {
                 grid-template-columns: 1fr;
             }
-
-            .templates-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .accounts-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .top-bar {
-                padding: 1rem;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Keep all HTML structure from original, just update the script section -->
+    <!-- DEBUG TOGGLE -->
+    <button class="debug-toggle" onclick="toggleDebug()">🔧</button>
+
+    <!-- DEBUG PANEL -->
+    <div class="debug-panel" id="debugPanel">
+        <div class="debug-header">
+            <span class="debug-title">🔧 Debug Console</span>
+            <span class="debug-close" onclick="toggleDebug()">×</span>
+        </div>
+
+        <button class="debug-btn" onclick="testAPI()">Test API Connection</button>
+        <button class="debug-btn" onclick="showDataStructure()">Show Data Structure</button>
+        <button class="debug-btn" onclick="validateData()">Validate Data</button>
+        <button class="debug-btn" onclick="clearCache()">Clear Cache & Reload</button>
+        <button class="debug-btn secondary" onclick="exportDebugLog()">Export Debug Log</button>
+
+        <div class="debug-section">
+            <div class="debug-label">API STATUS</div>
+            <div class="debug-value" id="debugApiStatus">Not tested</div>
+        </div>
+
+        <div class="debug-section">
+            <div class="debug-label">TOTAL TRADES</div>
+            <div class="debug-value" id="debugTotalTrades">0</div>
+        </div>
+
+        <div class="debug-section">
+            <div class="debug-label">LAST LOAD TIME</div>
+            <div class="debug-value" id="debugLoadTime">Never</div>
+        </div>
+
+        <div class="debug-section">
+            <div class="debug-label">CHARTS STATUS</div>
+            <div class="debug-value" id="debugChartsStatus">Not rendered</div>
+        </div>
+
+        <div class="debug-section">
+            <div class="debug-label">CONSOLE OUTPUT</div>
+            <div class="debug-value" id="debugConsole" style="max-height: 200px; overflow-y: auto; font-size: 0.75rem;">
+                Ready...
+            </div>
+        </div>
+    </div>
+
     <!-- LOGIN -->
     <div class="login-screen" id="loginScreen">
         <div class="login-box">
@@ -936,7 +719,7 @@
     </div>
 
     <!-- DASHBOARD -->
-    <div class="dashboard" id="dashboard">
+    <div class="dashboard" id="dashboard" style="display: none;">
         <!-- SIDEBAR -->
         <aside class="sidebar" id="sidebar">
             <div class="logo">🌾 Prop Farm</div>
@@ -946,30 +729,6 @@
                 <div class="nav-item active" data-page="overview">
                     <span class="nav-icon">📊</span>
                     <span>Overview</span>
-                </div>
-                <div class="nav-item" data-page="templates">
-                    <span class="nav-icon">📋</span>
-                    <span>Templates</span>
-                </div>
-                <div class="nav-item" data-page="accounts">
-                    <span class="nav-icon">💼</span>
-                    <span>Accounts</span>
-                </div>
-                <div class="nav-item" data-page="analytics">
-                    <span class="nav-icon">📈</span>
-                    <span>Analytics</span>
-                </div>
-            </nav>
-
-            <nav class="nav-section">
-                <div class="nav-title">Actions</div>
-                <div class="nav-item" data-page="addTrade">
-                    <span class="nav-icon">➕</span>
-                    <span>Add Trade</span>
-                </div>
-                <div class="nav-item" data-page="tradeLog">
-                    <span class="nav-icon">📝</span>
-                    <span>Trade Log</span>
                 </div>
             </nav>
 
@@ -993,9 +752,6 @@
                 <div class="top-bar-actions">
                     <button class="btn btn-secondary btn-icon" onclick="refreshData()" title="Refresh">
                         ↻
-                    </button>
-                    <button class="btn btn-secondary btn-icon" onclick="testAPI()" title="Test API">
-                        🔧
                     </button>
                 </div>
             </div>
@@ -1087,175 +843,17 @@
                             <div class="chart-header">
                                 <h3 class="chart-title">Portfolio Growth</h3>
                             </div>
-                            <canvas id="growthChart" height="300"></canvas>
+                            <div class="chart-container">
+                                <canvas id="growthChart"></canvas>
+                            </div>
                         </div>
                         <div class="chart-card">
                             <div class="chart-header">
                                 <h3 class="chart-title">Win Rate Distribution</h3>
                             </div>
-                            <canvas id="winRateChart" height="300"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Quick Stats -->
-                    <div class="templates-section">
-                        <div class="section-header">
-                            <h2 class="section-title">Top Performing Templates</h2>
-                            <div class="section-actions">
-                                <button class="btn btn-secondary" onclick="navigateTo('templates')">View All</button>
+                            <div class="chart-container">
+                                <canvas id="winRateChart"></canvas>
                             </div>
-                        </div>
-                        <div class="templates-grid" id="topTemplatesGrid"></div>
-                    </div>
-                </div>
-
-                <!-- PAGE: TEMPLATES -->
-                <div class="page" id="templatesPage">
-                    <div class="templates-section">
-                        <div class="section-header">
-                            <h2 class="section-title">Market Conditions</h2>
-                        </div>
-                        <div class="templates-grid" id="marketConditionsGrid"></div>
-                    </div>
-
-                    <div class="templates-section">
-                        <div class="section-header">
-                            <h2 class="section-title">Risk Templates</h2>
-                        </div>
-                        <div class="templates-grid" id="riskTemplatesGrid"></div>
-                    </div>
-                </div>
-
-                <!-- PAGE: ACCOUNTS -->
-                <div class="page" id="accountsPage">
-                    <div class="section-header">
-                        <h2 class="section-title">20 PA Accounts</h2>
-                        <div class="section-actions">
-                            <button class="btn btn-secondary" onclick="exportCSV()">Export CSV</button>
-                        </div>
-                    </div>
-
-                    <!-- Filter Pills -->
-                    <div class="filter-pills">
-                        <div class="filter-pill active" onclick="filterAccounts('all')">All Accounts</div>
-                        <div class="filter-pill" onclick="filterAccounts('active')">Active Only</div>
-                        <div class="filter-pill" onclick="filterAccounts('goal')">Goal Reached</div>
-                        <div class="filter-pill" onclick="filterAccounts('profitable')">Profitable</div>
-                    </div>
-
-                    <div class="accounts-grid" id="accountsGrid"></div>
-                </div>
-
-                <!-- PAGE: ANALYTICS -->
-                <div class="page" id="analyticsPage">
-                    <h2 class="section-title" style="margin-bottom: 1.5rem;">Performance Analytics</h2>
-                    
-                    <div class="table-card">
-                        <div class="table-header">
-                            <h3 class="chart-title">Template Comparison</h3>
-                        </div>
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Template</th>
-                                        <th>Total P&L</th>
-                                        <th>Trades</th>
-                                        <th>Win Rate</th>
-                                        <th>Avg Win</th>
-                                        <th>Avg Loss</th>
-                                        <th>Best Trade</th>
-                                        <th>Profit Factor</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="comparisonTableBody"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PAGE: ADD TRADE -->
-                <div class="page" id="addTradePage">
-                    <h2 class="section-title" style="margin-bottom: 1.5rem;">Add New Trade</h2>
-                    
-                    <div class="form-card">
-                        <form id="tradeForm">
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label class="form-label">PA Account *</label>
-                                    <select class="form-select" id="account" required></select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Market Condition *</label>
-                                    <select class="form-select" id="marketCondition" required>
-                                        <option value="">Select condition</option>
-                                        <option value="High Impact News">High Impact News</option>
-                                        <option value="No Impact">No Impact</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Risk Template *</label>
-                                    <select class="form-select" id="riskTemplate" required>
-                                        <option value="">Select risk level</option>
-                                        <option value="100">$100 (1 contract)</option>
-                                        <option value="200">$200 (2 contracts)</option>
-                                        <option value="300">$300 (3 contracts)</option>
-                                        <option value="400">$400 (4 contracts)</option>
-                                        <option value="500">$500 (5 contracts)</option>
-                                        <option value="600">$600 (6 contracts)</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Trade Date *</label>
-                                    <input type="date" class="form-input" id="tradeDate" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">P&L ($) *</label>
-                                    <input type="number" step="0.01" class="form-input" id="pnl" placeholder="0.00" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Contracts (auto-filled)</label>
-                                    <input type="number" class="form-input" id="contracts" readonly style="background: var(--bg-secondary);">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Trade Notes</label>
-                                <textarea class="form-input form-textarea" id="notes" placeholder="Entry reason, market conditions, lessons learned..."></textarea>
-                            </div>
-                            <div class="form-footer">
-                                <button type="submit" class="btn btn-primary" id="submitBtn">
-                                    <span id="submitText">Submit Trade</span>
-                                    <span id="submitLoading" class="loading" style="display: none;"></span>
-                                </button>
-                                <button type="button" class="btn btn-secondary" onclick="document.getElementById('tradeForm').reset(); setTodayDate();">Clear</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- PAGE: TRADE LOG -->
-                <div class="page" id="tradeLogPage">
-                    <h2 class="section-title" style="margin-bottom: 1.5rem;">Complete Trade Log</h2>
-                    
-                    <div class="table-card">
-                        <div class="table-header">
-                            <h3 class="chart-title">All Trades (Last 100)</h3>
-                        </div>
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Account</th>
-                                        <th>Market Condition</th>
-                                        <th>Risk</th>
-                                        <th>P&L</th>
-                                        <th>Contracts</th>
-                                        <th>Notes</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tradeLogBody"></tbody>
-                            </table>
                         </div>
                     </div>
                 </div>
@@ -1281,7 +879,108 @@
 
         let allData = [];
         let charts = {};
-        let accountFilter = 'all';
+        let debugLog = [];
+
+        // DEBUG FUNCTIONS
+        function debugMsg(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}`;
+            debugLog.push(logEntry);
+            
+            const consoleEl = document.getElementById('debugConsole');
+            if (consoleEl) {
+                consoleEl.innerHTML += `<div style="color: ${type === 'error' ? '#ef4444' : type === 'success' ? '#10b981' : '#0f172a'}">${logEntry}</div>`;
+                consoleEl.scrollTop = consoleEl.scrollHeight;
+            }
+            
+            console.log(logEntry);
+        }
+
+        function toggleDebug() {
+            document.getElementById('debugPanel').classList.toggle('show');
+        }
+
+        async function testAPI() {
+            debugMsg('Testing API connection...', 'info');
+            document.getElementById('debugApiStatus').textContent = 'Testing...';
+            
+            try {
+                const start = performance.now();
+                const response = await fetch(SHEET_API);
+                const data = await response.json();
+                const elapsed = (performance.now() - start).toFixed(0);
+                
+                document.getElementById('debugApiStatus').textContent = `✓ OK (${elapsed}ms)`;
+                debugMsg(`API Response: ${response.status} - ${data.length} records in ${elapsed}ms`, 'success');
+                showAlert(`✓ API works! Found ${data.length} trades (${elapsed}ms)`, 'success');
+            } catch (error) {
+                document.getElementById('debugApiStatus').textContent = `✗ Error`;
+                debugMsg(`API Error: ${error.message}`, 'error');
+                showAlert(`✗ API Error: ${error.message}`, 'error');
+            }
+        }
+
+        function showDataStructure() {
+            if (allData.length === 0) {
+                showAlert('No data loaded yet. Try refreshing first.', 'error');
+                return;
+            }
+
+            const sample = allData[0];
+            const structure = {
+                totalRecords: allData.length,
+                columns: Object.keys(sample),
+                sampleData: sample
+            };
+
+            debugMsg('Data Structure:', 'info');
+            debugMsg(JSON.stringify(structure, null, 2), 'info');
+            showAlert(`Data has ${structure.columns.length} columns: ${structure.columns.join(', ')}`, 'info');
+        }
+
+        function validateData() {
+            if (allData.length === 0) {
+                showAlert('No data to validate', 'error');
+                return;
+            }
+
+            let issues = [];
+            
+            allData.forEach((trade, i) => {
+                if (!trade.account) issues.push(`Row ${i+1}: Missing account`);
+                if (!trade.pnl) issues.push(`Row ${i+1}: Missing P&L`);
+                if (!trade.trade_date) issues.push(`Row ${i+1}: Missing date`);
+                if (isNaN(parseFloat(trade.pnl))) issues.push(`Row ${i+1}: Invalid P&L value`);
+            });
+
+            if (issues.length === 0) {
+                debugMsg('✓ Data validation passed', 'success');
+                showAlert('✓ All data is valid!', 'success');
+            } else {
+                debugMsg(`✗ Found ${issues.length} validation issues`, 'error');
+                issues.forEach(issue => debugMsg(issue, 'error'));
+                showAlert(`Found ${issues.length} data issues. Check debug console.`, 'error');
+            }
+        }
+
+        function clearCache() {
+            localStorage.clear();
+            sessionStorage.clear();
+            debugMsg('Cache cleared, reloading...', 'info');
+            location.reload();
+        }
+
+        function exportDebugLog() {
+            const logText = debugLog.join('\n');
+            const blob = new Blob([logText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `prop_farm_debug_${new Date().toISOString().split('T')[0]}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showAlert('✓ Debug log exported', 'success');
+        }
 
         // LOGIN
         if (sessionStorage.getItem('farm_auth') === 'true') showDashboard();
@@ -1299,7 +998,7 @@
 
         function showDashboard() {
             document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('dashboard').classList.add('show');
+            document.getElementById('dashboard').style.display = 'block';
             initDashboard();
         }
 
@@ -1310,10 +1009,8 @@
 
         // INIT
         function initDashboard() {
+            debugMsg('Dashboard initializing...', 'info');
             displayRandomQuote();
-            populateAccountDropdown();
-            setupEventListeners();
-            setTodayDate();
             loadDashboardData();
         }
 
@@ -1323,92 +1020,12 @@
             document.getElementById('quoteAuthor').textContent = `— ${quote.author}`;
         }
 
-        function populateAccountDropdown() {
-            const select = document.getElementById('account');
-            select.innerHTML = '<option value="">Select account</option>';
-            for (let i = 1; i <= 20; i++) {
-                select.innerHTML += `<option value="${i}">PA Account #${i}</option>`;
-            }
-        }
-
-        function setTodayDate() {
-            document.getElementById('tradeDate').valueAsDate = new Date();
-        }
-
-        function setupEventListeners() {
-            // Navigation
-            document.querySelectorAll('.nav-item[data-page]').forEach(item => {
-                item.addEventListener('click', () => {
-                    const page = item.dataset.page;
-                    navigateTo(page);
-                });
-            });
-
-            // Menu toggle
-            document.getElementById('menuToggle').addEventListener('click', () => {
-                document.getElementById('sidebar').classList.toggle('show');
-            });
-
-            // Risk template auto-fill contracts
-            document.getElementById('riskTemplate').addEventListener('change', (e) => {
-                const risk = parseInt(e.target.value);
-                if (risk) {
-                    document.getElementById('contracts').value = risk / 100;
-                } else {
-                    document.getElementById('contracts').value = '';
-                }
-            });
-
-            // Form submit
-            document.getElementById('tradeForm').addEventListener('submit', handleFormSubmit);
-        }
-
-        function navigateTo(page) {
-            // Update nav
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            document.querySelector(`.nav-item[data-page="${page}"]`)?.classList.add('active');
-
-            // Update pages
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(page + 'Page').classList.add('active');
-
-            // Update title
-            const titles = {
-                overview: 'Overview',
-                templates: 'Templates',
-                accounts: 'Accounts',
-                analytics: 'Analytics',
-                addTrade: 'Add Trade',
-                tradeLog: 'Trade Log'
-            };
-            document.getElementById('pageTitle').textContent = titles[page];
-
-            // Close mobile menu
-            if (window.innerWidth <= 1024) {
-                document.getElementById('sidebar').classList.remove('show');
-            }
-        }
-
-        // TEST API
-        async function testAPI() {
-            showAlert('Testing API connection...', 'info');
-            try {
-                console.log('Fetching from:', SHEET_API);
-                const response = await fetch(SHEET_API);
-                console.log('Response status:', response.status);
-                const data = await response.json();
-                console.log('Data received:', data);
-                showAlert(`✓ API works! Found ${data.length} trades`, 'success');
-            } catch (error) {
-                console.error('API Error:', error);
-                showAlert(`✗ API Error: ${error.message}`, 'error');
-            }
-        }
-
         // DATA
         async function loadDashboardData() {
+            debugMsg('Loading data from API...', 'info');
+            const loadStart = performance.now();
+            
             try {
-                console.log('Loading data from:', SHEET_API);
                 const response = await fetch(SHEET_API);
                 
                 if (!response.ok) {
@@ -1416,16 +1033,21 @@
                 }
                 
                 const data = await response.json();
-                console.log('Data loaded:', data.length, 'trades');
+                const loadTime = (performance.now() - loadStart).toFixed(0);
+                
+                debugMsg(`✓ Loaded ${data.length} trades in ${loadTime}ms`, 'success');
                 
                 allData = data || [];
+                document.getElementById('debugTotalTrades').textContent = allData.length;
+                document.getElementById('debugLoadTime').textContent = `${loadTime}ms ago`;
+                
                 updateAllViews();
                 
                 if (allData.length === 0) {
                     showAlert('No trades found. Add your first trade!', 'info');
                 }
             } catch (error) {
-                console.error('Load error:', error);
+                debugMsg(`✗ Load error: ${error.message}`, 'error');
                 showAlert(`Failed to load data: ${error.message}`, 'error');
                 allData = [];
                 updateAllViews();
@@ -1433,13 +1055,10 @@
         }
 
         function updateAllViews() {
+            debugMsg('Updating all views...', 'info');
             updateMetrics();
             updateMiniStats();
-            updateCharts();
-            updateTemplates();
-            updateAccounts();
-            updateAnalytics();
-            updateTradeLog();
+            updateChartsOptimized();
         }
 
         function updateMetrics() {
@@ -1461,7 +1080,6 @@
             
             document.getElementById('totalTrades').textContent = totalTrades;
             
-            // Calculate and display win streak
             const streak = calculateStreak(allData);
             document.getElementById('winStreak').textContent = streak.current;
             if (streak.current > 0) {
@@ -1483,7 +1101,6 @@
                 return;
             }
 
-            // Best/Worst Day
             const dailyPnL = {};
             allData.forEach(t => {
                 const date = t.trade_date;
@@ -1493,16 +1110,13 @@
             const bestDay = days.length > 0 ? Math.max(...days) : 0;
             const worstDay = days.length > 0 ? Math.min(...days) : 0;
 
-            // Avg Trade
             const totalPnL = allData.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
             const avgTrade = allData.length > 0 ? totalPnL / allData.length : 0;
 
-            // Profit Factor
             const totalWins = allData.filter(t => parseFloat(t.pnl || 0) > 0).reduce((sum, t) => sum + parseFloat(t.pnl), 0);
             const totalLosses = Math.abs(allData.filter(t => parseFloat(t.pnl || 0) < 0).reduce((sum, t) => sum + parseFloat(t.pnl), 0));
             const profitFactor = totalLosses > 0 ? totalWins / totalLosses : 0;
             
-            // Longest Streak
             const streak = calculateStreak(allData);
 
             document.getElementById('bestDay').textContent = formatCurrency(bestDay);
@@ -1512,383 +1126,157 @@
             document.getElementById('longestStreak').textContent = streak.longest;
         }
 
-        function updateCharts() {
-            if (allData.length === 0) {
-                // Show empty state
-                const growthCtx = document.getElementById('growthChart');
-                const winRateCtx = document.getElementById('winRateChart');
-                
-                if (charts.growth) charts.growth.destroy();
-                if (charts.winRate) charts.winRate.destroy();
-                
-                return;
-            }
-
-            // Growth Chart
-            const dates = [...new Set(allData.map(t => t.trade_date))].sort();
-            const cumulative = dates.map(date => {
-                const tradesUpTo = allData.filter(t => t.trade_date <= date);
-                return tradesUpTo.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
-            });
-
-            const growthCtx = document.getElementById('growthChart');
-            if (charts.growth) charts.growth.destroy();
-            charts.growth = new Chart(growthCtx, {
-                type: 'line',
-                data: {
-                    labels: dates,
-                    datasets: [{
-                        label: 'Portfolio P&L',
-                        data: cumulative,
-                        borderColor: '#667eea',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                        tension: 0.4,
-                        fill: true,
-                        borderWidth: 3
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: {
-                            ticks: {
-                                callback: value => '$' + value.toLocaleString()
-                            },
-                            grid: { color: '#e2e8f0' }
-                        },
-                        x: { grid: { display: false } }
-                    }
-                }
-            });
-
-            // Win Rate Chart
-            const templateData = groupByTemplate(allData);
-            const templateNames = Object.keys(templateData).filter(name => templateData[name].trades > 0);
-            const winRates = templateNames.map(name => templateData[name].winRate);
-
-            const winRateCtx = document.getElementById('winRateChart');
-            if (charts.winRate) charts.winRate.destroy();
-            charts.winRate = new Chart(winRateCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: templateNames.map(n => n.length > 15 ? n.substring(0, 12) + '...' : n),
-                    datasets: [{
-                        data: winRates,
-                        backgroundColor: [
-                            '#667eea', '#764ba2', '#3b82f6', '#8b5cf6',
-                            '#10b981', '#f59e0b', '#ef4444', '#06b6d4'
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom' }
-                    }
-                }
-            });
-        }
-
-        function updateTemplates() {
-            const templates = groupByTemplate(allData);
+        function updateChartsOptimized() {
+            debugMsg('Rendering charts...', 'info');
+            const chartStart = performance.now();
             
-            // Market Conditions
-            const marketGrid = document.getElementById('marketConditionsGrid');
-            marketGrid.innerHTML = '';
-            ['High Impact News', 'No Impact'].forEach(name => {
-                marketGrid.appendChild(createTemplateCard(name, templates[name]));
-            });
-
-            // Risk Templates
-            const riskGrid = document.getElementById('riskTemplatesGrid');
-            riskGrid.innerHTML = '';
-            ['100', '200', '300', '400', '500', '600'].forEach(risk => {
-                riskGrid.appendChild(createTemplateCard(`$${risk} Risk`, templates[risk]));
-            });
-
-            // Top templates for overview
-            const topGrid = document.getElementById('topTemplatesGrid');
-            topGrid.innerHTML = '';
-            const sorted = Object.entries(templates)
-                .filter(([name, data]) => data.trades > 0)
-                .sort((a, b) => b[1].totalPnL - a[1].totalPnL)
-                .slice(0, 3);
-            
-            if (sorted.length === 0) {
-                topGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary);">No trades yet. Add your first trade!</p>';
-            } else {
-                sorted.forEach(([name, data]) => {
-                    topGrid.appendChild(createTemplateCard(name, data));
-                });
+            // Destroy existing charts
+            if (charts.growth) {
+                charts.growth.destroy();
+                charts.growth = null;
             }
-        }
-
-        function createTemplateCard(name, data) {
-            const card = document.createElement('div');
-            card.className = 'template-card';
-            
-            const icon = getTemplateIcon(name);
-            const desc = getTemplateDesc(name);
-
-            card.innerHTML = `
-                <div class="template-header">
-                    <div class="template-icon">${icon}</div>
-                    <div class="template-info">
-                        <div class="template-name">${name}</div>
-                        <div class="template-desc">${desc}</div>
-                    </div>
-                </div>
-                <div class="template-stats-grid">
-                    <div class="template-stat">
-                        <div class="template-stat-value">${formatCurrency(data.totalPnL)}</div>
-                        <div class="template-stat-label">Total P&L</div>
-                    </div>
-                    <div class="template-stat">
-                        <div class="template-stat-value">${data.trades}</div>
-                        <div class="template-stat-label">Trades</div>
-                    </div>
-                    <div class="template-stat">
-                        <div class="template-stat-value">${Math.round(data.winRate)}%</div>
-                        <div class="template-stat-label">Win Rate</div>
-                    </div>
-                </div>
-                <div class="template-details">
-                    <div class="template-detail-row">
-                        <span class="template-detail-label">Avg Win</span>
-                        <span class="template-detail-value">${formatCurrency(data.avgWin)}</span>
-                    </div>
-                    <div class="template-detail-row">
-                        <span class="template-detail-label">Avg Loss</span>
-                        <span class="template-detail-value">${formatCurrency(data.avgLoss)}</span>
-                    </div>
-                    <div class="template-detail-row">
-                        <span class="template-detail-label">Best Trade</span>
-                        <span class="template-detail-value">${formatCurrency(data.bestTrade)}</span>
-                    </div>
-                </div>
-            `;
-            return card;
-        }
-
-        function updateAccounts() {
-            const grid = document.getElementById('accountsGrid');
-            grid.innerHTML = '';
-
-            const accountData = groupByAccount(allData);
-            
-            for (let i = 1; i <= 20; i++) {
-                const acc = accountData[i];
-                
-                // Apply filter
-                if (accountFilter === 'active' && acc.trades === 0) continue;
-                if (accountFilter === 'goal' && acc.pnl < 2000) continue;
-                if (accountFilter === 'profitable' && acc.pnl <= 0) continue;
-                
-                const card = document.createElement('div');
-                card.className = 'account-card';
-                
-                card.innerHTML = `
-                    <div class="account-header">
-                        <div class="account-number">PA #${i}</div>
-                        <span class="account-badge ${acc.pnl >= 2000 ? 'badge-success' : 'badge-active'}">
-                            ${acc.pnl >= 2000 ? 'GOAL ✓' : 'ACTIVE'}
-                        </span>
-                    </div>
-                    <div class="account-progress">
-                        <div class="progress-header">
-                            <span>${formatCurrency(acc.pnl)}</span>
-                            <span>${Math.round(acc.progress)}%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${acc.progress}%"></div>
-                        </div>
-                    </div>
-                    <div class="account-stats">
-                        <div class="account-stat">
-                            <span class="account-stat-label">Trades</span>
-                            <span class="account-stat-value">${acc.trades}</span>
-                        </div>
-                        <div class="account-stat">
-                            <span class="account-stat-label">Win Rate</span>
-                            <span class="account-stat-value">${acc.trades > 0 ? Math.round(acc.winRate) : 0}%</span>
-                        </div>
-                        <div class="account-stat">
-                            <span class="account-stat-label">To Goal</span>
-                            <span class="account-stat-value">${formatCurrency(Math.max(2000 - acc.pnl, 0))}</span>
-                        </div>
-                        <div class="account-stat">
-                            <span class="account-stat-label">Balance</span>
-                            <span class="account-stat-value">${formatCurrency(50000 + acc.pnl)}</span>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
+            if (charts.winRate) {
+                charts.winRate.destroy();
+                charts.winRate = null;
             }
-        }
-
-        function filterAccounts(filter) {
-            accountFilter = filter;
-            document.querySelectorAll('.filter-pill').forEach(pill => pill.classList.remove('active'));
-            event.target.classList.add('active');
-            updateAccounts();
-        }
-
-        function updateAnalytics() {
-            const tbody = document.getElementById('comparisonTableBody');
-            tbody.innerHTML = '';
-
-            const templates = groupByTemplate(allData);
-            const sorted = Object.entries(templates)
-                .filter(([name, data]) => data.trades > 0)
-                .sort((a, b) => b[1].totalPnL - a[1].totalPnL);
-
-            if (sorted.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: var(--text-secondary); padding: 2rem;">No trades yet</td></tr>';
-                return;
-            }
-
-            sorted.forEach(([name, data]) => {
-                const totalWins = data.avgWin * (data.trades * data.winRate / 100);
-                const totalLosses = Math.abs(data.avgLoss * (data.trades * (100 - data.winRate) / 100));
-                const profitFactor = totalLosses > 0 ? (totalWins / totalLosses).toFixed(2) : '0.00';
-                
-                const row = tbody.insertRow();
-                row.innerHTML = `
-                    <td><strong>${name}</strong></td>
-                    <td><strong>${formatCurrency(data.totalPnL)}</strong></td>
-                    <td>${data.trades}</td>
-                    <td>${Math.round(data.winRate)}%</td>
-                    <td>${formatCurrency(data.avgWin)}</td>
-                    <td>${formatCurrency(data.avgLoss)}</td>
-                    <td>${formatCurrency(data.bestTrade)}</td>
-                    <td>${profitFactor}</td>
-                `;
-            });
-        }
-
-        function updateTradeLog() {
-            const tbody = document.getElementById('tradeLogBody');
-            tbody.innerHTML = '';
 
             if (allData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-secondary); padding: 2rem;">No trades yet</td></tr>';
+                document.getElementById('debugChartsStatus').textContent = 'No data';
                 return;
             }
-
-            const sorted = [...allData].sort((a, b) => new Date(b.trade_date) - new Date(a.trade_date));
-
-            sorted.slice(0, 100).forEach(trade => {
-                const row = tbody.insertRow();
-                const pnl = parseFloat(trade.pnl || 0);
-                row.innerHTML = `
-                    <td>${trade.trade_date}</td>
-                    <td>PA #${trade.account}</td>
-                    <td>${trade.market_condition}</td>
-                    <td>$${trade.risk_template}</td>
-                    <td style="color: ${pnl >= 0 ? 'var(--success)' : 'var(--danger)'}"><strong>${formatCurrency(pnl)}</strong></td>
-                    <td>${trade.contracts}</td>
-                    <td>${trade.notes || '-'}</td>
-                `;
-            });
-        }
-
-        // FORM SUBMIT - FINAL CORRECT FORMAT
-        async function handleFormSubmit(e) {
-            e.preventDefault();
-
-            const btn = document.getElementById('submitBtn');
-            btn.disabled = true;
-            document.getElementById('submitText').style.display = 'none';
-            document.getElementById('submitLoading').style.display = 'inline-block';
-
-            // Get all form values (they're already strings from form inputs)
-            const account = document.getElementById('account').value;
-            const market_condition = document.getElementById('marketCondition').value;
-            const risk_template = document.getElementById('riskTemplate').value;
-            const trade_date = document.getElementById('tradeDate').value;
-            const pnl = document.getElementById('pnl').value;
-            const contracts = document.getElementById('contracts').value;
-            const notes = document.getElementById('notes').value || '';
-            const timestamp = new Date().toISOString();
-
-            console.log('=== FORM VALUES ===');
-            console.log('account:', account, '(type:', typeof account + ')');
-            console.log('market_condition:', market_condition);
-            console.log('risk_template:', risk_template);
-            console.log('trade_date:', trade_date);
-            console.log('pnl:', pnl);
-            console.log('contracts:', contracts);
-
-            // SheetDB POST format: {data: [object with quoted keys]}
-            const payload = {
-                data: [
-                    {
-                        "account": account,
-                        "market_condition": market_condition,
-                        "risk_template": risk_template,
-                        "trade_date": trade_date,
-                        "pnl": pnl,
-                        "contracts": contracts,
-                        "notes": notes,
-                        "timestamp": timestamp
-                    }
-                ]
-            };
-
-            console.log('=== SENDING TO SHEETDB ===');
-            console.log(JSON.stringify(payload, null, 2));
 
             try {
-                const response = await fetch(SHEET_API, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
+                // Growth Chart - Optimized
+                const dates = [...new Set(allData.map(t => t.trade_date))].sort();
+                const cumulative = [];
+                let sum = 0;
+                
+                dates.forEach(date => {
+                    const dayTrades = allData.filter(t => t.trade_date === date);
+                    sum += dayTrades.reduce((s, t) => s + parseFloat(t.pnl || 0), 0);
+                    cumulative.push(sum);
                 });
 
-                console.log('Response status:', response.status);
-                const responseText = await response.text();
-                console.log('Response body:', responseText);
-                
-                if (response.ok || response.status === 201) {
-                    showAlert('✓ Trade added successfully!', 'success');
-                    document.getElementById('tradeForm').reset();
-                    setTodayDate();
-                    setTimeout(() => {
-                        loadDashboardData();
-                        navigateTo('overview');
-                    }, 1000);
-                } else {
-                    throw new Error(responseText);
-                }
+                const growthCtx = document.getElementById('growthChart').getContext('2d');
+                charts.growth = new Chart(growthCtx, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: 'Portfolio P&L',
+                            data: cumulative,
+                            borderColor: '#667eea',
+                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            borderWidth: 3,
+                            pointRadius: 0,
+                            pointHoverRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: {
+                            duration: 750
+                        },
+                        plugins: { 
+                            legend: { display: false }
+                        },
+                        interaction: {
+                            intersect: false,
+                            mode: 'index'
+                        },
+                        scales: {
+                            y: {
+                                ticks: {
+                                    callback: value => '$' + value.toLocaleString()
+                                },
+                                grid: { color: '#e2e8f0' }
+                            },
+                            x: { 
+                                grid: { display: false },
+                                ticks: {
+                                    maxRotation: 0,
+                                    autoSkip: true,
+                                    maxTicksLimit: 8
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Win Rate Chart - Optimized with limited data points
+                const templateData = {};
+                allData.forEach(trade => {
+                    const template = trade.market_condition || 'Unknown';
+                    if (!templateData[template]) {
+                        templateData[template] = { wins: 0, total: 0 };
+                    }
+                    templateData[template].total++;
+                    if (parseFloat(trade.pnl || 0) > 0) {
+                        templateData[template].wins++;
+                    }
+                });
+
+                const labels = Object.keys(templateData).slice(0, 6); // Limit to 6 for performance
+                const data = labels.map(label => {
+                    const stats = templateData[label];
+                    return stats.total > 0 ? (stats.wins / stats.total) * 100 : 0;
+                });
+
+                const winRateCtx = document.getElementById('winRateChart').getContext('2d');
+                charts.winRate = new Chart(winRateCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: [
+                                '#667eea', '#764ba2', '#3b82f6', '#8b5cf6',
+                                '#10b981', '#f59e0b'
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: {
+                            duration: 750
+                        },
+                        plugins: {
+                            legend: { 
+                                position: 'bottom',
+                                labels: {
+                                    padding: 15,
+                                    font: { size: 11 }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                const chartTime = (performance.now() - chartStart).toFixed(0);
+                document.getElementById('debugChartsStatus').textContent = `✓ Rendered (${chartTime}ms)`;
+                debugMsg(`✓ Charts rendered in ${chartTime}ms`, 'success');
+
             } catch (error) {
-                console.error('=== SUBMISSION ERROR ===');
-                console.error(error);
-                showAlert('✗ Submission failed. Check console (F12)', 'error');
-            } finally {
-                btn.disabled = false;
-                document.getElementById('submitText').style.display = 'inline';
-                document.getElementById('submitLoading').style.display = 'none';
+                debugMsg(`✗ Chart error: ${error.message}`, 'error');
+                document.getElementById('debugChartsStatus').textContent = `✗ Error`;
             }
         }
 
-
-        // WIN STREAK CALCULATION
         function calculateStreak(data) {
             if (data.length === 0) return { current: 0, longest: 0 };
             
-            // Sort by date descending (newest first)
             const sorted = [...data].sort((a, b) => new Date(b.trade_date) - new Date(a.trade_date));
             
             let currentStreak = 0;
             let longestStreak = 0;
             let tempStreak = 0;
             
-            // Calculate current streak (from most recent trade)
             for (let i = 0; i < sorted.length; i++) {
                 const pnl = parseFloat(sorted[i].pnl || 0);
                 const isWin = pnl > 0;
@@ -1897,19 +1285,18 @@
                     if (isWin) {
                         tempStreak = 1;
                     } else {
-                        break;  // Current streak is 0 if last trade was loss
+                        break;
                     }
                 } else {
                     if (isWin) {
                         tempStreak++;
                     } else {
-                        break;  // Streak broken
+                        break;
                     }
                 }
             }
             currentStreak = tempStreak;
             
-            // Calculate longest streak in history
             let currentRun = 0;
             let isWinStreak = false;
             
@@ -1934,100 +1321,6 @@
             return { current: currentStreak, longest: longestStreak };
         }
 
-        // EXPORT CSV
-        function exportCSV() {
-            if (allData.length === 0) {
-                showAlert('No data to export', 'error');
-                return;
-            }
-
-            const headers = ['Date', 'Account', 'Market Condition', 'Risk Template', 'P&L', 'Contracts', 'Notes'];
-            const rows = allData.map(t => [
-                t.trade_date,
-                t.account,
-                t.market_condition,
-                t.risk_template,
-                t.pnl,
-                t.contracts,
-                t.notes || ''
-            ]);
-
-            let csv = headers.join(',') + '\n';
-            rows.forEach(row => {
-                csv += row.map(cell => `"${cell}"`).join(',') + '\n';
-            });
-
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `prop_farm_trades_${new Date().toISOString().split('T')[0]}.csv`;
-            a.click();
-            URL.revokeObjectURL(url);
-
-            showAlert('✓ CSV exported successfully!', 'success');
-        }
-
-        // UTILITIES
-        function groupByAccount(data) {
-            const grouped = {};
-            for (let i = 1; i <= 20; i++) {
-                const trades = data.filter(t => t.account == i);
-                const pnl = trades.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
-                const wins = trades.filter(t => parseFloat(t.pnl || 0) > 0).length;
-                grouped[i] = {
-                    pnl,
-                    trades: trades.length,
-                    winRate: trades.length > 0 ? (wins / trades.length) * 100 : 0,
-                    progress: Math.min((pnl / 2000) * 100, 100)
-                };
-            }
-            return grouped;
-        }
-
-        function groupByTemplate(data) {
-            const templates = {
-                'High Impact News': {},
-                'No Impact': {},
-                '100': {}, '200': {}, '300': {}, '400': {}, '500': {}, '600': {}
-            };
-
-            Object.keys(templates).forEach(key => {
-                const isCondition = ['High Impact News', 'No Impact'].includes(key);
-                const trades = isCondition 
-                    ? data.filter(t => t.market_condition === key)
-                    : data.filter(t => t.risk_template == key);
-                
-                const pnl = trades.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
-                const wins = trades.filter(t => parseFloat(t.pnl || 0) > 0);
-                const losses = trades.filter(t => parseFloat(t.pnl || 0) < 0);
-                
-                templates[key] = {
-                    totalPnL: pnl,
-                    trades: trades.length,
-                    winRate: trades.length > 0 ? (wins.length / trades.length) * 100 : 0,
-                    avgWin: wins.length > 0 ? wins.reduce((sum, t) => sum + parseFloat(t.pnl), 0) / wins.length : 0,
-                    avgLoss: losses.length > 0 ? losses.reduce((sum, t) => sum + parseFloat(t.pnl), 0) / losses.length : 0,
-                    bestTrade: trades.length > 0 ? Math.max(...trades.map(t => parseFloat(t.pnl || 0))) : 0
-                };
-            });
-
-            return templates;
-        }
-
-        function getTemplateIcon(name) {
-            if (name === 'High Impact News') return '📰';
-            if (name === 'No Impact') return '📉';
-            return '🎯';
-        }
-
-        function getTemplateDesc(name) {
-            if (name === 'High Impact News') return 'High volatility news events';
-            if (name === 'No Impact') return 'Low volatility sessions';
-            const risk = parseInt(name.replace('$', '').replace(' Risk', ''));
-            return `$${risk} risk, 1:1 reward, ${risk/100} contract(s)`;
-        }
-
         function formatCurrency(amount) {
             const formatted = new Intl.NumberFormat('en-US', {
                 style: 'currency',
@@ -2046,9 +1339,15 @@
         }
 
         function refreshData() {
+            debugMsg('Manual refresh triggered', 'info');
             showAlert('Refreshing data...', 'info');
             loadDashboardData();
         }
+
+        // Menu toggle
+        document.getElementById('menuToggle')?.addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('show');
+        });
     </script>
 </body>
 </html>
