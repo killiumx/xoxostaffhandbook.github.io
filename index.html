@@ -777,6 +777,16 @@
             transform: translateY(-2px);
         }
 
+        .account-card.at-risk {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.02);
+        }
+
+        .account-card.warning {
+            border-color: var(--warning);
+            background: rgba(245, 158, 11, 0.02);
+        }
+
         .account-header {
             display: flex;
             justify-content: space-between;
@@ -808,6 +818,16 @@
             color: var(--accent);
         }
 
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
         .account-progress {
             margin-bottom: 1.25rem;
         }
@@ -831,6 +851,10 @@
             height: 100%;
             background: linear-gradient(90deg, #667eea, #764ba2);
             transition: width 0.5s ease;
+        }
+
+        .progress-fill.danger {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
         }
 
         .account-stats {
@@ -857,6 +881,29 @@
             font-size: 1.125rem;
             font-weight: 800;
             font-family: 'JetBrains Mono', monospace;
+        }
+
+        .risk-info {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            font-size: 0.8125rem;
+        }
+
+        .risk-info.danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .risk-info.warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .risk-info.safe {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
         }
 
         /* FORM */
@@ -1272,7 +1319,7 @@
                 <!-- ALERT -->
                 <div class="alert" id="alert"></div>
 
-                <!-- PAGE: OVERVIEW (ULTIMATE VERSION) -->
+                <!-- PAGE: OVERVIEW -->
                 <div class="page active" id="overviewPage">
                     <!-- HERO BANNER -->
                     <div class="hero-banner">
@@ -1754,6 +1801,9 @@
         const PASSWORD = 'trader2025';
         const SHEET_API = 'https://sheetdb.io/api/v1/eltwz49i4x169';
         const MONTHLY_TARGET = 40000;
+        const STARTING_BALANCE = 50000;
+        const MAX_DRAWDOWN = 2500;
+        const SAFETY_NET = 52600;
 
         let allData = [];
         let charts = {};
@@ -2501,6 +2551,103 @@
             });
         }
 
+        // RISK MONITOR - FIXED VERSION
+        function updateRiskMonitor() {
+            const grid = document.getElementById('riskMonitorGrid');
+            grid.innerHTML = '';
+
+            const accountData = groupByAccount(allData);
+            let accountsAtRisk = 0;
+            let accountsWarning = 0;
+            
+            for (let i = 1; i <= 20; i++) {
+                const acc = accountData[i];
+                const currentBalance = STARTING_BALANCE + acc.pnl;
+                const highestBalance = acc.highestBalance || STARTING_BALANCE;
+                
+                // Calculate fail line based on rules
+                let failLine;
+                if (highestBalance >= SAFETY_NET) {
+                    // Safety net reached - fail line is locked at $50,100
+                    failLine = STARTING_BALANCE + (SAFETY_NET - STARTING_BALANCE) - MAX_DRAWDOWN;
+                } else {
+                    // Before safety net - fail line trails highest balance
+                    failLine = highestBalance - MAX_DRAWDOWN;
+                }
+                
+                const cushion = currentBalance - failLine;
+                const cushionPercent = (cushion / MAX_DRAWDOWN) * 100;
+                
+                let riskLevel = 'safe';
+                let riskClass = '';
+                let badgeClass = 'badge-active';
+                let badgeText = 'SAFE';
+                
+                if (cushion <= 0) {
+                    riskLevel = 'danger';
+                    riskClass = 'at-risk';
+                    badgeClass = 'badge-danger';
+                    badgeText = 'AT RISK';
+                    accountsAtRisk++;
+                } else if (cushion <= 500) {
+                    riskLevel = 'warning';
+                    riskClass = 'warning';
+                    badgeClass = 'badge-warning';
+                    badgeText = 'WARNING';
+                    accountsWarning++;
+                }
+                
+                const card = document.createElement('div');
+                card.className = `account-card ${riskClass}`;
+                
+                card.innerHTML = `
+                    <div class="account-header">
+                        <div class="account-number">PA #${i}</div>
+                        <span class="account-badge ${badgeClass}">${badgeText}</span>
+                    </div>
+                    <div class="account-progress">
+                        <div class="progress-header">
+                            <span>Balance: ${formatCurrency(currentBalance)}</span>
+                            <span>${Math.round(cushionPercent)}% Cushion</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill ${riskLevel === 'danger' ? 'danger' : ''}" style="width: ${Math.max(0, Math.min(100, cushionPercent))}%"></div>
+                        </div>
+                    </div>
+                    <div class="account-stats">
+                        <div class="account-stat">
+                            <span class="account-stat-label">Current P&L</span>
+                            <span class="account-stat-value" style="color: ${acc.pnl >= 0 ? 'var(--success)' : 'var(--danger)'}">${formatCurrency(acc.pnl)}</span>
+                        </div>
+                        <div class="account-stat">
+                            <span class="account-stat-label">Fail Line</span>
+                            <span class="account-stat-value">${formatCurrency(failLine)}</span>
+                        </div>
+                        <div class="account-stat">
+                            <span class="account-stat-label">Cushion</span>
+                            <span class="account-stat-value" style="color: ${riskLevel === 'danger' ? 'var(--danger)' : riskLevel === 'warning' ? 'var(--warning)' : 'var(--success)'}">${formatCurrency(cushion)}</span>
+                        </div>
+                        <div class="account-stat">
+                            <span class="account-stat-label">Highest Balance</span>
+                            <span class="account-stat-value">${formatCurrency(highestBalance)}</span>
+                        </div>
+                    </div>
+                    <div class="risk-info ${riskLevel}">
+                        ${riskLevel === 'danger' 
+                            ? '⚠️ CRITICAL: Account at or below fail line!' 
+                            : riskLevel === 'warning' 
+                            ? '⚠️ WARNING: Less than $500 from fail line' 
+                            : highestBalance >= SAFETY_NET 
+                            ? '✓ Safety net reached! Fail line locked at $50,100' 
+                            : `✓ Safe - ${formatCurrency(Math.abs(SAFETY_NET - highestBalance))} from safety net`}
+                    </div>
+                `;
+                grid.appendChild(card);
+            }
+            
+            debugMsg(`Risk Monitor: ${accountsAtRisk} at risk, ${accountsWarning} warning, ${20 - accountsAtRisk - accountsWarning} safe`, 'info');
+        }
+
         // FORM SUBMIT
         async function handleFormSubmit(e) {
             e.preventDefault();
@@ -2636,6 +2783,23 @@
             }
         }
 
+        // DELETE FUNCTIONS (placeholders - implement if needed)
+        function deleteByCycle() {
+            showAlert('Delete by Cycle feature coming soon', 'info');
+        }
+
+        function deleteByAccount() {
+            showAlert('Delete by Account feature coming soon', 'info');
+        }
+
+        function confirmDeleteAll() {
+            if (confirm('⚠️ Are you ABSOLUTELY SURE you want to delete ALL data? This cannot be undone!')) {
+                if (confirm('⚠️ FINAL WARNING: This will permanently delete everything. Continue?')) {
+                    showAlert('Delete All feature coming soon', 'info');
+                }
+            }
+        }
+
         // EXPORT CSV
         function exportCSV() {
             if (allData.length === 0) {
@@ -2733,11 +2897,22 @@
                 const trades = data.filter(t => t.account == i);
                 const pnl = trades.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
                 const wins = trades.filter(t => parseFloat(t.pnl || 0) > 0).length;
+                
+                // Calculate highest balance by sorting trades chronologically and tracking max
+                let runningBalance = STARTING_BALANCE;
+                let highestBalance = STARTING_BALANCE;
+                
+                trades.sort((a, b) => new Date(a.trade_date) - new Date(b.trade_date)).forEach(t => {
+                    runningBalance += parseFloat(t.pnl || 0);
+                    highestBalance = Math.max(highestBalance, runningBalance);
+                });
+                
                 grouped[i] = {
                     pnl,
                     trades: trades.length,
                     winRate: trades.length > 0 ? (wins / trades.length) * 100 : 0,
-                    progress: Math.min((pnl / 2000) * 100, 100)
+                    progress: Math.min((pnl / 2000) * 100, 100),
+                    highestBalance
                 };
             }
             return grouped;
