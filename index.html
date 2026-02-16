@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prop Farm Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <style>
         * {
@@ -34,13 +34,14 @@
         }
 
         body {
-            font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-secondary);
             color: var(--text-primary);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
         }
 
+        /* Keep all previous CSS styles from the original... */
         /* LOGIN */
         .login-screen {
             position: fixed;
@@ -133,6 +134,12 @@
         .btn-primary:hover {
             transform: translateY(-1px);
             box-shadow: 0 10px 20px -5px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .login-error {
@@ -343,6 +350,7 @@
         .metric-card:hover {
             border-color: var(--border-hover);
             box-shadow: var(--shadow);
+            transform: translateY(-2px);
         }
 
         .metric-header {
@@ -376,7 +384,7 @@
         .metric-value {
             font-size: 2.25rem;
             font-weight: 800;
-            font-family: 'Geist Mono', monospace;
+            font-family: 'JetBrains Mono', monospace;
             margin-bottom: 0.5rem;
         }
 
@@ -416,29 +424,7 @@
             font-weight: 700;
         }
 
-        .chart-filters {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .filter-btn {
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--border);
-            background: var(--bg-secondary);
-            border-radius: 8px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .filter-btn.active {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
-
-        /* TEMPLATES GRID */
+        /* TEMPLATES & ACCOUNTS - Keep all existing styles */
         .templates-section {
             margin-bottom: 3rem;
         }
@@ -453,11 +439,6 @@
         .section-title {
             font-size: 1.5rem;
             font-weight: 800;
-        }
-
-        .section-actions {
-            display: flex;
-            gap: 0.75rem;
         }
 
         .templates-grid {
@@ -528,7 +509,7 @@
         .template-stat-value {
             font-size: 1.5rem;
             font-weight: 800;
-            font-family: 'Geist Mono', monospace;
+            font-family: 'JetBrains Mono', monospace;
             margin-bottom: 0.25rem;
         }
 
@@ -559,10 +540,10 @@
 
         .template-detail-value {
             font-weight: 700;
-            font-family: 'Geist Mono', monospace;
+            font-family: 'JetBrains Mono', monospace;
         }
 
-        /* ACCOUNTS GRID */
+        /* ACCOUNTS */
         .accounts-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -580,6 +561,7 @@
         .account-card:hover {
             border-color: var(--accent);
             box-shadow: var(--shadow);
+            transform: translateY(-2px);
         }
 
         .account-header {
@@ -592,7 +574,7 @@
         .account-number {
             font-size: 1.125rem;
             font-weight: 800;
-            font-family: 'Geist Mono', monospace;
+            font-family: 'JetBrains Mono', monospace;
         }
 
         .account-badge {
@@ -661,7 +643,7 @@
         .account-stat-value {
             font-size: 1.125rem;
             font-weight: 800;
-            font-family: 'Geist Mono', monospace;
+            font-family: 'JetBrains Mono', monospace;
         }
 
         /* FORM */
@@ -722,6 +704,18 @@
 
         .alert.show {
             display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .alert-success {
@@ -734,6 +728,12 @@
             background: rgba(239, 68, 68, 0.1);
             color: var(--danger);
             border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(59, 130, 246, 0.3);
         }
 
         /* TABLE */
@@ -784,6 +784,89 @@
             background: var(--bg-secondary);
         }
 
+        /* LOADING */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* PAGE CONTENT */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* NEW: Statistics Cards */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-mini-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .stat-mini-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-mini-label {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        /* NEW: Filter Pills */
+        .filter-pills {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-pill {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-pill:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .filter-pill.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
         /* RESPONSIVE */
         @media (max-width: 1024px) {
             .chart-grid {
@@ -828,41 +911,14 @@
                 padding: 1rem;
             }
 
-            .top-bar-actions {
-                gap: 0.5rem;
-            }
-
             .form-grid {
                 grid-template-columns: 1fr;
             }
         }
-
-        /* LOADING */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* PAGE CONTENT */
-        .page {
-            display: none;
-        }
-
-        .page.active {
-            display: block;
-        }
     </style>
 </head>
 <body>
+    <!-- Keep all HTML structure from original, just update the script section -->
     <!-- LOGIN -->
     <div class="login-screen" id="loginScreen">
         <div class="login-box">
@@ -872,7 +928,7 @@
             <form id="loginForm">
                 <div class="form-group">
                     <label class="form-label">Password</label>
-                    <input type="password" class="form-input" id="passwordInput" placeholder="Enter password" required>
+                    <input type="password" class="form-input" id="passwordInput" placeholder="Enter password" required autocomplete="current-password">
                 </div>
                 <button type="submit" class="btn btn-primary">Access Dashboard</button>
             </form>
@@ -938,6 +994,9 @@
                     <button class="btn btn-secondary btn-icon" onclick="refreshData()" title="Refresh">
                         ↻
                     </button>
+                    <button class="btn btn-secondary btn-icon" onclick="testAPI()" title="Test API">
+                        🔧
+                    </button>
                 </div>
             </div>
 
@@ -990,16 +1049,31 @@
                         </div>
                     </div>
 
+                    <!-- Mini Stats -->
+                    <div class="stats-row">
+                        <div class="stat-mini-card">
+                            <div class="stat-mini-value" id="bestDay">$0</div>
+                            <div class="stat-mini-label">Best Day</div>
+                        </div>
+                        <div class="stat-mini-card">
+                            <div class="stat-mini-value" id="worstDay">$0</div>
+                            <div class="stat-mini-label">Worst Day</div>
+                        </div>
+                        <div class="stat-mini-card">
+                            <div class="stat-mini-value" id="avgTrade">$0</div>
+                            <div class="stat-mini-label">Avg Trade</div>
+                        </div>
+                        <div class="stat-mini-card">
+                            <div class="stat-mini-value" id="profitFactor">0.00</div>
+                            <div class="stat-mini-label">Profit Factor</div>
+                        </div>
+                    </div>
+
                     <!-- Charts -->
                     <div class="chart-grid">
                         <div class="chart-card">
                             <div class="chart-header">
                                 <h3 class="chart-title">Portfolio Growth</h3>
-                                <div class="chart-filters">
-                                    <button class="filter-btn active">7D</button>
-                                    <button class="filter-btn">30D</button>
-                                    <button class="filter-btn">All</button>
-                                </div>
                             </div>
                             <canvas id="growthChart" height="300"></canvas>
                         </div>
@@ -1019,7 +1093,7 @@
                                 <button class="btn btn-secondary" onclick="navigateTo('templates')">View All</button>
                             </div>
                         </div>
-                        <div id="topTemplatesGrid"></div>
+                        <div class="templates-grid" id="topTemplatesGrid"></div>
                     </div>
                 </div>
 
@@ -1045,9 +1119,18 @@
                     <div class="section-header">
                         <h2 class="section-title">20 PA Accounts</h2>
                         <div class="section-actions">
-                            <button class="btn btn-secondary">Export CSV</button>
+                            <button class="btn btn-secondary" onclick="exportCSV()">Export CSV</button>
                         </div>
                     </div>
+
+                    <!-- Filter Pills -->
+                    <div class="filter-pills">
+                        <div class="filter-pill active" onclick="filterAccounts('all')">All Accounts</div>
+                        <div class="filter-pill" onclick="filterAccounts('active')">Active Only</div>
+                        <div class="filter-pill" onclick="filterAccounts('goal')">Goal Reached</div>
+                        <div class="filter-pill" onclick="filterAccounts('profitable')">Profitable</div>
+                    </div>
+
                     <div class="accounts-grid" id="accountsGrid"></div>
                 </div>
 
@@ -1060,7 +1143,7 @@
                             <h3 class="chart-title">Template Comparison</h3>
                         </div>
                         <div class="table-container">
-                            <table id="comparisonTable">
+                            <table>
                                 <thead>
                                     <tr>
                                         <th>Template</th>
@@ -1070,6 +1153,7 @@
                                         <th>Avg Win</th>
                                         <th>Avg Loss</th>
                                         <th>Best Trade</th>
+                                        <th>Profit Factor</th>
                                     </tr>
                                 </thead>
                                 <tbody id="comparisonTableBody"></tbody>
@@ -1086,11 +1170,11 @@
                         <form id="tradeForm">
                             <div class="form-grid">
                                 <div class="form-group">
-                                    <label class="form-label">PA Account</label>
+                                    <label class="form-label">PA Account *</label>
                                     <select class="form-select" id="account" required></select>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Market Condition</label>
+                                    <label class="form-label">Market Condition *</label>
                                     <select class="form-select" id="marketCondition" required>
                                         <option value="">Select condition</option>
                                         <option value="High Impact News">High Impact News</option>
@@ -1098,7 +1182,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Risk Template</label>
+                                    <label class="form-label">Risk Template *</label>
                                     <select class="form-select" id="riskTemplate" required>
                                         <option value="">Select risk level</option>
                                         <option value="100">$100 (1 contract)</option>
@@ -1110,16 +1194,16 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Trade Date</label>
+                                    <label class="form-label">Trade Date *</label>
                                     <input type="date" class="form-input" id="tradeDate" required>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">P&L ($)</label>
+                                    <label class="form-label">P&L ($) *</label>
                                     <input type="number" step="0.01" class="form-input" id="pnl" placeholder="0.00" required>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Contracts</label>
-                                    <input type="number" class="form-input" id="contracts" readonly>
+                                    <label class="form-label">Contracts (auto-filled)</label>
+                                    <input type="number" class="form-input" id="contracts" readonly style="background: var(--bg-secondary);">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -1127,11 +1211,11 @@
                                 <textarea class="form-input form-textarea" id="notes" placeholder="Entry reason, market conditions, lessons learned..."></textarea>
                             </div>
                             <div class="form-footer">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" id="submitBtn">
                                     <span id="submitText">Submit Trade</span>
                                     <span id="submitLoading" class="loading" style="display: none;"></span>
                                 </button>
-                                <button type="button" class="btn btn-secondary" onclick="document.getElementById('tradeForm').reset()">Clear</button>
+                                <button type="button" class="btn btn-secondary" onclick="document.getElementById('tradeForm').reset(); setTodayDate();">Clear</button>
                             </div>
                         </form>
                     </div>
@@ -1143,7 +1227,7 @@
                     
                     <div class="table-card">
                         <div class="table-header">
-                            <h3 class="chart-title">All Trades</h3>
+                            <h3 class="chart-title">All Trades (Last 100)</h3>
                         </div>
                         <div class="table-container">
                             <table>
@@ -1185,6 +1269,7 @@
 
         let allData = [];
         let charts = {};
+        let accountFilter = 'all';
 
         // LOGIN
         if (sessionStorage.getItem('farm_auth') === 'true') showDashboard();
@@ -1216,6 +1301,7 @@
             displayRandomQuote();
             populateAccountDropdown();
             setupEventListeners();
+            setTodayDate();
             loadDashboardData();
         }
 
@@ -1231,6 +1317,10 @@
             for (let i = 1; i <= 20; i++) {
                 select.innerHTML += `<option value="${i}">PA Account #${i}</option>`;
             }
+        }
+
+        function setTodayDate() {
+            document.getElementById('tradeDate').valueAsDate = new Date();
         }
 
         function setupEventListeners() {
@@ -1252,14 +1342,13 @@
                 const risk = parseInt(e.target.value);
                 if (risk) {
                     document.getElementById('contracts').value = risk / 100;
+                } else {
+                    document.getElementById('contracts').value = '';
                 }
             });
 
             // Form submit
             document.getElementById('tradeForm').addEventListener('submit', handleFormSubmit);
-
-            // Set today's date
-            document.getElementById('tradeDate').valueAsDate = new Date();
         }
 
         function navigateTo(page) {
@@ -1288,16 +1377,44 @@
             }
         }
 
+        // TEST API
+        async function testAPI() {
+            showAlert('Testing API connection...', 'info');
+            try {
+                console.log('Fetching from:', SHEET_API);
+                const response = await fetch(SHEET_API);
+                console.log('Response status:', response.status);
+                const data = await response.json();
+                console.log('Data received:', data);
+                showAlert(`✓ API works! Found ${data.length} trades`, 'success');
+            } catch (error) {
+                console.error('API Error:', error);
+                showAlert(`✗ API Error: ${error.message}`, 'error');
+            }
+        }
+
         // DATA
         async function loadDashboardData() {
             try {
+                console.log('Loading data from:', SHEET_API);
                 const response = await fetch(SHEET_API);
-                if (!response.ok) throw new Error('Failed');
-                allData = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('Data loaded:', data.length, 'trades');
+                
+                allData = data || [];
                 updateAllViews();
+                
+                if (allData.length === 0) {
+                    showAlert('No trades found. Add your first trade!', 'info');
+                }
             } catch (error) {
-                console.error('Error:', error);
-                showAlert('Failed to load data', 'error');
+                console.error('Load error:', error);
+                showAlert(`Failed to load data: ${error.message}`, 'error');
                 allData = [];
                 updateAllViews();
             }
@@ -1305,6 +1422,7 @@
 
         function updateAllViews() {
             updateMetrics();
+            updateMiniStats();
             updateCharts();
             updateTemplates();
             updateAccounts();
@@ -1332,7 +1450,52 @@
             document.getElementById('totalTrades').textContent = totalTrades;
         }
 
+        function updateMiniStats() {
+            if (allData.length === 0) {
+                document.getElementById('bestDay').textContent = '$0';
+                document.getElementById('worstDay').textContent = '$0';
+                document.getElementById('avgTrade').textContent = '$0';
+                document.getElementById('profitFactor').textContent = '0.00';
+                return;
+            }
+
+            // Best/Worst Day
+            const dailyPnL = {};
+            allData.forEach(t => {
+                const date = t.trade_date;
+                dailyPnL[date] = (dailyPnL[date] || 0) + parseFloat(t.pnl || 0);
+            });
+            const days = Object.values(dailyPnL);
+            const bestDay = days.length > 0 ? Math.max(...days) : 0;
+            const worstDay = days.length > 0 ? Math.min(...days) : 0;
+
+            // Avg Trade
+            const totalPnL = allData.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
+            const avgTrade = allData.length > 0 ? totalPnL / allData.length : 0;
+
+            // Profit Factor
+            const totalWins = allData.filter(t => parseFloat(t.pnl || 0) > 0).reduce((sum, t) => sum + parseFloat(t.pnl), 0);
+            const totalLosses = Math.abs(allData.filter(t => parseFloat(t.pnl || 0) < 0).reduce((sum, t) => sum + parseFloat(t.pnl), 0));
+            const profitFactor = totalLosses > 0 ? totalWins / totalLosses : 0;
+
+            document.getElementById('bestDay').textContent = formatCurrency(bestDay);
+            document.getElementById('worstDay').textContent = formatCurrency(worstDay);
+            document.getElementById('avgTrade').textContent = formatCurrency(avgTrade);
+            document.getElementById('profitFactor').textContent = profitFactor.toFixed(2);
+        }
+
         function updateCharts() {
+            if (allData.length === 0) {
+                // Show empty state
+                const growthCtx = document.getElementById('growthChart');
+                const winRateCtx = document.getElementById('winRateChart');
+                
+                if (charts.growth) charts.growth.destroy();
+                if (charts.winRate) charts.winRate.destroy();
+                
+                return;
+            }
+
             // Growth Chart
             const dates = [...new Set(allData.map(t => t.trade_date))].sort();
             const cumulative = dates.map(date => {
@@ -1374,7 +1537,7 @@
 
             // Win Rate Chart
             const templateData = groupByTemplate(allData);
-            const templateNames = Object.keys(templateData);
+            const templateNames = Object.keys(templateData).filter(name => templateData[name].trades > 0);
             const winRates = templateNames.map(name => templateData[name].winRate);
 
             const winRateCtx = document.getElementById('winRateChart');
@@ -1421,11 +1584,18 @@
             // Top templates for overview
             const topGrid = document.getElementById('topTemplatesGrid');
             topGrid.innerHTML = '';
-            topGrid.className = 'templates-grid';
-            const sorted = Object.entries(templates).sort((a, b) => b[1].totalPnL - a[1].totalPnL).slice(0, 3);
-            sorted.forEach(([name, data]) => {
-                topGrid.appendChild(createTemplateCard(name, data));
-            });
+            const sorted = Object.entries(templates)
+                .filter(([name, data]) => data.trades > 0)
+                .sort((a, b) => b[1].totalPnL - a[1].totalPnL)
+                .slice(0, 3);
+            
+            if (sorted.length === 0) {
+                topGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary);">No trades yet. Add your first trade!</p>';
+            } else {
+                sorted.forEach(([name, data]) => {
+                    topGrid.appendChild(createTemplateCard(name, data));
+                });
+            }
         }
 
         function createTemplateCard(name, data) {
@@ -1483,6 +1653,12 @@
             
             for (let i = 1; i <= 20; i++) {
                 const acc = accountData[i];
+                
+                // Apply filter
+                if (accountFilter === 'active' && acc.trades === 0) continue;
+                if (accountFilter === 'goal' && acc.pnl < 2000) continue;
+                if (accountFilter === 'profitable' && acc.pnl <= 0) continue;
+                
                 const card = document.createElement('div');
                 card.className = 'account-card';
                 
@@ -1509,7 +1685,7 @@
                         </div>
                         <div class="account-stat">
                             <span class="account-stat-label">Win Rate</span>
-                            <span class="account-stat-value">${Math.round(acc.winRate)}%</span>
+                            <span class="account-stat-value">${acc.trades > 0 ? Math.round(acc.winRate) : 0}%</span>
                         </div>
                         <div class="account-stat">
                             <span class="account-stat-label">To Goal</span>
@@ -1525,14 +1701,32 @@
             }
         }
 
+        function filterAccounts(filter) {
+            accountFilter = filter;
+            document.querySelectorAll('.filter-pill').forEach(pill => pill.classList.remove('active'));
+            event.target.classList.add('active');
+            updateAccounts();
+        }
+
         function updateAnalytics() {
             const tbody = document.getElementById('comparisonTableBody');
             tbody.innerHTML = '';
 
             const templates = groupByTemplate(allData);
-            const sorted = Object.entries(templates).sort((a, b) => b[1].totalPnL - a[1].totalPnL);
+            const sorted = Object.entries(templates)
+                .filter(([name, data]) => data.trades > 0)
+                .sort((a, b) => b[1].totalPnL - a[1].totalPnL);
+
+            if (sorted.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: var(--text-secondary); padding: 2rem;">No trades yet</td></tr>';
+                return;
+            }
 
             sorted.forEach(([name, data]) => {
+                const totalWins = data.avgWin * (data.trades * data.winRate / 100);
+                const totalLosses = Math.abs(data.avgLoss * (data.trades * (100 - data.winRate) / 100));
+                const profitFactor = totalLosses > 0 ? (totalWins / totalLosses).toFixed(2) : '0.00';
+                
                 const row = tbody.insertRow();
                 row.innerHTML = `
                     <td><strong>${name}</strong></td>
@@ -1542,6 +1736,7 @@
                     <td>${formatCurrency(data.avgWin)}</td>
                     <td>${formatCurrency(data.avgLoss)}</td>
                     <td>${formatCurrency(data.bestTrade)}</td>
+                    <td>${profitFactor}</td>
                 `;
             });
         }
@@ -1549,6 +1744,11 @@
         function updateTradeLog() {
             const tbody = document.getElementById('tradeLogBody');
             tbody.innerHTML = '';
+
+            if (allData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-secondary); padding: 2rem;">No trades yet</td></tr>';
+                return;
+            }
 
             const sorted = [...allData].sort((a, b) => new Date(b.trade_date) - new Date(a.trade_date));
 
@@ -1567,11 +1767,11 @@
             });
         }
 
-        // FORM
+        // FORM SUBMIT
         async function handleFormSubmit(e) {
             e.preventDefault();
 
-            const btn = e.target.querySelector('.btn-primary');
+            const btn = document.getElementById('submitBtn');
             btn.disabled = true;
             document.getElementById('submitText').style.display = 'none';
             document.getElementById('submitLoading').style.display = 'inline-block';
@@ -1587,31 +1787,77 @@
                 timestamp: new Date().toISOString()
             };
 
+            console.log('Submitting trade:', formData);
+
             try {
                 const response = await fetch(SHEET_API, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
                     body: JSON.stringify({ data: [formData] })
                 });
 
+                console.log('Response status:', response.status);
+                
                 if (response.ok) {
+                    const result = await response.json();
+                    console.log('Success:', result);
                     showAlert('✓ Trade added successfully!', 'success');
                     document.getElementById('tradeForm').reset();
-                    document.getElementById('tradeDate').valueAsDate = new Date();
+                    setTodayDate();
                     setTimeout(() => {
                         loadDashboardData();
                         navigateTo('overview');
                     }, 1000);
                 } else {
-                    throw new Error('Failed');
+                    const errorText = await response.text();
+                    console.error('Error response:', errorText);
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
                 }
             } catch (error) {
-                showAlert('✗ Failed to submit trade', 'error');
+                console.error('Submit error:', error);
+                showAlert(`✗ Failed to submit: ${error.message}`, 'error');
             } finally {
                 btn.disabled = false;
                 document.getElementById('submitText').style.display = 'inline';
                 document.getElementById('submitLoading').style.display = 'none';
             }
+        }
+
+        // EXPORT CSV
+        function exportCSV() {
+            if (allData.length === 0) {
+                showAlert('No data to export', 'error');
+                return;
+            }
+
+            const headers = ['Date', 'Account', 'Market Condition', 'Risk Template', 'P&L', 'Contracts', 'Notes'];
+            const rows = allData.map(t => [
+                t.trade_date,
+                t.account,
+                t.market_condition,
+                t.risk_template,
+                t.pnl,
+                t.contracts,
+                t.notes || ''
+            ]);
+
+            let csv = headers.join(',') + '\n';
+            rows.forEach(row => {
+                csv += row.map(cell => `"${cell}"`).join(',') + '\n';
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `prop_farm_trades_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            showAlert('✓ CSV exported successfully!', 'success');
         }
 
         // UTILITIES
@@ -1670,7 +1916,8 @@
         function getTemplateDesc(name) {
             if (name === 'High Impact News') return 'High volatility news events';
             if (name === 'No Impact') return 'Low volatility sessions';
-            return name + ' risk, 1:1 reward, ' + (parseInt(name.replace('$', '').replace(' Risk', '')) / 100) + ' contract(s)';
+            const risk = parseInt(name.replace('$', '').replace(' Risk', ''));
+            return `$${risk} risk, 1:1 reward, ${risk/100} contract(s)`;
         }
 
         function formatCurrency(amount) {
@@ -1691,8 +1938,8 @@
         }
 
         function refreshData() {
+            showAlert('Refreshing data...', 'info');
             loadDashboardData();
-            showAlert('✓ Data refreshed', 'success');
         }
     </script>
 </body>
