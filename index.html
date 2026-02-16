@@ -1047,6 +1047,14 @@
                             <div class="metric-value" id="totalTrades">0</div>
                             <div class="metric-change neutral">Across 20 accounts</div>
                         </div>
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-label">Win Streak</span>
+                                <div class="metric-icon orange">🔥</div>
+                            </div>
+                            <div class="metric-value" id="winStreak">0</div>
+                            <div class="metric-change neutral" id="streakInfo">No active streak</div>
+                        </div>
                     </div>
 
                     <!-- Mini Stats -->
@@ -1066,6 +1074,10 @@
                         <div class="stat-mini-card">
                             <div class="stat-mini-value" id="profitFactor">0.00</div>
                             <div class="stat-mini-label">Profit Factor</div>
+                        </div>
+                        <div class="stat-mini-card">
+                            <div class="stat-mini-value" id="longestStreak">0</div>
+                            <div class="stat-mini-label">Longest Win Streak</div>
                         </div>
                     </div>
 
@@ -1448,6 +1460,17 @@
             document.getElementById('winStats').textContent = `${wins} wins / ${totalTrades} trades`;
             
             document.getElementById('totalTrades').textContent = totalTrades;
+            
+            // Calculate and display win streak
+            const streak = calculateStreak(allData);
+            document.getElementById('winStreak').textContent = streak.current;
+            if (streak.current > 0) {
+                document.getElementById('streakInfo').textContent = `🔥 ${streak.current} wins in a row!`;
+                document.getElementById('streakInfo').className = 'metric-change positive';
+            } else {
+                document.getElementById('streakInfo').textContent = 'No active streak';
+                document.getElementById('streakInfo').className = 'metric-change neutral';
+            }
         }
 
         function updateMiniStats() {
@@ -1456,6 +1479,7 @@
                 document.getElementById('worstDay').textContent = '$0';
                 document.getElementById('avgTrade').textContent = '$0';
                 document.getElementById('profitFactor').textContent = '0.00';
+                document.getElementById('longestStreak').textContent = '0';
                 return;
             }
 
@@ -1477,11 +1501,15 @@
             const totalWins = allData.filter(t => parseFloat(t.pnl || 0) > 0).reduce((sum, t) => sum + parseFloat(t.pnl), 0);
             const totalLosses = Math.abs(allData.filter(t => parseFloat(t.pnl || 0) < 0).reduce((sum, t) => sum + parseFloat(t.pnl), 0));
             const profitFactor = totalLosses > 0 ? totalWins / totalLosses : 0;
+            
+            // Longest Streak
+            const streak = calculateStreak(allData);
 
             document.getElementById('bestDay').textContent = formatCurrency(bestDay);
             document.getElementById('worstDay').textContent = formatCurrency(worstDay);
             document.getElementById('avgTrade').textContent = formatCurrency(avgTrade);
             document.getElementById('profitFactor').textContent = profitFactor.toFixed(2);
+            document.getElementById('longestStreak').textContent = streak.longest;
         }
 
         function updateCharts() {
@@ -1767,7 +1795,7 @@
             });
         }
 
-        // FORM SUBMIT
+        // FORM SUBMIT - FIXED FOR SHEETDB
         async function handleFormSubmit(e) {
             e.preventDefault();
 
@@ -1776,14 +1804,15 @@
             document.getElementById('submitText').style.display = 'none';
             document.getElementById('submitLoading').style.display = 'inline-block';
 
+            // ✅ FIX: SheetDB wants strings, not numbers, and NO data wrapper
             const formData = {
                 account: document.getElementById('account').value,
                 market_condition: document.getElementById('marketCondition').value,
                 risk_template: document.getElementById('riskTemplate').value,
                 trade_date: document.getElementById('tradeDate').value,
-                pnl: parseFloat(document.getElementById('pnl').value),
-                contracts: parseInt(document.getElementById('contracts').value),
-                notes: document.getElementById('notes').value,
+                pnl: document.getElementById('pnl').value,  // String, not parseFloat
+                contracts: document.getElementById('contracts').value,  // String, not parseInt
+                notes: document.getElementById('notes').value || '',
                 timestamp: new Date().toISOString()
             };
 
@@ -1793,10 +1822,9 @@
                 const response = await fetch(SHEET_API, {
                     method: 'POST',
                     headers: { 
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ data: [formData] })
+                    body: JSON.stringify(formData)  // ✅ FIX: Direct object, not wrapped
                 });
 
                 console.log('Response status:', response.status);
@@ -1824,6 +1852,64 @@
                 document.getElementById('submitText').style.display = 'inline';
                 document.getElementById('submitLoading').style.display = 'none';
             }
+        }
+
+
+        // WIN STREAK CALCULATION
+        function calculateStreak(data) {
+            if (data.length === 0) return { current: 0, longest: 0 };
+            
+            // Sort by date descending (newest first)
+            const sorted = [...data].sort((a, b) => new Date(b.trade_date) - new Date(a.trade_date));
+            
+            let currentStreak = 0;
+            let longestStreak = 0;
+            let tempStreak = 0;
+            
+            // Calculate current streak (from most recent trade)
+            for (let i = 0; i < sorted.length; i++) {
+                const pnl = parseFloat(sorted[i].pnl || 0);
+                const isWin = pnl > 0;
+                
+                if (i === 0) {
+                    if (isWin) {
+                        tempStreak = 1;
+                    } else {
+                        break;  // Current streak is 0 if last trade was loss
+                    }
+                } else {
+                    if (isWin) {
+                        tempStreak++;
+                    } else {
+                        break;  // Streak broken
+                    }
+                }
+            }
+            currentStreak = tempStreak;
+            
+            // Calculate longest streak in history
+            let currentRun = 0;
+            let isWinStreak = false;
+            
+            for (let i = sorted.length - 1; i >= 0; i--) {
+                const pnl = parseFloat(sorted[i].pnl || 0);
+                const isWin = pnl > 0;
+                
+                if (isWin) {
+                    if (!isWinStreak) {
+                        currentRun = 1;
+                        isWinStreak = true;
+                    } else {
+                        currentRun++;
+                    }
+                    longestStreak = Math.max(longestStreak, currentRun);
+                } else {
+                    currentRun = 0;
+                    isWinStreak = false;
+                }
+            }
+            
+            return { current: currentStreak, longest: longestStreak };
         }
 
         // EXPORT CSV
