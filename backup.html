@@ -2128,10 +2128,15 @@
         const USERS = {
             'trader2025': {
                 sheetAPI: 'https://sheetdb.io/api/v1/eltwz49i4x169',
-                name: 'Trader One',
-                accountsOwned: 20
+                name: 'demo',
+                accountsOwned: 1
             },
             'trader2026': {
+                sheetAPI: 'https://sheetdb.io/api/v1/3if5pdgxfo1p2',
+                name: 'Trader Two',
+                accountsOwned: 20
+            },
+            'demo': {
                 sheetAPI: 'https://sheetdb.io/api/v1/3if5pdgxfo1p2',
                 name: 'Trader Two',
                 accountsOwned: 20
@@ -3141,19 +3146,25 @@
         }
 
         function updatePayoutSummary(totalPnL) {
+            // Calculate goal based on number of accounts owned
+            const accountsOwned = CURRENT_USER.accountsOwned || 20;
+            const firstPayoutGoalAdjusted = 4600 * accountsOwned;
+            const firstPayoutMinAdjusted = 4600 * accountsOwned;
+            
             // First Payout Progress
-            const firstPayoutProg = Math.min((totalPnL / FIRST_PAYOUT_GOAL) * 100, 100);
+            const firstPayoutProg = Math.min((totalPnL / firstPayoutGoalAdjusted) * 100, 100);
             document.getElementById('firstPayoutProgress').textContent = Math.round(firstPayoutProg) + '%';
             
             let status, statusClass;
-            if (totalPnL >= FIRST_PAYOUT_GOAL) {
-                status = `✓ Qualified! Full $2,000 withdrawal unlocked`;
+            if (totalPnL >= firstPayoutGoalAdjusted) {
+                const perAccount = accountsOwned > 1 ? ` ($${(totalPnL / accountsOwned).toFixed(0)} per account)` : '';
+                status = `✓ Qualified! Full withdrawal unlocked${perAccount}`;
                 statusClass = 'positive';
-            } else if (totalPnL >= FIRST_PAYOUT_MIN) {
-                status = `✓ Min qualified. ${formatCurrency(FIRST_PAYOUT_GOAL - totalPnL)} to full payout`;
+            } else if (totalPnL >= firstPayoutMinAdjusted) {
+                status = `✓ Min qualified. ${formatCurrency(firstPayoutGoalAdjusted - totalPnL)} to full payout`;
                 statusClass = 'positive';
             } else {
-                status = `${formatCurrency(FIRST_PAYOUT_MIN - totalPnL)} to qualify`;
+                status = `${formatCurrency(firstPayoutMinAdjusted - totalPnL)} to qualify (${accountsOwned} account${accountsOwned > 1 ? 's' : ''})`;
                 statusClass = 'neutral';
             }
             document.getElementById('firstPayoutStatus').textContent = status;
@@ -4067,13 +4078,17 @@
                 
                debugMsg(`✓ Deleted ${deleteCount} of ${totalTrades} trades`, 'success');
                 
-                // Also delete all payouts for this user
+                // Also delete all payouts and clear trade log for this user
                 try {
                     const storageKey = `prop_farm_payouts_${CURRENT_USER.name}`;
                     localStorage.removeItem(storageKey);
                     payoutData = [];
-                    debugMsg(`✓ Deleted all payout records`, 'success');
-                    showAlert(`✓ Successfully deleted ${deleteCount} trades and all payout records`, 'success');
+                    
+                    // Clear trade log display
+                    allData = [];
+                    
+                    debugMsg(`✓ Deleted all payout records and trade log`, 'success');
+                    showAlert(`✓ Successfully deleted ${deleteCount} trades, all payouts, and trade log`, 'success');
                 } catch (error) {
                     debugMsg(`✗ Error deleting payouts: ${error.message}`, 'error');
                     showAlert(`✓ Deleted ${deleteCount} trades (payout deletion failed)`, 'info');
