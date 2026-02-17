@@ -1308,12 +1308,16 @@
             </nav>
 
             <nav class="nav-section">
-                <div class="nav-title">Settings</div>
-                <div class="nav-item" onclick="logout()">
-                    <span class="nav-icon">🚪</span>
-                    <span>Logout</span>
-                </div>
-            </nav>
+    <div class="nav-title">Settings</div>
+    <div class="nav-item" data-page="settings">
+        <span class="nav-icon">⚙️</span>
+        <span>Settings</span>
+    </div>
+    <div class="nav-item" onclick="logout()">
+        <span class="nav-icon">🚪</span>
+        <span>Logout</span>
+    </div>
+</nav>
         </aside>
 
         <!-- MAIN CONTENT -->
@@ -1357,7 +1361,7 @@
                                 </div>
                                 <div class="hero-stat">
                                     <div class="hero-stat-value" id="heroAccounts">0/20</div>
-                                    <div class="hero-stat-label">Accounts at Goal</div>
+                                    <div class="hero-stat-label">Accounts at Goal / Total</div>
                                 </div>
                             </div>
                         </div>
@@ -1562,11 +1566,11 @@
                     <div class="metrics-grid" style="margin-bottom: 2rem;">
                         <div class="metric-card">
                             <div class="metric-header">
-                                <span class="metric-label">First Payout Progress</span>
+                                <span class="metric-label">Payout Progress</span>
                                 <div class="metric-icon blue">🎯</div>
                             </div>
                             <div class="metric-value" id="firstPayoutProgress">0%</div>
-                            <div class="metric-change neutral" id="firstPayoutStatus">Not yet qualified</div>
+                            <div class="metric-change neutral" id="firstPayoutStatus">No active accounts yet</div>
                         </div>
                         <div class="metric-card">
                             <div class="metric-header">
@@ -1596,10 +1600,12 @@
 
                     <!-- Farming Strategy Info -->
                     <div class="alert alert-info show" style="margin-bottom: 2rem;">
-                        <strong>🌾 The Farmer Mentality:</strong><br>
-                        Plant daily wins ($250-$300). Protect the field (stay out of red folder news). Stay patient (45 days first cycle). 
-                        Take the harvest when the account matures ($54,600 = full $2k payout). After first harvest, monthly cycles are easier (just $2k in 8-20 days).
-                    </div>
+    <strong>🌾 Active Accounts System:</strong><br>
+    • Payout goal based on <strong>active accounts only</strong> (accounts with trades)<br>
+    • Goal = Active accounts × $4,600<br>
+    • Example: 1 active = $4,600 | 5 active = $23,000<br>
+    • Set your total goal in <strong>Settings</strong> (1-100)
+</div>
 
                     <!-- Cycle Comparison Table -->
                     <div class="table-card">
@@ -2120,6 +2126,36 @@
                     </div>
                 </div>
             </div>
+            <div class="page" id="settingsPage">
+<h2 class="section-title" style="margin-bottom: 1rem;">⚙️ Settings</h2>
+<p style="color: var(--text-secondary); margin-bottom: 2rem;">Set your account goal (1-100)</p>
+<div class="metrics-grid" style="margin-bottom: 2rem;">
+<div class="metric-card"><div class="metric-header"><span class="metric-label">Your Goal</span><div class="metric-icon purple">🎯</div></div><div class="metric-value" id="settingsGoalDisplay">20</div><div class="metric-change neutral">Total target</div></div>
+<div class="metric-card"><div class="metric-header"><span class="metric-label">Active</span><div class="metric-icon blue">💼</div></div><div class="metric-value" id="settingsActiveDisplay">0</div><div class="metric-change neutral" id="settingsActiveList">No trades</div></div>
+<div class="metric-card"><div class="metric-header"><span class="metric-label">Payout Goal</span><div class="metric-icon green">💰</div></div><div class="metric-value" id="settingsPayoutGoal">$0</div><div class="metric-change neutral">Active × $4,600</div></div>
+</div>
+<div class="form-card">
+<h3 style="margin-bottom: 1rem;">Set Goal</h3>
+<div class="alert alert-info show" style="margin-bottom: 1rem;">Cycle Performance tracks ONLY active accounts (with trades)</div>
+<div class="form-grid">
+<div class="form-group"><label class="form-label">Total Account Goal</label>
+<select class="form-select" id="accountGoalSelect">
+<option value="1">1</option><option value="5">5</option><option value="10">10</option><option value="20" selected>20</option><option value="30">30</option><option value="40">40</option><option value="50">50</option><option value="60">60</option><option value="70">70</option><option value="80">80</option><option value="90">90</option><option value="100">100</option><option value="custom">Custom...</option>
+</select>
+<input type="number" class="form-input" id="customAccountGoal" placeholder="1-100" min="1" max="100" style="margin-top: 0.5rem; display: none;">
+</div></div>
+<div style="padding: 1rem; background: var(--bg-secondary); border-radius: 8px; margin: 1rem 0; font-size: 0.875rem;">
+<strong>Examples:</strong> 1 active = $4,600 | 5 = $23K | 10 = $46K | 20 = $92K
+</div>
+<div class="form-footer">
+<button class="btn btn-primary" onclick="saveAccountGoal()">💾 Save</button>
+<button class="btn btn-secondary" onclick="resetAccountGoal()">Reset</button>
+</div></div>
+<div class="table-card" style="margin-top: 2rem;">
+<div class="table-header"><h3 class="chart-title">Active Accounts</h3></div>
+<div class="table-container"><table><thead><tr><th>Account</th><th>P&L</th><th>Trades</th><th>Win %</th><th>Balance</th><th>Status</th></tr></thead>
+<tbody id="settingsActiveAccountsTable"></tbody></table></div></div>
+</div>
         </main>
     </div>
 
@@ -2164,6 +2200,58 @@
         let accountFilter = 'all';
         let debugLog = [];
         let payoutData = [];
+
+// ========================================
+// USER SETTINGS - ACCOUNT GOAL (1-100 accounts)
+// ========================================
+let userAccountGoal = 20;
+
+function loadAccountGoal() {
+    if (!CURRENT_USER) return;
+    const storageKey = `prop_farm_account_goal_${CURRENT_USER.name}`;
+    const stored = localStorage.getItem(storageKey);
+    if (stored) {
+        userAccountGoal = parseInt(stored);
+        debugMsg(`Loaded account goal: ${userAccountGoal} accounts`, 'info');
+    } else {
+        userAccountGoal = 20;
+        saveAccountGoalToStorage();
+    }
+}
+
+function saveAccountGoalToStorage() {
+    if (!CURRENT_USER) return;
+    const storageKey = `prop_farm_account_goal_${CURRENT_USER.name}`;
+    localStorage.setItem(storageKey, userAccountGoal.toString());
+    debugMsg(`Account goal saved: ${userAccountGoal}`, 'success');
+}
+
+function getUserAccountGoal() {
+    return userAccountGoal;
+}
+
+// ========================================
+// ACTIVE ACCOUNTS (for Cycle Performance)
+// ========================================
+function getActiveAccountCount() {
+    const activeAccounts = new Set();
+    allData.forEach(trade => {
+        if (trade.account && trade.account !== 'N/A' && !trade.no_trade_day) {
+            activeAccounts.add(parseInt(trade.account));
+        }
+    });
+    return activeAccounts.size;
+}
+
+function getActiveAccountsList() {
+    const activeAccounts = new Set();
+    allData.forEach(trade => {
+        if (trade.account && trade.account !== 'N/A' && !trade.no_trade_day) {
+            activeAccounts.add(parseInt(trade.account));
+        }
+    });
+    return Array.from(activeAccounts).sort((a, b) => a - b);
+}
         const PAYOUT_API = 'https://sheetdb.io/api/v1/your_payout_sheet_id'; // User can create separate sheet later
 
         // DEBUG FUNCTIONS
@@ -2311,8 +2399,9 @@
 
         // INIT
         function initDashboard() {
-            debugMsg('Dashboard initializing...', 'info');
-            populateAccountDropdown();
+    debugMsg('Dashboard initializing...', 'info');
+    loadAccountGoal();
+    populateAccountDropdown();
             setupEventListeners();
             setupPayoutForm();
             setTodayDate();
@@ -2332,8 +2421,9 @@
             deleteSelect.innerHTML = '<option value="">Select account</option>';
             followerDiv.innerHTML = '';
             
-            for (let i = 1; i <= 20; i++) {
-                select.innerHTML += `<option value="${i}">PA Account #${i}</option>`;
+            const accountGoal = getUserAccountGoal();
+    for (let i = 1; i <= accountGoal; i++) {
+        select.innerHTML += `<option value="${i}">PA Account #${i}</option>`;
                 leadSelect.innerHTML += `<option value="${i}">PA Account #${i}</option>`;
                 deleteSelect.innerHTML += `<option value="${i}">PA Account #${i}</option>`;
                 
@@ -2352,11 +2442,23 @@
         }
 
         function setupEventListeners() {
-            document.querySelectorAll('.nav-item[data-page]').forEach(item => {
-                item.addEventListener('click', () => {
-                    navigateTo(item.dataset.page);
-                });
-            });
+    document.querySelectorAll('.nav-item[data-page]').forEach(item => {
+        item.addEventListener('click', () => {
+            navigateTo(item.dataset.page);
+        });
+    });
+
+    const accountGoalSelect = document.getElementById('accountGoalSelect');
+    if (accountGoalSelect) {
+        accountGoalSelect.addEventListener('change', (e) => {
+            const customInput = document.getElementById('customAccountGoal');
+            if (e.target.value === 'custom') {
+                customInput.style.display = 'block';
+                customInput.focus();
+            } else {
+                customInput.style.display = 'none';
+            }
+        });
 
             document.getElementById('menuToggle').addEventListener('click', () => {
                 document.getElementById('sidebar').classList.toggle('show');
@@ -2448,22 +2550,27 @@
             document.getElementById(page + 'Page').classList.add('active');
 
             const titles = {
-                overview: 'Ultimate Overview',
-                cyclePerformance: 'Cycle Performance',
-                templates: 'Templates',
-                accounts: 'Accounts',
-                analytics: 'Analytics',
-                riskMonitor: 'Risk Monitor',
-                addTrade: 'Add Trade',
-                logPayout: 'Log Payout',
-                tradeLog: 'Trade Log',
-                deleteData: 'Delete Data'
-            };
+    overview: 'Ultimate Overview',
+    cyclePerformance: 'Cycle Performance',
+    templates: 'Templates',
+    accounts: 'Accounts',
+    analytics: 'Analytics',
+    riskMonitor: 'Risk Monitor',
+    addTrade: 'Add Trade',
+    logPayout: 'Log Payout',
+    tradeLog: 'Trade Log',
+    deleteData: 'Delete Data',
+    settings: 'Settings'
+};
             document.getElementById('pageTitle').textContent = titles[page];
 
             if (window.innerWidth <= 1024) {
-                document.getElementById('sidebar').classList.remove('show');
-            }
+    document.getElementById('sidebar').classList.remove('show');
+}
+
+if (page === 'settings') {
+    updateSettingsPage();
+}
         }
 
         // DATA
@@ -2535,7 +2642,8 @@
 
             document.getElementById('heroTotalPnL').textContent = formatCurrency(totalPnL);
             document.getElementById('heroProgress').textContent = Math.round(progress) + '%';
-            document.getElementById('heroAccounts').textContent = `${accountsAtGoal}/20`;
+            const accountGoal = getUserAccountGoal();
+document.getElementById('heroAccounts').textContent = `${accountsAtGoal}/${accountGoal}`;
 
             // Update hero title based on progress
             const messages = totalPnL >= FIRST_PAYOUT_GOAL
@@ -2896,12 +3004,14 @@
         }
 
         function updateAccounts() {
-            const grid = document.getElementById('accountsGrid');
-            grid.innerHTML = '';
+           function updateAccounts() {
+    const grid = document.getElementById('accountsGrid');
+    grid.innerHTML = '';
 
-            const accountData = groupByAccount(allData);
-            
-            for (let i = 1; i <= 20; i++) {
+    const accountData = groupByAccount(allData);
+    const accountGoal = getUserAccountGoal();
+    
+    for (let i = 1; i <= accountGoal; i++) {
                 const acc = accountData[i];
                 
                 if (accountFilter === 'active' && acc.trades === 0) continue;
@@ -3030,14 +3140,15 @@
 
         // RISK MONITOR - FIXED VERSION
         function updateRiskMonitor() {
-            const grid = document.getElementById('riskMonitorGrid');
-            grid.innerHTML = '';
+    const grid = document.getElementById('riskMonitorGrid');
+    grid.innerHTML = '';
 
-            const accountData = groupByAccount(allData);
-            let accountsAtRisk = 0;
-            let accountsWarning = 0;
-            
-            for (let i = 1; i <= 20; i++) {
+    const accountData = groupByAccount(allData);
+    const accountGoal = getUserAccountGoal();
+    let accountsAtRisk = 0;
+    let accountsWarning = 0;
+    
+    for (let i = 1; i <= accountGoal; i++) {
                 const acc = accountData[i];
                 const currentBalance = STARTING_BALANCE + acc.pnl;
                 const highestBalance = acc.highestBalance || STARTING_BALANCE;
@@ -3146,91 +3257,38 @@
         }
 
         function updatePayoutSummary(totalPnL) {
-            // Calculate goal based on number of accounts owned
-            const accountsOwned = CURRENT_USER.accountsOwned || 20;
-            const firstPayoutGoalAdjusted = 4600 * accountsOwned;
-            const firstPayoutMinAdjusted = 4600 * accountsOwned;
-            
-            // First Payout Progress
-            const firstPayoutProg = Math.min((totalPnL / firstPayoutGoalAdjusted) * 100, 100);
-            document.getElementById('firstPayoutProgress').textContent = Math.round(firstPayoutProg) + '%';
-            
-            let status, statusClass;
-            if (totalPnL >= firstPayoutGoalAdjusted) {
-                const perAccount = accountsOwned > 1 ? ` ($${(totalPnL / accountsOwned).toFixed(0)} per account)` : '';
-                status = `✓ Qualified! Full withdrawal unlocked${perAccount}`;
-                statusClass = 'positive';
-            } else if (totalPnL >= firstPayoutMinAdjusted) {
-                status = `✓ Min qualified. ${formatCurrency(firstPayoutGoalAdjusted - totalPnL)} to full payout`;
-                statusClass = 'positive';
-            } else {
-                status = `${formatCurrency(firstPayoutMinAdjusted - totalPnL)} to qualify (${accountsOwned} account${accountsOwned > 1 ? 's' : ''})`;
-                statusClass = 'neutral';
-            }
-            document.getElementById('firstPayoutStatus').textContent = status;
-            document.getElementById('firstPayoutStatus').className = `metric-change ${statusClass}`;
-            
-            // Total Payouts Earned
-            let totalPayouts = 0;
-            let payoutCount = 0;
-            
-            if (totalPnL >= FIRST_PAYOUT_GOAL) {
-                totalPayouts = 4600;
-                payoutCount = 1;
-                
-                // Add subsequent $2k payouts
-                const afterFirst = totalPnL - FIRST_PAYOUT_GOAL;
-                const additionalPayouts = Math.floor(afterFirst / MONTHLY_PAYOUT_GOAL);
-                totalPayouts += (additionalPayouts * 4600);
-                payoutCount += additionalPayouts;
-            }
-            
-            document.getElementById('totalPayouts').textContent = formatCurrency(totalPayouts);
-            document.getElementById('payoutCount').textContent = payoutCount === 0 
-                ? 'No payouts yet' 
-                : `${payoutCount} payout${payoutCount > 1 ? 's' : ''} earned`;
-            
-            // Current Cycle Status
-            const activeCycles = Object.keys(groupByCycle(allData)).filter(c => c !== 'undefined');
-            const currentCycle = activeCycles.length > 0 ? Math.max(...activeCycles.map(c => parseInt(c))) : 1;
-            
-            let cycleStatus, cycleInfo;
-            if (totalPnL < FIRST_PAYOUT_MIN) {
-                cycleStatus = `Cycle ${currentCycle}`;
-                cycleInfo = 'Building to first payout';
-            } else if (totalPnL < FIRST_PAYOUT_GOAL) {
-                cycleStatus = `Cycle ${currentCycle}`;
-                cycleInfo = `${formatCurrency(FIRST_PAYOUT_GOAL - totalPnL)} to full $2k`;
-            } else {
-                cycleStatus = `Cycle ${currentCycle}`;
-                const afterFirst = totalPnL - FIRST_PAYOUT_GOAL;
-                const currentMonthlyProgress = afterFirst % MONTHLY_PAYOUT_GOAL;
-                cycleInfo = `${formatCurrency(MONTHLY_PAYOUT_GOAL - currentMonthlyProgress)} to next payout`;
-            }
-            
-            document.getElementById('currentCycleStatus').textContent = cycleStatus;
-            document.getElementById('currentCycleInfo').textContent = cycleInfo;
-            
-            // Daily Average
-            const tradingDays = [...new Set(allData.map(t => t.trade_date))].length;
-            const dailyAvg = tradingDays > 0 ? totalPnL / tradingDays : 0;
-            
-            document.getElementById('dailyAverage').textContent = formatCurrency(dailyAvg);
-            
-            let targetClass = 'neutral';
-            if (dailyAvg >= DAILY_TARGET_MIN && dailyAvg <= DAILY_TARGET_MAX) {
-                targetClass = 'positive';
-            } else if (dailyAvg > DAILY_TARGET_MAX) {
-                targetClass = 'positive';
-            } else if (dailyAvg < DAILY_TARGET_MIN && dailyAvg > 0) {
-                targetClass = 'neutral';
-            } else {
-                targetClass = 'negative';
-            }
-            
-            document.getElementById('dailyTarget').textContent = `Target: $${DAILY_TARGET_MIN}-$${DAILY_TARGET_MAX}`;
-            document.getElementById('dailyTarget').className = `metric-change ${targetClass}`;
-        }
+    const activeAccounts = getActiveAccountCount();
+    const payoutGoal = activeAccounts * 4600;
+    const payoutProgress = payoutGoal > 0 ? Math.min((totalPnL / payoutGoal) * 100, 100) : 0;
+    document.getElementById('firstPayoutProgress').textContent = Math.round(payoutProgress) + '%';
+    let status, statusClass;
+    if (activeAccounts === 0) {
+        status = 'Trade first account';
+        statusClass = 'neutral';
+    } else if (totalPnL >= payoutGoal) {
+        status = `✓ ${formatCurrency(payoutGoal)} goal reached!`;
+        statusClass = 'positive';
+    } else {
+        const acctText = activeAccounts === 1 ? '1 active' : `${activeAccounts} active`;
+        status = `${formatCurrency(payoutGoal - totalPnL)} to goal (${acctText})`;
+        statusClass = 'neutral';
+    }
+    document.getElementById('firstPayoutStatus').textContent = status;
+    document.getElementById('firstPayoutStatus').className = `metric-change ${statusClass}`;
+    let totalPayouts = 0;
+    payoutData.forEach(p => { totalPayouts += parseFloat(p.amount || 0); });
+    document.getElementById('totalPayouts').textContent = formatCurrency(totalPayouts);
+    document.getElementById('payoutCount').textContent = payoutData.length === 0 ? 'No payouts' : `${payoutData.length} payout${payoutData.length > 1 ? 's' : ''}`;
+    const activeCycles = Object.keys(groupByCycle(allData)).filter(c => c !== 'undefined');
+    const currentCycle = activeCycles.length > 0 ? Math.max(...activeCycles.map(c => parseInt(c))) : 1;
+    document.getElementById('currentCycleStatus').textContent = `Cycle ${currentCycle}`;
+    document.getElementById('currentCycleInfo').textContent = activeAccounts === 0 ? 'Start trading' : totalPnL >= payoutGoal ? 'Ready!' : `${formatCurrency(payoutGoal - totalPnL)} to goal`;
+    const tradingDays = [...new Set(allData.map(t => t.trade_date))].length;
+    const dailyAvg = tradingDays > 0 ? totalPnL / tradingDays : 0;
+    document.getElementById('dailyAverage').textContent = formatCurrency(dailyAvg);
+    const targetClass = dailyAvg >= 250 && dailyAvg <= 300 ? 'positive' : dailyAvg > 300 ? 'positive' : dailyAvg > 0 ? 'neutral' : 'negative';
+    document.getElementById('dailyTarget').className = `metric-change ${targetClass}`;
+}
 
         function groupByCycle(data) {
             const grouped = {};
@@ -4185,8 +4243,9 @@
         }
 
         function getAccountsAtGoal() {
-            let count = 0;
-            for (let i = 1; i <= 20; i++) {
+    let count = 0;
+    const accountGoal = getUserAccountGoal();
+    for (let i = 1; i <= accountGoal; i++) {
                 const trades = allData.filter(t => t.account == i);
                 const pnl = trades.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
                 if (pnl >= 4600) count++;
@@ -4195,8 +4254,9 @@
         }
 
         function groupByAccount(data) {
-            const grouped = {};
-            for (let i = 1; i <= 20; i++) {
+    const grouped = {};
+    const accountGoal = getUserAccountGoal();
+    for (let i = 1; i <= accountGoal; i++) {
                 const trades = data.filter(t => t.account == i);
                 const pnl = trades.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
                 const wins = trades.filter(t => parseFloat(t.pnl || 0) > 0).length;
@@ -4280,6 +4340,87 @@
             alert.className = `alert alert-${type} show`;
             setTimeout(() => alert.classList.remove('show'), 5000);
         }
+
+        function updateSettingsPage() {
+    const activeAccounts = getActiveAccountsList();
+    const activeCount = activeAccounts.length;
+    const accountGoal = getUserAccountGoal();
+    const payoutGoal = activeCount * 4600;
+    
+    document.getElementById('settingsGoalDisplay').textContent = accountGoal;
+    document.getElementById('settingsActiveDisplay').textContent = activeCount;
+    document.getElementById('settingsPayoutGoal').textContent = formatCurrency(payoutGoal);
+    
+    if (activeCount === 0) {
+        document.getElementById('settingsActiveList').textContent = 'No trades yet';
+    } else if (activeCount <= 5) {
+        document.getElementById('settingsActiveList').textContent = `PA #${activeAccounts.join(', #')}`;
+    } else {
+        document.getElementById('settingsActiveList').textContent = `PA #${activeAccounts.slice(0, 3).join(', #')} +${activeCount - 3} more`;
+    }
+    
+    const select = document.getElementById('accountGoalSelect');
+    if (select) {
+        if ([1,5,10,20,30,40,50,60,70,80,90,100].includes(accountGoal)) {
+            select.value = accountGoal;
+        } else {
+            select.value = 'custom';
+            document.getElementById('customAccountGoal').value = accountGoal;
+            document.getElementById('customAccountGoal').style.display = 'block';
+        }
+    }
+    
+    updateSettingsActiveAccountsTable();
+}
+
+function updateSettingsActiveAccountsTable() {
+    const tbody = document.getElementById('settingsActiveAccountsTable');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    const activeAccounts = getActiveAccountsList();
+    if (activeAccounts.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-secondary); padding: 2rem;">No active accounts</td></tr>';
+        return;
+    }
+    activeAccounts.forEach(accountNum => {
+        const trades = allData.filter(t => parseInt(t.account) === accountNum && !t.no_trade_day);
+        const pnl = trades.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
+        const wins = trades.filter(t => parseFloat(t.pnl || 0) > 0).length;
+        const winRate = trades.length > 0 ? (wins / trades.length) * 100 : 0;
+        const balance = 50000 + pnl;
+        const status = pnl >= 4600 ? '✅' : pnl >= 3450 ? '🟡' : '🔵';
+        const row = tbody.insertRow();
+        row.innerHTML = `<td><strong>PA #${accountNum}</strong></td><td style="color: ${pnl >= 0 ? 'var(--success)' : 'var(--danger)'}"><strong>${formatCurrency(pnl)}</strong></td><td>${trades.length}</td><td>${Math.round(winRate)}%</td><td>${formatCurrency(balance)}</td><td>${status}</td>`;
+    });
+}
+
+function saveAccountGoal() {
+    let goal = parseInt(document.getElementById('accountGoalSelect').value);
+    if (isNaN(goal) || document.getElementById('accountGoalSelect').value === 'custom') {
+        goal = parseInt(document.getElementById('customAccountGoal').value);
+    }
+    if (isNaN(goal) || goal < 1 || goal > 100) {
+        showAlert('Enter 1-100', 'error');
+        return;
+    }
+    userAccountGoal = goal;
+    saveAccountGoalToStorage();
+    showAlert(`✓ Goal: ${goal} accounts`, 'success');
+    populateAccountDropdown();
+    updateSettingsPage();
+    updateAllViews();
+}
+
+function resetAccountGoal() {
+    if (!confirm('Reset to 20?')) return;
+    userAccountGoal = 20;
+    saveAccountGoalToStorage();
+    showAlert('✓ Reset to 20', 'success');
+    populateAccountDropdown();
+    updateSettingsPage();
+    updateAllViews();
+}
+
 
         function refreshData() {
             debugMsg('Manual refresh triggered', 'info');
