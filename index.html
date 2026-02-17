@@ -340,6 +340,31 @@
             color: white;
         }
 
+        /* ADD THIS RIGHT HERE ↓ */
+        a.nav-item {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            transition: all 0.15s;
+        }
+        a.nav-item:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        a.nav-item:visited {
+            color: var(--text-secondary);
+        }
+
+        .nav-icon {
+            font-size: 1.25rem;
+        }
+
         .nav-icon {
             font-size: 1.25rem;
         }
@@ -1316,11 +1341,11 @@
                     <span class="nav-icon">🗑️</span>
                     <span>Delete Data</span>
                 </div>
-                <a class="nav-item" href="pamm_calculator_dashboard.html" target="_blank" style="text-decoration: none;">
-    <span class="nav-icon">📊</span>
-    <span>PAMM Calculator</span>
-</a>
-    
+                <a class="nav-item" href="pamm_calculator_dashboard.html" target="_blank">
+                    <span class="nav-icon">📊</span>
+                    <span>PAMM Calculator</span>
+                </a>
+                    
             </nav>
 
             <nav class="nav-section">
