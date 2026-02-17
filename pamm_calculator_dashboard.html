@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAMM Calculator — 24-5 Gold Scalper</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ── EXACT PROP FARM PRO THEME ── */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --text-tertiary: #94a3b8;
+            --border: #e2e8f0;
+            --border-hover: #cbd5e1;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --purple: #8b5cf6;
+            --orange: #f97316;
+            --cyan: #06b6d4;
+            --gold: #d97706;
+            --gold-bg: rgba(217, 119, 6, 0.08);
+            --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+            --shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* TOP BAR */
+        .top-bar {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+        .top-bar-left { display: flex; align-items: center; gap: 1rem; }
+        .page-title { font-size: 1.5rem; font-weight: 700; }
+        .logo-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--gold);
+            background: var(--gold-bg);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            border: 1px solid rgba(217,119,6,0.2);
+        }
+
+        /* CONTAINER */
+        .container {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* ALERT */
+        .alert {
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9375rem;
+            font-weight: 500;
+        }
+        .alert-info {
+            background: rgba(59,130,246,0.08);
+            color: var(--accent);
+            border: 1px solid rgba(59,130,246,0.2);
+        }
+        .alert-gold {
+            background: var(--gold-bg);
+            color: var(--gold);
+            border: 1px solid rgba(217,119,6,0.25);
+        }
+        .alert-success {
+            background: rgba(16,185,129,0.08);
+            color: var(--success);
+            border: 1px solid rgba(16,185,129,0.2);
+        }
+        .alert-danger {
+            background: rgba(239,68,68,0.08);
+            color: var(--danger);
+            border: 1px solid rgba(239,68,68,0.2);
+        }
+
+        /* LIVE STATS STRIP */
+        .live-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-pill {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            transition: all 0.2s;
+        }
+        .stat-pill:hover { border-color: var(--border-hover); box-shadow: var(--shadow); transform: translateY(-1px); }
+        .stat-pill .sp-val {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        .stat-pill .sp-val.pos { color: var(--success); }
+        .stat-pill .sp-val.neg { color: var(--danger); }
+        .stat-pill .sp-val.gold { color: var(--gold); }
+        .stat-pill .sp-val.blue { color: var(--accent); }
+        .stat-pill .sp-val.purple { color: var(--purple); }
+        .stat-pill .sp-lbl {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+        }
+
+        /* SECTION TITLE */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+        }
+        .section-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            background: rgba(59,130,246,0.1);
+            color: var(--accent);
+        }
+
+        /* MAIN GRID */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        @media (max-width: 1100px) { .main-grid { grid-template-columns: 1fr; } }
+
+        /* CARDS */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .card-header {
+            padding: 1.25rem 1.75rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card-title {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+        .card-body { padding: 1.75rem; }
+        .card-body.no-pad { padding: 0; }
+
+        /* FORM ELEMENTS */
+        .form-group { margin-bottom: 1.25rem; }
+        .form-label {
+            display: block;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+            transition: all 0.2s;
+            -moz-appearance: textfield;
+        }
+        .form-input::-webkit-outer-spin-button,
+        .form-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: var(--bg-primary);
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+        }
+        .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.9375rem;
+            font-family: inherit;
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .form-select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+        }
+
+        /* RANGE SLIDER */
+        .range-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            outline: none;
+            margin-top: 0.6rem;
+            padding: 0;
+            border: none;
+        }
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px; height: 18px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 1px 4px rgba(59,130,246,0.4);
+            transition: transform 0.15s;
+        }
+        .range-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            margin-top: 0.25rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* SCENARIO TABS */
+        .scenario-tabs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        .stab {
+            padding: 0.625rem;
+            background: var(--bg-secondary);
+            border: none;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+            border-right: 1px solid var(--border);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--text-secondary);
+        }
+        .stab:last-child { border-right: none; }
+        .stab.active { background: var(--accent); color: white; }
+        .stab:hover:not(.active) { background: var(--border); color: var(--text-primary); }
+
+        /* INPUT WITH PREFIX */
+        .input-with-prefix {
+            display: flex;
+            align-items: center;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            background: var(--bg-secondary);
+            transition: all 0.2s;
+        }
+        .input-with-prefix:focus-within {
+            border-color: var(--accent);
+            background: var(--bg-primary);
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+        }
+        .input-prefix-label {
+            padding: 0.75rem 0.875rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: var(--border);
+            border-right: 2px solid var(--border);
+            white-space: nowrap;
+        }
+        .input-with-prefix input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--text-primary);
+            outline: none;
+            -moz-appearance: textfield;
+        }
+        .input-with-prefix input::-webkit-outer-spin-button,
+        .input-with-prefix input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+        /* RESULT HERO */
+        .result-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 14px;
+            padding: 1.5rem;
+            margin-bottom: 1.25rem;
+            color: white;
+            text-align: center;
+        }
+        .rh-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.85;
+            margin-bottom: 0.5rem;
+        }
+        .rh-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.75rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            margin-bottom: 0.4rem;
+        }
+        .rh-sub { font-size: 0.85rem; opacity: 0.8; }
+
+        /* RESULT GRID */
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1.25rem;
+            border: 1px solid var(--border);
+        }
+        .rg-cell {
+            background: var(--bg-secondary);
+            padding: 0.875rem 1.25rem;
+        }
+        .rg-val {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+        .rg-val.pos { color: var(--success); }
+        .rg-val.neg { color: var(--danger); }
+        .rg-val.gold { color: var(--gold); }
+        .rg-val.blue { color: var(--accent); }
+        .rg-val.purple { color: var(--purple); }
+        .rg-lbl {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+        }
+
+        /* PROGRESS BAR */
+        .prog-wrap { margin-bottom: 1rem; }
+        .prog-head {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+        .prog-track {
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .prog-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+        .prog-fill.blue { background: linear-gradient(90deg, #667eea, #3b82f6); }
+        .prog-fill.green { background: linear-gradient(90deg, #10b981, #34d399); }
+        .prog-fill.gold { background: linear-gradient(90deg, #d97706, #f59e0b); }
+
+        /* CHART */
+        .chart-wrap {
+            position: relative;
+            height: 200px;
+            margin-top: 1rem;
+        }
+        canvas { display: block; }
+
+        /* REFERENCE NOTE */
+        .ref-note {
+            background: rgba(59,130,246,0.05);
+            border: 1px solid rgba(59,130,246,0.15);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 10px 10px 0;
+            padding: 0.875rem 1.25rem;
+            margin-top: 1rem;
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        .ref-note strong { color: var(--accent); }
+        .ref-note .ref-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent);
+            margin-bottom: 0.4rem;
+        }
+
+        /* MONTHLY TABLE */
+        .monthly-table { width: 100%; border-collapse: collapse; }
+        .monthly-table th {
+            text-align: left;
+            padding: 0.875rem 1.25rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+            border-bottom: 2px solid var(--border);
+        }
+        .monthly-table td {
+            padding: 0.875rem 1.25rem;
+            font-size: 0.875rem;
+            font-family: 'JetBrains Mono', monospace;
+            border-bottom: 1px solid var(--border);
+            font-weight: 500;
+        }
+        .monthly-table tr:hover td { background: rgba(59,130,246,0.03); }
+        .monthly-table .total-row td {
+            background: rgba(59,130,246,0.06);
+            border-top: 2px solid var(--accent);
+            border-bottom: none;
+            font-weight: 700;
+        }
+        .monthly-table td.pos { color: var(--success); }
+        .monthly-table td.neg { color: var(--danger); }
+        .monthly-table td.gold { color: var(--gold); }
+
+        /* SCENARIO RISK CARDS */
+        .scenario-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+        @media (max-width: 800px) { .scenario-cards { grid-template-columns: 1fr; } }
+
+        .sc-card {
+            background: var(--bg-card);
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+        }
+        .sc-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+        .sc-card.bear { border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.02); }
+        .sc-card.base { border-color: rgba(217,119,6,0.4); background: var(--gold-bg); }
+        .sc-card.bull { border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.02); }
+
+        .sc-header {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+        .sc-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+        .sc-card.bear .sc-dot { background: var(--danger); }
+        .sc-card.base .sc-dot { background: var(--gold); }
+        .sc-card.bull .sc-dot { background: var(--success); }
+        .sc-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .sc-card.bear .sc-label { color: var(--danger); }
+        .sc-card.base .sc-label { color: var(--gold); }
+        .sc-card.bull .sc-label { color: var(--success); }
+
+        .sc-return {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.25rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.25rem;
+        }
+        .sc-card.bear .sc-return { color: var(--danger); }
+        .sc-card.base .sc-return { color: var(--gold); }
+        .sc-card.bull .sc-return { color: var(--success); }
+        .sc-final {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        .sc-detail {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .sc-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 0.875rem 0;
+        }
+        .sc-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+        }
+        .sc-stat { }
+        .sc-stat-val { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--text-primary); }
+        .sc-stat-lbl { color: var(--text-secondary); }
+
+        /* TRANSACTIONS */
+        .tx-table { width: 100%; border-collapse: collapse; }
+        .tx-table th {
+            text-align: left;
+            padding: 0.75rem 1.25rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+            border-bottom: 2px solid var(--border);
+        }
+        .tx-table td {
+            padding: 0.75rem 1.25rem;
+            font-size: 0.8375rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .tx-table tr:hover td { background: var(--bg-secondary); }
+        .tx-sym {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--gold);
+            background: var(--gold-bg);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+        .tx-profit {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        /* DISCLAIMER */
+        .disclaimer {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 1.5rem;
+        }
+        .disclaimer-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+        .disclaimer-icon {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            background: rgba(245,158,11,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        .disclaimer h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .disclaimer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .dis-block {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+        }
+        .dis-block h4 {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        .dis-block.warn h4 { color: var(--warning); }
+        .dis-block.info h4 { color: var(--accent); }
+        .dis-block.safe h4 { color: var(--success); }
+        .dis-block p {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        .disclaimer .fine-print {
+            font-size: 0.775rem;
+            color: var(--text-tertiary);
+            line-height: 1.75;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* FULL WIDTH */
+        .full { grid-column: 1 / -1; }
+
+        /* METRIC INLINE */
+        .inline-metrics {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+        }
+        .im { }
+        .im-val { font-family: 'JetBrains Mono', monospace; font-size: 1rem; font-weight: 700; }
+        .im-lbl { font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
+
+        /* ANIMATE */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .card { animation: fadeUp 0.4s ease both; }
+
+        /* XAUUSD REFERENCE TAG */
+        .xau-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: var(--gold-bg);
+            border: 1px solid rgba(217,119,6,0.25);
+            color: var(--gold);
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* RETURNS REFERENCE TABLE */
+        .ref-table { width: 100%; border-collapse: collapse; }
+        .ref-table th {
+            text-align: left;
+            padding: 0.625rem 1rem;
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+        .ref-table td {
+            padding: 0.625rem 1rem;
+            font-size: 0.8125rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+        }
+        .ref-table tr:hover td { background: var(--bg-secondary); }
+        .ref-table tr.active-row td { background: rgba(59,130,246,0.06); }
+    </style>
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <h1 class="page-title">PAMM Investment Calculator</h1>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.75rem;">
+            <span class="xau-tag">⚡ XAUUSD</span>
+            <span style="font-size:0.8rem;color:var(--text-secondary);font-family:'JetBrains Mono',monospace;">Performance Reference Data</span>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- PERFORMANCE REFERENCE STRIP -->
+        <div class="alert alert-info" style="margin-bottom:1.5rem;font-size:0.85rem;">
+            <strong>📊 Performance Reference:</strong> All return figures in this calculator are sourced from verified XAUUSD PAMM trading data — 123 days, 297 trades, 71.7% win rate, $20,585 total profit. Use the stats below as your basis for rate assumptions.
+        </div>
+
+        <!-- LIVE STATS STRIP — expanded with daily avg etc -->
+        <div class="live-stats" style="margin-bottom:2rem;">
+            <div class="stat-pill">
+                <div class="sp-val gold">+370.81%</div>
+                <div class="sp-lbl">Total Return</div>
+            </div>
+            <div class="stat-pill">
+                <div class="sp-val pos">+119.23%</div>
+                <div class="sp-lbl">Monthly Return</div>
+            </div>
+            <div class="stat-pill">
+                <div class="sp-val pos">+332.29%</div>
+                <div class="sp-lbl">Quarter Return</div>
+            </div>
+            <div class="stat-pill">
+                <div class="sp-val pos">+5.77%</div>
+                <div class="sp-lbl">Weekly Return</div>
+            </div>
+            <div class="stat-pill">
+                <div class="sp-val gold">$167.36</div>
+                <div class="sp-lbl">Daily Avg Profit</div>
+            </div>
+            <div class="stat-pill">
+                <div class="sp-val blue">$69.31</div>
+                <div class="sp-lbl">Avg P&L / Trade</div>
+            </div>
+            <div class="stat-pill">
+                <div class="sp-val pos">71.7%</div>
+                <div class="sp-lbl">Win Rate</div>
+            </div>
+            <div class="stat-pill">
+                <div class="sp-val purple">2.41×</div>
+                <div class="sp-lbl">Win / Loss Ratio</div>
+            </div>
+            <div class="stat-pill">
+                <div class="sp-val blue">15.85</div>
+                <div class="sp-lbl">Recovery Factor</div>
+            </div>
+            <div class="stat-pill">
+                <div class="sp-val purple">0.46</div>
+                <div class="sp-lbl">Sharpe Ratio</div>
+            </div>
+            <div class="stat-pill">
+                <div class="sp-val pos">213 / 84</div>
+                <div class="sp-lbl">Wins / Losses</div>
+            </div>
+            <div class="stat-pill">
+                <div class="sp-val gold">2:36</div>
+                <div class="sp-lbl">Avg Trade Duration</div>
+            </div>
+        </div>
+
+        <!-- MAIN GRID: INPUT + RESULTS -->
+        <div class="main-grid">
+
+            <!-- LEFT: INPUTS -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">⚙️ Investment Parameters</span>
+                    <span class="xau-tag">XAUUSD</span>
+                </div>
+                <div class="card-body">
+
+                    <div class="scenario-tabs">
+                        <button class="stab active" onclick="setPreset('conservative')">Conservative</button>
+                        <button class="stab" onclick="setPreset('base')">Base Case</button>
+                        <button class="stab" onclick="setPreset('aggressive')">Aggressive</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Investment Amount (USD)</label>
+                        <div class="input-with-prefix">
+                            <span class="input-prefix-label">$</span>
+                            <input type="number" id="investAmount" value="1000" min="100" max="100000" step="100" oninput="syncRanges(); calc()">
+                        </div>
+                        <input type="range" class="range-slider" id="investRange" min="100" max="50000" step="100" value="1000" oninput="syncFromRange('invest')">
+                        <div class="range-labels"><span>$100</span><span>$10K</span><span>$25K</span><span>$50K</span></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Projection Period</label>
+                        <div class="input-with-prefix">
+                            <span class="input-prefix-label">MO</span>
+                            <input type="number" id="months" value="6" min="1" max="24" oninput="syncRanges(); calc()">
+                        </div>
+                        <input type="range" class="range-slider" id="monthsRange" min="1" max="24" value="6" oninput="syncFromRange('months')">
+                        <div class="range-labels"><span>1</span><span>6</span><span>12</span><span>24</span></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Monthly Return Rate — <span style="color:var(--gold);font-weight:700;">Reference avg: 119.23%/mo</span></label>
+                        <div class="input-with-prefix">
+                            <span class="input-prefix-label">%</span>
+                            <input type="number" id="monthlyRate" value="119.23" step="0.1" oninput="syncRanges(); calc()">
+                        </div>
+                        <input type="range" class="range-slider" id="rateRange" min="1" max="300" step="0.1" value="119.23" oninput="syncFromRange('rate')">
+                        <div class="range-labels"><span>1%</span><span>75%</span><span>150%</span><span>300%</span></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Performance Fee (%)</label>
+                        <div class="input-with-prefix">
+                            <span class="input-prefix-label">%</span>
+                            <input type="number" id="perfFee" value="30" min="0" max="50" oninput="calc()">
+                        </div>
+                        <div class="ref-note" style="margin-top:0.5rem;font-size:0.75rem;">
+                            <strong>Note:</strong> Fee applied on profitable months only. No fee charged on flat or losing periods.
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Profit Strategy</label>
+                        <select class="form-select" id="compound" onchange="calc()">
+                            <option value="yes">Full Compounding — reinvest 100% of profit</option>
+                            <option value="no">Full Withdrawal — withdraw all profits monthly</option>
+                            <option value="half">Split 50/50 — reinvest half, withdraw half</option>
+                        </select>
+                    </div>
+
+                    <!-- PERFORMANCE REFERENCE TABLE -->
+                    <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:0.5rem;">
+                        <div style="padding:0.75rem 1rem;background:var(--bg-secondary);border-bottom:1px solid var(--border);font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-secondary);display:flex;align-items:center;gap:0.5rem;">
+                            <span class="xau-tag">XAUUSD</span> Performance Reference
+                        </div>
+                        <table class="ref-table">
+                            <thead>
+                                <tr><th>Period</th><th>Return</th><th>Annualized Est.</th><th>Used In</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1 Day (avg)</td><td class="gold">+3.01%</td><td class="pos">+1,100%+</td><td style="font-size:0.72rem;color:var(--text-secondary);">Daily calc</td></tr>
+                                <tr><td>1 Week</td><td class="pos">+5.77%</td><td class="pos">+300%+</td><td style="font-size:0.72rem;color:var(--text-secondary);">Weekly ref</td></tr>
+                                <tr class="active-row"><td>1 Month ⭐ Base</td><td class="gold">+119.23%</td><td class="gold">+1,431%</td><td style="font-size:0.72rem;color:var(--accent);font-weight:700;">Default rate</td></tr>
+                                <tr><td>1 Quarter</td><td class="pos">+332.29%</td><td class="pos">+1,329%</td><td style="font-size:0.72rem;color:var(--text-secondary);">Quarterly</td></tr>
+                                <tr><td>All Time (123d)</td><td class="gold">+370.81%</td><td class="pos">+1,100%+</td><td style="font-size:0.72rem;color:var(--text-secondary);">Total ref</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- RIGHT: RESULTS -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📈 Projected Returns</span>
+                    <span id="compoundLabel" style="font-size:0.78rem;color:var(--text-secondary);font-weight:600;">Full Compounding</span>
+                </div>
+                <div class="card-body">
+
+                    <div class="result-hero">
+                        <div class="rh-label">Projected Final Value</div>
+                        <div class="rh-value" id="finalValue">$0</div>
+                        <div class="rh-sub" id="finalSub">After 30% performance fee • 6 months</div>
+                    </div>
+
+                    <div class="result-grid">
+                        <div class="rg-cell">
+                            <div class="rg-val pos" id="grossProfit">$0</div>
+                            <div class="rg-lbl">Gross Profit</div>
+                        </div>
+                        <div class="rg-cell">
+                            <div class="rg-val gold" id="netProfit">$0</div>
+                            <div class="rg-lbl">Net Profit (after fee)</div>
+                        </div>
+                        <div class="rg-cell">
+                            <div class="rg-val neg" id="feePaid">$0</div>
+                            <div class="rg-lbl">Total Fee Paid</div>
+                        </div>
+                        <div class="rg-cell">
+                            <div class="rg-val blue" id="roi">0%</div>
+                            <div class="rg-lbl">Net ROI</div>
+                        </div>
+                        <div class="rg-cell">
+                            <div class="rg-val purple" id="monthlyIncome">$0</div>
+                            <div class="rg-lbl">Avg Monthly Net</div>
+                        </div>
+                        <div class="rg-cell">
+                            <div class="rg-val" id="dailyIncome">$0</div>
+                            <div class="rg-lbl">Avg Daily Profit</div>
+                        </div>
+                        <div class="rg-cell">
+                            <div class="rg-val" id="weeklyIncome">$0</div>
+                            <div class="rg-lbl">Avg Weekly Profit</div>
+                        </div>
+                        <div class="rg-cell">
+                            <div class="rg-val" id="breakEven">~0 days</div>
+                            <div class="rg-lbl">Break-Even Point</div>
+                        </div>
+                        <div class="rg-cell">
+                            <div class="rg-val pos" id="projWinTrades">0</div>
+                            <div class="rg-lbl">Est. Winning Trades</div>
+                        </div>
+                        <div class="rg-cell">
+                            <div class="rg-val neg" id="projLossTrades">0</div>
+                            <div class="rg-lbl">Est. Losing Trades</div>
+                        </div>
+                    </div>
+
+                    <!-- PROGRESS BARS -->
+                    <div class="prog-wrap">
+                        <div class="prog-head">
+                            <span style="color:var(--text-secondary);font-size:0.78rem;">Progress to 2× initial</span>
+                            <span id="d2pct" style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:0.78rem;">0%</span>
+                        </div>
+                        <div class="prog-track"><div class="prog-fill blue" id="d2bar" style="width:0%"></div></div>
+                    </div>
+                    <div class="prog-wrap">
+                        <div class="prog-head">
+                            <span style="color:var(--text-secondary);font-size:0.78rem;">Progress to 5× initial</span>
+                            <span id="d5pct" style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:0.78rem;">0%</span>
+                        </div>
+                        <div class="prog-track"><div class="prog-fill green" id="d5bar" style="width:0%"></div></div>
+                    </div>
+                    <div class="prog-wrap">
+                        <div class="prog-head">
+                            <span style="color:var(--text-secondary);font-size:0.78rem;">Progress to 10× initial</span>
+                            <span id="d10pct" style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:0.78rem;">0%</span>
+                        </div>
+                        <div class="prog-track"><div class="prog-fill gold" id="d10bar" style="width:0%"></div></div>
+                    </div>
+
+                    <!-- CHART -->
+                    <div class="chart-wrap">
+                        <canvas id="projChart"></canvas>
+                    </div>
+
+                    <!-- CALCULATION REFERENCE NOTE -->
+                    <div class="ref-note" id="calcNote">
+                        <div class="ref-title">📊 Calculation Reference — How We Got These Numbers</div>
+                        <span id="calcNoteText">Enter parameters above to see full calculation breakdown.</span>
+                    </div>
+
+                </div>
+            </div>
+
+        </div><!-- end main-grid -->
+
+        <!-- MONTH-BY-MONTH BREAKDOWN -->
+        <div class="card" style="margin-bottom:1.5rem;">
+            <div class="card-header">
+                <span class="card-title">🗓️ Month-by-Month Breakdown</span>
+                <span style="font-size:0.78rem;color:var(--text-secondary);" id="tableSubtitle">Based on 119.23%/mo reference avg</span>
+            </div>
+            <div class="card-body no-pad">
+                <div style="overflow-x:auto;">
+                    <table class="monthly-table">
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Start Balance</th>
+                                <th>Monthly Rate</th>
+                                <th>Gross Profit</th>
+                                <th>Perf. Fee</th>
+                                <th>Net Profit</th>
+                                <th>Withdrawal</th>
+                                <th>End Balance</th>
+                                <th>Daily Avg</th>
+                                <th>Cumulative ROI</th>
+                            </tr>
+                        </thead>
+                        <tbody id="monthlyBody"></tbody>
+                    </table>
+                </div>
+                <div class="ref-note" style="margin:1.25rem;border-radius:10px;">
+                    <div class="ref-title">📊 How These Numbers Are Calculated</div>
+                    <span id="tableNote">Each month: Gross Profit = Start Balance × Monthly Rate. Performance fee deducted from profit only. Net Profit = Gross − Fee. Daily Avg = Net Profit ÷ 22 trading days. End Balance adjusts based on your compounding selection.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- RISK SCENARIOS -->
+        <div class="section-header">
+            <h2 class="section-title">📉 Projection Scenarios</h2>
+            <span class="section-badge">Referenced from performance data</span>
+        </div>
+        <div class="scenario-cards" id="scenarioCards"></div>
+        <div class="ref-note" style="margin-bottom:1.5rem;">
+            <div class="ref-title">📊 How Scenarios Are Derived — Full Reference</div>
+            <span id="scenarioNote">Loading scenario reference...</span>
+        </div>
+
+        <!-- DISCLAIMER -->
+        <div class="disclaimer">
+            <div class="disclaimer-header">
+                <div class="disclaimer-icon">⚠️</div>
+                <div>
+                    <h3>Calculator Projection Disclaimer</h3>
+                    <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.2rem;">Understanding what these projections mean — and what they don't</div>
+                </div>
+            </div>
+
+            <div class="disclaimer-grid">
+                <div class="dis-block warn">
+                    <h4>⚠️ These Are Projections, Not Predictions</h4>
+                    <p>Every number this calculator produces is a <strong>mathematical model</strong> — it applies a fixed monthly rate to your investment across time. Real PAMM accounts do not produce the exact same return every month. Some months will be higher, some lower, and some may be negative. The calculator cannot account for market volatility, drawdown periods, or strategy changes.</p>
+                </div>
+                <div class="dis-block info">
+                    <h4>📐 How the Calculator Works</h4>
+                    <p>Formula: <strong>Monthly Profit = Balance × Rate%</strong>. Fee deducted from profit only. Compounding option adds net profit back to balance each month — this causes exponential growth in projections. Daily avg is estimated using 22 trading days/month. Weekly avg = Monthly ÷ 4.33. Break-even = initial investment ÷ avg monthly net × 30 days.</p>
+                </div>
+                <div class="dis-block safe">
+                    <h4>✅ Where the Reference Data Comes From</h4>
+                    <p>The default 119.23% monthly rate is taken from the XAUUSD PAMM's most recent full month of verified trading: 297 total trades, 213 wins, 84 losses, $20,585 profit over 123 days. Daily avg of $167.36/day. Win/loss ratio: 2.41×. This is the factual basis for the Base Case scenario in this calculator.</p>
+                </div>
+                <div class="dis-block warn">
+                    <h4>📉 Scenario Range Explained</h4>
+                    <p><strong>Conservative (40%/mo):</strong> ⅓ of the recorded monthly avg — models a slow or drawdown period. <strong>Base (119.23%/mo):</strong> The exact verified monthly return — reflects current real performance. <strong>Aggressive (137%/mo):</strong> 15% above base — models a stronger-than-average month, not an outlier. Each scenario uses the same fee structure and compounding logic.</p>
+                </div>
+                <div class="dis-block info">
+                    <h4>💸 Fee Structure & Withdrawals</h4>
+                    <p>The 30% performance fee default reflects a typical PAMM fee structure. Fee is applied to <strong>profits only</strong> — never to your principal or during losing months. Under PAMM, you control your own capital. Withdrawals are typically processed on a set schedule by the broker. The fund manager does not have access to withdraw your principal.</p>
+                </div>
+                <div class="dis-block safe">
+                    <h4>📅 How Long to Evaluate</h4>
+                    <p>A single month's projection can look extraordinary at 119%+ rates. We recommend using the <strong>3-month or 6-month</strong> view to see realistic compounding in context. Any PAMM strategy should be evaluated over a minimum of 30–90 days before drawing conclusions. The conservative scenario is the most reasonable baseline for planning.</p>
+                </div>
+            </div>
+
+            <div class="fine-print">
+                <strong>Important:</strong> This calculator is a personal modelling tool only — not financial advice, and not a guarantee of any returns. All reference figures (119.23% monthly, 370.81% total, 71.7% win rate, $20,585 profit) are historical data points used as inputs. Past performance does not guarantee future results. Trading involves risk of loss, including loss of principal. Projections are mathematical scenarios only and should be used for planning purposes, not as a basis for financial decisions. Always consult a qualified financial advisor before investing.
+            </div>
+        </div>
+
+    </div><!-- end container -->
+
+<script>
+const PAMM = {
+    totalReturn: 370.81,
+    monthReturn: 119.23,
+    quarterReturn: 332.29,
+    weekReturn: 5.77,
+    dayReturn: 3.01,
+    winRate: 71.7,
+    avgWin: 127.06,
+    avgLoss: 77.12,
+    bestTrade: 3890,
+    worstTrade: -650,
+    totalProfit: 20585.35,
+    tradesWon: 213,
+    tradesLost: 84,
+    totalTrades: 297,
+    ageDays: 123,
+    avgPnlPerTrade: 69.31,
+    avgPnlPerLot: 115.49,
+    dailyAvgProfit: 167.36,
+    tradingDaysPerMonth: 22,
+    recoveryFactor: 15.85,
+    sharpe: 0.46,
+    defaultFee: 30
+};
+
+// Aggressive = 15% above base
+const PRESETS = {
+    conservative: { rate: 40 },
+    base:         { rate: 119.23 },
+    aggressive:   { rate: +(119.23 * 1.15).toFixed(2) }
+};
+
+function setPreset(name) {
+    document.querySelectorAll('.stab').forEach((b, i) => {
+        b.classList.toggle('active', ['conservative','base','aggressive'][i] === name);
+    });
+    document.getElementById('monthlyRate').value = PRESETS[name].rate;
+    document.getElementById('rateRange').value = PRESETS[name].rate;
+    calc();
+}
+
+function syncFromRange(type) {
+    if (type === 'invest') {
+        document.getElementById('investAmount').value = document.getElementById('investRange').value;
+    } else if (type === 'months') {
+        document.getElementById('months').value = document.getElementById('monthsRange').value;
+    } else if (type === 'rate') {
+        document.getElementById('monthlyRate').value = parseFloat(document.getElementById('rateRange').value).toFixed(2);
+    }
+    calc();
+}
+
+function syncRanges() {
+    document.getElementById('investRange').value = Math.min(parseFloat(document.getElementById('investAmount').value) || 1000, 50000);
+    document.getElementById('monthsRange').value = document.getElementById('months').value;
+    document.getElementById('rateRange').value = document.getElementById('monthlyRate').value;
+}
+
+function fmt(n, dec=0) {
+    const abs = Math.abs(n);
+    const s = new Intl.NumberFormat('en-US', {
+        style:'currency', currency:'USD',
+        minimumFractionDigits: dec,
+        maximumFractionDigits: dec
+    }).format(abs);
+    return n < 0 ? '(' + s + ')' : s;
+}
+
+function fmtPct(n) {
+    return (n >= 0 ? '+' : '') + n.toFixed(2) + '%';
+}
+
+function calc() {
+    const invest   = parseFloat(document.getElementById('investAmount').value) || 1000;
+    const months   = parseInt(document.getElementById('months').value) || 6;
+    const rate     = parseFloat(document.getElementById('monthlyRate').value) || 119.23;
+    const fee      = parseFloat(document.getElementById('perfFee').value) || 30;
+    const compound = document.getElementById('compound').value;
+
+    const compLabels = { yes: 'Full Compounding', no: 'Full Withdrawal', half: '50/50 Split' };
+    document.getElementById('compoundLabel').textContent = compLabels[compound];
+
+    const rows = [];
+    let balance = invest;
+    let totalGross=0, totalFee=0, totalNet=0, totalWithdrawn=0;
+
+    for (let m = 1; m <= months; m++) {
+        const start  = balance;
+        const gross  = start * (rate / 100);
+        const feeAmt = gross > 0 ? gross * (fee / 100) : 0;
+        const net    = gross - feeAmt;
+        const dailyAvg = net / PAMM.tradingDaysPerMonth;
+
+        let reinvest = 0, withdrawn = 0;
+        if (compound === 'yes')        { reinvest = net; withdrawn = 0; }
+        else if (compound === 'no')    { reinvest = 0;   withdrawn = net; }
+        else                           { reinvest = net * 0.5; withdrawn = net * 0.5; }
+
+        balance = start + reinvest;
+        totalGross    += gross;
+        totalFee      += feeAmt;
+        totalNet      += net;
+        totalWithdrawn += withdrawn;
+
+        const cumROI = ((balance + totalWithdrawn - invest) / invest) * 100;
+        rows.push({ m, start, rate, gross, feeAmt, net, dailyAvg, reinvest, withdrawn, balance, cumROI });
+    }
+
+    const finalPortfolio = rows[rows.length-1]?.balance || invest;
+    const totalValue  = finalPortfolio + totalWithdrawn;
+    const roi         = ((totalValue - invest) / invest) * 100;
+    const avgMonthly  = totalNet / months;
+    const avgDaily    = avgMonthly / PAMM.tradingDaysPerMonth;
+    const avgWeekly   = avgMonthly / 4.33;
+    const breakEven   = avgMonthly > 0 ? Math.ceil((invest / avgMonthly) * 30) : 0;
+    const totalTradingDays = months * PAMM.tradingDaysPerMonth;
+    const tradesPerDay = PAMM.totalTrades / PAMM.ageDays;
+    const projTotalTrades = Math.round(tradesPerDay * totalTradingDays);
+    const projWins = Math.round(projTotalTrades * (PAMM.winRate / 100));
+    const projLosses = projTotalTrades - projWins;
+
+    // Update results
+    document.getElementById('finalValue').textContent = fmt(totalValue);
+    document.getElementById('finalSub').textContent =
+        `After ${fee}% perf. fee • ${months} month${months!==1?'s':''} • ${compLabels[compound]}`;
+
+    document.getElementById('grossProfit').textContent  = fmt(totalGross);
+    document.getElementById('netProfit').textContent    = fmt(totalNet);
+    document.getElementById('feePaid').textContent      = fmt(totalFee);
+    document.getElementById('roi').textContent          = fmtPct(roi);
+    document.getElementById('roi').className            = 'rg-val ' + (roi > 0 ? 'blue' : 'neg');
+    document.getElementById('monthlyIncome').textContent = fmt(avgMonthly);
+    document.getElementById('dailyIncome').textContent  = fmt(avgDaily, 2);
+    document.getElementById('weeklyIncome').textContent = fmt(avgWeekly, 2);
+    document.getElementById('breakEven').textContent    = breakEven > 0 ? `~${breakEven} days` : 'Immediate';
+    document.getElementById('projWinTrades').textContent = projWins.toLocaleString();
+    document.getElementById('projLossTrades').textContent = projLosses.toLocaleString();
+
+    // Progress bars
+    const p2  = Math.min((totalValue / (invest*2))  * 100, 100);
+    const p5  = Math.min((totalValue / (invest*5))  * 100, 100);
+    const p10 = Math.min((totalValue / (invest*10)) * 100, 100);
+    document.getElementById('d2pct').textContent  = p2.toFixed(0)+'%';
+    document.getElementById('d5pct').textContent  = p5.toFixed(0)+'%';
+    document.getElementById('d10pct').textContent = p10.toFixed(0)+'%';
+    document.getElementById('d2bar').style.width  = p2+'%';
+    document.getElementById('d5bar').style.width  = p5+'%';
+    document.getElementById('d10bar').style.width = p10+'%';
+
+    // Calc reference note
+    const m1gross = fmt(invest * rate / 100);
+    const m1fee   = fmt(invest * rate / 100 * fee / 100);
+    const m1net   = fmt(invest * rate / 100 * (1 - fee/100));
+    const m1daily = fmt(invest * rate / 100 * (1 - fee/100) / PAMM.tradingDaysPerMonth, 2);
+    const compNote = compound === 'yes'
+        ? `With <strong>full compounding</strong>, each month's net profit is added to the balance — meaning the next month earns returns on a larger base. This creates exponential growth: Month 1 earns on ${fmt(invest)}, Month 2 earns on more, and so on.`
+        : compound === 'no'
+        ? `With <strong>full withdrawal</strong>, net profit is taken out each month — balance stays at ${fmt(invest)} throughout. Growth is linear: every month earns the same dollar amount.`
+        : `With <strong>50/50 split</strong>, half of net profit is reinvested and half withdrawn. Moderate compounding effect — balance grows slowly while generating monthly income.`;
+    const rateNote = rate === PAMM.monthReturn
+        ? `You're using the <strong>exact verified monthly average of ${PAMM.monthReturn}%</strong> from the XAUUSD performance data.`
+        : rate < PAMM.monthReturn
+        ? `You're using <strong>${rate}%</strong> — below the verified ${PAMM.monthReturn}% avg. This is a more conservative assumption.`
+        : `You're using <strong>${rate}%</strong> — above the verified ${PAMM.monthReturn}% avg. This assumes stronger-than-average performance.`;
+
+    document.getElementById('calcNoteText').innerHTML =
+        `<strong>Month 1 step-by-step:</strong> ${fmt(invest)} × ${rate}% = ${m1gross} gross profit.
+        ${fee}% fee on profit: ${m1fee}. Net profit = ${m1net}. Estimated daily avg = ${m1daily}/day (÷22 trading days).
+        <br><br><strong>Compounding logic:</strong> ${compNote}
+        <br><br><strong>Rate basis:</strong> ${rateNote}
+        <br><br><strong>Trade estimates:</strong> Based on ${(tradesPerDay).toFixed(1)} trades/day historical pace — over ${months} month${months!==1?'s':''} (~${totalTradingDays} trading days), projecting ~${projTotalTrades} total trades, ~${projWins} wins at 71.7% win rate.`;
+
+    // Table subtitle
+    document.getElementById('tableSubtitle').textContent =
+        `${rate}%/mo • Reference avg: ${PAMM.monthReturn}%/mo • ${compLabels[compound]}`;
+
+    // Monthly table
+    const tbody = document.getElementById('monthlyBody');
+    tbody.innerHTML = '';
+    rows.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td style="font-weight:700;color:var(--text-primary);">Month ${r.m}</td>
+            <td>${fmt(r.start)}</td>
+            <td class="${r.rate>0?'pos':'neg'}">${r.rate.toFixed(2)}%</td>
+            <td class="pos">${fmt(r.gross)}</td>
+            <td class="neg">(${fmt(r.feeAmt)})</td>
+            <td class="${r.net>0?'pos':'neg'}">${fmt(r.net)}</td>
+            <td style="color:var(--purple);font-weight:700;">${r.withdrawn>0?fmt(r.withdrawn):'—'}</td>
+            <td class="gold">${fmt(r.balance)}</td>
+            <td style="color:var(--accent);font-family:'JetBrains Mono',monospace;">${fmt(r.dailyAvg, 2)}</td>
+            <td class="${r.cumROI>0?'pos':'neg'}">${fmtPct(r.cumROI)}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    // Total row
+    const tRow = document.createElement('tr');
+    tRow.className = 'total-row';
+    tRow.innerHTML = `
+        <td>TOTAL</td>
+        <td>${fmt(invest)}</td>
+        <td>—</td>
+        <td class="pos">${fmt(totalGross)}</td>
+        <td class="neg">(${fmt(totalFee)})</td>
+        <td class="gold">${fmt(totalNet)}</td>
+        <td style="color:var(--purple);">${totalWithdrawn>0?fmt(totalWithdrawn):'—'}</td>
+        <td class="gold">${fmt(totalValue)}</td>
+        <td style="color:var(--accent);">${fmt(avgDaily, 2)}</td>
+        <td class="${roi>0?'pos':'neg'}">${fmtPct(roi)}</td>
+    `;
+    tbody.appendChild(tRow);
+
+    // Table note
+    document.getElementById('tableNote').innerHTML =
+        `Formula: <strong>Gross = Balance × ${rate}%</strong>. Fee = Gross × ${fee}% (profit only).
+        Net = Gross − Fee. Daily Avg = Net ÷ 22 trading days/month.
+        Reference: XAUUSD avg ${PAMM.monthReturn}%/mo, daily avg $${PAMM.dailyAvgProfit}/day at historical pace.
+        ${compound==='yes' ? 'Compounding: end balance grows each month, increasing future gross profits.' :
+          compound==='no'  ? 'No compounding: balance stays fixed at initial investment each month.' :
+                             '50/50: half of profit compounded, half withdrawn each month.'}`;
+
+    drawChart(rows, invest, totalWithdrawn);
+    drawScenarios(invest, months, fee);
+}
+
+function drawChart(rows, invest, totalWithdrawn) {
+    const canvas = document.getElementById('projChart');
+    const parent = canvas.parentElement;
+    canvas.width  = parent.offsetWidth || 600;
+    canvas.height = parent.offsetHeight || 200;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+
+    const labels = ['Start', ...rows.map(r => 'M'+r.m)];
+    let cumWithdrawn = 0;
+    const values = [invest, ...rows.map(r => { cumWithdrawn += r.withdrawn; return r.balance + cumWithdrawn; })];
+    const maxV = Math.max(...values) * 1.05;
+    const minV = Math.min(...values) * 0.95;
+    const range = maxV - minV || 1;
+
+    const pad = { top:16, right:16, bottom:28, left:68 };
+    const cW = W-pad.left-pad.right, cH = H-pad.top-pad.bottom;
+    ctx.clearRect(0, 0, W, H);
+
+    const pts = values.map((v,i) => ({
+        x: pad.left + (cW/(labels.length-1))*i,
+        y: pad.top + cH - ((v-minV)/range)*cH
+    }));
+
+    ctx.strokeStyle='#e2e8f0'; ctx.lineWidth=1;
+    for (let i=0; i<=4; i++) {
+        const y = pad.top+(cH/4)*i;
+        ctx.beginPath(); ctx.moveTo(pad.left,y); ctx.lineTo(pad.left+cW,y); ctx.stroke();
+        const v = minV+range*(1-i/4);
+        ctx.fillStyle='#94a3b8'; ctx.font='9px JetBrains Mono,monospace'; ctx.textAlign='right';
+        ctx.fillText('$'+Math.round(v).toLocaleString(), pad.left-5, y+3);
+    }
+
+    ctx.fillStyle='#94a3b8'; ctx.font='9px JetBrains Mono,monospace'; ctx.textAlign='center';
+    labels.forEach((l,i) => {
+        if (labels.length <= 13 || i % Math.ceil(labels.length/10) === 0 || i===labels.length-1)
+            ctx.fillText(l, pts[i].x, H-6);
+    });
+
+    const grad = ctx.createLinearGradient(0,pad.top,0,pad.top+cH);
+    grad.addColorStop(0,'rgba(102,126,234,0.2)');
+    grad.addColorStop(1,'rgba(102,126,234,0.0)');
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pad.top+cH);
+    pts.forEach(p => ctx.lineTo(p.x,p.y));
+    ctx.lineTo(pts[pts.length-1].x, pad.top+cH);
+    ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+
+    ctx.beginPath();
+    pts.forEach((p,i) => i===0 ? ctx.moveTo(p.x,p.y) : ctx.lineTo(p.x,p.y));
+    ctx.strokeStyle='#667eea'; ctx.lineWidth=2.5; ctx.lineJoin='round'; ctx.stroke();
+
+    pts.forEach(p => {
+        ctx.beginPath(); ctx.arc(p.x,p.y,3.5,0,Math.PI*2);
+        ctx.fillStyle='#667eea'; ctx.fill();
+        ctx.strokeStyle='white'; ctx.lineWidth=1.5; ctx.stroke();
+    });
+}
+
+function drawScenarios(invest, months, fee) {
+    const aggressiveRate = +(PAMM.monthReturn * 1.15).toFixed(2);
+    const scenarios = [
+        {
+            key: 'bear', label: 'Conservative Scenario', rate: 40,
+            how: `40% chosen as ⅓ of the ${PAMM.monthReturn}% verified monthly average. This models a significantly underperforming period — drawdown, ranging market, or reduced signal quality. It is the most pessimistic realistic scenario, not a worst-case.`
+        },
+        {
+            key: 'base', label: 'Base Case Scenario', rate: PAMM.monthReturn,
+            how: `${PAMM.monthReturn}% is the direct verified monthly return from XAUUSD performance data: ${PAMM.totalTrades} trades, ${PAMM.tradesWon} wins, $${PAMM.totalProfit.toLocaleString()} profit over ${PAMM.ageDays} days. This is the most grounded projection — it assumes performance continues at the documented pace.`
+        },
+        {
+            key: 'bull', label: 'Aggressive Scenario', rate: aggressiveRate,
+            how: `${aggressiveRate}% = ${PAMM.monthReturn}% base × 115% — exactly 15% above the verified monthly average. This models a modestly stronger month with elevated Gold volatility or increased trade frequency. Not an outlier — a realistic upside.`
+        }
+    ];
+
+    const container = document.getElementById('scenarioCards');
+    container.innerHTML = '';
+
+    let noteHtml = `<strong>How each scenario rate was derived:</strong><br>`;
+    scenarios.forEach(s => {
+        let bal = invest, tG=0, tF=0, tN=0;
+        for (let m=0; m<months; m++) {
+            const g=bal*(s.rate/100), f=g>0?g*(fee/100):0, n=g-f;
+            tG+=g; tF+=f; tN+=n; bal+=n;
+        }
+        const roi = ((bal-invest)/invest*100);
+        const monthly = tN/months;
+        const daily = monthly/PAMM.tradingDaysPerMonth;
+
+        const div = document.createElement('div');
+        div.className = `sc-card ${s.key}`;
+        div.innerHTML = `
+            <div class="sc-header"><div class="sc-dot"></div><div class="sc-label">${s.label}</div></div>
+            <div class="sc-return">${roi>=0?'+':''}${roi.toFixed(0)}%</div>
+            <div class="sc-final">${fmt(bal)} projected value</div>
+            <div class="sc-detail" style="margin-bottom:0.75rem;">${s.how}</div>
+            <div class="sc-divider"></div>
+            <div class="sc-stats">
+                <div class="sc-stat"><div class="sc-stat-val">${fmt(tN)}</div><div class="sc-stat-lbl">Total Net</div></div>
+                <div class="sc-stat"><div class="sc-stat-val">${fmt(monthly)}</div><div class="sc-stat-lbl">Avg/Month</div></div>
+                <div class="sc-stat"><div class="sc-stat-val">${fmt(daily,2)}</div><div class="sc-stat-lbl">Avg/Day</div></div>
+                <div class="sc-stat"><div class="sc-stat-val">${s.rate}%</div><div class="sc-stat-lbl">Rate Used</div></div>
+                <div class="sc-stat"><div class="sc-stat-val">${fmt(tF)}</div><div class="sc-stat-lbl">Fees Paid</div></div>
+                <div class="sc-stat"><div class="sc-stat-val">${fmt(tN/invest*100,1)}%</div><div class="sc-stat-lbl">Net ROI</div></div>
+            </div>
+        `;
+        container.appendChild(div);
+
+        noteHtml += `<br><strong>${s.label} (${s.rate}%/mo):</strong> ${s.how}`;
+    });
+
+    noteHtml += `<br><br>All three scenarios use <strong>${fee}% performance fee</strong> on profits only, with full compounding over <strong>${months} month${months!==1?'s':''}.</strong> The ${PAMM.monthReturn}% base is sourced directly from verified XAUUSD data — ${PAMM.totalTrades} trades, ${PAMM.tradesWon} wins, ${PAMM.winRate}% accuracy.`;
+    document.getElementById('scenarioNote').innerHTML = noteHtml;
+}
+
+calc();
+window.addEventListener('resize', calc);
+</script>
+</body>
+</html>
