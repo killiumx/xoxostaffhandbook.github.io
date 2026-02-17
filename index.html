@@ -2218,12 +2218,6 @@
                     </div>
                 </div>
             </div>
-<p style="color: var(--text-secondary); margin-bottom: 2rem;">Set your account goal (1-100)</p>
-<div class="metrics-grid" style="margin-bottom: 2rem;">
-<div class="metric-card"><div class="metric-header"><span class="metric-label">Your Goal</span><div class="metric-icon purple">🎯</div></div><div class="metric-value" id="settingsGoalDisplay">20</div><div class="metric-change neutral">Total target</div></div>
-<div class="metric-card"><div class="metric-header"><span class="metric-label">Active</span><div class="metric-icon blue">💼</div></div><div class="metric-value" id="settingsActiveDisplay">0</div><div class="metric-change neutral" id="settingsActiveList">No trades</div></div>
-<div class="metric-card"><div class="metric-header"><span class="metric-label">Payout Goal</span><div class="metric-icon green">💰</div></div><div class="metric-value" id="settingsPayoutGoal">$0</div><div class="metric-change neutral">Active × $4,600</div></div>
-</div>
 <div class="form-card">
 <h3 style="margin-bottom: 1rem;">Set Goal</h3>
 <div class="alert alert-info show" style="margin-bottom: 1rem;">Cycle Performance tracks ONLY active accounts (with trades)</div>
@@ -2438,12 +2432,10 @@ function getActiveAccountsList() {
             showAlert('✓ Debug log exported', 'success');
         }
 
-        // AUTO-LOGIN BYPASS
-sessionStorage.setItem('farm_auth', 'true');
-sessionStorage.setItem('farm_password', 'trader2025');
-
-// LOGIN - MULTI USER
-if (sessionStorage.getItem('farm_auth') === 'true') {
+         // AUTO-LOGIN BYPASS - Wait for DOM to load first
+    document.addEventListener('DOMContentLoaded', function() {
+        sessionStorage.setItem('farm_auth', 'true');
+        sessionStorage.setItem('farm_password', 'trader2025');
 
         // LOGIN - MULTI USER
         if (sessionStorage.getItem('farm_auth') === 'true') {
@@ -2454,6 +2446,9 @@ if (sessionStorage.getItem('farm_auth') === 'true') {
                 showDashboard();
             }
         }
+    });
+
+
 
         document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
@@ -3101,61 +3096,60 @@ document.getElementById('heroAccounts').textContent = `${accountsAtGoal}/${accou
         }
 
         function updateAccounts() {
-           function updateAccounts() {
-    const grid = document.getElementById('accountsGrid');
-    grid.innerHTML = '';
+        const grid = document.getElementById('accountsGrid');
+        grid.innerHTML = '';
 
-    const accountData = groupByAccount(allData);
-    const accountGoal = getUserAccountGoal();
-    
-    for (let i = 1; i <= accountGoal; i++) {
-                const acc = accountData[i];
-                
-                if (accountFilter === 'active' && acc.trades === 0) continue;
-                if (accountFilter === 'goal' && acc.pnl < 4600) continue;
-                if (accountFilter === 'profitable' && acc.pnl <= 0) continue;
-                
-                const card = document.createElement('div');
-                card.className = 'account-card';
-                
-                card.innerHTML = `
-                    <div class="account-header">
-                        <div class="account-number">PA #${i}</div>
-                        <span class="account-badge ${acc.pnl >= 4600 ? 'badge-success' : 'badge-active'}">
-                            ${acc.pnl >= 4600 ? 'GOAL ✓' : 'ACTIVE'}
-                        </span>
+        const accountData = groupByAccount(allData);
+        const accountGoal = getUserAccountGoal();
+        
+        for (let i = 1; i <= accountGoal; i++) {
+            const acc = accountData[i];
+            
+            if (accountFilter === 'active' && acc.trades === 0) continue;
+            if (accountFilter === 'goal' && acc.pnl < 4600) continue;
+            if (accountFilter === 'profitable' && acc.pnl <= 0) continue;
+            
+            const card = document.createElement('div');
+            card.className = 'account-card';
+            
+            card.innerHTML = `
+                <div class="account-header">
+                    <div class="account-number">PA #${i}</div>
+                    <span class="account-badge ${acc.pnl >= 4600 ? 'badge-success' : 'badge-active'}">
+                        ${acc.pnl >= 4600 ? 'GOAL ✓' : 'ACTIVE'}
+                    </span>
+                </div>
+                <div class="account-progress">
+                    <div class="progress-header">
+                        <span>${formatCurrency(acc.pnl)}</span>
+                        <span>${Math.round(acc.progress)}%</span>
                     </div>
-                    <div class="account-progress">
-                        <div class="progress-header">
-                            <span>${formatCurrency(acc.pnl)}</span>
-                            <span>${Math.round(acc.progress)}%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${acc.progress}%"></div>
-                        </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${acc.progress}%"></div>
                     </div>
-                    <div class="account-stats">
-                        <div class="account-stat">
-                            <span class="account-stat-label">Trades</span>
-                            <span class="account-stat-value">${acc.trades}</span>
-                        </div>
-                        <div class="account-stat">
-                            <span class="account-stat-label">Win Rate</span>
-                            <span class="account-stat-value">${acc.trades > 0 ? Math.round(acc.winRate) : 0}%</span>
-                        </div>
-                        <div class="account-stat">
-                            <span class="account-stat-label">To Goal</span>
-                            <span class="account-stat-value">${formatCurrency(Math.max(4600 - acc.pnl, 0))}</span>
-                        </div>
-                        <div class="account-stat">
-                            <span class="account-stat-label">Balance</span>
-                            <span class="account-stat-value">${formatCurrency(50000 + acc.pnl)}</span>
-                        </div>
+                </div>
+                <div class="account-stats">
+                    <div class="account-stat">
+                        <span class="account-stat-label">Trades</span>
+                        <span class="account-stat-value">${acc.trades}</span>
                     </div>
-                `;
-                grid.appendChild(card);
-            }
+                    <div class="account-stat">
+                        <span class="account-stat-label">Win Rate</span>
+                        <span class="account-stat-value">${acc.trades > 0 ? Math.round(acc.winRate) : 0}%</span>
+                    </div>
+                    <div class="account-stat">
+                        <span class="account-stat-label">To Goal</span>
+                        <span class="account-stat-value">${formatCurrency(Math.max(4600 - acc.pnl, 0))}</span>
+                    </div>
+                    <div class="account-stat">
+                        <span class="account-stat-label">Balance</span>
+                        <span class="account-stat-value">${formatCurrency(50000 + acc.pnl)}</span>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(card);
         }
+    }
 
         function filterAccounts(filter) {
             accountFilter = filter;
