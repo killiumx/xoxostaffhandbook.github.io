@@ -1202,9 +1202,14 @@
         <button class="debug-btn" onclick="exportDebugLog()">Export Debug Log</button>
         <button class="debug-btn secondary" onclick="exportCSV()">Export CSV Data</button>
 
-         <div class="debug-section">
+        <div class="debug-section">
             <div class="debug-label">CURRENT USER</div>
             <div class="debug-value" id="debugCurrentUser">Not logged in</div>
+        </div>
+
+        <div class="debug-section">
+            <div class="debug-label">ACCOUNT GOAL</div>
+            <div class="debug-value" id="debugAccountGoal">Not set</div>
         </div>
 
         <div class="debug-section">
@@ -1220,6 +1225,11 @@
         <div class="debug-section">
             <div class="debug-label">TOTAL TRADES</div>
             <div class="debug-value" id="debugTotalTrades">0</div>
+        </div>
+
+        <div class="debug-section">
+            <div class="debug-label">ACTIVE ACCOUNTS</div>
+            <div class="debug-value" id="debugActiveAccounts">0</div>
         </div>
 
         <div class="debug-section">
@@ -1255,11 +1265,12 @@
     <div class="dashboard" id="dashboard">
         <!-- SIDEBAR -->
         <aside class="sidebar" id="sidebar">
-              <div class="logo">🌾 Prop Farm</div>
-            <div class="user-badge" id="userBadge">User Dashboard</div>
+            <div class="logo">🌾 Prop Farm</div>
+            <div class="user-badge" id="userBadge" style="background: var(--bg-secondary); padding: 0.75rem; border-radius: 10px; margin-bottom: 2rem; text-align: center; font-weight: 600;">
+                User Dashboard
+            </div>
             
             <nav class="nav-section">
-```
                 <div class="nav-title">Main</div>
                 <div class="nav-item active" data-page="overview">
                     <span class="nav-icon">📊</span>
@@ -1309,6 +1320,10 @@
 
             <nav class="nav-section">
                 <div class="nav-title">Settings</div>
+                <div class="nav-item" data-page="settings">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Settings</span>
+                </div>
                 <div class="nav-item" onclick="logout()">
                     <span class="nav-icon">🚪</span>
                     <span>Logout</span>
@@ -1344,7 +1359,7 @@
                     <!-- HERO BANNER -->
                     <div class="hero-banner">
                         <div class="hero-content">
-                           <div class="hero-greeting">Welcome back, <span id="heroUserName">Trader</span></div>
+                            <div class="hero-greeting">Welcome back, <span id="heroUserName">Trader</span></div>
                             <div class="hero-title" id="heroTitle">Building Your Trading Empire</div>
                             <div class="hero-stats">
                                 <div class="hero-stat">
@@ -1353,7 +1368,7 @@
                                 </div>
                                 <div class="hero-stat">
                                     <div class="hero-stat-value" id="heroProgress">0%</div>
-                                    <div class="hero-stat-label">Monthly Goal Progress</div>
+                                    <div class="hero-stat-label">Portfolio Progress</div>
                                 </div>
                                 <div class="hero-stat">
                                     <div class="hero-stat-value" id="heroAccounts">0/20</div>
@@ -1386,11 +1401,11 @@
                                 <p>Download trades</p>
                             </div>
                         </div>
-                        <div class="action-card" onclick="toggleDebug()">
-                            <div class="action-icon orange">🔧</div>
+                        <div class="action-card" onclick="navigateTo('settings')">
+                            <div class="action-icon orange">⚙️</div>
                             <div class="action-info">
-                                <h4>Debug Tools</h4>
-                                <p>API & diagnostics</p>
+                                <h4>Settings</h4>
+                                <p>Configure accounts</p>
                             </div>
                         </div>
                     </div>
@@ -1435,7 +1450,7 @@
                                 <div class="metric-icon cyan">📈</div>
                             </div>
                             <div class="metric-value" id="totalTrades">0</div>
-                            <div class="metric-change neutral">Across 20 accounts</div>
+                            <div class="metric-change neutral" id="totalTradesLabel">Across all accounts</div>
                         </div>
                         <div class="metric-card">
                             <div class="metric-header">
@@ -1529,7 +1544,7 @@
                             <div class="chart-header">
                                 <div>
                                     <h3 class="chart-title">Account Status</h3>
-                                    <p class="chart-subtitle">20 PA accounts</p>
+                                    <p class="chart-subtitle" id="accountStatusSubtitle">Portfolio overview</p>
                                 </div>
                             </div>
                             <div class="chart-container-small">
@@ -1549,13 +1564,13 @@
                         <div class="templates-grid" id="topTemplatesGrid"></div>
                     </div>
                 </div>
-
                 <!-- PAGE: CYCLE PERFORMANCE -->
                 <div class="page" id="cyclePerformancePage">
                     <h2 class="section-title" style="margin-bottom: 1rem;">🔄 Cycle Performance Tracker</h2>
                     <p style="color: var(--text-secondary); margin-bottom: 2rem;">
-                        Track your farming journey: First cycle target is $4,600 profit in 45 days ($250-$300/day). 
-                        After first payout, monthly cycles need $2,000 in 8-20 days.
+                        Track your farming journey across your <strong id="cycleActiveAccountsText">active accounts</strong>. 
+                        First cycle target is $4,600 profit per account in 45 days ($250-$300/day). 
+                        After first payout, monthly cycles need $2,000 per account in 8-20 days.
                     </p>
 
                     <!-- Payout Summary Cards -->
@@ -1597,8 +1612,34 @@
                     <!-- Farming Strategy Info -->
                     <div class="alert alert-info show" style="margin-bottom: 2rem;">
                         <strong>🌾 The Farmer Mentality:</strong><br>
-                        Plant daily wins ($250-$300). Protect the field (stay out of red folder news). Stay patient (45 days first cycle). 
-                        Take the harvest when the account matures ($54,600 = full $2k payout). After first harvest, monthly cycles are easier (just $2k in 8-20 days).
+                        Plant daily wins ($250-$300 per account). Protect the field (stay out of red folder news). Stay patient (45 days first cycle). 
+                        Take the harvest when accounts mature ($54,600 per account = full $2k payout). After first harvest, monthly cycles are easier (just $2k in 8-20 days per account).
+                    </div>
+
+                    <!-- Active Accounts Summary -->
+                    <div class="form-card" style="margin-bottom: 2rem;">
+                        <h3 style="margin-bottom: 1rem;">📊 Active Accounts Summary</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.875rem;">
+                            Cycle performance tracks only accounts with trades. Your goal settings in Settings page apply to the full portfolio view.
+                        </p>
+                        <div class="stats-row">
+                            <div class="stat-mini-card">
+                                <div class="stat-mini-value" id="cycleActiveAccounts">0</div>
+                                <div class="stat-mini-label">Active Accounts</div>
+                            </div>
+                            <div class="stat-mini-card">
+                                <div class="stat-mini-value" id="cycleAvgPerAccount">$0</div>
+                                <div class="stat-mini-label">Avg Per Account</div>
+                            </div>
+                            <div class="stat-mini-card">
+                                <div class="stat-mini-value" id="cycleTotalGoal">$0</div>
+                                <div class="stat-mini-label">Total Goal (Active)</div>
+                            </div>
+                            <div class="stat-mini-card">
+                                <div class="stat-mini-value" id="cycleRemainingGoal">$0</div>
+                                <div class="stat-mini-label">Remaining to Goal</div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Cycle Comparison Table -->
@@ -1661,6 +1702,128 @@
                     </div>
                 </div>
 
+                <!-- PAGE: SETTINGS -->
+                <div class="page" id="settingsPage">
+                    <h2 class="section-title" style="margin-bottom: 1rem;">⚙️ Account Settings</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                        Configure your portfolio size and account goals. This affects how the dashboard calculates your overall targets.
+                    </p>
+
+                    <!-- Current Settings Summary -->
+                    <div class="metrics-grid" style="margin-bottom: 2rem;">
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-label">Current Account Goal</span>
+                                <div class="metric-icon blue">🎯</div>
+                            </div>
+                            <div class="metric-value" id="settingsCurrentGoal">20</div>
+                            <div class="metric-change neutral">Total accounts in portfolio</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-label">Active Accounts</span>
+                                <div class="metric-icon green">💼</div>
+                            </div>
+                            <div class="metric-value" id="settingsActiveAccounts">0</div>
+                            <div class="metric-change neutral">Accounts with trades</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-label">Portfolio Goal</span>
+                                <div class="metric-icon purple">💰</div>
+                            </div>
+                            <div class="metric-value" id="settingsPortfolioGoal">$92,000</div>
+                            <div class="metric-change neutral" id="settingsGoalCalc">$4,600 × 20 accounts</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-label">Potential Payout</span>
+                                <div class="metric-icon orange">🌾</div>
+                            </div>
+                            <div class="metric-value" id="settingsPotentialPayout">$40,000</div>
+                            <div class="metric-change neutral" id="settingsPayoutCalc">$2,000 × 20 accounts</div>
+                        </div>
+                    </div>
+
+                    <!-- Settings Form -->
+                    <div class="form-card">
+                        <h3 style="margin-bottom: 1.5rem;">📊 Portfolio Configuration</h3>
+                        
+                        <div class="alert alert-info show" style="margin-bottom: 2rem;">
+                            <strong>💡 How This Works:</strong><br>
+                            • <strong>Cycle Performance</strong> tracks ONLY accounts you've actually traded<br>
+                            • <strong>Rest of Dashboard</strong> shows all accounts in your goal (even untouched ones)<br>
+                            • Set your goal to match how many accounts you own or plan to trade
+                        </div>
+
+                        <form id="settingsForm">
+                            <div class="form-group">
+                                <label class="form-label">Account Goal</label>
+                                <select class="form-select" id="accountGoalSelect">
+                                    <option value="1">1 Account ($4,600 goal, $2k payout)</option>
+                                    <option value="5">5 Accounts ($23,000 goal, $10k payout)</option>
+                                    <option value="10">10 Accounts ($46,000 goal, $20k payout)</option>
+                                    <option value="20" selected>20 Accounts ($92,000 goal, $40k payout)</option>
+                                    <option value="50">50 Accounts ($230,000 goal, $100k payout)</option>
+                                    <option value="100">100 Accounts ($460,000 goal, $200k payout)</option>
+                                    <option value="custom">Custom Amount...</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group" id="customGoalGroup" style="display: none;">
+                                <label class="form-label">Custom Account Goal</label>
+                                <input type="number" class="form-input" id="customAccountGoal" min="1" max="200" placeholder="Enter number of accounts (1-200)">
+                                <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                                    Enter any number between 1 and 200 accounts
+                                </p>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Goal Per Account</label>
+                                <input type="number" class="form-input" id="goalPerAccount" value="4600" readonly style="background: var(--bg-secondary);">
+                                <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                                    Standard prop firm payout threshold ($4,600 profit = $2k withdrawal)
+                                </p>
+                            </div>
+
+                            <div class="form-footer">
+                                <button type="submit" class="btn btn-primary">
+                                    💾 Save Settings
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="resetSettingsForm()">
+                                    Reset to Default
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Active Accounts Table -->
+                    <div class="table-card" style="margin-top: 2rem;">
+                        <div class="table-header">
+                            <h3 class="chart-title">All Configured Accounts</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">
+                                Based on your current goal setting
+                            </p>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Account</th>
+                                        <th>Status</th>
+                                        <th>P&L</th>
+                                        <th>Progress</th>
+                                        <th>Trades</th>
+                                        <th>Win Rate</th>
+                                        <th>To Goal</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="settingsAccountsBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- PAGE: TEMPLATES -->
                 <div class="page" id="templatesPage">
                     <div class="templates-section">
@@ -1681,7 +1844,7 @@
                 <!-- PAGE: ACCOUNTS -->
                 <div class="page" id="accountsPage">
                     <div class="section-header">
-                        <h2 class="section-title">20 PA Accounts</h2>
+                        <h2 class="section-title" id="accountsPageTitle">Portfolio Accounts</h2>
                         <div class="section-actions">
                             <button class="btn btn-secondary" onclick="exportCSV()">Export CSV</button>
                         </div>
@@ -1738,62 +1901,6 @@
 
                     <div class="accounts-grid" id="riskMonitorGrid"></div>
                 </div>
-
-                <!-- PAGE: DELETE DATA -->
-                <div class="page" id="deleteDataPage">
-                    <h2 class="section-title" style="margin-bottom: 1.5rem;">🗑️ Delete Data</h2>
-                    
-                    <div class="alert alert-error show" style="margin-bottom: 2rem;">
-                        <strong>⚠️ Warning:</strong> Deleted data cannot be recovered. Please be careful!
-                    </div>
-
-                    <div class="form-card">
-                        <h3 style="margin-bottom: 1.5rem;">Delete Options</h3>
-                        
-                        <div style="display: grid; gap: 1.5rem;">
-                            <div style="padding: 1.5rem; border: 2px solid var(--border); border-radius: 12px;">
-                                <h4 style="margin-bottom: 0.5rem;">🔄 Delete by Cycle</h4>
-                                <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.875rem;">Remove all trades from a specific cycle/month</p>
-                                <div style="display: flex; gap: 1rem;">
-                                    <select class="form-select" id="deleteCycleSelect" style="flex: 1;">
-                                        <option value="">Select cycle to delete</option>
-                                        <option value="1">Cycle 1</option>
-                                        <option value="2">Cycle 2</option>
-                                        <option value="3">Cycle 3</option>
-                                        <option value="4">Cycle 4</option>
-                                        <option value="5">Cycle 5</option>
-                                        <option value="6">Cycle 6</option>
-                                        <option value="7">Cycle 7</option>
-                                        <option value="8">Cycle 8</option>
-                                        <option value="9">Cycle 9</option>
-                                        <option value="10">Cycle 10</option>
-                                        <option value="11">Cycle 11</option>
-                                        <option value="12">Cycle 12</option>
-                                    </select>
-                                    <button class="btn btn-secondary" onclick="deleteByCycle()">Delete Cycle</button>
-                                </div>
-                            </div>
-
-                            <div style="padding: 1.5rem; border: 2px solid var(--border); border-radius: 12px;">
-                                <h4 style="margin-bottom: 0.5rem;">💼 Delete by Account</h4>
-                                <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.875rem;">Remove all trades from a specific account</p>
-                                <div style="display: flex; gap: 1rem;">
-                                    <select class="form-select" id="deleteAccountSelect" style="flex: 1;">
-                                        <option value="">Select account to delete</option>
-                                    </select>
-                                    <button class="btn btn-secondary" onclick="deleteByAccount()">Delete Account</button>
-                                </div>
-                            </div>
-
-                            <div style="padding: 1.5rem; border: 2px solid #ef4444; border-radius: 12px; background: rgba(239, 68, 68, 0.05);">
-                                <h4 style="margin-bottom: 0.5rem; color: var(--danger);">💣 Delete ALL Data</h4>
-                                <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.875rem;">⚠️ This will permanently delete ALL trades from ALL accounts!</p>
-                                <button class="btn btn-secondary" onclick="confirmDeleteAll()" style="background: var(--danger); color: white; border: none;">Delete Everything</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- PAGE: ADD TRADE -->
                 <div class="page" id="addTradePage">
                     <h2 class="section-title" style="margin-bottom: 1.5rem;">Add New Trade</h2>
@@ -1971,7 +2078,7 @@
                                         <option value="500">$500</option>
                                         <option value="1000">$1,000</option>
                                         <option value="1500">$1,500</option>
-                                        <option value="4600">$2,000</option>
+                                        <option value="2000">$2,000</option>
                                         <option value="2500">$2,500</option>
                                         <option value="3000">$3,000</option>
                                         <option value="4000">$4,000</option>
@@ -1990,7 +2097,7 @@
                                     <label class="form-label">Account(s) *</label>
                                     <select class="form-select" id="payoutAccount" required>
                                         <option value="">Select account</option>
-                                        <option value="all">All 20 Accounts (Portfolio)</option>
+                                        <option value="all">All Accounts (Portfolio)</option>
                                     </select>
                                 </div>
 
@@ -2119,41 +2226,97 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- PAGE: DELETE DATA -->
+                <div class="page" id="deleteDataPage">
+                    <h2 class="section-title" style="margin-bottom: 1.5rem;">🗑️ Delete Data</h2>
+                    
+                    <div class="alert alert-error show" style="margin-bottom: 2rem;">
+                        <strong>⚠️ Warning:</strong> Deleted data cannot be recovered. Please be careful!
+                    </div>
+
+                    <div class="form-card">
+                        <h3 style="margin-bottom: 1.5rem;">Delete Options</h3>
+                        
+                        <div style="display: grid; gap: 1.5rem;">
+                            <div style="padding: 1.5rem; border: 2px solid var(--border); border-radius: 12px;">
+                                <h4 style="margin-bottom: 0.5rem;">🔄 Delete by Cycle</h4>
+                                <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.875rem;">Remove all trades from a specific cycle/month</p>
+                                <div style="display: flex; gap: 1rem;">
+                                    <select class="form-select" id="deleteCycleSelect" style="flex: 1;">
+                                        <option value="">Select cycle to delete</option>
+                                        <option value="1">Cycle 1</option>
+                                        <option value="2">Cycle 2</option>
+                                        <option value="3">Cycle 3</option>
+                                        <option value="4">Cycle 4</option>
+                                        <option value="5">Cycle 5</option>
+                                        <option value="6">Cycle 6</option>
+                                        <option value="7">Cycle 7</option>
+                                        <option value="8">Cycle 8</option>
+                                        <option value="9">Cycle 9</option>
+                                        <option value="10">Cycle 10</option>
+                                        <option value="11">Cycle 11</option>
+                                        <option value="12">Cycle 12</option>
+                                    </select>
+                                    <button class="btn btn-secondary" onclick="deleteByCycle()">Delete Cycle</button>
+                                </div>
+                            </div>
+
+                            <div style="padding: 1.5rem; border: 2px solid var(--border); border-radius: 12px;">
+                                <h4 style="margin-bottom: 0.5rem;">💼 Delete by Account</h4>
+                                <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.875rem;">Remove all trades from a specific account</p>
+                                <div style="display: flex; gap: 1rem;">
+                                    <select class="form-select" id="deleteAccountSelect" style="flex: 1;">
+                                        <option value="">Select account to delete</option>
+                                    </select>
+                                    <button class="btn btn-secondary" onclick="deleteByAccount()">Delete Account</button>
+                                </div>
+                            </div>
+
+                            <div style="padding: 1.5rem; border: 2px solid #ef4444; border-radius: 12px; background: rgba(239, 68, 68, 0.05);">
+                                <h4 style="margin-bottom: 0.5rem; color: var(--danger);">💣 Delete ALL Data</h4>
+                                <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.875rem;">⚠️ This will permanently delete ALL trades from ALL accounts!</p>
+                                <button class="btn btn-secondary" onclick="confirmDeleteAll()" style="background: var(--danger); color: white; border: none;">Delete Everything</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
-
     <script>
-        // ✅ MULTI-USER CONFIGURATION
+        // ✅ MULTI-USER CONFIGURATION WITH ACCOUNT GOALS
         const USERS = {
             'trader2025': {
-    sheetAPI: 'https://sheetdb.io/api/v1/eltwz49i4x169',
-    name: 'demo',
-    totalAccounts: 5,     // ← You own 5 accounts total
-    goalPerAccount: 4600  // ← Each needs $4,600
-},
+                sheetAPI: 'https://sheetdb.io/api/v1/eltwz49i4x169',
+                name: 'demo',
+                defaultAccountGoal: 5  // User's default: managing 5 accounts
+            },
             'trader2026': {
                 sheetAPI: 'https://sheetdb.io/api/v1/3if5pdgxfo1p2',
                 name: 'Trader Two',
-                accountsOwned: 20
+                defaultAccountGoal: 20  // User's default: managing 20 accounts
             },
             'demo': {
                 sheetAPI: 'https://sheetdb.io/api/v1/3if5pdgxfo1p2',
-                name: 'Trader Two',
-                accountsOwned: 20
+                name: 'Demo User',
+                defaultAccountGoal: 10  // User's default: managing 10 accounts
             }
         };
 
         let CURRENT_USER = null;
         let SHEET_API = null;
+        let USER_ACCOUNT_GOAL = 20;  // Dynamic - set from user settings
+        
         const STARTING_BALANCE = 50000;
         const MAX_DRAWDOWN = 2500;
         const SAFETY_NET = 52600;
         
-        // Payout Goals
-        const FIRST_PAYOUT_GOAL = 54600;  // $4,600 profit = Full $2k withdrawal
-        const FIRST_PAYOUT_MIN = 52600;   // $2,600 profit = Qualify for payout
-        const MONTHLY_PAYOUT_GOAL = 4600; // After first payout, $2k per month
+        // Payout Goals (PER ACCOUNT)
+        const GOAL_PER_ACCOUNT = 4600;    // $4,600 profit per account
+        const FIRST_PAYOUT_MIN = 2600;    // $2,600 profit = Qualify
+        const MONTHLY_PAYOUT_GOAL = 2000; // After first payout, $2k per account
+        const PAYOUT_PER_ACCOUNT = 2000;  // $2,000 withdrawal per account
         const DAILY_TARGET_MIN = 250;
         const DAILY_TARGET_MAX = 300;
         const FIRST_CYCLE_DAYS = 45;
@@ -2165,7 +2328,6 @@
         let accountFilter = 'all';
         let debugLog = [];
         let payoutData = [];
-        const PAYOUT_API = 'https://sheetdb.io/api/v1/your_payout_sheet_id'; // User can create separate sheet later
 
         // DEBUG FUNCTIONS
         function debugMsg(message, type = 'info') {
@@ -2267,6 +2429,7 @@
             if (storedPassword && USERS[storedPassword]) {
                 CURRENT_USER = USERS[storedPassword];
                 SHEET_API = CURRENT_USER.sheetAPI;
+                loadUserSettings();
                 showDashboard();
             }
         }
@@ -2281,6 +2444,7 @@
                 sessionStorage.setItem('farm_auth', 'true');
                 sessionStorage.setItem('farm_password', password);
                 debugMsg(`User logged in: ${CURRENT_USER.name}`, 'success');
+                loadUserSettings();
                 showDashboard();
             } else {
                 document.getElementById('loginError').classList.add('show');
@@ -2297,17 +2461,45 @@
             document.getElementById('heroUserName').textContent = CURRENT_USER.name;
             document.getElementById('debugCurrentUser').textContent = CURRENT_USER.name;
             document.getElementById('debugApiUrl').textContent = SHEET_API;
+            document.getElementById('debugAccountGoal').textContent = `${USER_ACCOUNT_GOAL} accounts`;
             
             initDashboard();
         }
 
-       function logout() {
+        function logout() {
             sessionStorage.removeItem('farm_auth');
             sessionStorage.removeItem('farm_password');
             if (CURRENT_USER) {
                 localStorage.removeItem(`prop_farm_payouts_${CURRENT_USER.name}`);
+                localStorage.removeItem(`prop_farm_settings_${CURRENT_USER.name}`);
             }
             location.reload();
+        }
+
+        // USER SETTINGS MANAGEMENT
+        function loadUserSettings() {
+            const storageKey = `prop_farm_settings_${CURRENT_USER.name}`;
+            const stored = localStorage.getItem(storageKey);
+            
+            if (stored) {
+                const settings = JSON.parse(stored);
+                USER_ACCOUNT_GOAL = settings.accountGoal || CURRENT_USER.defaultAccountGoal || 20;
+            } else {
+                USER_ACCOUNT_GOAL = CURRENT_USER.defaultAccountGoal || 20;
+            }
+            
+            debugMsg(`User settings loaded: ${USER_ACCOUNT_GOAL} accounts`, 'info');
+        }
+
+        function saveUserSettings(accountGoal) {
+            const storageKey = `prop_farm_settings_${CURRENT_USER.name}`;
+            const settings = {
+                accountGoal: accountGoal,
+                savedAt: new Date().toISOString()
+            };
+            localStorage.setItem(storageKey, JSON.stringify(settings));
+            USER_ACCOUNT_GOAL = accountGoal;
+            debugMsg(`Settings saved: ${accountGoal} accounts`, 'success');
         }
 
         // INIT
@@ -2316,6 +2508,7 @@
             populateAccountDropdown();
             setupEventListeners();
             setupPayoutForm();
+            setupSettingsForm();
             setTodayDate();
             loadDashboardData();
             loadPayoutData();
@@ -2326,14 +2519,16 @@
             const leadSelect = document.getElementById('leadAccount');
             const deleteSelect = document.getElementById('deleteAccountSelect');
             const followerDiv = document.getElementById('followerCheckboxes');
+            const payoutAccountSelect = document.getElementById('payoutAccount');
             
-            // Single account select
+            // Clear all dropdowns
             select.innerHTML = '<option value="">Select account</option>';
             leadSelect.innerHTML = '<option value="">Select lead account</option>';
             deleteSelect.innerHTML = '<option value="">Select account</option>';
             followerDiv.innerHTML = '';
             
-            for (let i = 1; i <= 20; i++) {
+            // Populate based on USER_ACCOUNT_GOAL
+            for (let i = 1; i <= USER_ACCOUNT_GOAL; i++) {
                 select.innerHTML += `<option value="${i}">PA Account #${i}</option>`;
                 leadSelect.innerHTML += `<option value="${i}">PA Account #${i}</option>`;
                 deleteSelect.innerHTML += `<option value="${i}">PA Account #${i}</option>`;
@@ -2346,6 +2541,16 @@
                     </label>
                 `;
             }
+            
+            // Payout account dropdown
+            if (payoutAccountSelect) {
+                payoutAccountSelect.innerHTML = '<option value="">Select account</option><option value="all">All Accounts (Portfolio)</option>';
+                for (let i = 1; i <= USER_ACCOUNT_GOAL; i++) {
+                    payoutAccountSelect.innerHTML += `<option value="${i}">PA Account #${i}</option>`;
+                }
+            }
+            
+            debugMsg(`Account dropdowns populated with ${USER_ACCOUNT_GOAL} accounts`, 'info');
         }
 
         function setTodayDate() {
@@ -2399,9 +2604,6 @@
                     cb.disabled = isNoTradeDay;
                 });
                 
-                // Cycle and date stay enabled
-                // Notes stay enabled for explanation
-                
                 if (isNoTradeDay) {
                     // Auto-fill notes
                     const notesField = document.getElementById('notes');
@@ -2449,7 +2651,7 @@
             document.getElementById(page + 'Page').classList.add('active');
 
             const titles = {
-                overview: 'Ultimate Overview',
+                overview: 'Overview',
                 cyclePerformance: 'Cycle Performance',
                 templates: 'Templates',
                 accounts: 'Accounts',
@@ -2458,12 +2660,18 @@
                 addTrade: 'Add Trade',
                 logPayout: 'Log Payout',
                 tradeLog: 'Trade Log',
-                deleteData: 'Delete Data'
+                deleteData: 'Delete Data',
+                settings: 'Settings'
             };
             document.getElementById('pageTitle').textContent = titles[page];
 
             if (window.innerWidth <= 1024) {
                 document.getElementById('sidebar').classList.remove('show');
+            }
+            
+            // Update settings page when navigating to it
+            if (page === 'settings') {
+                updateSettingsPage();
             }
         }
 
@@ -2486,6 +2694,11 @@
                 
                 allData = data || [];
                 document.getElementById('debugTotalTrades').textContent = allData.length;
+                
+                // Count active accounts
+                const activeAccounts = getActiveAccountCount();
+                document.getElementById('debugActiveAccounts').textContent = activeAccounts;
+                
                 document.getElementById('debugLoadTime').textContent = `${loadTime}ms ago`;
                 
                 updateAllViews();
@@ -2515,34 +2728,23 @@
             updateCyclePerformance();
             updatePayoutPage();
         }
-
         function updateHeroStats() {
             const totalPnL = allData.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
             const accountsAtGoal = getAccountsAtGoal();
             
-            // Calculate progress toward first payout
-            let progress, goalText;
-            if (totalPnL < FIRST_PAYOUT_MIN) {
-                progress = Math.min((totalPnL / FIRST_PAYOUT_GOAL) * 100, 100);
-                goalText = 'To First Payout';
-            } else {
-                // After first payout, track monthly $2k goals
-                const afterFirstPayout = totalPnL - FIRST_PAYOUT_GOAL;
-                const monthlyGoals = Math.floor(afterFirstPayout / MONTHLY_PAYOUT_GOAL);
-                const currentProgress = afterFirstPayout % MONTHLY_PAYOUT_GOAL;
-                progress = (currentProgress / MONTHLY_PAYOUT_GOAL) * 100;
-                goalText = `Payout ${monthlyGoals + 2} Progress`;
-            }
+            // Calculate progress toward portfolio goal
+            const portfolioGoal = USER_ACCOUNT_GOAL * GOAL_PER_ACCOUNT;
+            const progress = Math.min((totalPnL / portfolioGoal) * 100, 100);
 
             document.getElementById('heroTotalPnL').textContent = formatCurrency(totalPnL);
             document.getElementById('heroProgress').textContent = Math.round(progress) + '%';
-            document.getElementById('heroAccounts').textContent = `${accountsAtGoal}/20`;
+            document.getElementById('heroAccounts').textContent = `${accountsAtGoal}/${USER_ACCOUNT_GOAL}`;
 
             // Update hero title based on progress
-            const messages = totalPnL >= FIRST_PAYOUT_GOAL
+            const messages = totalPnL >= portfolioGoal
                 ? ['Harvesting Monthly Payouts', 'Farmer Mentality Proven', 'Steady Monthly Income']
-                : totalPnL >= FIRST_PAYOUT_MIN
-                ? ['First Payout Qualified!', 'Ready for Harvest', 'Unlock That $2k!']
+                : totalPnL >= (portfolioGoal * 0.75)
+                ? ['First Payout Qualified!', 'Ready for Harvest', 'Unlock That Payout!']
                 : ['Building Your Trading Empire', 'Plant Daily Wins', 'Protect the Field', 'Stay Patient'];
             
             document.getElementById('heroTitle').textContent = messages[Math.floor(Math.random() * messages.length)];
@@ -2561,16 +2763,9 @@
             const avgTrade = totalTrades > 0 ? totalPnL / totalTrades : 0;
             const streak = calculateStreak(allData);
             
-            // Calculate progress toward payout goals
-            let progress;
-            if (totalPnL < FIRST_PAYOUT_MIN) {
-                progress = Math.min((totalPnL / FIRST_PAYOUT_GOAL) * 100, 100);
-            } else {
-                // After first payout, track monthly $2k goals
-                const afterFirstPayout = totalPnL - FIRST_PAYOUT_GOAL;
-                const currentProgress = afterFirstPayout % MONTHLY_PAYOUT_GOAL;
-                progress = (currentProgress / MONTHLY_PAYOUT_GOAL) * 100;
-            }
+            // Calculate progress toward portfolio goal
+            const portfolioGoal = USER_ACCOUNT_GOAL * GOAL_PER_ACCOUNT;
+            const progress = Math.min((totalPnL / portfolioGoal) * 100, 100);
 
             document.getElementById('totalPnL').textContent = formatCurrency(totalPnL);
             document.getElementById('pnlChange').textContent = formatCurrency(totalPnL) + ' total';
@@ -2593,6 +2788,7 @@
             }
             
             document.getElementById('totalTrades').textContent = totalTrades;
+            document.getElementById('totalTradesLabel').textContent = `Across ${USER_ACCOUNT_GOAL} accounts`;
             
             document.getElementById('avgTrade').textContent = formatCurrency(avgTrade);
             document.getElementById('avgTradeInfo').textContent = avgTrade >= 0 ? 'Per trade' : 'Loss per trade';
@@ -2794,15 +2990,18 @@
 
             // Account Status Chart
             const accountsAtGoal = getAccountsAtGoal();
-            const accountsActive = 20 - accountsAtGoal;
+            const accountsActive = getActiveAccountCount() - accountsAtGoal;
+            const accountsInactive = USER_ACCOUNT_GOAL - getActiveAccountCount();
+
+            document.getElementById('accountStatusSubtitle').textContent = `${USER_ACCOUNT_GOAL} accounts total`;
 
             charts.accountStatus = new Chart(document.getElementById('accountStatusChart'), {
                 type: 'doughnut',
                 data: {
-                    labels: ['At Goal', 'In Progress'],
+                    labels: ['At Goal', 'In Progress', 'Not Started'],
                     datasets: [{
-                        data: [accountsAtGoal, accountsActive],
-                        backgroundColor: ['#10b981', '#3b82f6'],
+                        data: [accountsAtGoal, accountsActive, accountsInactive],
+                        backgroundColor: ['#10b981', '#3b82f6', '#94a3b8'],
                         borderWidth: 2,
                         borderColor: '#ffffff'
                     }]
@@ -2902,11 +3101,13 @@
 
             const accountData = groupByAccount(allData);
             
-            for (let i = 1; i <= 20; i++) {
+            document.getElementById('accountsPageTitle').textContent = `${USER_ACCOUNT_GOAL} Portfolio Accounts`;
+            
+            for (let i = 1; i <= USER_ACCOUNT_GOAL; i++) {
                 const acc = accountData[i];
                 
                 if (accountFilter === 'active' && acc.trades === 0) continue;
-                if (accountFilter === 'goal' && acc.pnl < 4600) continue;
+                if (accountFilter === 'goal' && acc.pnl < GOAL_PER_ACCOUNT) continue;
                 if (accountFilter === 'profitable' && acc.pnl <= 0) continue;
                 
                 const card = document.createElement('div');
@@ -2915,8 +3116,8 @@
                 card.innerHTML = `
                     <div class="account-header">
                         <div class="account-number">PA #${i}</div>
-                        <span class="account-badge ${acc.pnl >= 4600 ? 'badge-success' : 'badge-active'}">
-                            ${acc.pnl >= 4600 ? 'GOAL ✓' : 'ACTIVE'}
+                        <span class="account-badge ${acc.pnl >= GOAL_PER_ACCOUNT ? 'badge-success' : 'badge-active'}">
+                            ${acc.pnl >= GOAL_PER_ACCOUNT ? 'GOAL ✓' : 'ACTIVE'}
                         </span>
                     </div>
                     <div class="account-progress">
@@ -2939,11 +3140,11 @@
                         </div>
                         <div class="account-stat">
                             <span class="account-stat-label">To Goal</span>
-                            <span class="account-stat-value">${formatCurrency(Math.max(4600 - acc.pnl, 0))}</span>
+                            <span class="account-stat-value">${formatCurrency(Math.max(GOAL_PER_ACCOUNT - acc.pnl, 0))}</span>
                         </div>
                         <div class="account-stat">
                             <span class="account-stat-label">Balance</span>
-                            <span class="account-stat-value">${formatCurrency(50000 + acc.pnl)}</span>
+                            <span class="account-stat-value">${formatCurrency(STARTING_BALANCE + acc.pnl)}</span>
                         </div>
                     </div>
                 `;
@@ -3028,7 +3229,6 @@
                 }
             });
         }
-
         // RISK MONITOR - FIXED VERSION
         function updateRiskMonitor() {
             const grid = document.getElementById('riskMonitorGrid');
@@ -3038,7 +3238,7 @@
             let accountsAtRisk = 0;
             let accountsWarning = 0;
             
-            for (let i = 1; i <= 20; i++) {
+            for (let i = 1; i <= USER_ACCOUNT_GOAL; i++) {
                 const acc = accountData[i];
                 const currentBalance = STARTING_BALANCE + acc.pnl;
                 const highestBalance = acc.highestBalance || STARTING_BALANCE;
@@ -3123,15 +3323,19 @@
                 grid.appendChild(card);
             }
             
-            debugMsg(`Risk Monitor: ${accountsAtRisk} at risk, ${accountsWarning} warning, ${20 - accountsAtRisk - accountsWarning} safe`, 'info');
+            debugMsg(`Risk Monitor: ${accountsAtRisk} at risk, ${accountsWarning} warning, ${USER_ACCOUNT_GOAL - accountsAtRisk - accountsWarning} safe`, 'info');
         }
 
         // CYCLE PERFORMANCE
         function updateCyclePerformance() {
             const totalPnL = allData.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
+            const activeAccounts = getActiveAccountCount();
             
-            // Update payout summary cards
-            updatePayoutSummary(totalPnL);
+            // Update text to show active accounts
+            document.getElementById('cycleActiveAccountsText').textContent = `${activeAccounts} active account${activeAccounts !== 1 ? 's' : ''}`;
+            
+            // Update payout summary cards (based on ACTIVE accounts only)
+            updatePayoutSummary(totalPnL, activeAccounts);
             
             // Group data by cycle
             const cycleData = groupByCycle(allData);
@@ -3144,46 +3348,60 @@
             
             // Update cycle detail cards
             updateCycleDetails(cycleData);
+            
+            // Update active accounts summary
+            updateActiveAccountsSummary(activeAccounts, totalPnL);
         }
 
-        function updatePayoutSummary(totalPnL) {
-            // Calculate goal based on number of accounts owned
-            const accountsOwned = CURRENT_USER.accountsOwned || 20;
-            const firstPayoutGoalAdjusted = 4600 * accountsOwned;
-            const firstPayoutMinAdjusted = 4600 * accountsOwned;
+        function updateActiveAccountsSummary(activeAccounts, totalPnL) {
+            document.getElementById('cycleActiveAccounts').textContent = activeAccounts;
+            
+            const avgPerAccount = activeAccounts > 0 ? totalPnL / activeAccounts : 0;
+            document.getElementById('cycleAvgPerAccount').textContent = formatCurrency(avgPerAccount);
+            
+            const totalGoalActive = activeAccounts * GOAL_PER_ACCOUNT;
+            document.getElementById('cycleTotalGoal').textContent = formatCurrency(totalGoalActive);
+            
+            const remaining = Math.max(0, totalGoalActive - totalPnL);
+            document.getElementById('cycleRemainingGoal').textContent = formatCurrency(remaining);
+        }
+
+        function updatePayoutSummary(totalPnL, activeAccounts) {
+            // Calculate goal based on ACTIVE accounts only
+            const activeGoal = activeAccounts * GOAL_PER_ACCOUNT;
             
             // First Payout Progress
-            const firstPayoutProg = Math.min((totalPnL / firstPayoutGoalAdjusted) * 100, 100);
+            const firstPayoutProg = activeAccounts > 0 ? Math.min((totalPnL / activeGoal) * 100, 100) : 0;
             document.getElementById('firstPayoutProgress').textContent = Math.round(firstPayoutProg) + '%';
             
             let status, statusClass;
-            if (totalPnL >= firstPayoutGoalAdjusted) {
-                const perAccount = accountsOwned > 1 ? ` ($${(totalPnL / accountsOwned).toFixed(0)} per account)` : '';
-                status = `✓ Qualified! Full withdrawal unlocked${perAccount}`;
+            if (totalPnL >= activeGoal) {
+                status = `✓ Qualified! ${activeAccounts} account${activeAccounts !== 1 ? 's' : ''} ready`;
                 statusClass = 'positive';
-            } else if (totalPnL >= firstPayoutMinAdjusted) {
-                status = `✓ Min qualified. ${formatCurrency(firstPayoutGoalAdjusted - totalPnL)} to full payout`;
-                statusClass = 'positive';
+            } else if (activeAccounts > 0) {
+                const perAccount = totalPnL / activeAccounts;
+                status = `${formatCurrency(activeGoal - totalPnL)} to goal (${activeAccounts} active account${activeAccounts !== 1 ? 's' : ''})`;
+                statusClass = 'neutral';
             } else {
-                status = `${formatCurrency(firstPayoutMinAdjusted - totalPnL)} to qualify (${accountsOwned} account${accountsOwned > 1 ? 's' : ''})`;
+                status = 'No active accounts yet';
                 statusClass = 'neutral';
             }
             document.getElementById('firstPayoutStatus').textContent = status;
             document.getElementById('firstPayoutStatus').className = `metric-change ${statusClass}`;
             
-            // Total Payouts Earned
+            // Total Payouts Earned (theoretical)
             let totalPayouts = 0;
             let payoutCount = 0;
             
-            if (totalPnL >= FIRST_PAYOUT_GOAL) {
-                totalPayouts = 4600;
+            if (totalPnL >= activeGoal) {
+                totalPayouts = activeAccounts * PAYOUT_PER_ACCOUNT;
                 payoutCount = 1;
                 
-                // Add subsequent $2k payouts
-                const afterFirst = totalPnL - FIRST_PAYOUT_GOAL;
-                const additionalPayouts = Math.floor(afterFirst / MONTHLY_PAYOUT_GOAL);
-                totalPayouts += (additionalPayouts * 4600);
-                payoutCount += additionalPayouts;
+                // Add subsequent payouts
+                const afterFirst = totalPnL - activeGoal;
+                const additionalCycles = Math.floor(afterFirst / (activeAccounts * MONTHLY_PAYOUT_GOAL));
+                totalPayouts += (additionalCycles * activeAccounts * PAYOUT_PER_ACCOUNT);
+                payoutCount += additionalCycles;
             }
             
             document.getElementById('totalPayouts').textContent = formatCurrency(totalPayouts);
@@ -3196,17 +3414,17 @@
             const currentCycle = activeCycles.length > 0 ? Math.max(...activeCycles.map(c => parseInt(c))) : 1;
             
             let cycleStatus, cycleInfo;
-            if (totalPnL < FIRST_PAYOUT_MIN) {
+            if (totalPnL < activeGoal) {
                 cycleStatus = `Cycle ${currentCycle}`;
-                cycleInfo = 'Building to first payout';
-            } else if (totalPnL < FIRST_PAYOUT_GOAL) {
-                cycleStatus = `Cycle ${currentCycle}`;
-                cycleInfo = `${formatCurrency(FIRST_PAYOUT_GOAL - totalPnL)} to full $2k`;
+                cycleInfo = activeAccounts > 0 
+                    ? `${formatCurrency(activeGoal - totalPnL)} to first payout`
+                    : 'Start trading to begin cycle';
             } else {
                 cycleStatus = `Cycle ${currentCycle}`;
-                const afterFirst = totalPnL - FIRST_PAYOUT_GOAL;
-                const currentMonthlyProgress = afterFirst % MONTHLY_PAYOUT_GOAL;
-                cycleInfo = `${formatCurrency(MONTHLY_PAYOUT_GOAL - currentMonthlyProgress)} to next payout`;
+                const afterFirst = totalPnL - activeGoal;
+                const monthlyGoal = activeAccounts * MONTHLY_PAYOUT_GOAL;
+                const currentMonthlyProgress = afterFirst % monthlyGoal;
+                cycleInfo = `${formatCurrency(monthlyGoal - currentMonthlyProgress)} to next payout`;
             }
             
             document.getElementById('currentCycleStatus').textContent = cycleStatus;
@@ -3219,17 +3437,18 @@
             document.getElementById('dailyAverage').textContent = formatCurrency(dailyAvg);
             
             let targetClass = 'neutral';
-            if (dailyAvg >= DAILY_TARGET_MIN && dailyAvg <= DAILY_TARGET_MAX) {
+            const targetPerDay = activeAccounts * DAILY_TARGET_MIN;
+            if (dailyAvg >= targetPerDay) {
                 targetClass = 'positive';
-            } else if (dailyAvg > DAILY_TARGET_MAX) {
-                targetClass = 'positive';
-            } else if (dailyAvg < DAILY_TARGET_MIN && dailyAvg > 0) {
+            } else if (dailyAvg > 0) {
                 targetClass = 'neutral';
             } else {
                 targetClass = 'negative';
             }
             
-            document.getElementById('dailyTarget').textContent = `Target: $${DAILY_TARGET_MIN}-$${DAILY_TARGET_MAX}`;
+            document.getElementById('dailyTarget').textContent = activeAccounts > 0 
+                ? `Target: ${formatCurrency(targetPerDay)}-${formatCurrency(activeAccounts * DAILY_TARGET_MAX)}/day`
+                : 'No active accounts';
             document.getElementById('dailyTarget').className = `metric-change ${targetClass}`;
         }
 
@@ -3292,10 +3511,13 @@
                 const row = tbody.insertRow();
                 
                 // Determine status
+                const activeAccounts = getActiveAccountCount();
+                const cycleGoal = activeAccounts * GOAL_PER_ACCOUNT;
+                
                 let status = '';
-                if (data.totalPnL >= MONTHLY_PAYOUT_GOAL) {
+                if (data.totalPnL >= cycleGoal) {
                     status = '✅ Payout Ready';
-                } else if (data.totalPnL >= MONTHLY_PAYOUT_GOAL * 0.75) {
+                } else if (data.totalPnL >= cycleGoal * 0.75) {
                     status = '🟡 Near Goal';
                 } else {
                     status = '🔵 In Progress';
@@ -3413,6 +3635,9 @@
                 return;
             }
             
+            const activeAccounts = getActiveAccountCount();
+            const cycleGoal = activeAccounts * GOAL_PER_ACCOUNT;
+            
             cycles.forEach(cycleNum => {
                 const data = cycleData[cycleNum];
                 const card = document.createElement('div');
@@ -3422,11 +3647,11 @@
                 let statusText = 'In Progress';
                 let statusColor = '#3b82f6';
                 
-                if (data.totalPnL >= MONTHLY_PAYOUT_GOAL) {
+                if (data.totalPnL >= cycleGoal) {
                     icon = '🌾';
                     statusText = 'Payout Ready';
                     statusColor = '#10b981';
-                } else if (data.totalPnL >= MONTHLY_PAYOUT_GOAL * 0.75) {
+                } else if (data.totalPnL >= cycleGoal * 0.75) {
                     icon = '🌿';
                     statusText = 'Near Goal';
                     statusColor = '#f59e0b';
@@ -3482,8 +3707,104 @@
             });
         }
 
+        // SETTINGS PAGE
+        function setupSettingsForm() {
+            const form = document.getElementById('settingsForm');
+            const accountGoalSelect = document.getElementById('accountGoalSelect');
+            const customGoalGroup = document.getElementById('customGoalGroup');
+            const customAccountGoal = document.getElementById('customAccountGoal');
+            
+            // Set current value
+            accountGoalSelect.value = USER_ACCOUNT_GOAL;
+            
+            // Handle custom option
+            accountGoalSelect.addEventListener('change', (e) => {
+                if (e.target.value === 'custom') {
+                    customGoalGroup.style.display = 'block';
+                    customAccountGoal.required = true;
+                    customAccountGoal.focus();
+                } else {
+                    customGoalGroup.style.display = 'none';
+                    customAccountGoal.required = false;
+                }
+            });
+            
+            // Form submit
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                let newGoal;
+                if (accountGoalSelect.value === 'custom') {
+                    newGoal = parseInt(customAccountGoal.value);
+                    if (isNaN(newGoal) || newGoal < 1 || newGoal > 200) {
+                        showAlert('Please enter a valid number between 1 and 200', 'error');
+                        return;
+                    }
+                } else {
+                    newGoal = parseInt(accountGoalSelect.value);
+                }
+                
+                saveUserSettings(newGoal);
+                populateAccountDropdown();
+                updateAllViews();
+                
+                showAlert(`✓ Settings saved! Portfolio now set to ${newGoal} accounts`, 'success');
+                
+                setTimeout(() => {
+                    navigateTo('overview');
+                }, 1500);
+            });
+        }
+
+        function resetSettingsForm() {
+            const defaultGoal = CURRENT_USER.defaultAccountGoal || 20;
+            document.getElementById('accountGoalSelect').value = defaultGoal;
+            document.getElementById('customGoalGroup').style.display = 'none';
+            document.getElementById('customAccountGoal').value = '';
+        }
+
+        function updateSettingsPage() {
+            const activeAccounts = getActiveAccountCount();
+            const portfolioGoal = USER_ACCOUNT_GOAL * GOAL_PER_ACCOUNT;
+            const potentialPayout = USER_ACCOUNT_GOAL * PAYOUT_PER_ACCOUNT;
+            
+            document.getElementById('settingsCurrentGoal').textContent = USER_ACCOUNT_GOAL;
+            document.getElementById('settingsActiveAccounts').textContent = activeAccounts;
+            document.getElementById('settingsPortfolioGoal').textContent = formatCurrency(portfolioGoal);
+            document.getElementById('settingsGoalCalc').textContent = `$${GOAL_PER_ACCOUNT.toLocaleString()} × ${USER_ACCOUNT_GOAL} accounts`;
+            document.getElementById('settingsPotentialPayout').textContent = formatCurrency(potentialPayout);
+            document.getElementById('settingsPayoutCalc').textContent = `$${PAYOUT_PER_ACCOUNT.toLocaleString()} × ${USER_ACCOUNT_GOAL} accounts`;
+            
+            // Update accounts table
+            updateSettingsAccountsTable();
+        }
+
+        function updateSettingsAccountsTable() {
+            const tbody = document.getElementById('settingsAccountsBody');
+            tbody.innerHTML = '';
+            
+            const accountData = groupByAccount(allData);
+            
+            for (let i = 1; i <= USER_ACCOUNT_GOAL; i++) {
+                const acc = accountData[i];
+                const row = tbody.insertRow();
+                
+                let status = acc.trades === 0 ? 'Not Started' : acc.pnl >= GOAL_PER_ACCOUNT ? 'Goal Reached' : 'In Progress';
+                let statusClass = acc.trades === 0 ? 'neutral' : acc.pnl >= GOAL_PER_ACCOUNT ? 'positive' : 'neutral';
+                
+                row.innerHTML = `
+                    <td><strong>PA #${i}</strong></td>
+                    <td><span style="color: var(--text-${statusClass})">${status}</span></td>
+                    <td style="color: ${acc.pnl >= 0 ? 'var(--success)' : 'var(--danger)'}">${formatCurrency(acc.pnl)}</td>
+                    <td>${Math.round(acc.progress)}%</td>
+                    <td>${acc.trades}</td>
+                    <td>${acc.trades > 0 ? Math.round(acc.winRate) : 0}%</td>
+                    <td>${formatCurrency(Math.max(0, GOAL_PER_ACCOUNT - acc.pnl))}</td>
+                `;
+            }
+        }
         // PAYOUT MANAGEMENT
-         async function loadPayoutData() {
+        async function loadPayoutData() {
             try {
                 // Store payouts per user
                 const storageKey = `prop_farm_payouts_${CURRENT_USER.name}`;
@@ -3501,21 +3822,24 @@
             
             const totalPnL = allData.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
             const totalWithdrawn = payoutData.reduce((sum, p) => sum + parseFloat(p.amount || 0), 0);
+            const activeAccounts = getActiveAccountCount();
+            const activeGoal = activeAccounts * GOAL_PER_ACCOUNT;
             
             // Calculate available for withdrawal
             let available = 0;
             let status = 'Not qualified yet';
             let statusClass = 'neutral';
             
-            if (totalPnL >= FIRST_PAYOUT_GOAL) {
+            if (totalPnL >= activeGoal) {
                 const afterPayouts = totalPnL - totalWithdrawn;
-                if (afterPayouts >= MONTHLY_PAYOUT_GOAL) {
-                    available = Math.floor(afterPayouts / MONTHLY_PAYOUT_GOAL) * 4600;
-                    status = `✅ ${Math.floor(afterPayouts / MONTHLY_PAYOUT_GOAL)} payout(s) ready`;
+                const monthlyGoal = activeAccounts * MONTHLY_PAYOUT_GOAL;
+                if (afterPayouts >= monthlyGoal) {
+                    available = Math.floor(afterPayouts / monthlyGoal) * (activeAccounts * PAYOUT_PER_ACCOUNT);
+                    status = `✅ ${Math.floor(afterPayouts / monthlyGoal)} payout(s) ready`;
                     statusClass = 'positive';
                 }
-            } else if (totalPnL >= FIRST_PAYOUT_MIN) {
-                available = 4600;
+            } else if (totalPnL >= (activeAccounts * FIRST_PAYOUT_MIN)) {
+                available = activeAccounts * PAYOUT_PER_ACCOUNT;
                 status = '✅ First payout qualified';
                 statusClass = 'positive';
             }
@@ -3536,7 +3860,9 @@
             
             if (payoutData.length === 0) {
                 phase = 'First Cycle';
-                phaseInfo = `${formatCurrency(FIRST_PAYOUT_GOAL - totalPnL)} to full payout`;
+                phaseInfo = activeAccounts > 0 
+                    ? `${formatCurrency(activeGoal - totalPnL)} to first payout`
+                    : 'Start trading to begin';
             } else {
                 const lastPayout = payoutData[payoutData.length - 1];
                 phase = `Cycle ${lastPayout.new_cycle || 2}`;
@@ -3612,14 +3938,14 @@
                     switch(e.target.value) {
                         case 'first_min':
                         case 'first_full':
-                            templateSelect.value = '4600';
-                            amountInput.value = '4600';
+                            templateSelect.value = '2000';
+                            amountInput.value = '2000';
                             cycleCompletedSelect.value = '1';
                             newCycleSelect.value = '2';
                             break;
                         case 'monthly':
-                            templateSelect.value = '4600';
-                            amountInput.value = '4600';
+                            templateSelect.value = '2000';
+                            amountInput.value = '2000';
                             cycleCompletedSelect.value = lastCycle;
                             newCycleSelect.value = Math.min(lastCycle + 1, 12);
                             break;
@@ -3630,15 +3956,6 @@
                             break;
                     }
                 });
-                
-                // Add "All 20 Accounts" plus individual accounts to dropdown
-                const payoutAccountSelect = document.getElementById('payoutAccount');
-                for (let i = 1; i <= 20; i++) {
-                    const option = document.createElement('option');
-                    option.value = i;
-                    option.textContent = `PA Account #${i}`;
-                    payoutAccountSelect.appendChild(option);
-                }
                 
                 // Auto-suggest current cycle
                 const lastPayout = payoutData.length > 0 ? payoutData[payoutData.length - 1] : null;
@@ -3677,7 +3994,7 @@
                     : payoutType === 'monthly' ? 'Monthly Payout'
                     : 'Custom Payout',
                 amount: parseFloat(amount),
-                account: account === 'all' ? 'All 20 Accounts' : `PA Account #${account}`,
+                account: account === 'all' ? 'All Accounts (Portfolio)' : `PA Account #${account}`,
                 cycle_completed: parseInt(cycleCompleted),
                 new_cycle: parseInt(newCycle),
                 payment_method: paymentMethod,
@@ -3706,7 +4023,7 @@
                 // Show info about new cycle
                 setTimeout(() => {
                     showAlert(`🌾 Cycle ${newCycle} started! Future trades will use this cycle by default.`, 'info');
-                }, 4600);
+                }, 2000);
                 
             } catch (error) {
                 debugMsg(`✗ Payout error: ${error.message}`, 'error');
@@ -3934,7 +4251,6 @@
             debugMsg(`Deleting trades from Cycle ${cycle}...`, 'info');
             
             try {
-                // Find all trades from this cycle
                 const tradesToDelete = allData.filter(t => t.cycle == cycle);
                 
                 if (tradesToDelete.length === 0) {
@@ -3944,7 +4260,6 @@
                 
                 debugMsg(`Found ${tradesToDelete.length} trades to delete`, 'info');
                 
-                // Delete each trade
                 let deleteCount = 0;
                 for (const trade of tradesToDelete) {
                     try {
@@ -3965,7 +4280,6 @@
                 debugMsg(`✓ Deleted ${deleteCount} trades from Cycle ${cycle}`, 'success');
                 showAlert(`✓ Deleted ${deleteCount} trades from Cycle ${cycle}`, 'success');
                 
-                // Reset select and reload
                 cycleSelect.value = '';
                 setTimeout(() => loadDashboardData(), 1000);
                 
@@ -3991,7 +4305,6 @@
             debugMsg(`Deleting trades from Account ${account}...`, 'info');
             
             try {
-                // Find all trades from this account
                 const tradesToDelete = allData.filter(t => t.account == account);
                 
                 if (tradesToDelete.length === 0) {
@@ -4001,7 +4314,6 @@
                 
                 debugMsg(`Found ${tradesToDelete.length} trades to delete`, 'info');
                 
-                // Delete each trade
                 let deleteCount = 0;
                 for (const trade of tradesToDelete) {
                     try {
@@ -4022,7 +4334,6 @@
                 debugMsg(`✓ Deleted ${deleteCount} trades from Account ${account}`, 'success');
                 showAlert(`✓ Deleted ${deleteCount} trades from Account #${account}`, 'success');
                 
-                // Reset select and reload
                 accountSelect.value = '';
                 setTimeout(() => loadDashboardData(), 1000);
                 
@@ -4041,7 +4352,6 @@
                 return;
             }
             
-            // Extra confirmation with text input
             const confirmation = prompt('Type "DELETE ALL" to confirm (case sensitive):');
             if (confirmation !== 'DELETE ALL') {
                 showAlert('Deletion cancelled - confirmation text did not match', 'info');
@@ -4055,7 +4365,6 @@
                 const totalTrades = allData.length;
                 let deleteCount = 0;
                 
-                // Delete each trade one by one
                 for (const trade of allData) {
                     try {
                         const response = await fetch(`${SHEET_API}/timestamp/${trade.timestamp}`, {
@@ -4065,7 +4374,6 @@
                         if (response.ok) {
                             deleteCount++;
                             
-                            // Show progress every 10 deletions
                             if (deleteCount % 10 === 0) {
                                 debugMsg(`Progress: ${deleteCount}/${totalTrades} deleted`, 'info');
                             }
@@ -4077,15 +4385,12 @@
                     }
                 }
                 
-               debugMsg(`✓ Deleted ${deleteCount} of ${totalTrades} trades`, 'success');
+                debugMsg(`✓ Deleted ${deleteCount} of ${totalTrades} trades`, 'success');
                 
-                // Also delete all payouts and clear trade log for this user
                 try {
                     const storageKey = `prop_farm_payouts_${CURRENT_USER.name}`;
                     localStorage.removeItem(storageKey);
                     payoutData = [];
-                    
-                    // Clear trade log display
                     allData = [];
                     
                     debugMsg(`✓ Deleted all payout records and trade log`, 'success');
@@ -4095,7 +4400,6 @@
                     showAlert(`✓ Deleted ${deleteCount} trades (payout deletion failed)`, 'info');
                 }
                 
-                // Reload dashboard
                 setTimeout(() => loadDashboardData(), 1500);
                 
             } catch (error) {
@@ -4187,22 +4491,31 @@
 
         function getAccountsAtGoal() {
             let count = 0;
-            for (let i = 1; i <= 20; i++) {
+            for (let i = 1; i <= USER_ACCOUNT_GOAL; i++) {
                 const trades = allData.filter(t => t.account == i);
                 const pnl = trades.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
-                if (pnl >= 4600) count++;
+                if (pnl >= GOAL_PER_ACCOUNT) count++;
             }
             return count;
         }
 
+        function getActiveAccountCount() {
+            const activeSet = new Set();
+            allData.forEach(t => {
+                if (t.account && t.account !== 'N/A') {
+                    activeSet.add(parseInt(t.account));
+                }
+            });
+            return activeSet.size;
+        }
+
         function groupByAccount(data) {
             const grouped = {};
-            for (let i = 1; i <= 20; i++) {
+            for (let i = 1; i <= USER_ACCOUNT_GOAL; i++) {
                 const trades = data.filter(t => t.account == i);
                 const pnl = trades.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
                 const wins = trades.filter(t => parseFloat(t.pnl || 0) > 0).length;
                 
-                // Calculate highest balance by sorting trades chronologically and tracking max
                 let runningBalance = STARTING_BALANCE;
                 let highestBalance = STARTING_BALANCE;
                 
@@ -4215,7 +4528,7 @@
                     pnl,
                     trades: trades.length,
                     winRate: trades.length > 0 ? (wins / trades.length) * 100 : 0,
-                    progress: Math.min((pnl / 4600) * 100, 100),
+                    progress: Math.min((pnl / GOAL_PER_ACCOUNT) * 100, 100),
                     highestBalance
                 };
             }
