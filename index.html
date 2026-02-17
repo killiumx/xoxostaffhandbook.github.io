@@ -2348,6 +2348,13 @@ function getActiveAccountsList() {
             showAlert('✓ Debug log exported', 'success');
         }
 
+        // AUTO-LOGIN BYPASS
+sessionStorage.setItem('farm_auth', 'true');
+sessionStorage.setItem('farm_password', 'trader2025');
+
+// LOGIN - MULTI USER
+if (sessionStorage.getItem('farm_auth') === 'true') {
+
         // LOGIN - MULTI USER
         if (sessionStorage.getItem('farm_auth') === 'true') {
             const storedPassword = sessionStorage.getItem('farm_password');
