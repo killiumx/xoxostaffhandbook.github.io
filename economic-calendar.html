@@ -677,14 +677,18 @@ async function callClaude(userMsg, maxTokens = 700, history = []) {
     if (!res.ok) {
       const e = await res.json().catch(() => ({}));
       const msg = e.error || `HTTP ${res.status}`;
+      // Log full detail array so we can see per-model OpenRouter errors
+      const detail = Array.isArray(e.detail) ? e.detail : [];
+      const fullMsg = detail.length ? `${msg}\n\nPer-model errors:\n${detail.join('\n')}` : msg;
       dbgLog('err', `← ${res.status} after ${ms}ms: ${msg}`);
+      if (detail.length) detail.forEach(d => dbgLog('err', '  ' + d));
       dbgSetVal('ds-code', res.status, 'err');
       dbgSetVal('ds-rl', res.status === 429 ? '⚠️ Rate limited — wait 60s' : '—', res.status === 429 ? 'warn' : '');
       if (res.status === 403) return '❌ CORS blocked — update ALLOWED_ORIGIN in your Worker to match: ' + window.location.origin;
       if (res.status === 429) return '⏳ Rate limited — please wait 60 seconds before trying again.';
       if (res.status === 401) return '❌ OpenRouter key invalid — check OPENROUTER_KEY in Cloudflare Variables.';
-      if (res.status === 502) return '❌ All AI models failed — check your OpenRouter key at openrouter.ai/keys';
-      return `❌ Error ${res.status}: ${msg}`;
+      if (res.status === 502) return `❌ All AI models failed:\n${detail.join('\n') || 'No detail — redeploy latest worker.js'}`;
+      return `❌ Error ${res.status}: ${fullMsg}`;
     }
     const data  = await res.json();
     const text  = data.content?.[0]?.text || '(no response)';
