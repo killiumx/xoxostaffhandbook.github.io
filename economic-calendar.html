@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Prop Farm Pro — Economic Calendar</title>
+<title>Prop Farm Pro — Economic Calendar + AI</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
@@ -14,50 +14,44 @@
   --blue:#3b82f6;--green:#10b981;--red:#ef4444;--amber:#f59e0b;
   --purple:#8b5cf6;--cyan:#06b6d4;
   --g1:#667eea;--g2:#764ba2;
+  --ai1:#ff6b35;--ai2:#f7931e;
   --sh:0 1px 3px rgba(0,0,0,.1);--sh2:0 10px 25px rgba(0,0,0,.1);
 }
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t1);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
-
-/* ── NAV ── */
 .nav{background:var(--card);border-bottom:1px solid var(--border);padding:.875rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;box-shadow:0 1px 3px rgba(0,0,0,.07)}
 .logo{font-size:1.125rem;font-weight:800;background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .logo em{-webkit-text-fill-color:var(--t1);font-style:normal}
-.nav-r{display:flex;align-items:center;gap:.75rem}
+.nav-r{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
 .live{display:flex;align-items:center;gap:.375rem;font-size:.75rem;font-weight:700;color:var(--green);font-family:'JetBrains Mono',monospace}
 .ldot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 1.5s infinite}
+.ai-pill{display:flex;align-items:center;gap:.375rem;font-size:.6875rem;font-weight:700;background:linear-gradient(135deg,var(--ai1),var(--ai2));color:#fff;padding:.25rem .75rem;border-radius:20px}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.5)}}
 .back{font-size:.8125rem;font-weight:600;color:var(--t2);text-decoration:none;padding:.375rem .875rem;border:1px solid var(--border);border-radius:8px;transition:all .2s}
-.back:hover{border-color:var(--blue);color:var(--blue)}
-
-/* ── HERO ── */
 .hero{background:linear-gradient(135deg,var(--g1),var(--g2));padding:2rem 2rem 1.5rem;color:#fff}
 .hero-inner{max-width:1500px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1.5rem}
 .hero-left h1{font-size:clamp(1.375rem,3vw,2rem);font-weight:800;margin-bottom:.25rem}
 .hero-left p{opacity:.88;font-size:.875rem;margin-bottom:.875rem}
 .hero-pills{display:flex;gap:.4rem;flex-wrap:wrap}
 .hpill{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:.2rem .75rem;font-size:.6875rem;font-weight:600}
+.hpill.ai{background:rgba(255,107,53,.35);border-color:rgba(255,107,53,.5)}
 .hero-stats{display:flex;gap:1.5rem;flex-wrap:wrap}
 .hstat{text-align:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:.75rem 1.25rem}
 .hstat-val{font-size:1.75rem;font-weight:800;font-family:'JetBrains Mono',monospace;line-height:1}
 .hstat-label{font-size:.6875rem;opacity:.85;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-top:.25rem}
-
-/* ── TODAY BAR ── */
 .today-bar{background:var(--card);border-bottom:1px solid var(--border);padding:.75rem 2rem}
 .today-inner{max-width:1500px;margin:0 auto;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
 .today-label{font-size:.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);white-space:nowrap}
 .tstat{display:flex;align-items:center;gap:.5rem;padding:.3rem .875rem;border-radius:8px;border:1px solid var(--border)}
 .tstat-n{font-family:'JetBrains Mono',monospace;font-size:1.125rem;font-weight:800}
 .tstat-l{font-size:.625rem;font-weight:600;color:var(--t2)}
-.tstat.r{background:rgba(239,68,68,.06)} .tstat.r .tstat-n{color:var(--red)}
-.tstat.a{background:rgba(245,158,11,.06)} .tstat.a .tstat-n{color:var(--amber)}
-.tstat.g{background:rgba(16,185,129,.06)} .tstat.g .tstat-n{color:var(--green)}
-.tstat.b{background:rgba(59,130,246,.06)} .tstat.b .tstat-n{color:var(--blue)}
+.tstat.r{background:rgba(239,68,68,.06)}.tstat.r .tstat-n{color:var(--red)}
+.tstat.a{background:rgba(245,158,11,.06)}.tstat.a .tstat-n{color:var(--amber)}
+.tstat.g{background:rgba(16,185,129,.06)}.tstat.g .tstat-n{color:var(--green)}
+.tstat.b{background:rgba(59,130,246,.06)}.tstat.b .tstat-n{color:var(--blue)}
 .advice{margin-left:auto;padding:.375rem 1rem;border-radius:8px;font-size:.8125rem;font-weight:700;border:1px solid}
 .advice.danger{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3);color:var(--red)}
 .advice.caution{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3);color:var(--amber)}
 .advice.clear{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.3);color:var(--green)}
-
-/* ── CLOCK BAR ── */
 .clock-bar{background:var(--card);border-bottom:1px solid var(--border);padding:.5rem 2rem}
 .clock-inner{max-width:1500px;margin:0 auto;display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap}
 .ck-lbl{font-size:.625rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--t3)}
@@ -65,72 +59,112 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t1);line-he
 .ck-zone{display:flex;align-items:center;gap:.375rem;padding:.25rem .625rem;border-radius:8px;border:1px solid transparent;transition:all .2s}
 .ck-zone.open{background:rgba(16,185,129,.07);border-color:rgba(16,185,129,.2)}
 .ck-flag{font-size:.9375rem}
-.ck-body{}
 .ck-time{font-family:'JetBrains Mono',monospace;font-size:.875rem;font-weight:700;color:var(--t1);line-height:1.1}
 .ck-zone.open .ck-time{color:var(--green)}
 .ck-name{font-size:.5rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--t3);display:flex;align-items:center;gap:2px}
 .sdot{width:5px;height:5px;border-radius:50%;background:var(--t3);flex-shrink:0}
 .sdot.open{background:var(--green);animation:pulse 2s infinite}
 .ck-zone.open .ck-name{color:var(--green)}
-
-/* ── CONTAINER ── */
 .wrap{max-width:1500px;margin:0 auto;padding:1.5rem 2rem 3rem}
-
-/* ── ALERT ── */
 .red-alert{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:12px;padding:.875rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:flex-start;gap:.75rem;font-size:.875rem}
 .red-alert strong{color:var(--red)}
 .red-alert p{color:var(--t2);line-height:1.5;margin-top:.125rem}
-
-/* ── TABS ── */
-.tabs{display:flex;gap:.375rem;margin-bottom:1.5rem;flex-wrap:wrap;overflow-x:auto;padding-bottom:.25rem}
+.tabs{display:flex;gap:.375rem;margin-bottom:1.5rem;flex-wrap:wrap;padding-bottom:.25rem}
 .tab{padding:.5rem 1.125rem;border-radius:10px;font-size:.8125rem;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--t2);transition:all .15s;white-space:nowrap}
 .tab:hover{border-color:var(--blue);color:var(--blue)}
 .tab.active{background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;border-color:transparent;box-shadow:0 4px 12px rgba(102,126,234,.3)}
-
-/* ── PANELS ── */
+.tab.ai-tab{border-color:rgba(255,107,53,.3);color:var(--ai1)}
+.tab.ai-tab.active{background:linear-gradient(135deg,var(--ai1),var(--ai2));box-shadow:0 4px 12px rgba(255,107,53,.3)}
 .panel{display:none}.panel.active{display:block}
-
-/* ── WIDGET ── */
 .wbox{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--sh);margin-bottom:1.5rem}
 .whead{padding:.875rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
 .wtitle{font-size:.9375rem;font-weight:700}
 .wsub{font-size:.6875rem;color:var(--t2);margin-top:1px}
 .wbadge{font-size:.6rem;font-weight:700;padding:.125rem .5rem;border-radius:20px;background:rgba(59,130,246,.1);color:var(--blue)}
+.wbadge.ai{background:rgba(255,107,53,.1);color:var(--ai1)}
 .tradingview-widget-container{height:680px}
-
-/* ── NEWS GRID ── */
+/* NEWS */
 .news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;margin-bottom:1.5rem}
-.ncard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.125rem;transition:all .2s;cursor:pointer;animation:fadeUp .3s ease both;position:relative;overflow:hidden}
+.ncard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.125rem;transition:all .2s;animation:fadeUp .3s ease both;position:relative;overflow:hidden}
 .ncard:hover{transform:translateY(-2px);box-shadow:var(--sh2);border-color:var(--border2)}
 .ncard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px}
-.ncard.HIGH::before{background:var(--red)}
-.ncard.MEDIUM::before{background:var(--amber)}
-.ncard.LOW::before{background:var(--green)}
+.ncard.HIGH::before{background:var(--red)}.ncard.MEDIUM::before{background:var(--amber)}.ncard.LOW::before{background:var(--green)}
 .ncard-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.625rem}
 .nsource{font-size:.625rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--blue)}
-.nbadges{display:flex;gap:.25rem;align-items:center}
+.nbadges{display:flex;gap:.25rem;align-items:center;flex-wrap:wrap}
 .nipact{font-size:.5625rem;font-weight:700;text-transform:uppercase;padding:.125rem .5rem;border-radius:20px}
-.nipact.HIGH{background:rgba(239,68,68,.1);color:var(--red)}
-.nipact.MEDIUM{background:rgba(245,158,11,.1);color:var(--amber)}
-.nipact.LOW{background:rgba(16,185,129,.1);color:var(--green)}
+.nipact.HIGH{background:rgba(239,68,68,.1);color:var(--red)}.nipact.MEDIUM{background:rgba(245,158,11,.1);color:var(--amber)}.nipact.LOW{background:rgba(16,185,129,.1);color:var(--green)}
 .navoid{font-size:.5rem;font-weight:700;padding:.125rem .4375rem;border-radius:4px;text-transform:uppercase}
-.navoid.avoid{background:rgba(239,68,68,.1);color:var(--red)}
-.navoid.watch{background:rgba(245,158,11,.1);color:var(--amber)}
-.navoid.trade{background:rgba(16,185,129,.1);color:var(--green)}
-.ntitle{font-weight:700;font-size:.875rem;line-height:1.4;margin-bottom:.375rem;color:var(--t1)}
-.nfutures{font-size:.625rem;font-weight:600;color:var(--blue);margin-bottom:.375rem;font-family:'JetBrains Mono',monospace}
+.navoid.avoid{background:rgba(239,68,68,.1);color:var(--red)}.navoid.watch{background:rgba(245,158,11,.1);color:var(--amber)}.navoid.trade{background:rgba(16,185,129,.1);color:var(--green)}
+.ntitle{font-weight:700;font-size:.875rem;line-height:1.4;margin-bottom:.375rem;color:var(--t1);cursor:pointer}
+.ntitle:hover{color:var(--blue)}
+.nfutures-tags{display:flex;gap:.25rem;flex-wrap:wrap;margin-bottom:.375rem}
+.ft2{font-size:.5rem;font-weight:700;font-family:'JetBrains Mono',monospace;padding:.125rem .375rem;border-radius:3px;background:rgba(59,130,246,.1);color:var(--blue);white-space:nowrap}
 .nsumm{font-size:.75rem;color:var(--t2);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.nai-section{margin-top:.625rem;border-top:1px solid rgba(255,107,53,.12);padding-top:.625rem}
+.nai-btn{font-size:.625rem;font-weight:700;background:linear-gradient(135deg,var(--ai1),var(--ai2));color:#fff;border:none;border-radius:6px;padding:.25rem .625rem;cursor:pointer;font-family:inherit;transition:opacity .2s}
+.nai-btn:hover{opacity:.82}
+.nai-result{margin-top:.5rem;font-size:.75rem;line-height:1.5;color:var(--t1);background:rgba(255,107,53,.04);border:1px solid rgba(255,107,53,.15);border-radius:8px;padding:.625rem .75rem;display:none;white-space:pre-wrap}
+.nai-result.show{display:block;animation:fadeUp .25s ease}
 .nfoot{display:flex;justify-content:space-between;margin-top:.625rem;padding-top:.625rem;border-top:1px solid var(--border);font-size:.625rem;color:var(--t3);font-family:'JetBrains Mono',monospace}
-
-/* ── HISTORICAL CHEAT ── */
+/* AI BRIEFING */
+.briefing-box{background:linear-gradient(135deg,rgba(255,107,53,.06),rgba(247,147,30,.04));border:1px solid rgba(255,107,53,.2);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem}
+.briefing-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.75rem}
+.briefing-title{font-size:1rem;font-weight:700;display:flex;align-items:center;gap:.5rem}
+.briefing-content{font-size:.875rem;color:var(--t2);line-height:1.8;white-space:pre-wrap}
+.briefing-content strong{color:var(--t1)}
+.briefing-loading{display:flex;align-items:center;gap:.75rem;color:var(--t2);font-size:.875rem}
+.ai-spinner{width:18px;height:18px;border:2px solid rgba(255,107,53,.2);border-top-color:var(--ai1);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+/* CHAT */
+.chat-wrap{display:grid;grid-template-columns:1fr 340px;gap:1.5rem;align-items:start}
+@media(max-width:900px){.chat-wrap{grid-template-columns:1fr}}
+.chat-box{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--sh);display:flex;flex-direction:column;height:580px}
+.chat-head{padding:.875rem 1.25rem;border-bottom:1px solid var(--border);background:linear-gradient(135deg,var(--ai1),var(--ai2));color:#fff;display:flex;align-items:center;gap:.75rem}
+.chat-head-txt{font-weight:700;font-size:.9375rem}
+.chat-head-sub{font-size:.6875rem;opacity:.88}
+.chat-messages{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.875rem}
+.chat-messages::-webkit-scrollbar{width:4px}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.msg{max-width:88%;display:flex;flex-direction:column;gap:.25rem;animation:fadeUp .25s ease}
+.msg.user{align-self:flex-end;align-items:flex-end}
+.msg.ai{align-self:flex-start;align-items:flex-start}
+.msg-bubble{padding:.625rem .875rem;border-radius:12px;font-size:.8125rem;line-height:1.55}
+.msg.user .msg-bubble{background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;border-radius:12px 12px 2px 12px}
+.msg.ai .msg-bubble{background:var(--bg);border:1px solid var(--border);color:var(--t1);border-radius:12px 12px 12px 2px;white-space:pre-wrap}
+.msg.ai.loading .msg-bubble{color:var(--t3)}
+.msg-time{font-size:.5rem;color:var(--t3);font-family:'JetBrains Mono',monospace}
+.chat-input-row{padding:.875rem 1.25rem;border-top:1px solid var(--border);display:flex;gap:.625rem;align-items:flex-end;background:var(--card)}
+.chat-input{flex:1;padding:.625rem .875rem;border:1px solid var(--border);border-radius:10px;font-family:inherit;font-size:.8125rem;resize:none;min-height:40px;max-height:100px;line-height:1.5;outline:none;transition:border-color .2s;background:var(--bg)}
+.chat-input:focus{border-color:var(--ai1)}
+.chat-send{padding:.625rem 1rem;background:linear-gradient(135deg,var(--ai1),var(--ai2));color:#fff;border:none;border-radius:10px;font-size:.8125rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap}
+.chat-send:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(255,107,53,.3)}
+.chat-send:disabled{opacity:.5;cursor:not-allowed;transform:none}
+/* QUICK Q's */
+.quick-qs{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.25rem;box-shadow:var(--sh)}
+.qqs-title{font-weight:700;font-size:.875rem;margin-bottom:.875rem;display:flex;align-items:center;gap:.5rem}
+.qq-btn{display:block;width:100%;text-align:left;padding:.625rem .875rem;border:1px solid var(--border);border-radius:10px;background:var(--bg);font-size:.75rem;font-weight:600;color:var(--t1);cursor:pointer;font-family:inherit;margin-bottom:.5rem;transition:all .2s;line-height:1.4}
+.qq-btn:hover{border-color:var(--ai1);color:var(--ai1);background:rgba(255,107,53,.04)}
+.qq-btn:last-child{margin-bottom:0}
+/* LOG */
+.log-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1.5rem}
+.log-head{padding:.75rem 1.25rem;background:var(--bg);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
+.log-title{font-weight:700;font-size:.9375rem}
+table.log{width:100%;border-collapse:collapse;font-size:.8125rem}
+table.log th{padding:.5rem 1rem;font-size:.5625rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--t3);background:var(--bg);text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+table.log td{padding:.625rem 1rem;border-bottom:1px solid var(--border);vertical-align:middle;line-height:1.4}
+table.log tr:last-child td{border-bottom:none}
+table.log tr:hover td{background:var(--bg)}
+.badge-h{background:rgba(239,68,68,.1);color:var(--red);font-size:.5rem;font-weight:700;padding:.125rem .5rem;border-radius:20px;text-transform:uppercase;white-space:nowrap}
+.badge-m{background:rgba(245,158,11,.1);color:var(--amber);font-size:.5rem;font-weight:700;padding:.125rem .5rem;border-radius:20px;text-transform:uppercase;white-space:nowrap}
+.ai-cell{font-size:.6875rem;color:var(--t2);max-width:320px;line-height:1.5}
+.ai-cell.loading{color:var(--t3);font-style:italic}
+.futs-cell{display:flex;gap:.25rem;flex-wrap:wrap}
+.log-empty{padding:2rem;text-align:center;color:var(--t3);font-size:.875rem}
+/* CHEAT */
 .cheat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1rem;margin-bottom:1.5rem}
 .ccard{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
 .ccard-head{padding:.75rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.625rem}
-.ccard-head.red{border-left:4px solid var(--red)}
-.ccard-head.amber{border-left:4px solid var(--amber)}
-.ccard-head.green{border-left:4px solid var(--green)}
-.ccard-head.purple{border-left:4px solid var(--purple)}
-.ccard-head.cyan{border-left:4px solid var(--cyan)}
+.ccard-head.red{border-left:4px solid var(--red)}.ccard-head.amber{border-left:4px solid var(--amber)}
 .cname{font-weight:700;font-size:.875rem}
 .cfreq{font-size:.5625rem;color:var(--t3);font-family:'JetBrains Mono',monospace;margin-left:auto}
 .ccsched{font-size:.625rem;color:var(--t2);margin-top:1px}
@@ -142,11 +176,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t1);line-he
 .scenario{font-weight:700;font-size:.6875rem}
 .up{color:var(--green)}.down{color:var(--red)}.mixed{color:var(--amber)}
 .ftag{display:inline-block;font-size:.5rem;font-weight:700;font-family:'JetBrains Mono',monospace;padding:.0625rem .3125rem;border-radius:3px;background:rgba(59,130,246,.1);color:var(--blue);margin:1px}
-.ftag.down{background:rgba(239,68,68,.1);color:var(--red)}
-.ftag.up{background:rgba(16,185,129,.1);color:var(--green)}
+.ftag.down{background:rgba(239,68,68,.1);color:var(--red)}.ftag.up{background:rgba(16,185,129,.1);color:var(--green)}
 .prob{font-size:.5625rem;color:var(--t3);font-style:italic}
-
-/* ── QUICK REF TABLE ── */
+/* QR TABLE */
 .qrtable-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1.5rem}
 .qrhead{padding:.75rem 1.25rem;background:var(--bg);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
 .qrtitle{font-weight:700;font-size:.9375rem}
@@ -156,99 +188,81 @@ table.qr td{padding:.625rem 1rem;font-size:.8125rem;border-bottom:1px solid var(
 table.qr tr:last-child td{border-bottom:none}
 table.qr tr:hover td{background:var(--bg)}
 .ipill{display:inline-block;padding:.125rem .5rem;border-radius:20px;font-size:.5625rem;font-weight:700;text-transform:uppercase}
-.ipill.H{background:rgba(239,68,68,.1);color:var(--red)}
-.ipill.M{background:rgba(245,158,11,.1);color:var(--amber)}
-.ipill.L{background:rgba(16,185,129,.1);color:var(--green)}
+.ipill.H{background:rgba(239,68,68,.1);color:var(--red)}.ipill.M{background:rgba(245,158,11,.1);color:var(--amber)}.ipill.L{background:rgba(16,185,129,.1);color:var(--green)}
 .futs{display:flex;gap:.25rem;flex-wrap:wrap}
 .ft{font-size:.5625rem;font-weight:700;font-family:'JetBrains Mono',monospace;padding:.0625rem .375rem;border-radius:3px;background:rgba(59,130,246,.1);color:var(--blue)}
-
-/* ── FF CARD ── */
+/* INFO */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-bottom:1.5rem}
+.ibox{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.125rem}
+.ibox.red-b{border-left:4px solid var(--red)}.ibox.amber-b{border-left:4px solid var(--amber)}.ibox.green-b{border-left:4px solid var(--green)}.ibox.blue-b{border-left:4px solid var(--blue)}
+.ibox-title{font-weight:700;font-size:.875rem;margin-bottom:.625rem;display:flex;align-items:center;gap:.375rem}
+.ilist li{font-size:.75rem;color:var(--t2);padding:.25rem 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.5rem;list-style:none}
+.ilist li:last-child{border-bottom:none}
+.idot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.ilist strong{color:var(--t1)}
 .ff-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
 .ff-icon{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#ff6b35,#f7931e);display:flex;align-items:center;justify-content:center;font-size:1.75rem;flex-shrink:0}
 .ff-info h3{font-size:1rem;font-weight:700;margin-bottom:.25rem}
 .ff-info p{font-size:.8125rem;color:var(--t2);line-height:1.5}
 .ff-btns{margin-left:auto;display:flex;gap:.5rem;flex-wrap:wrap}
 .btn{padding:.5rem 1.125rem;border-radius:9px;font-size:.8125rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:.375rem}
-.btn-grad{background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff}
-.btn-grad:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(102,126,234,.4)}
 .btn-out{background:var(--card);color:var(--t1);border:1px solid var(--border)}
 .btn-out:hover{border-color:var(--blue);color:var(--blue)}
 .btn-ff{background:linear-gradient(135deg,#ff6b35,#f7931e);color:#fff}
 .btn-ff:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(255,107,53,.35)}
-.btn-myfx{background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff}
-
-/* ── CHART CARDS ── */
+.btn-ai{background:linear-gradient(135deg,var(--ai1),var(--ai2));color:#fff}
+.btn-ai:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(255,107,53,.35)}
 .chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1rem;margin-bottom:1.5rem}
 .chart-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.125rem}
 .cc-title{font-weight:700;font-size:.875rem;margin-bottom:.125rem}
 .cc-sub{font-size:.6875rem;color:var(--t2);margin-bottom:1rem}
 .cc-wrap{position:relative;height:200px}
-
-/* ── INFO BOXES ── */
-.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-bottom:1.5rem}
-.ibox{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.125rem}
-.ibox.red-b{border-left:4px solid var(--red)}
-.ibox.amber-b{border-left:4px solid var(--amber)}
-.ibox.green-b{border-left:4px solid var(--green)}
-.ibox.blue-b{border-left:4px solid var(--blue)}
-.ibox-title{font-weight:700;font-size:.875rem;margin-bottom:.625rem;display:flex;align-items:center;gap:.375rem}
-.ilist li{font-size:.75rem;color:var(--t2);padding:.25rem 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.5rem;list-style:none}
-.ilist li:last-child{border-bottom:none}
-.idot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.ilist strong{color:var(--t1)}
-
-/* ── TIP BOX ── */
 .tip{background:rgba(102,126,234,.06);border:1px solid rgba(102,126,234,.2);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.5rem;display:flex;gap:.75rem;font-size:.875rem;align-items:flex-start}
-.tip strong{color:var(--g1)}
-.tip p{color:var(--t2);line-height:1.6}
-
-/* ── SPINNER ── */
+.tip strong{color:var(--g1)}.tip p{color:var(--t2);line-height:1.6}
 .spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--g1);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto .75rem}
 @keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .loading-box{text-align:center;padding:3rem 1rem;color:var(--t2);font-size:.875rem}
-
-/* ── SECTION DIVIDER ── */
 .sdiv{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
 .sdiv h3{font-size:1rem;font-weight:700;white-space:nowrap}
 .sdiv-line{flex:1;height:1px;background:var(--border)}
 .sdiv-count{font-size:.75rem;color:var(--t3);font-family:'JetBrains Mono',monospace;white-space:nowrap}
-
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
-/* ── RESPONSIVE ── */
+/* API KEY BAR */
+.api-key-bar{background:rgba(255,107,53,.06);border:1px solid rgba(255,107,53,.2);border-radius:12px;padding:.875rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:.875rem;flex-wrap:wrap}
+.api-key-bar label{font-size:.8125rem;font-weight:700;color:var(--ai1);white-space:nowrap}
+.api-key-input{flex:1;min-width:200px;padding:.4375rem .875rem;border:1px solid var(--border2);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.8125rem;outline:none;transition:border-color .2s}
+.api-key-input:focus{border-color:var(--ai1)}
+.api-key-status{font-size:.75rem;font-weight:600;padding:.25rem .75rem;border-radius:20px;white-space:nowrap}
+.api-key-status.ok{background:rgba(16,185,129,.1);color:var(--green)}
+.api-key-status.none{background:rgba(245,158,11,.1);color:var(--amber)}
 @media(max-width:768px){
-  .wrap{padding:1rem}
-  .hero{padding:1.5rem 1rem}
+  .wrap{padding:1rem}.hero{padding:1.5rem 1rem}
   .tradingview-widget-container{height:560px}
-  .ff-card{flex-direction:column}
-  .ff-btns{margin-left:0;width:100%}
-  table.qr th:nth-child(4),table.qr td:nth-child(4),
-  table.qr th:nth-child(5),table.qr td:nth-child(5){display:none}
+  .ff-card{flex-direction:column}.ff-btns{margin-left:0;width:100%}
+  table.qr th:nth-child(4),table.qr td:nth-child(4),table.qr th:nth-child(5),table.qr td:nth-child(5){display:none}
 }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav class="nav">
   <div class="logo">🌾 <em>Prop Farm Pro</em> — Economic Calendar</div>
   <div class="nav-r">
+    <div class="ai-pill">🤖 Claude AI</div>
     <div class="live"><div class="ldot"></div>LIVE</div>
     <a class="back" href="javascript:history.back()">← Dashboard</a>
   </div>
 </nav>
 
-<!-- HERO -->
 <div class="hero">
   <div class="hero-inner">
     <div class="hero-left">
-      <h1>📅 Economic Calendar & News Intel</h1>
-      <p>Real-time events · Historical reactions · Live news · Futures impact guide</p>
+      <h1>📅 Economic Calendar & AI News Intel</h1>
+      <p>Real-time events · AI-classified news · Smart briefings · Futures impact · Trade setup guide</p>
       <div class="hero-pills">
-        <span class="hpill">🔴 Red = Avoid Trading</span>
-        <span class="hpill">🟠 Orange = Caution</span>
-        <span class="hpill">🟡 Yellow = Monitor</span>
+        <span class="hpill">🔴 Red = Avoid</span><span class="hpill">🟠 Orange = Caution</span>
         <span class="hpill">NQ · ES · CL · GC · YM · ZB</span>
+        <span class="hpill ai">🤖 Claude AI Analysis</span>
       </div>
     </div>
     <div class="hero-stats">
@@ -259,7 +273,6 @@ table.qr tr:hover td{background:var(--bg)}
   </div>
 </div>
 
-<!-- TODAY SNAPSHOT -->
 <div class="today-bar">
   <div class="today-inner">
     <span class="today-label">Today</span>
@@ -271,7 +284,6 @@ table.qr tr:hover td{background:var(--bg)}
   </div>
 </div>
 
-<!-- CLOCK BAR -->
 <div class="clock-bar">
   <div class="clock-inner">
     <span class="ck-lbl">Sessions</span>
@@ -279,898 +291,604 @@ table.qr tr:hover td{background:var(--bg)}
   </div>
 </div>
 
-<!-- MAIN WRAP -->
 <div class="wrap">
 
-  <!-- RED FOLDER ALERT -->
-  <div class="red-alert">
-    <span style="font-size:1.25rem;flex-shrink:0">⚡</span>
-    <div>
-      <strong>RED FOLDER RULE:</strong>
-      <p>Stay flat <strong>15 min before & after</strong> any HIGH impact event. NQ & ES can spike 50–150 points in seconds. The snapshot bar above tells you how dangerous today is. Check the <strong>Historical Reactions</strong> tab to know what usually happens after each release.</p>
+<div class="red-alert">
+  <span style="font-size:1.25rem;flex-shrink:0">⚡</span>
+  <div>
+    <strong>RED FOLDER RULE:</strong>
+    <p>Stay flat <strong>15 min before & after</strong> any HIGH impact event. NQ & ES can spike 50–150 points in seconds. Use <strong>🤖 AI Briefing</strong> each morning for your daily plan, or <strong>💬 AI Chat</strong> to ask anything about today's events.</p>
+  </div>
+</div>
+
+<!-- API KEY INPUT -->
+<div class="api-key-bar">
+  <label>🤖 AI Proxy:</label>
+  <input class="api-key-input" id="claudeKeyInput" type="text" placeholder="Checking proxy status..." readonly style="cursor:default;color:var(--t2)">
+  <span class="api-key-status none" id="keyStatus">⏳ Checking...</span>
+  <button class="btn btn-ai" id="testKeyBtn" onclick="testKey()" style="font-size:.75rem;padding:.375rem .875rem">🧪 Test AI</button>
+</div>
+
+<!-- SETUP GUIDE — hidden until needed -->
+<div id="setupGuide" style="display:none;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;line-height:1.9;font-size:.875rem">
+  <div style="font-size:1rem;font-weight:800;margin-bottom:.375rem;display:flex;align-items:center;gap:.5rem">⚙️ One-Time Setup — Secure AI Proxy
+    <span style="font-size:.6875rem;font-weight:600;background:rgba(16,185,129,.1);color:var(--green);padding:.125rem .625rem;border-radius:20px">100% FREE</span>
+    <span style="font-size:.6875rem;font-weight:600;background:rgba(59,130,246,.1);color:var(--blue);padding:.125rem .625rem;border-radius:20px">No Credit Card</span>
+  </div>
+  <div style="color:var(--t2);font-size:.8125rem;margin-bottom:1.25rem">Uses <strong>OpenRouter</strong> (free AI) + <strong>Cloudflare Workers</strong> (free proxy). Your key is never in GitHub.</div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem;margin-bottom:1.25rem">
+
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:1.125rem">
+      <div style="font-weight:700;margin-bottom:.625rem;color:var(--blue);display:flex;align-items:center;gap:.5rem">
+        <span style="background:var(--blue);color:#fff;width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.625rem;font-weight:800;flex-shrink:0">1</span>
+        Get Free OpenRouter Key
+      </div>
+      <ol style="padding-left:1.25rem;color:var(--t2);font-size:.8125rem;line-height:1.9">
+        <li>Go to <a href="https://openrouter.ai" target="_blank" style="color:var(--blue);font-weight:600">openrouter.ai</a></li>
+        <li>Sign in with Google or GitHub</li>
+        <li>Click <strong>Keys → Create Key</strong></li>
+        <li>Copy key — starts with <code style="background:var(--border);padding:.1rem .3rem;border-radius:4px">sk-or-v1-</code></li>
+        <li>✅ No credit card, no billing needed</li>
+      </ol>
+    </div>
+
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:1.125rem">
+      <div style="font-weight:700;margin-bottom:.625rem;color:var(--ai1);display:flex;align-items:center;gap:.5rem">
+        <span style="background:var(--ai1);color:#fff;width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.625rem;font-weight:800;flex-shrink:0">2</span>
+        Deploy Cloudflare Worker
+      </div>
+      <ol style="padding-left:1.25rem;color:var(--t2);font-size:.8125rem;line-height:1.9">
+        <li>Go to <a href="https://workers.cloudflare.com" target="_blank" style="color:var(--blue);font-weight:600">workers.cloudflare.com</a> → free account</li>
+        <li><strong>Create Worker</strong> → paste <code style="background:var(--border);padding:.1rem .3rem;border-radius:4px">cloudflare-worker.js</code></li>
+        <li>Edit line 1: set <code style="background:var(--border);padding:.1rem .3rem;border-radius:4px">ALLOWED_ORIGIN</code> to your GitHub Pages URL</li>
+        <li><strong>Settings → Variables → Add:</strong><br>
+          Name: <code style="background:var(--border);padding:.1rem .3rem;border-radius:4px">OPENROUTER_KEY</code><br>
+          Value: your <code style="background:var(--border);padding:.1rem .3rem;border-radius:4px">sk-or-v1-...</code> key → <strong>Encrypt ✅</strong></li>
+        <li>Click <strong>Deploy</strong> → copy the Worker URL</li>
+      </ol>
+    </div>
+
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:1.125rem">
+      <div style="font-weight:700;margin-bottom:.625rem;color:var(--green);display:flex;align-items:center;gap:.5rem">
+        <span style="background:var(--green);color:#fff;width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.625rem;font-weight:800;flex-shrink:0">3</span>
+        Link to HTML → Push to GitHub
+      </div>
+      <ol style="padding-left:1.25rem;color:var(--t2);font-size:.8125rem;line-height:1.9">
+        <li>Open <code style="background:var(--border);padding:.1rem .3rem;border-radius:4px">PropFarmPro_AI_Enhanced.html</code></li>
+        <li>Find near top of &lt;script&gt;:<br>
+          <code style="background:var(--border);padding:.1rem .3rem;border-radius:4px;font-size:.6875rem">const PROXY_URL = 'PASTE_YOUR_WORKER_URL_HERE'</code></li>
+        <li>Replace with your Worker URL:<br>
+          <code style="background:var(--border);padding:.1rem .3rem;border-radius:4px;font-size:.6875rem">const PROXY_URL = 'https://pfp.name.workers.dev'</code></li>
+        <li>Commit & push to GitHub</li>
+        <li>Open your GitHub Pages URL → AI works! ✅</li>
+      </ol>
     </div>
   </div>
 
-  <!-- TABS -->
-  <div class="tabs">
-    <div class="tab active" onclick="switchTab('calendar',this)">📅 Live Calendar</div>
-    <div class="tab" onclick="switchTab('news',this)">📰 Live News Feed</div>
-    <div class="tab" onclick="switchTab('history',this)">📊 Historical Reactions</div>
-    <div class="tab" onclick="switchTab('sources',this)">🔗 News Sources</div>
-    <div class="tab" onclick="switchTab('guide',this)">📖 Futures Guide</div>
+  <div style="background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:10px;padding:.875rem 1.125rem;font-size:.8125rem;color:var(--t2)">
+    <strong style="color:var(--green)">🔒 Security:</strong> Your API key is encrypted inside Cloudflare — never in GitHub, never visible in browser source code. Cloudflare Workers free tier = 100,000 requests/day. OpenRouter free tier = unlimited requests on free models (Llama 3.3 70B, Gemini Flash, Mistral).
   </div>
+</div>
 
-  <!-- ═══ TAB 1: CALENDAR ═══ -->
-  <div class="panel active" id="panel-calendar">
-    <div class="wbox">
-      <div class="whead">
-        <div>
-          <div class="wtitle">📅 TradingView Economic Calendar</div>
-          <div class="wsub">Real-time Actual · Forecast · Previous · Impact flags — Same data as forex.com</div>
-        </div>
-        <span class="wbadge">TradingView — Free, No Key</span>
-      </div>
-      <div class="tradingview-widget-container">
-        <div class="tradingview-widget-container__widget"></div>
-        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
-        {"colorTheme":"light","isTransparent":false,"width":"100%","height":"680","locale":"en","importanceFilter":"-1,0,1","countryFilter":"us,eu,gb,jp,ca,au,nz,ch,cn,de,fr"}
-        </script>
-      </div>
+<!-- file:// warning -->
+<div id="corsWarning" style="display:none;background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.25);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:.8125rem;line-height:1.8">
+  <strong style="color:var(--red)">⚠️ Opened as local file — use GitHub Pages or a local server</strong><br>
+  <span style="color:var(--t2)">For local testing: <code style="background:var(--bg);padding:.1rem .4rem;border-radius:4px;font-family:'JetBrains Mono',monospace">python -m http.server 8080</code> then visit <a href="http://localhost:8080">localhost:8080</a></span>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('calendar',this)">📅 Live Calendar</div>
+  <div class="tab" onclick="switchTab('news',this)">📰 Live News Feed</div>
+  <div class="tab ai-tab" onclick="switchTab('briefing',this)">🤖 AI Briefing</div>
+  <div class="tab ai-tab" onclick="switchTab('chat',this)">💬 AI Chat Analyst</div>
+  <div class="tab" onclick="switchTab('log',this)">📋 News Log</div>
+  <div class="tab" onclick="switchTab('history',this)">📊 Historical Reactions</div>
+  <div class="tab" onclick="switchTab('sources',this)">🔗 News Sources</div>
+  <div class="tab" onclick="switchTab('guide',this)">📖 Futures Guide</div>
+</div>
+
+<!-- ═══ CALENDAR ═══ -->
+<div class="panel active" id="panel-calendar">
+  <div class="wbox">
+    <div class="whead">
+      <div><div class="wtitle">📅 TradingView Economic Calendar</div><div class="wsub">Real-time Actual · Forecast · Previous · Impact flags</div></div>
+      <span class="wbadge">TradingView — Free</span>
     </div>
-
-    <!-- CHART ROW -->
-    <div class="chart-grid">
-      <div class="chart-card">
-        <div class="cc-title">Today's Event Distribution</div>
-        <div class="cc-sub">High vs Medium vs Low impact events today</div>
-        <div class="cc-wrap"><canvas id="chartToday"></canvas></div>
-      </div>
-      <div class="chart-card">
-        <div class="cc-title">Weekly Impact Heat</div>
-        <div class="cc-sub">High-impact events by day this week</div>
-        <div class="cc-wrap"><canvas id="chartWeek"></canvas></div>
-      </div>
-      <div class="chart-card">
-        <div class="cc-title">Currency Exposure</div>
-        <div class="cc-sub">Which currencies have most events today</div>
-        <div class="cc-wrap"><canvas id="chartCurrency"></canvas></div>
-      </div>
-    </div>
-
-    <div class="tip">
-      <span style="font-size:1.25rem;flex-shrink:0">🌾</span>
-      <div><strong>Farmer Mentality:</strong> <p>Red events are storms. You don't plant during a storm — you wait. Let volatility pass, then return to your $250–$300 daily target. Tap the <strong>Historical Reactions</strong> tab to know what the market usually does after each event so you can plan your re-entry.</p></div>
+    <div class="tradingview-widget-container">
+      <div class="tradingview-widget-container__widget"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
+      {"colorTheme":"light","isTransparent":false,"width":"100%","height":"680","locale":"en","importanceFilter":"-1,0,1","countryFilter":"us,eu,gb,jp,ca,au,nz,ch,cn,de,fr"}
+      </script>
     </div>
   </div>
-
-  <!-- ═══ TAB 2: NEWS FEED ═══ -->
-  <div class="panel" id="panel-news">
-    <div class="wbox" style="margin-bottom:1rem">
-      <div class="whead">
-        <div>
-          <div class="wtitle">📰 Live Market News — Finnhub</div>
-          <div class="wsub">Auto-filtered for futures-moving keywords · Impact classified · Updates on refresh</div>
-        </div>
-        <div style="display:flex;gap:.5rem;align-items:center">
-          <span class="wbadge" id="newsBadge">Loading...</span>
-          <button class="btn btn-out" style="padding:.3rem .75rem;font-size:.75rem" onclick="loadNews()">↻ Refresh</button>
-        </div>
-      </div>
-    </div>
-    <div id="newsOutput">
-      <div class="loading-box"><div class="spinner"></div>Fetching live news...</div>
-    </div>
+  <div class="chart-grid">
+    <div class="chart-card"><div class="cc-title">Today's Event Distribution</div><div class="cc-sub">High vs Medium vs Low impact events today</div><div class="cc-wrap"><canvas id="chartToday"></canvas></div></div>
+    <div class="chart-card"><div class="cc-title">Weekly Impact Heat</div><div class="cc-sub">High-impact events by day this week</div><div class="cc-wrap"><canvas id="chartWeek"></canvas></div></div>
+    <div class="chart-card"><div class="cc-title">Currency Exposure</div><div class="cc-sub">Which currencies have most events today</div><div class="cc-wrap"><canvas id="chartCurrency"></canvas></div></div>
   </div>
+  <div class="tip"><span style="font-size:1.25rem;flex-shrink:0">🌾</span><div><strong>Farmer Mentality:</strong> <p>Red events are storms — wait them out. Go to <strong>🤖 AI Briefing</strong> each morning for your personalised plan, or use <strong>💬 AI Chat</strong> to ask "What should I watch today?"</p></div></div>
+</div>
 
-  <!-- ═══ TAB 3: HISTORICAL REACTIONS ═══ -->
-  <div class="panel" id="panel-history">
-    <div class="tip">
-      <span style="font-size:1.25rem;flex-shrink:0">📖</span>
-      <div><strong>How to read this:</strong> <p>Based on CME Group research, quantitative studies, and years of market data. "Beat" = actual better than forecast. "Miss" = worse. Probabilities are historical averages — <strong>markets don't always react as expected.</strong> News candles often fake one direction before reversing. Always wait 1–3 minutes for confirmation before entering.</p></div>
-    </div>
-
-    <div class="sdiv"><h3>🔴 HIGH Impact Events</h3><div class="sdiv-line"></div><div class="sdiv-count">STAY OUT 15 MIN BEFORE & AFTER</div></div>
-
-    <div class="cheat-grid">
-
-      <!-- NFP -->
-      <div class="ccard">
-        <div class="ccard-head red">
-          <span style="font-size:1.125rem">💼</span>
-          <div><div class="cname">Non-Farm Payrolls (NFP)</div><div class="ccsched">1st Friday monthly · 8:30am EST</div></div>
-          <span class="cfreq">MONTHLY</span>
-        </div>
-        <table class="ctable">
-          <tr><th>Scenario</th><th>NQ/ES Reaction</th><th>Futures</th><th>%Prob</th></tr>
-          <tr>
-            <td><span class="scenario up">🟢 Big Beat</span><br><span class="prob">+100k+ above forecast</span></td>
-            <td class="mixed">Spike UP then often reverses — strong jobs = rate hike fear kills rally</td>
-            <td><span class="ftag up">NQ↑</span><span class="ftag up">ES↑</span><span class="ftag down">ZB↓</span><span class="ftag down">GC↓</span></td>
-            <td class="up">62%</td>
-          </tr>
-          <tr>
-            <td><span class="scenario down">🔴 Big Miss</span><br><span class="prob">-100k+ below forecast</span></td>
-            <td class="down">Hard drop, may recover if recession already priced in</td>
-            <td><span class="ftag down">NQ↓</span><span class="ftag down">ES↓</span><span class="ftag up">GC↑</span><span class="ftag up">ZB↑</span></td>
-            <td class="down">71%</td>
-          </tr>
-          <tr>
-            <td><span class="scenario mixed">🟡 In-Line</span><br><span class="prob">Within ±30k</span></td>
-            <td class="mixed">Low volatility, slow grind, check wages data for direction</td>
-            <td><span class="ftag">NQ→</span><span class="ftag">ES→</span></td>
-            <td class="mixed">55%</td>
-          </tr>
-        </table>
-      </div>
-
-      <!-- CPI -->
-      <div class="ccard">
-        <div class="ccard-head red">
-          <span style="font-size:1.125rem">📈</span>
-          <div><div class="cname">CPI / Core CPI (Inflation)</div><div class="ccsched">~12th monthly · 8:30am EST</div></div>
-          <span class="cfreq">MONTHLY</span>
-        </div>
-        <table class="ctable">
-          <tr><th>Scenario</th><th>NQ/ES Reaction</th><th>Futures</th><th>%Prob</th></tr>
-          <tr>
-            <td><span class="scenario down">🔴 Hot CPI</span><br><span class="prob">Above forecast</span></td>
-            <td class="down">Hard sell-off — more rate hikes expected, tech/growth hit hardest</td>
-            <td><span class="ftag down">NQ↓↓</span><span class="ftag down">ES↓</span><span class="ftag up">GC↑</span><span class="ftag down">ZB↓</span></td>
-            <td class="down">74%</td>
-          </tr>
-          <tr>
-            <td><span class="scenario up">🟢 Cool CPI</span><br><span class="prob">Below forecast</span></td>
-            <td class="up">Strong rally — rate cut hopes surge, NQ leads. Best trade of the month</td>
-            <td><span class="ftag up">NQ↑↑</span><span class="ftag up">ES↑</span><span class="ftag up">GC↑</span><span class="ftag up">ZB↑</span></td>
-            <td class="up">78%</td>
-          </tr>
-          <tr>
-            <td><span class="scenario mixed">🟡 In-Line</span></td>
-            <td class="mixed">Whipsaw in both directions, usually fades back. Wait for direction</td>
-            <td><span class="ftag">NQ→</span><span class="ftag">ES→</span></td>
-            <td class="mixed">52%</td>
-          </tr>
-        </table>
-      </div>
-
-      <!-- FOMC -->
-      <div class="ccard">
-        <div class="ccard-head red">
-          <span style="font-size:1.125rem">🏦</span>
-          <div><div class="cname">FOMC Rate Decision</div><div class="ccsched">8x per year · 2:00pm EST (+ presser 2:30pm)</div></div>
-          <span class="cfreq">8x/YEAR</span>
-        </div>
-        <table class="ctable">
-          <tr><th>Scenario</th><th>NQ/ES Reaction</th><th>Futures</th><th>%Prob</th></tr>
-          <tr>
-            <td><span class="scenario up">🟢 Rate Cut</span><br><span class="prob">Or dovish surprise</span></td>
-            <td class="up">Massive rally, especially NQ. Hold the rally — presser can extend it</td>
-            <td><span class="ftag up">NQ↑↑↑</span><span class="ftag up">ES↑↑</span><span class="ftag up">GC↑</span><span class="ftag down">DXY↓</span></td>
-            <td class="up">82%</td>
-          </tr>
-          <tr>
-            <td><span class="scenario down">🔴 Rate Hike</span><br><span class="prob">Or hawkish surprise</span></td>
-            <td class="down">Hard sell. Watch press conference — Powell can reverse the move</td>
-            <td><span class="ftag down">NQ↓↓</span><span class="ftag down">ES↓</span><span class="ftag down">GC↓</span><span class="ftag up">DXY↑</span></td>
-            <td class="down">79%</td>
-          </tr>
-          <tr>
-            <td><span class="scenario mixed">🟡 Hold (Expected)</span></td>
-            <td class="mixed">All about the statement & dot plot. Presser drives the real move</td>
-            <td><span class="ftag">NQ↕</span><span class="ftag">ES↕</span></td>
-            <td class="mixed">varies</td>
-          </tr>
-        </table>
-      </div>
-
-      <!-- GDP -->
-      <div class="ccard">
-        <div class="ccard-head red">
-          <span style="font-size:1.125rem">🌍</span>
-          <div><div class="cname">GDP (Gross Domestic Product)</div><div class="ccsched">Quarterly · 8:30am EST</div></div>
-          <span class="cfreq">QUARTERLY</span>
-        </div>
-        <table class="ctable">
-          <tr><th>Scenario</th><th>NQ/ES Reaction</th><th>Futures</th><th>%Prob</th></tr>
-          <tr>
-            <td><span class="scenario up">🟢 Beat</span><br><span class="prob">Better than forecast</span></td>
-            <td class="up">Initial rally — but strong economy = rates stay high, fades often</td>
-            <td><span class="ftag up">NQ↑</span><span class="ftag up">ES↑</span><span class="ftag down">GC↓</span></td>
-            <td class="up">59%</td>
-          </tr>
-          <tr>
-            <td><span class="scenario down">🔴 Miss / Negative</span></td>
-            <td class="down">Sell-off. If 2nd consecutive negative = recession flag, big drop</td>
-            <td><span class="ftag down">NQ↓</span><span class="ftag down">ES↓</span><span class="ftag up">ZB↑</span></td>
-            <td class="down">65%</td>
-          </tr>
-        </table>
-      </div>
-
-      <!-- PPI -->
-      <div class="ccard">
-        <div class="ccard-head amber">
-          <span style="font-size:1.125rem">🏭</span>
-          <div><div class="cname">PPI (Producer Price Index)</div><div class="ccsched">~11th monthly · 8:30am EST</div></div>
-          <span class="cfreq">MONTHLY</span>
-        </div>
-        <table class="ctable">
-          <tr><th>Scenario</th><th>NQ/ES Reaction</th><th>Futures</th><th>%Prob</th></tr>
-          <tr>
-            <td><span class="scenario down">🔴 Hot PPI</span><br><span class="prob">Leading inflation indicator</span></td>
-            <td class="down">Sell — signals CPI will follow higher, rate hike risk rises</td>
-            <td><span class="ftag down">NQ↓</span><span class="ftag down">ES↓</span><span class="ftag up">GC↑</span></td>
-            <td class="down">61%</td>
-          </tr>
-          <tr>
-            <td><span class="scenario up">🟢 Cool PPI</span></td>
-            <td class="up">Rally — inflation pipeline cools, rate cut hopes build</td>
-            <td><span class="ftag up">NQ↑</span><span class="ftag up">ES↑</span><span class="ftag up">GC↑</span></td>
-            <td class="up">63%</td>
-          </tr>
-        </table>
-      </div>
-
-      <!-- EIA OIL -->
-      <div class="ccard">
-        <div class="ccard-head amber">
-          <span style="font-size:1.125rem">🛢️</span>
-          <div><div class="cname">EIA Crude Oil Inventories</div><div class="ccsched">Wednesdays · 10:30am EST</div></div>
-          <span class="cfreq">WEEKLY</span>
-        </div>
-        <table class="ctable">
-          <tr><th>Scenario</th><th>CL Reaction</th><th>Futures</th><th>%Prob</th></tr>
-          <tr>
-            <td><span class="scenario down">🔴 Build (Inventory +)</span><br><span class="prob">More supply than expected</span></td>
-            <td class="down">CL sells off — oversupply signals weak demand</td>
-            <td><span class="ftag down">CL↓↓</span><span class="ftag">NQ→</span></td>
-            <td class="down">68%</td>
-          </tr>
-          <tr>
-            <td><span class="scenario up">🟢 Draw (Inventory -)</span><br><span class="prob">Less supply than expected</span></td>
-            <td class="up">CL rallies — demand strong, supply tight</td>
-            <td><span class="ftag up">CL↑↑</span><span class="ftag">NQ→</span></td>
-            <td class="up">70%</td>
-          </tr>
-        </table>
-      </div>
-
-      <!-- JOBLESS CLAIMS -->
-      <div class="ccard">
-        <div class="ccard-head amber">
-          <span style="font-size:1.125rem">📋</span>
-          <div><div class="cname">Initial Jobless Claims</div><div class="ccsched">Thursdays · 8:30am EST</div></div>
-          <span class="cfreq">WEEKLY</span>
-        </div>
-        <table class="ctable">
-          <tr><th>Scenario</th><th>NQ/ES Reaction</th><th>Futures</th><th>%Prob</th></tr>
-          <tr>
-            <td><span class="scenario down">🔴 High Claims</span><br><span class="prob">More than forecast = job losses</span></td>
-            <td class="down">Mild sell — signals labor market weakening</td>
-            <td><span class="ftag down">NQ↓</span><span class="ftag down">ES↓</span></td>
-            <td class="down">57%</td>
-          </tr>
-          <tr>
-            <td><span class="scenario up">🟢 Low Claims</span><br><span class="prob">Less than forecast = job strength</span></td>
-            <td class="up">Mild rally — strong labor market, consumer spending holds</td>
-            <td><span class="ftag up">NQ↑</span><span class="ftag up">ES↑</span></td>
-            <td class="up">58%</td>
-          </tr>
-        </table>
-      </div>
-
-      <!-- ISM -->
-      <div class="ccard">
-        <div class="ccard-head amber">
-          <span style="font-size:1.125rem">🏗️</span>
-          <div><div class="cname">ISM Manufacturing / Services PMI</div><div class="ccsched">1st/3rd business day monthly · 10am EST</div></div>
-          <span class="cfreq">MONTHLY</span>
-        </div>
-        <table class="ctable">
-          <tr><th>Scenario</th><th>NQ/ES Reaction</th><th>Key Level</th><th>%Prob</th></tr>
-          <tr>
-            <td><span class="scenario up">🟢 Above 50</span><br><span class="prob">Expansion territory</span></td>
-            <td class="up">Rally if beats forecast — economy expanding</td>
-            <td class="up">>50 = growth</td>
-            <td class="up">61%</td>
-          </tr>
-          <tr>
-            <td><span class="scenario down">🔴 Below 50</span><br><span class="prob">Contraction territory</span></td>
-            <td class="down">Sell — economy contracting, earnings risk rises</td>
-            <td class="down">&lt;50 = contraction</td>
-            <td class="down">63%</td>
-          </tr>
-        </table>
-      </div>
-
-    </div><!-- end cheat-grid -->
-
-    <!-- SEASONALITY NOTE -->
-    <div class="info-grid">
-      <div class="ibox blue-b">
-        <div class="ibox-title">📅 Best Days to Trade (Historically)</div>
-        <ul class="ilist">
-          <li><span class="idot" style="background:var(--green)"></span><strong>Tuesday & Wednesday</strong> — fewest red events, cleanest trends</li>
-          <li><span class="idot" style="background:var(--green)"></span><strong>Monday after 10am</strong> — gaps settled, direction clearer</li>
-          <li><span class="idot" style="background:var(--amber)"></span><strong>Thursday</strong> — Jobless Claims at 8:30am, wait until after</li>
-          <li><span class="idot" style="background:var(--red)"></span><strong>NFP Friday</strong> — most dangerous day of the month</li>
-          <li><span class="idot" style="background:var(--red)"></span><strong>FOMC Day</strong> — avoid all day until 3pm after dust settles</li>
-        </ul>
-      </div>
-      <div class="ibox green-b">
-        <div class="ibox-title">🌾 Prop Trader Strategy Around News</div>
-        <ul class="ilist">
-          <li><span class="idot" style="background:var(--red)"></span>Check calendar the night before — know red events in advance</li>
-          <li><span class="idot" style="background:var(--amber)"></span>Set a phone alarm 20 min before red events</li>
-          <li><span class="idot" style="background:var(--green)"></span>Close all positions 15 min before red releases</li>
-          <li><span class="idot" style="background:var(--green)"></span>Wait 3–5 min after release for direction confirmation</li>
-          <li><span class="idot" style="background:var(--blue)"></span>Use Historical Reactions tab to pre-plan your bias</li>
-          <li><span class="idot" style="background:var(--blue)"></span>$250–$300/day target is still achievable on news days — just wait</li>
-        </ul>
-      </div>
-      <div class="ibox red-b">
-        <div class="ibox-title">⚠️ The "News Trap" — What Beginners Get Wrong</div>
-        <ul class="ilist">
-          <li><span class="idot" style="background:var(--red)"></span><strong>Buy the rumor, sell the news</strong> — market moves BEFORE release</li>
-          <li><span class="idot" style="background:var(--red)"></span>Initial candle often fakes the wrong direction first</li>
-          <li><span class="idot" style="background:var(--red)"></span>"Good news" can still drop if already priced in</li>
-          <li><span class="idot" style="background:var(--amber)"></span>Always wait for the 1–3 min candle to close for confirmation</li>
-          <li><span class="idot" style="background:var(--amber)"></span>Spreads widen massively at release — use limit orders</li>
-          <li><span class="idot" style="background:var(--green)"></span>Best entries are usually 5–15 min AFTER release, not during</li>
-        </ul>
-      </div>
-    </div>
-
-  </div><!-- end history panel -->
-
-  <!-- ═══ TAB 4: SOURCES ═══ -->
-  <div class="panel" id="panel-sources">
-
-    <!-- FOREX FACTORY -->
-    <div class="ff-card">
-      <div class="ff-icon">🏭</div>
-      <div class="ff-info">
-        <h3>Forex Factory Calendar</h3>
-        <p>The gold standard for traders. Red/Orange/Yellow impact flags, Actual vs Forecast vs Previous, detailed event descriptions, historical data, and forum discussion. Used by millions of retail traders worldwide. <strong>This is the exact calendar forex.com mirrors.</strong></p>
-      </div>
-      <div class="ff-btns">
-        <a class="btn btn-ff" href="https://www.forexfactory.com/calendar" target="_blank">🏭 Open Forex Factory</a>
-        <a class="btn btn-out" href="https://www.forexfactory.com/calendar?day=today" target="_blank">Today Only</a>
-        <a class="btn btn-out" href="https://www.forexfactory.com/calendar?week=this" target="_blank">This Week</a>
-      </div>
-    </div>
-
-    <!-- OTHER SOURCES -->
-    <div class="sdiv"><h3>📰 Other News Sources</h3><div class="sdiv-line"></div></div>
-    <div class="cheat-grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">
-
-      <div class="ccard">
-        <div class="ccard-head" style="border-left:4px solid var(--blue)">
-          <span style="font-size:1.125rem">📊</span>
-          <div><div class="cname">Investing.com</div><div class="ccsched">Economic calendar + news + analysis</div></div>
-        </div>
-        <div style="padding:.875rem 1rem;font-size:.8125rem;color:var(--t2);line-height:1.5">
-          Full economic calendar with filters, actual/forecast/previous, historical charts per event, and analyst expectations. Great for deep research.
-        </div>
-        <div style="padding:0 1rem .875rem;display:flex;gap:.5rem">
-          <a class="btn btn-out" style="font-size:.75rem;padding:.375rem .75rem" href="https://www.investing.com/economic-calendar/" target="_blank">Open Calendar</a>
-          <a class="btn btn-out" style="font-size:.75rem;padding:.375rem .75rem" href="https://www.investing.com/news/economy" target="_blank">Economy News</a>
-        </div>
-      </div>
-
-      <div class="ccard">
-        <div class="ccard-head" style="border-left:4px solid #e31c1c">
-          <span style="font-size:1.125rem">📺</span>
-          <div><div class="cname">MarketWatch</div><div class="ccsched">Real-time financial news</div></div>
-        </div>
-        <div style="padding:.875rem 1rem;font-size:.8125rem;color:var(--t2);line-height:1.5">
-          Real-time news on economic releases, Fed commentary, earnings. Good for market-moving headlines as they break.
-        </div>
-        <div style="padding:0 1rem .875rem;display:flex;gap:.5rem">
-          <a class="btn btn-out" style="font-size:.75rem;padding:.375rem .75rem" href="https://www.marketwatch.com/economy-politics/calendars/economic" target="_blank">Open</a>
-        </div>
-      </div>
-
-      <div class="ccard">
-        <div class="ccard-head" style="border-left:4px solid #f90">
-          <span style="font-size:1.125rem">📡</span>
-          <div><div class="cname">CME Group FedWatch</div><div class="ccsched">Fed rate probability tool</div></div>
-        </div>
-        <div style="padding:.875rem 1rem;font-size:.8125rem;color:var(--t2);line-height:1.5">
-          Shows market-implied probability of Fed rate decisions. Essential context before FOMC — know what's priced in before trading it.
-        </div>
-        <div style="padding:0 1rem .875rem;display:flex;gap:.5rem">
-          <a class="btn btn-out" style="font-size:.75rem;padding:.375rem .75rem" href="https://www.cmegroup.com/markets/interest-rates/cme-fedwatch-tool.html" target="_blank">Open FedWatch</a>
-        </div>
-      </div>
-
-      <div class="ccard">
-        <div class="ccard-head" style="border-left:4px solid var(--green)">
-          <span style="font-size:1.125rem">🏛️</span>
-          <div><div class="cname">BLS.gov (Bureau of Labor Statistics)</div><div class="ccsched">Official US government data</div></div>
-        </div>
-        <div style="padding:.875rem 1rem;font-size:.8125rem;color:var(--t2);line-height:1.5">
-          Official source for NFP, CPI, PPI, Jobless Claims. The raw data before anyone spins it. Release calendar available months in advance.
-        </div>
-        <div style="padding:0 1rem .875rem;display:flex;gap:.5rem">
-          <a class="btn btn-out" style="font-size:.75rem;padding:.375rem .75rem" href="https://www.bls.gov/schedule/news_release/ecopro.htm" target="_blank">Release Calendar</a>
-        </div>
-      </div>
-
-      <div class="ccard">
-        <div class="ccard-head" style="border-left:4px solid var(--purple)">
-          <span style="font-size:1.125rem">📱</span>
-          <div><div class="cname">Myfxbook Calendar</div><div class="ccsched">Clean mobile-friendly calendar</div></div>
-        </div>
-        <div style="padding:.875rem 1rem;font-size:.8125rem;color:var(--t2);line-height:1.5">
-          Similar to Forex Factory, great mobile experience. Shows actual vs forecast vs previous with impact colors. Good backup source.
-        </div>
-        <div style="padding:0 1rem .875rem">
-          <a class="btn btn-out" style="font-size:.75rem;padding:.375rem .75rem" href="https://www.myfxbook.com/forex-economic-calendar" target="_blank">Open</a>
-        </div>
-      </div>
-
-      <div class="ccard">
-        <div class="ccard-head" style="border-left:4px solid var(--cyan)">
-          <span style="font-size:1.125rem">🤖</span>
-          <div><div class="cname">Live News Feed (This Page)</div><div class="ccsched">Powered by Finnhub free API</div></div>
-        </div>
-        <div style="padding:.875rem 1rem;font-size:.8125rem;color:var(--t2);line-height:1.5">
-          The News Feed tab on this page pulls live headlines filtered for futures-moving keywords, auto-classified as HIGH/MEDIUM/LOW impact.
-        </div>
-        <div style="padding:0 1rem .875rem">
-          <button class="btn btn-out" style="font-size:.75rem;padding:.375rem .75rem" onclick="switchTab('news',document.querySelector('.tab:nth-child(2)'))">Go to News Feed →</button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ═══ TAB 5: FUTURES GUIDE ═══ -->
-  <div class="panel" id="panel-guide">
-
-    <div class="sdiv"><h3>⚡ Which Events Move Which Futures</h3><div class="sdiv-line"></div></div>
-
-    <div class="qrtable-wrap" style="margin-bottom:1.5rem">
-      <div class="qrhead"><span class="qrtitle">Full Event → Futures Impact Reference</span><span style="font-size:.75rem;color:var(--t3)">Sorted by impact strength</span></div>
-      <div style="overflow-x:auto">
-        <table class="qr">
-          <tr>
-            <th>Event</th><th>Impact</th><th>When</th><th>Moves</th><th>How Much</th><th>Action</th>
-          </tr>
-          <tr><td><strong>FOMC Rate Decision</strong></td><td><span class="ipill H">HIGH</span></td><td>8x/year 2pm EST</td><td><div class="futs"><span class="ft">NQ</span><span class="ft">ES</span><span class="ft">YM</span><span class="ft">GC</span><span class="ft">ZB</span><span class="ft">DXY</span></div></td><td class="down"><strong>100–400pt NQ</strong></td><td class="down"><strong>AVOID ALL DAY</strong></td></tr>
-          <tr><td><strong>Non-Farm Payrolls</strong></td><td><span class="ipill H">HIGH</span></td><td>1st Fri 8:30am EST</td><td><div class="futs"><span class="ft">NQ</span><span class="ft">ES</span><span class="ft">YM</span><span class="ft">GC</span><span class="ft">ZB</span></div></td><td class="down"><strong>80–250pt NQ</strong></td><td class="down"><strong>AVOID ±15min</strong></td></tr>
-          <tr><td><strong>CPI / Core CPI</strong></td><td><span class="ipill H">HIGH</span></td><td>~12th 8:30am EST</td><td><div class="futs"><span class="ft">NQ</span><span class="ft">ES</span><span class="ft">GC</span><span class="ft">ZB</span><span class="ft">CL</span></div></td><td class="down"><strong>80–200pt NQ</strong></td><td class="down"><strong>AVOID ±15min</strong></td></tr>
-          <tr><td><strong>GDP (Advance)</strong></td><td><span class="ipill H">HIGH</span></td><td>Quarterly 8:30am</td><td><div class="futs"><span class="ft">NQ</span><span class="ft">ES</span><span class="ft">YM</span><span class="ft">ZB</span></div></td><td class="mixed"><strong>40–120pt NQ</strong></td><td class="down"><strong>AVOID ±15min</strong></td></tr>
-          <tr><td><strong>PPI / Core PPI</strong></td><td><span class="ipill H">HIGH</span></td><td>~11th 8:30am EST</td><td><div class="futs"><span class="ft">NQ</span><span class="ft">ES</span><span class="ft">GC</span></div></td><td class="mixed"><strong>30–100pt NQ</strong></td><td class="down"><strong>AVOID ±15min</strong></td></tr>
-          <tr><td><strong>Unemployment Rate</strong></td><td><span class="ipill H">HIGH</span></td><td>1st Fri 8:30am EST</td><td><div class="futs"><span class="ft">NQ</span><span class="ft">ES</span></div></td><td class="mixed"><strong>30–80pt NQ</strong></td><td class="down"><strong>AVOID ±15min</strong></td></tr>
-          <tr><td><strong>EIA Crude Oil Inventories</strong></td><td><span class="ipill M">MEDIUM</span></td><td>Wed 10:30am EST</td><td><div class="futs"><span class="ft">CL</span><span class="ft">RB</span><span class="ft">HO</span></div></td><td class="mixed"><strong>50–150¢ CL</strong></td><td class="mixed">REDUCE SIZE</td></tr>
-          <tr><td><strong>ISM Manufacturing PMI</strong></td><td><span class="ipill M">MEDIUM</span></td><td>1st biz day 10am</td><td><div class="futs"><span class="ft">NQ</span><span class="ft">ES</span><span class="ft">CL</span></div></td><td class="mixed"><strong>20–60pt NQ</strong></td><td class="mixed">REDUCE SIZE</td></tr>
-          <tr><td><strong>Retail Sales</strong></td><td><span class="ipill M">MEDIUM</span></td><td>~15th 8:30am</td><td><div class="futs"><span class="ft">NQ</span><span class="ft">ES</span><span class="ft">YM</span></div></td><td class="mixed"><strong>20–60pt NQ</strong></td><td class="mixed">REDUCE SIZE</td></tr>
-          <tr><td><strong>Initial Jobless Claims</strong></td><td><span class="ipill M">MEDIUM</span></td><td>Thu 8:30am EST</td><td><div class="futs"><span class="ft">NQ</span><span class="ft">ES</span></div></td><td class="mixed"><strong>15–50pt NQ</strong></td><td class="mixed">MONITOR</td></tr>
-          <tr><td><strong>Fed Speakers / Powell</strong></td><td><span class="ipill M">MEDIUM</span></td><td>Various</td><td><div class="futs"><span class="ft">NQ</span><span class="ft">ES</span><span class="ft">GC</span><span class="ft">ZB</span></div></td><td class="mixed"><strong>20–80pt NQ</strong></td><td class="mixed">WATCH</td></tr>
-          <tr><td><strong>ECB Rate Decision</strong></td><td><span class="ipill M">MEDIUM</span></td><td>8x/year 8:15am</td><td><div class="futs"><span class="ft">6E</span><span class="ft">ES</span><span class="ft">NQ</span></div></td><td class="mixed"><strong>Forex + index</strong></td><td class="mixed">MONITOR</td></tr>
-          <tr><td><strong>BOE Rate Decision</strong></td><td><span class="ipill M">MEDIUM</span></td><td>8x/year 7am EST</td><td><div class="futs"><span class="ft">6B</span><span class="ft">ES</span></div></td><td class="mixed"><strong>GBP pairs</strong></td><td class="mixed">MONITOR</td></tr>
-          <tr><td><strong>Housing Starts / Permits</strong></td><td><span class="ipill L">LOW</span></td><td>~18th 8:30am</td><td><div class="futs"><span class="ft">YM</span><span class="ft">ZN</span></div></td><td class="up"><strong>10–30pt</strong></td><td class="up">OK TO TRADE</td></tr>
-          <tr><td><strong>Consumer Confidence</strong></td><td><span class="ipill L">LOW</span></td><td>Last Tue 10am</td><td><div class="futs"><span class="ft">ES</span><span class="ft">NQ</span></div></td><td class="up"><strong>10–30pt</strong></td><td class="up">OK TO TRADE</td></tr>
-        </table>
-      </div>
-    </div>
-
-    <!-- FUTURES LEGEND -->
-    <div class="info-grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
-      <div class="ibox blue-b"><div class="ibox-title">📌 Futures Codes</div>
-        <ul class="ilist">
-          <li><span class="idot" style="background:var(--blue)"></span><strong>NQ</strong> = Nasdaq 100 Futures</li>
-          <li><span class="idot" style="background:var(--blue)"></span><strong>ES</strong> = S&P 500 Futures</li>
-          <li><span class="idot" style="background:var(--blue)"></span><strong>YM</strong> = Dow Jones Futures</li>
-          <li><span class="idot" style="background:var(--blue)"></span><strong>RTY</strong> = Russell 2000 Futures</li>
-          <li><span class="idot" style="background:var(--amber)"></span><strong>CL</strong> = Crude Oil Futures</li>
-          <li><span class="idot" style="background:var(--amber)"></span><strong>RB</strong> = Gasoline Futures</li>
-          <li><span class="idot" style="background:var(--green)"></span><strong>GC</strong> = Gold Futures</li>
-          <li><span class="idot" style="background:var(--green)"></span><strong>SI</strong> = Silver Futures</li>
-          <li><span class="idot" style="background:var(--purple)"></span><strong>ZB</strong> = 30Y Treasury Bond</li>
-          <li><span class="idot" style="background:var(--purple)"></span><strong>ZN</strong> = 10Y Treasury Note</li>
-          <li><span class="idot" style="background:var(--red)"></span><strong>6E</strong> = Euro FX Futures</li>
-          <li><span class="idot" style="background:var(--red)"></span><strong>6B</strong> = British Pound Futures</li>
-        </ul>
-      </div>
-      <div class="ibox amber-b"><div class="ibox-title">🕐 Key Trading Times EST</div>
-        <ul class="ilist">
-          <li><span class="idot" style="background:var(--red)"></span><strong>8:30am</strong> — Most US economic data</li>
-          <li><span class="idot" style="background:var(--amber)"></span><strong>9:30am</strong> — NYSE/NASDAQ open</li>
-          <li><span class="idot" style="background:var(--amber)"></span><strong>10:00am</strong> — ISM, Consumer data</li>
-          <li><span class="idot" style="background:var(--amber)"></span><strong>10:30am</strong> — EIA Oil (Wed)</li>
-          <li><span class="idot" style="background:var(--blue)"></span><strong>2:00pm</strong> — FOMC Decision</li>
-          <li><span class="idot" style="background:var(--blue)"></span><strong>2:30pm</strong> — Powell Press Conference</li>
-          <li><span class="idot" style="background:var(--green)"></span><strong>4:00pm</strong> — NYSE close</li>
-          <li><span class="idot" style="background:var(--green)"></span><strong>5:00pm</strong> — Futures re-open</li>
-        </ul>
-      </div>
-      <div class="ibox green-b"><div class="ibox-title">💡 Pro Tips</div>
-        <ul class="ilist">
-          <li><span class="idot" style="background:var(--green)"></span>NQ moves ~2x more than ES on news</li>
-          <li><span class="idot" style="background:var(--green)"></span>Gold (GC) often moves INVERSE to DXY</li>
-          <li><span class="idot" style="background:var(--green)"></span>Bonds (ZB) move INVERSE to rate hike expectations</li>
-          <li><span class="idot" style="background:var(--amber)"></span>Oil (CL) reacts most to supply/demand, not rates</li>
-          <li><span class="idot" style="background:var(--amber)"></span>Watch VIX — high VIX = avoid, low VIX = trade</li>
-          <li><span class="idot" style="background:var(--red)"></span>Pre-market news (6–9:30am) sets the day's tone</li>
-        </ul>
+<!-- ═══ NEWS FEED ═══ -->
+<div class="panel" id="panel-news">
+  <div class="wbox" style="margin-bottom:1rem">
+    <div class="whead">
+      <div><div class="wtitle">📰 Live Market News — AI Classified</div><div class="wsub">Finnhub headlines + Claude AI analysis · Click 🤖 on any card for deep analysis</div></div>
+      <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+        <span class="wbadge ai" id="newsBadge">Loading...</span>
+        <button class="btn btn-out" style="padding:.3rem .75rem;font-size:.75rem" onclick="loadNews()">↻ Refresh</button>
+        <button class="btn btn-ai" style="padding:.3rem .75rem;font-size:.75rem" onclick="analyseAllHigh()">🤖 AI Analyse All HIGH</button>
       </div>
     </div>
   </div>
+  <div id="newsOutput"><div class="loading-box"><div class="spinner"></div>Fetching live news...</div></div>
+</div>
+
+<!-- ═══ AI BRIEFING ═══ -->
+<div class="panel" id="panel-briefing">
+  <div class="briefing-box">
+    <div class="briefing-header">
+      <div class="briefing-title">🤖 AI Pre-Market Briefing <span style="font-size:.75rem;color:var(--t3);font-weight:400" id="briefingDate"></span></div>
+      <button class="btn btn-ai" id="briefingBtn" onclick="generateBriefing()">⚡ Generate Today's Briefing</button>
+    </div>
+    <div id="briefingOutput"><div style="color:var(--t3);font-size:.875rem;font-style:italic">Click "Generate Today's Briefing" to get an AI-powered pre-market analysis with your daily plan, key events to watch, safe trade windows, and risk assessment tailored for prop traders.</div></div>
+  </div>
+  <div class="sdiv"><h3>📊 What the Briefing Includes</h3><div class="sdiv-line"></div></div>
+  <div class="info-grid">
+    <div class="ibox blue-b"><div class="ibox-title">📋 Daily Risk Assessment</div><ul class="ilist"><li><span class="idot" style="background:var(--blue)"></span>Overall danger level for today</li><li><span class="idot" style="background:var(--blue)"></span>Which specific events to avoid</li><li><span class="idot" style="background:var(--blue)"></span>Exact time windows to stay flat</li><li><span class="idot" style="background:var(--blue)"></span>Which futures will be most volatile</li></ul></div>
+    <div class="ibox green-b"><div class="ibox-title">🌾 Safe Trade Windows</div><ul class="ilist"><li><span class="idot" style="background:var(--green)"></span>Best time windows to trade today</li><li><span class="idot" style="background:var(--green)"></span>Post-news re-entry timing</li><li><span class="idot" style="background:var(--green)"></span>Which instruments look cleanest</li><li><span class="idot" style="background:var(--green)"></span>$250–$300 daily target strategy</li></ul></div>
+    <div class="ibox amber-b"><div class="ibox-title">🎯 Market Context</div><ul class="ilist"><li><span class="idot" style="background:var(--amber)"></span>Macro environment summary</li><li><span class="idot" style="background:var(--amber)"></span>Expected direction if events beat/miss</li><li><span class="idot" style="background:var(--amber)"></span>Key levels to watch (NQ/ES)</li><li><span class="idot" style="background:var(--amber)"></span>Historical pattern for today's events</li></ul></div>
+  </div>
+</div>
+
+<!-- ═══ AI CHAT ═══ -->
+<div class="panel" id="panel-chat">
+  <div class="chat-wrap">
+    <div class="chat-box">
+      <div class="chat-head">
+        <span style="font-size:1.5rem">🤖</span>
+        <div><div class="chat-head-txt">Prop Farm AI Analyst</div><div class="chat-head-sub">Ask anything about events, setups, or risk management</div></div>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="msg ai">
+          <div class="msg-bubble">👋 I'm your Prop Farm AI Analyst. I specialise in futures markets, economic events, and prop trading rules.
+
+Ask me things like:
+• "Is today safe to trade NQ?"
+• "What happens to NQ after a hot CPI?"
+• "Explain the NFP re-entry setup"
+• "What's the FOMC day strategy?"
+• "How do I protect my prop account?"
+
+Add your Claude API key in the orange bar to activate me.</div>
+          <div class="msg-time">Prop Farm AI</div>
+        </div>
+      </div>
+      <div class="chat-input-row">
+        <textarea class="chat-input" id="chatInput" rows="1" placeholder="Ask the AI analyst anything..." onkeydown="handleChatKey(event)"></textarea>
+        <button class="chat-send" id="chatSendBtn" onclick="sendChat()">Send ↑</button>
+      </div>
+    </div>
+    <div class="quick-qs">
+      <div class="qqs-title">⚡ Quick Questions</div>
+      <button class="qq-btn" onclick="askQuick('Is today a safe day to trade NQ and ES futures?')">🔍 Is today safe to trade?</button>
+      <button class="qq-btn" onclick="askQuick('What are the most important economic events this week for NQ/ES traders?')">📅 Key events this week?</button>
+      <button class="qq-btn" onclick="askQuick('When exactly do I re-enter after a major news event like NFP or CPI?')">⏱️ When to re-enter after news?</button>
+      <button class="qq-btn" onclick="askQuick('What typically happens to NQ futures after a hot CPI print? Give specific scenarios.')">📈 Hot CPI → NQ reaction?</button>
+      <button class="qq-btn" onclick="askQuick('What typically happens to NQ futures after a big NFP miss? Walk me through the trade.')">📉 NFP miss → trade setup?</button>
+      <button class="qq-btn" onclick="askQuick('What is the full FOMC day strategy for a prop trader from open to close?')">🏦 FOMC day strategy?</button>
+      <button class="qq-btn" onclick="askQuick('How do I protect my prop account during high-impact news events?')">🛡️ Protect my account?</button>
+      <button class="qq-btn" onclick="askQuick('Give me the best hours of the week to trade NQ for consistent $250-$300 daily targets.')">🎯 Best hours for $250 target?</button>
+      <button class="qq-btn" onclick="askQuick('Explain the news trap — why markets fake the wrong direction on releases.')">⚠️ Explain the news trap</button>
+      <button class="qq-btn" onclick="askQuick('How does the bond market (ZB) relate to NQ futures? Explain the inverse relationship.')">📊 Bonds vs NQ explained?</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ NEWS LOG ═══ -->
+<div class="panel" id="panel-log">
+  <div class="wbox" style="margin-bottom:1rem">
+    <div class="whead">
+      <div><div class="wtitle">📋 AI-Enhanced News Impact Log</div><div class="wsub">Every HIGH & MEDIUM story with AI analysis, futures affected, and trade action — auto-populated from News Feed</div></div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <span class="wbadge ai" id="logCount">0 entries</span>
+        <button class="btn btn-out" style="padding:.3rem .75rem;font-size:.75rem" onclick="exportLog()">⬇ Export CSV</button>
+        <button class="btn btn-out" style="padding:.3rem .75rem;font-size:.75rem;color:var(--red)" onclick="clearLog()">🗑 Clear Log</button>
+      </div>
+    </div>
+  </div>
+  <div class="log-wrap">
+    <div class="log-head"><span class="log-title">High &amp; Medium Impact Event Log</span><span style="font-size:.75rem;color:var(--t3)">Loads when you visit News Feed tab</span></div>
+    <div style="overflow-x:auto">
+      <table class="log" id="logTable">
+        <thead><tr><th>Time</th><th>Impact</th><th>Source</th><th>Headline</th><th>Futures</th><th>AI Analysis</th><th>Action</th></tr></thead>
+        <tbody id="logBody"><tr><td colspan="7" class="log-empty">📭 Go to News Feed tab first to populate the log</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ HISTORICAL REACTIONS ═══ -->
+<div class="panel" id="panel-history">
+  <div class="tip"><span style="font-size:1.25rem;flex-shrink:0">📖</span><div><strong>How to use this:</strong> <p>"Beat" = actual better than forecast. "Miss" = worse. Probabilities are historical averages — not guarantees. Initial candle often fakes the wrong direction. Use <strong>💬 AI Chat</strong> to ask about specific event scenarios for deeper analysis.</p></div></div>
+  <div class="sdiv"><h3>🔴 HIGH Impact Events</h3><div class="sdiv-line"></div><div class="sdiv-count">STAY OUT 15 MIN BEFORE & AFTER</div></div>
+  <div class="cheat-grid">
+    <div class="ccard"><div class="ccard-head red"><span style="font-size:1.125rem">💼</span><div><div class="cname">Non-Farm Payrolls (NFP)</div><div class="ccsched">1st Friday monthly · 8:30am EST</div></div><span class="cfreq">MONTHLY</span></div><table class="ctable"><tr><th>Scenario</th><th>NQ/ES Reaction</th><th>Futures</th><th>%Prob</th></tr><tr><td><span class="scenario up">🟢 Big Beat</span><br><span class="prob">+100k+ above forecast</span></td><td class="mixed">Spike UP then often reverses — strong jobs = rate hike fear kills rally</td><td><span class="ftag up">NQ↑</span><span class="ftag up">ES↑</span><span class="ftag down">ZB↓</span><span class="ftag down">GC↓</span></td><td class="up">62%</td></tr><tr><td><span class="scenario down">🔴 Big Miss</span><br><span class="prob">-100k+ below forecast</span></td><td class="down">Hard drop, may recover if recession already priced in</td><td><span class="ftag down">NQ↓</span><span class="ftag down">ES↓</span><span class="ftag up">GC↑</span><span class="ftag up">ZB↑</span></td><td class="down">71%</td></tr><tr><td><span class="scenario mixed">🟡 In-Line</span><br><span class="prob">Within ±30k</span></td><td class="mixed">Low volatility, slow grind, check wages data for direction</td><td><span class="ftag">NQ→</span><span class="ftag">ES→</span></td><td class="mixed">55%</td></tr></table></div>
+    <div class="ccard"><div class="ccard-head red"><span style="font-size:1.125rem">📈</span><div><div class="cname">CPI / Core CPI (Inflation)</div><div class="ccsched">~12th monthly · 8:30am EST</div></div><span class="cfreq">MONTHLY</span></div><table class="ctable"><tr><th>Scenario</th><th>NQ/ES Reaction</th><th>Futures</th><th>%Prob</th></tr><tr><td><span class="scenario down">🔴 Hot CPI</span><br><span class="prob">Above forecast</span></td><td class="down">Hard sell-off — more rate hikes expected, tech/growth hit hardest</td><td><span class="ftag down">NQ↓↓</span><span class="ftag down">ES↓</span><span class="ftag up">GC↑</span><span class="ftag down">ZB↓</span></td><td class="down">74%</td></tr><tr><td><span class="scenario up">🟢 Cool CPI</span><br><span class="prob">Below forecast</span></td><td class="up">Strong rally — rate cut hopes surge, NQ leads. Best trade of the month</td><td><span class="ftag up">NQ↑↑</span><span class="ftag up">ES↑</span><span class="ftag up">GC↑</span><span class="ftag up">ZB↑</span></td><td class="up">78%</td></tr><tr><td><span class="scenario mixed">🟡 In-Line</span></td><td class="mixed">Whipsaw both directions, usually fades. Wait for confirmation</td><td><span class="ftag">NQ→</span><span class="ftag">ES→</span></td><td class="mixed">52%</td></tr></table></div>
+    <div class="ccard"><div class="ccard-head red"><span style="font-size:1.125rem">🏦</span><div><div class="cname">FOMC Rate Decision</div><div class="ccsched">8x per year · 2:00pm EST (+ presser 2:30pm)</div></div><span class="cfreq">8x/YEAR</span></div><table class="ctable"><tr><th>Scenario</th><th>NQ/ES Reaction</th><th>Futures</th><th>%Prob</th></tr><tr><td><span class="scenario up">🟢 Rate Cut / Dovish</span></td><td class="up">Massive rally especially NQ. Hold — presser can extend it</td><td><span class="ftag up">NQ↑↑↑</span><span class="ftag up">ES↑↑</span><span class="ftag up">GC↑</span><span class="ftag down">DXY↓</span></td><td class="up">82%</td></tr><tr><td><span class="scenario down">🔴 Rate Hike / Hawkish</span></td><td class="down">Hard sell. Watch press conference — Powell can reverse the move</td><td><span class="ftag down">NQ↓↓</span><span class="ftag down">ES↓</span><span class="ftag down">GC↓</span><span class="ftag up">DXY↑</span></td><td class="down">79%</td></tr><tr><td><span class="scenario mixed">🟡 Hold (Expected)</span></td><td class="mixed">All about statement & dot plot. Presser drives real move</td><td><span class="ftag">NQ↕</span><span class="ftag">ES↕</span></td><td class="mixed">varies</td></tr></table></div>
+    <div class="ccard"><div class="ccard-head red"><span style="font-size:1.125rem">🌍</span><div><div class="cname">GDP (Gross Domestic Product)</div><div class="ccsched">Quarterly · 8:30am EST</div></div><span class="cfreq">QUARTERLY</span></div><table class="ctable"><tr><th>Scenario</th><th>NQ/ES Reaction</th><th>Futures</th><th>%Prob</th></tr><tr><td><span class="scenario up">🟢 Beat</span></td><td class="up">Initial rally — but strong economy = rates stay high, fades often</td><td><span class="ftag up">NQ↑</span><span class="ftag up">ES↑</span><span class="ftag down">GC↓</span></td><td class="up">59%</td></tr><tr><td><span class="scenario down">🔴 Miss / Negative</span></td><td class="down">Sell-off. 2nd consecutive negative = recession flag, big drop</td><td><span class="ftag down">NQ↓</span><span class="ftag down">ES↓</span><span class="ftag up">ZB↑</span></td><td class="down">65%</td></tr></table></div>
+    <div class="ccard"><div class="ccard-head amber"><span style="font-size:1.125rem">🏭</span><div><div class="cname">PPI (Producer Price Index)</div><div class="ccsched">~11th monthly · 8:30am EST</div></div><span class="cfreq">MONTHLY</span></div><table class="ctable"><tr><th>Scenario</th><th>NQ/ES Reaction</th><th>Futures</th><th>%Prob</th></tr><tr><td><span class="scenario down">🔴 Hot PPI</span></td><td class="down">Sell — signals CPI will follow higher, rate hike risk rises</td><td><span class="ftag down">NQ↓</span><span class="ftag down">ES↓</span><span class="ftag up">GC↑</span></td><td class="down">61%</td></tr><tr><td><span class="scenario up">🟢 Cool PPI</span></td><td class="up">Rally — inflation pipeline cools, rate cut hopes build</td><td><span class="ftag up">NQ↑</span><span class="ftag up">ES↑</span><span class="ftag up">GC↑</span></td><td class="up">63%</td></tr></table></div>
+    <div class="ccard"><div class="ccard-head amber"><span style="font-size:1.125rem">🛢️</span><div><div class="cname">EIA Crude Oil Inventories</div><div class="ccsched">Wednesdays · 10:30am EST</div></div><span class="cfreq">WEEKLY</span></div><table class="ctable"><tr><th>Scenario</th><th>CL Reaction</th><th>Futures</th><th>%Prob</th></tr><tr><td><span class="scenario down">🔴 Build (+)</span></td><td class="down">CL sells off — oversupply signals weak demand</td><td><span class="ftag down">CL↓↓</span><span class="ftag">NQ→</span></td><td class="down">68%</td></tr><tr><td><span class="scenario up">🟢 Draw (-)</span></td><td class="up">CL rallies — demand strong, supply tight</td><td><span class="ftag up">CL↑↑</span><span class="ftag">NQ→</span></td><td class="up">70%</td></tr></table></div>
+    <div class="ccard"><div class="ccard-head amber"><span style="font-size:1.125rem">📋</span><div><div class="cname">Initial Jobless Claims</div><div class="ccsched">Thursdays · 8:30am EST</div></div><span class="cfreq">WEEKLY</span></div><table class="ctable"><tr><th>Scenario</th><th>NQ/ES Reaction</th><th>Futures</th><th>%Prob</th></tr><tr><td><span class="scenario down">🔴 High Claims</span></td><td class="down">Mild sell — labor market weakening</td><td><span class="ftag down">NQ↓</span><span class="ftag down">ES↓</span></td><td class="down">57%</td></tr><tr><td><span class="scenario up">🟢 Low Claims</span></td><td class="up">Mild rally — strong labor, consumer spending holds</td><td><span class="ftag up">NQ↑</span><span class="ftag up">ES↑</span></td><td class="up">58%</td></tr></table></div>
+    <div class="ccard"><div class="ccard-head amber"><span style="font-size:1.125rem">🏗️</span><div><div class="cname">ISM Manufacturing / Services PMI</div><div class="ccsched">1st/3rd business day monthly · 10am EST</div></div><span class="cfreq">MONTHLY</span></div><table class="ctable"><tr><th>Scenario</th><th>NQ/ES Reaction</th><th>Key Level</th><th>%Prob</th></tr><tr><td><span class="scenario up">🟢 Above 50</span></td><td class="up">Rally if beats forecast — economy expanding</td><td class="up">>50 = growth</td><td class="up">61%</td></tr><tr><td><span class="scenario down">🔴 Below 50</span></td><td class="down">Sell — economy contracting, earnings risk rises</td><td class="down">&lt;50 = contraction</td><td class="down">63%</td></tr></table></div>
+  </div>
+  <div class="info-grid">
+    <div class="ibox blue-b"><div class="ibox-title">📅 Best Days to Trade</div><ul class="ilist"><li><span class="idot" style="background:var(--green)"></span><strong>Tuesday & Wednesday</strong> — fewest red events, cleanest trends</li><li><span class="idot" style="background:var(--green)"></span><strong>Monday after 10am</strong> — gaps settled, direction clearer</li><li><span class="idot" style="background:var(--amber)"></span><strong>Thursday</strong> — wait until after Jobless Claims 8:30am</li><li><span class="idot" style="background:var(--red)"></span><strong>NFP Friday</strong> — most dangerous day of the month</li><li><span class="idot" style="background:var(--red)"></span><strong>FOMC Day</strong> — avoid all day until 3pm</li></ul></div>
+    <div class="ibox green-b"><div class="ibox-title">🌾 Prop Trader Strategy</div><ul class="ilist"><li><span class="idot" style="background:var(--red)"></span>Check calendar the night before</li><li><span class="idot" style="background:var(--amber)"></span>Set alarm 20 min before red events</li><li><span class="idot" style="background:var(--green)"></span>Close all positions 15 min before releases</li><li><span class="idot" style="background:var(--green)"></span>Wait 3–5 min after release for confirmation</li><li><span class="idot" style="background:var(--blue)"></span>Use AI Chat to pre-plan your bias</li><li><span class="idot" style="background:var(--blue)"></span>$250–$300/day still achievable on news days</li></ul></div>
+    <div class="ibox red-b"><div class="ibox-title">⚠️ The News Trap</div><ul class="ilist"><li><span class="idot" style="background:var(--red)"></span><strong>Buy the rumor, sell the news</strong> — moves BEFORE release</li><li><span class="idot" style="background:var(--red)"></span>Initial candle often fakes the wrong direction</li><li><span class="idot" style="background:var(--red)"></span>"Good news" can still drop if already priced in</li><li><span class="idot" style="background:var(--amber)"></span>Wait for 1–3 min candle to close for confirmation</li><li><span class="idot" style="background:var(--amber)"></span>Spreads widen massively at release</li><li><span class="idot" style="background:var(--green)"></span>Best entries 5–15 min AFTER release, not during</li></ul></div>
+  </div>
+</div>
+
+<!-- ═══ SOURCES ═══ -->
+<div class="panel" id="panel-sources">
+  <div class="ff-card"><div class="ff-icon">🏭</div><div class="ff-info"><h3>Forex Factory Calendar</h3><p>The gold standard for traders. Red/Orange/Yellow flags, Actual vs Forecast vs Previous. <strong>This is the exact calendar forex.com mirrors.</strong></p></div><div class="ff-btns"><a class="btn btn-ff" href="https://www.forexfactory.com/calendar" target="_blank">🏭 Open Forex Factory</a><a class="btn btn-out" href="https://www.forexfactory.com/calendar?day=today" target="_blank">Today Only</a><a class="btn btn-out" href="https://www.forexfactory.com/calendar?week=this" target="_blank">This Week</a></div></div>
+  <div class="cheat-grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">
+    <div class="ccard"><div class="ccard-head" style="border-left:4px solid var(--blue)"><span style="font-size:1.125rem">📊</span><div><div class="cname">Investing.com</div><div class="ccsched">Economic calendar + news + analysis</div></div></div><div style="padding:.875rem 1rem;font-size:.8125rem;color:var(--t2);line-height:1.5">Full calendar with filters, actual/forecast/previous, historical charts per event. Great for deep research.</div><div style="padding:0 1rem .875rem"><a class="btn btn-out" style="font-size:.75rem;padding:.375rem .75rem" href="https://www.investing.com/economic-calendar/" target="_blank">Open Calendar</a></div></div>
+    <div class="ccard"><div class="ccard-head" style="border-left:4px solid #f90"><span style="font-size:1.125rem">📡</span><div><div class="cname">CME Group FedWatch</div><div class="ccsched">Fed rate probability tool</div></div></div><div style="padding:.875rem 1rem;font-size:.8125rem;color:var(--t2);line-height:1.5">Shows market-implied probability of Fed rate decisions. Essential before FOMC — know what's priced in.</div><div style="padding:0 1rem .875rem"><a class="btn btn-out" style="font-size:.75rem;padding:.375rem .75rem" href="https://www.cmegroup.com/markets/interest-rates/cme-fedwatch-tool.html" target="_blank">Open FedWatch</a></div></div>
+    <div class="ccard"><div class="ccard-head" style="border-left:4px solid var(--green)"><span style="font-size:1.125rem">🏛️</span><div><div class="cname">BLS.gov</div><div class="ccsched">Official US government data releases</div></div></div><div style="padding:.875rem 1rem;font-size:.8125rem;color:var(--t2);line-height:1.5">Official source for NFP, CPI, PPI, Jobless Claims. Raw data before anyone spins it. Release calendar available months in advance.</div><div style="padding:0 1rem .875rem"><a class="btn btn-out" style="font-size:.75rem;padding:.375rem .75rem" href="https://www.bls.gov/schedule/news_release/ecopro.htm" target="_blank">Release Calendar</a></div></div>
+    <div class="ccard"><div class="ccard-head" style="border-left:4px solid var(--ai1)"><span style="font-size:1.125rem">🤖</span><div><div class="cname">Claude AI (Free API)</div><div class="ccsched">Anthropic Console — free tier available</div></div></div><div style="padding:.875rem 1rem;font-size:.8125rem;color:var(--t2);line-height:1.5">Get your free Claude API key at console.anthropic.com. Paste it into the orange bar at the top. Free tier gives you thousands of requests per month.</div><div style="padding:0 1rem .875rem"><a class="btn btn-ai" style="font-size:.75rem;padding:.375rem .75rem" href="https://console.anthropic.com/" target="_blank">Get Free API Key →</a></div></div>
+  </div>
+</div>
+
+<!-- ═══ FUTURES GUIDE ═══ -->
+<div class="panel" id="panel-guide">
+  <div class="sdiv"><h3>⚡ Which Events Move Which Futures</h3><div class="sdiv-line"></div></div>
+  <div class="qrtable-wrap" style="margin-bottom:1.5rem"><div class="qrhead"><span class="qrtitle">Full Event → Futures Impact Reference</span><span style="font-size:.75rem;color:var(--t3)">Sorted by impact strength</span></div><div style="overflow-x:auto"><table class="qr"><tr><th>Event</th><th>Impact</th><th>When</th><th>Moves</th><th>How Much</th><th>Action</th></tr><tr><td><strong>FOMC Rate Decision</strong></td><td><span class="ipill H">HIGH</span></td><td>8x/year 2pm EST</td><td><div class="futs"><span class="ft">NQ</span><span class="ft">ES</span><span class="ft">YM</span><span class="ft">GC</span><span class="ft">ZB</span><span class="ft">DXY</span></div></td><td class="down"><strong>100–400pt NQ</strong></td><td class="down"><strong>AVOID ALL DAY</strong></td></tr><tr><td><strong>Non-Farm Payrolls</strong></td><td><span class="ipill H">HIGH</span></td><td>1st Fri 8:30am EST</td><td><div class="futs"><span class="ft">NQ</span><span class="ft">ES</span><span class="ft">YM</span><span class="ft">GC</span><span class="ft">ZB</span></div></td><td class="down"><strong>80–250pt NQ</strong></td><td class="down"><strong>AVOID ±15min</strong></td></tr><tr><td><strong>CPI / Core CPI</strong></td><td><span class="ipill H">HIGH</span></td><td>~12th 8:30am EST</td><td><div class="futs"><span class="ft">NQ</span><span class="ft">ES</span><span class="ft">GC</span><span class="ft">ZB</span><span class="ft">CL</span></div></td><td class="down"><strong>80–200pt NQ</strong></td><td class="down"><strong>AVOID ±15min</strong></td></tr><tr><td><strong>GDP (Advance)</strong></td><td><span class="ipill H">HIGH</span></td><td>Quarterly 8:30am</td><td><div class="futs"><span class="ft">NQ</span><span class="ft">ES</span><span class="ft">YM</span><span class="ft">ZB</span></div></td><td class="mixed"><strong>40–120pt NQ</strong></td><td class="down"><strong>AVOID ±15min</strong></td></tr><tr><td><strong>PPI / Core PPI</strong></td><td><span class="ipill H">HIGH</span></td><td>~11th 8:30am EST</td><td><div class="futs"><span class="ft">NQ</span><span class="ft">ES</span><span class="ft">GC</span></div></td><td class="mixed"><strong>30–100pt NQ</strong></td><td class="down"><strong>AVOID ±15min</strong></td></tr><tr><td><strong>EIA Crude Oil Inventories</strong></td><td><span class="ipill M">MEDIUM</span></td><td>Wed 10:30am EST</td><td><div class="futs"><span class="ft">CL</span><span class="ft">RB</span><span class="ft">HO</span></div></td><td class="mixed"><strong>50–150¢ CL</strong></td><td class="mixed">REDUCE SIZE</td></tr><tr><td><strong>ISM Manufacturing PMI</strong></td><td><span class="ipill M">MEDIUM</span></td><td>1st biz day 10am</td><td><div class="futs"><span class="ft">NQ</span><span class="ft">ES</span><span class="ft">CL</span></div></td><td class="mixed"><strong>20–60pt NQ</strong></td><td class="mixed">REDUCE SIZE</td></tr><tr><td><strong>Retail Sales</strong></td><td><span class="ipill M">MEDIUM</span></td><td>~15th 8:30am</td><td><div class="futs"><span class="ft">NQ</span><span class="ft">ES</span><span class="ft">YM</span></div></td><td class="mixed"><strong>20–60pt NQ</strong></td><td class="mixed">REDUCE SIZE</td></tr><tr><td><strong>Initial Jobless Claims</strong></td><td><span class="ipill M">MEDIUM</span></td><td>Thu 8:30am EST</td><td><div class="futs"><span class="ft">NQ</span><span class="ft">ES</span></div></td><td class="mixed"><strong>15–50pt NQ</strong></td><td class="mixed">MONITOR</td></tr><tr><td><strong>Fed Speakers / Powell</strong></td><td><span class="ipill M">MEDIUM</span></td><td>Various</td><td><div class="futs"><span class="ft">NQ</span><span class="ft">ES</span><span class="ft">GC</span><span class="ft">ZB</span></div></td><td class="mixed"><strong>20–80pt NQ</strong></td><td class="mixed">WATCH</td></tr><tr><td><strong>Housing Starts</strong></td><td><span class="ipill L">LOW</span></td><td>~18th 8:30am</td><td><div class="futs"><span class="ft">YM</span><span class="ft">ZN</span></div></td><td class="up"><strong>10–30pt</strong></td><td class="up">OK TO TRADE</td></tr><tr><td><strong>Consumer Confidence</strong></td><td><span class="ipill L">LOW</span></td><td>Last Tue 10am</td><td><div class="futs"><span class="ft">ES</span><span class="ft">NQ</span></div></td><td class="up"><strong>10–30pt</strong></td><td class="up">OK TO TRADE</td></tr></table></div></div>
+  <div class="info-grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
+    <div class="ibox blue-b"><div class="ibox-title">📌 Futures Codes</div><ul class="ilist"><li><span class="idot" style="background:var(--blue)"></span><strong>NQ</strong> = Nasdaq 100 Futures</li><li><span class="idot" style="background:var(--blue)"></span><strong>ES</strong> = S&P 500 Futures</li><li><span class="idot" style="background:var(--blue)"></span><strong>YM</strong> = Dow Jones Futures</li><li><span class="idot" style="background:var(--blue)"></span><strong>RTY</strong> = Russell 2000</li><li><span class="idot" style="background:var(--amber)"></span><strong>CL</strong> = Crude Oil Futures</li><li><span class="idot" style="background:var(--green)"></span><strong>GC</strong> = Gold Futures</li><li><span class="idot" style="background:var(--purple)"></span><strong>ZB</strong> = 30Y Treasury Bond</li><li><span class="idot" style="background:var(--red)"></span><strong>6E</strong> = Euro FX Futures</li></ul></div>
+    <div class="ibox amber-b"><div class="ibox-title">🕐 Key Times EST</div><ul class="ilist"><li><span class="idot" style="background:var(--red)"></span><strong>8:30am</strong> — Most US economic data</li><li><span class="idot" style="background:var(--amber)"></span><strong>9:30am</strong> — NYSE/NASDAQ open</li><li><span class="idot" style="background:var(--amber)"></span><strong>10:00am</strong> — ISM, Consumer data</li><li><span class="idot" style="background:var(--amber)"></span><strong>10:30am</strong> — EIA Oil (Wed)</li><li><span class="idot" style="background:var(--blue)"></span><strong>2:00pm</strong> — FOMC Decision</li><li><span class="idot" style="background:var(--blue)"></span><strong>2:30pm</strong> — Powell Press Conference</li><li><span class="idot" style="background:var(--green)"></span><strong>4:00pm</strong> — NYSE close</li></ul></div>
+    <div class="ibox green-b"><div class="ibox-title">💡 Pro Tips</div><ul class="ilist"><li><span class="idot" style="background:var(--green)"></span>NQ moves ~2x more than ES on news</li><li><span class="idot" style="background:var(--green)"></span>Gold (GC) often moves INVERSE to DXY</li><li><span class="idot" style="background:var(--green)"></span>Bonds (ZB) move INVERSE to rate hike expectations</li><li><span class="idot" style="background:var(--amber)"></span>Oil (CL) reacts most to supply/demand</li><li><span class="idot" style="background:var(--amber)"></span>Watch VIX — high = avoid, low = trade</li><li><span class="idot" style="background:var(--red)"></span>Pre-market news (6–9:30am) sets day's tone</li></ul></div>
+  </div>
+</div>
 
 </div><!-- end wrap -->
 
 <script>
-// ══════════════════════════════════════════════════════
-//  CONFIG
-// ══════════════════════════════════════════════════════
-const API_KEY = 'd6a0pr9r01qsjlb99n50d6a0pr9r01qsjlb99n5g';
-const BASE    = 'https://finnhub.io/api/v1';
+// ══ CONFIG ══
+const FINNHUB_KEY  = 'd6a0pr9r01qsjlb99n50d6a0pr9r01qsjlb99n5g';
+const FINNHUB_BASE = 'https://finnhub.io/api/v1';
 
-// ══════════════════════════════════════════════════════
-//  TAB SWITCHING
-// ══════════════════════════════════════════════════════
-function switchTab(id, el) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  if (el) el.classList.add('active');
-  document.getElementById('panel-' + id).classList.add('active');
-  if (id === 'news' && !newsLoaded) loadNews();
-}
+// ─────────────────────────────────────────────────────────────────────────────
+//  SECURE PROXY URL  ← paste your Cloudflare Worker URL here after deploying
+//  e.g.  'https://pfp-proxy.YOUR-NAME.workers.dev'
+//  The API key lives inside Cloudflare — never in this file or GitHub
+// ─────────────────────────────────────────────────────────────────────────────
+const PROXY_URL = 'PASTE_YOUR_WORKER_URL_HERE';
 
-// ══════════════════════════════════════════════════════
-//  SESSION CLOCKS
-// ══════════════════════════════════════════════════════
-const ZONES = [
-  {id:'ny',        flag:'🇺🇸', label:'NY EST',   tz:'America/New_York',  open:13.5, close:20},
-  {id:'london',    flag:'🇬🇧', label:'LDN GMT',  tz:'Europe/London',     open:8,    close:16.5},
-  {id:'frankfurt', flag:'🇪🇺', label:'FRA CET',  tz:'Europe/Berlin',     open:7,    close:15.5},
-  {id:'tokyo',     flag:'🇯🇵', label:'TKY JST',  tz:'Asia/Tokyo',        open:0,    close:6},
-  {id:'sydney',    flag:'🇦🇺', label:'SYD AEST', tz:'Australia/Sydney',  open:22,   close:7},
-  {id:'utc',       flag:'🌐', label:'UTC',       tz:'UTC',               open:-1,   close:-1},
-];
+let newsLog = [];
+let chatHistory = [];
+let proxyReady = false;
 
-function isOpen(z) {
-  if (z.open < 0) return false;
-  const now = new Date();
-  const h = now.getUTCHours() + now.getUTCMinutes()/60;
-  return z.open < z.close ? (h >= z.open && h < z.close) : (h >= z.open || h < z.close);
-}
+// ══ PROXY STATUS CHECK ══
+async function initProxy() {
+  const s = document.getElementById('keyStatus');
+  const bar = document.getElementById('claudeKeyInput');
 
-function buildClocks() {
-  const container = document.getElementById('clockZones');
-  container.innerHTML = ZONES.map(z => `
-    <div class="ck-zone" id="ckz-${z.id}">
-      <span class="ck-flag">${z.flag}</span>
-      <div class="ck-body">
-        <div class="ck-time" id="ckt-${z.id}">--:--</div>
-        <div class="ck-name"><span class="sdot" id="cks-${z.id}"></span>${z.label}</div>
-      </div>
-    </div>`).join('');
-}
+  if (!PROXY_URL || PROXY_URL === 'PASTE_YOUR_WORKER_URL_HERE') {
+    s.textContent = '⚙️ Not configured — see setup guide below';
+    s.className = 'api-key-status none';
+    bar.value = 'Follow setup guide ↓ (free, no credit card)';
+    bar.disabled = true;
+    document.getElementById('testKeyBtn').disabled = true;
+    document.getElementById('setupGuide').style.display = 'block';
+    return;
+  }
 
-function updateClocks() {
-  const now = new Date();
-  let openCount = 0;
-  ZONES.forEach(z => {
-    const el = document.getElementById('ckt-' + z.id);
-    const dot = document.getElementById('cks-' + z.id);
-    const zone = document.getElementById('ckz-' + z.id);
-    if (!el) return;
-    el.textContent = now.toLocaleTimeString('en-US',{timeZone:z.tz,hour:'2-digit',minute:'2-digit',hour12:false});
-    const open = isOpen(z);
-    if (open) openCount++;
-    dot.className = 'sdot' + (open ? ' open' : '');
-    zone.className = 'ck-zone' + (open ? ' open' : '');
-  });
-  document.getElementById('hSessions').textContent = openCount;
-}
+  // Proxy URL is set — show ready state
+  bar.value = PROXY_URL;
+  bar.disabled = true;
+  bar.style.color = 'var(--green)';
+  bar.style.fontFamily = 'inherit';
+  s.textContent = '⏳ Checking proxy...';
+  s.className = 'api-key-status none';
 
-buildClocks();
-setInterval(updateClocks, 1000);
-updateClocks();
-
-// ══════════════════════════════════════════════════════
-//  TODAY SNAPSHOT — reads real news from Finnhub
-//  classifies each story and counts actual today events
-// ══════════════════════════════════════════════════════
-
-// High-impact economic event keywords that signal a RED event
-const HIGH_KEYWORDS = [
-  'nonfarm','nfp','payroll','fomc','federal reserve rate','interest rate decision',
-  'cpi','core cpi','consumer price index','inflation report',
-  'ppi','producer price index',
-  'gdp','gross domestic product',
-  'unemployment rate','jobs report','employment report',
-  'boe rate','ecb rate','bank of japan rate','reserve bank'
-];
-const MEDIUM_KEYWORDS = [
-  'jobless claims','initial claims','ism manufacturing','ism services',
-  'pmi','retail sales','housing starts','building permits',
-  'consumer confidence','fed speak','powell speaks','powell speech',
-  'lagarde','eia crude','oil inventories','industrial production',
-  'durable goods','trade balance','current account'
-];
-
-function classifyStoryImpact(text) {
-  const t = text.toLowerCase();
-  if (HIGH_KEYWORDS.some(k => t.includes(k)))   return 'HIGH';
-  if (MEDIUM_KEYWORDS.some(k => t.includes(k))) return 'MEDIUM';
-  return 'LOW';
-}
-
-async function buildTodaySnapshot() {
-  // Set loading state
-  ['tRed','tAmber','tLow','tTotal','hRed'].forEach(id => {
-    document.getElementById(id).textContent = '…';
-  });
-  document.getElementById('tradeAdvice').textContent = 'Checking...';
-
-  const todayStart = Math.floor(new Date().setHours(0,0,0,0) / 1000);
-  const todayEnd   = Math.floor(new Date().setHours(23,59,59,999) / 1000);
-
-  let red = 0, amber = 0, low = 0;
-  const seenEvents = new Set();
-
+  // Quick ping test
   try {
-    // Pull from forex + general categories
-    const cats = ['forex', 'general'];
-    for (const cat of cats) {
-      const res = await fetch(`${BASE}/news?category=${cat}&token=${API_KEY}`);
-      if (!res.ok) continue;
-      const data = await res.json();
-      if (!Array.isArray(data)) continue;
-
-      data.forEach(n => {
-        // Only count stories from today
-        if (n.datetime < todayStart || n.datetime > todayEnd) return;
-        const text = `${n.headline||''} ${n.summary||''}`;
-        const impact = classifyStoryImpact(text);
-        // Dedupe by similar headline (avoid counting same event multiple times)
-        const key = (n.headline||'').substring(0, 40).toLowerCase();
-        if (seenEvents.has(key)) return;
-        seenEvents.add(key);
-        if (impact === 'HIGH')   red++;
-        else if (impact === 'MEDIUM') amber++;
-        else low++;
-      });
+    const res = await fetch(PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: [{ role: 'user', content: 'ping' }], max_tokens: 5 })
+    });
+    if (res.status === 200 || res.status === 400) { // 400 = proxy works, bad payload
+      proxyReady = true;
+      s.textContent = '✅ AI Proxy Connected & Secure';
+      s.className = 'api-key-status ok';
+    } else if (res.status === 403) {
+      s.textContent = '⚠️ CORS blocked — update ALLOWED_ORIGIN in Worker';
+      s.className = 'api-key-status none';
+    } else {
+      s.textContent = `⚠️ Proxy returned ${res.status}`;
+      s.className = 'api-key-status none';
     }
   } catch(e) {
-    console.error('Snapshot error:', e);
+    s.textContent = '⚠️ Cannot reach proxy — check Worker URL';
+    s.className = 'api-key-status none';
   }
+}
 
-  const total = red + amber + low;
-
-  // If no today stories found (weekend, early morning, API limit) show honest message
-  if (total === 0) {
-    ['tRed','tAmber','tLow','tTotal','hRed'].forEach(id => {
-      document.getElementById(id).textContent = '0';
-    });
-    const advice = document.getElementById('tradeAdvice');
-    advice.textContent = '📭 No news yet today — check back later';
-    advice.className = 'advice clear';
-    buildCharts(0, 0, 0);
-    return;
-  }
-
-  document.getElementById('tRed').textContent   = red;
-  document.getElementById('tAmber').textContent  = amber;
-  document.getElementById('tLow').textContent    = low;
-  document.getElementById('tTotal').textContent  = total;
-  document.getElementById('hRed').textContent    = red;
-
-  const advice = document.getElementById('tradeAdvice');
-  if (red >= 2) {
-    advice.textContent = `🔴 HIGH RISK — ${red} red events today`;
-    advice.className = 'advice danger';
-  } else if (red === 1) {
-    advice.textContent = '🟠 CAUTION — 1 high-impact event today';
-    advice.className = 'advice caution';
-  } else if (amber >= 2) {
-    advice.textContent = `🟡 MODERATE — ${amber} medium events, reduce size`;
-    advice.className = 'advice caution';
+async function testKey() {
+  const btn = document.getElementById('testKeyBtn');
+  btn.textContent = '⏳ Testing...'; btn.disabled = true;
+  const result = await callClaude('Say only: AI CONNECTED', 20);
+  btn.textContent = '🧪 Test AI'; btn.disabled = false;
+  if (result.includes('CONNECTED') || (!result.startsWith('❌') && !result.startsWith('⚠️'))) {
+    proxyReady = true;
+    document.getElementById('keyStatus').textContent = '✅ AI Working!';
+    document.getElementById('keyStatus').className = 'api-key-status ok';
+    alert('✅ Claude AI is connected and working through your secure proxy!');
   } else {
-    advice.textContent = '🟢 CLEAR DAY — Good conditions to trade';
-    advice.className = 'advice clear';
+    alert('Connection issue:\n\n' + result);
   }
-
-  buildCharts(red, amber, low);
 }
 
-// ══════════════════════════════════════════════════════
-//  CHARTS
-// ══════════════════════════════════════════════════════
-function buildCharts(red, amber, low) {
-  // Today donut
-  new Chart(document.getElementById('chartToday'), {
-    type: 'doughnut',
-    data: {
-      labels: ['High Impact', 'Medium', 'Low'],
-      datasets: [{
-        data: [red || 0.1, amber || 0.1, low || 0.1],
-        backgroundColor: ['#ef4444','#f59e0b','#10b981'],
-        borderWidth: 2, borderColor: '#fff'
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 8 } } },
-      cutout: '65%'
+function setKey() {} // no-op — key is in Cloudflare, not here
+function initKey() { initProxy(); }
+
+document.getElementById('claudeKeyInput').addEventListener('input', function() { setKey(this.value); });
+document.getElementById('claudeKeyInput').addEventListener('paste', function() {
+  setTimeout(() => setKey(this.value), 50); // catch paste value after DOM updates
+});
+
+async function testKey() {
+  const btn = document.getElementById('testKeyBtn');
+  btn.textContent = '⏳ Testing...'; btn.disabled = true;
+  const result = await callClaude('Say "AI CONNECTED ✅" and nothing else.', 20);
+  btn.textContent = '🧪 Test AI'; btn.disabled = false;
+  const s = document.getElementById('keyStatus');
+  if (result.includes('CONNECTED') || result.includes('✅')) {
+    s.textContent = '✅ AI Connected & Working!'; s.className = 'api-key-status ok';
+    alert('✅ Claude AI is connected and working! All features are active.');
+  } else if (result.startsWith('❌') || result.startsWith('⚠️')) {
+    s.textContent = '❌ Failed: ' + result.substring(0,60); s.className = 'api-key-status none';
+    alert('Connection failed:\n\n' + result + '\n\nMake sure:\n1. You opened this file in a web server (not double-click)\n2. Your key starts with sk-ant-api03-\n3. See instructions below.');
+  } else {
+    s.textContent = '✅ AI Working!'; s.className = 'api-key-status ok';
+    alert('✅ AI Connected! Response: ' + result);
+  }
+}
+
+initKey();
+
+// ══ CLAUDE CALL ══
+const SYSTEM_PROP = `You are an expert prop futures trader analyst for Prop Farm Pro. You specialise in NQ (Nasdaq 100), ES (S&P 500), YM (Dow), CL (Crude Oil), GC (Gold), ZB (30Y Bonds) futures. You know economic event impact on futures, prop trading rules (daily loss limits, consistency rules), and the Red Folder Rule (stay flat 15 min before/after HIGH events). Daily target: $250-$300/day. Responses are concise, actionable, futures-specific. Keep under 400 words unless asked for detail.`;
+
+async function callClaude(userMsg, maxTokens=700, history=[]) {
+  if (!PROXY_URL || PROXY_URL === 'PASTE_YOUR_WORKER_URL_HERE') {
+    return '⚙️ Proxy not set up yet. Follow the setup guide on this page to deploy your Cloudflare Worker.';
+  }
+  const messages = history.length ? history : [{role:'user', content: userMsg}];
+  try {
+    const res = await fetch(PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages, max_tokens: maxTokens, system: SYSTEM_PROP })
+    });
+    if (!res.ok) {
+      const e = await res.json().catch(()=>({}));
+      if (res.status === 403) return '❌ CORS blocked — update ALLOWED_ORIGIN in your Worker to match your GitHub Pages URL.';
+      if (res.status === 429) return '⏳ Rate limited — wait 60 seconds and try again.';
+      if (res.status === 401) return '❌ API key invalid in Worker — check your Cloudflare env variable CLAUDE_API_KEY.';
+      return `❌ Proxy error ${res.status}: ${e.error?.message || JSON.stringify(e)}`;
     }
-  });
-
-  // Weekly bar (estimated typical week)
-  new Chart(document.getElementById('chartWeek'), {
-    type: 'bar',
-    data: {
-      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-      datasets: [
-        { label: 'High', data: [0, 0, 0, 0, 2], backgroundColor: '#ef4444', borderRadius: 4 },
-        { label: 'Medium', data: [1, 1, 2, 2, 1], backgroundColor: '#f59e0b', borderRadius: 4 },
-        { label: 'Low', data: [2, 3, 2, 1, 1], backgroundColor: '#10b981', borderRadius: 4 },
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { position: 'bottom', labels: { font: { size: 10 }, padding: 6 } } },
-      scales: {
-        x: { stacked: true, grid: { display: false } },
-        y: { stacked: true, ticks: { stepSize: 1 }, grid: { color: '#e2e8f0' } }
-      }
-    }
-  });
-
-  // Currency pie
-  new Chart(document.getElementById('chartCurrency'), {
-    type: 'pie',
-    data: {
-      labels: ['USD', 'EUR', 'GBP', 'JPY', 'Other'],
-      datasets: [{
-        data: [45, 20, 15, 10, 10],
-        backgroundColor: ['#3b82f6','#667eea','#8b5cf6','#ef4444','#94a3b8'],
-        borderWidth: 2, borderColor: '#fff'
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { position: 'bottom', labels: { font: { size: 10 }, padding: 6 } } }
-    }
-  });
-}
-
-// ══════════════════════════════════════════════════════
-//  NEWS FEED
-// ══════════════════════════════════════════════════════
-let newsLoaded = false;
-const KEYWORDS = ['inflation','fed','fomc','cpi','ppi','gdp','nfp','nonfarm','jobs','unemployment','rate','oil','crude','gold','futures','nasdaq','dow','s&p','treasury','ecb','boe','boj','interest','reserve','recession','payroll','ism','pmi','retail','housing','jobless','powell','lagarde','yield','bond'];
-
-function classifyImpact(text) {
-  const t = text.toLowerCase();
-  const high   = ['fomc','federal reserve','cpi','inflation data','nonfarm','nfp','interest rate decision','gdp report','ppi','recession','emergency rate'];
-  const medium = ['unemployment','jobless claims','retail sales','ism','pmi','oil inventories','eia','ecb','boe','boj','powell','lagarde','yield curve','earnings beat'];
-  if (high.some(k => t.includes(k)))   return 'HIGH';
-  if (medium.some(k => t.includes(k))) return 'MEDIUM';
-  return 'LOW';
-}
-
-function getFuturesTag(text) {
-  const t = text.toLowerCase();
-  if (t.includes('nonfarm')||t.includes('nfp')||t.includes('payroll'))       return '⚡ Moves NQ · ES · YM';
-  if (t.includes('cpi')||t.includes('inflation'))                            return '⚡ Moves NQ · ES · GC · ZB';
-  if (t.includes('fomc')||t.includes('federal reserve')||t.includes('rate')) return '⚡ MAJOR — All futures affected';
-  if (t.includes('gdp'))                                                      return '⚡ Moves ES · NQ · YM';
-  if (t.includes('ppi'))                                                      return '⚡ Moves NQ · ES · GC';
-  if (t.includes('oil')||t.includes('crude')||t.includes('eia'))             return '⚡ Moves CL heavily';
-  if (t.includes('gold'))                                                     return '⚡ Moves GC · SI';
-  if (t.includes('unemployment')||t.includes('jobless'))                     return '⚡ Moves NQ · ES';
-  if (t.includes('retail sales'))                                             return '⚡ Moves ES · YM';
-  if (t.includes('ecb')||t.includes('boe')||t.includes('boj'))               return '⚡ Moves currency futures + ES';
-  if (t.includes('nasdaq')||t.includes('tech'))                               return '⚡ Moves NQ directly';
-  return '';
-}
-
-function timeAgo(ts) {
-  const d = Math.floor((Date.now() - ts*1000)/60000);
-  if (d < 1) return 'Just now';
-  if (d < 60) return `${d}m ago`;
-  if (d < 1440) return `${Math.floor(d/60)}h ago`;
-  return `${Math.floor(d/1440)}d ago`;
-}
-
-function getTradeLabel(impact) {
-  if (impact === 'HIGH')   return {cls:'avoid', text:'🔴 AVOID'};
-  if (impact === 'MEDIUM') return {cls:'watch', text:'🟡 WATCH'};
-  return {cls:'trade', text:'🟢 TRADE'};
-}
-
-async function loadNews() {
-  newsLoaded = true;
-  const out = document.getElementById('newsOutput');
-  out.innerHTML = '<div class="loading-box"><div class="spinner"></div>Fetching live news from Finnhub...</div>';
-
-  const cats = ['forex','general','merger'];
-  const seen = new Set();
-  let items = [];
-
-  for (const cat of cats) {
-    try {
-      const res = await fetch(`${BASE}/news?category=${cat}&token=${API_KEY}`);
-      if (!res.ok) continue;
-      const data = await res.json();
-      if (!Array.isArray(data)) continue;
-      data.forEach(n => {
-        const text = `${n.headline||''} ${n.summary||''}`;
-        if (seen.has(n.headline)) return;
-        if (!KEYWORDS.some(kw => text.toLowerCase().includes(kw))) return;
-        seen.add(n.headline);
-        items.push({...n, impact: classifyImpact(text), futuresTag: getFuturesTag(text)});
-      });
-    } catch(e) {}
+    const data = await res.json();
+    return data.content?.[0]?.text || '(no response)';
+  } catch(err) {
+    return '❌ Cannot reach proxy: ' + err.message + '. Check your Worker URL is correct.';
   }
-
-  items.sort((a,b) => b.datetime - a.datetime);
-  items = items.slice(0, 36);
-
-  document.getElementById('hNews').textContent = items.length;
-  document.getElementById('newsBadge').textContent = `${items.length} stories`;
-
-  if (items.length === 0) {
-    out.innerHTML = '<div class="loading-box" style="color:var(--red)">⚠️ No relevant news found. Check your API key or try refreshing.</div>';
-    return;
-  }
-
-  const high   = items.filter(n => n.impact === 'HIGH');
-  const medium = items.filter(n => n.impact === 'MEDIUM');
-  const low    = items.filter(n => n.impact === 'LOW');
-
-  function renderGroup(title, arr, color) {
-    if (!arr.length) return '';
-    return `
-      <div class="sdiv" style="margin-bottom:.875rem">
-        <h3 style="color:${color}">${title}</h3>
-        <div class="sdiv-line"></div>
-        <div class="sdiv-count">${arr.length} stories</div>
-      </div>
-      <div class="news-grid">
-        ${arr.map((n,i) => buildNewsCard(n,i)).join('')}
-      </div>`;
-  }
-
-  out.innerHTML =
-    renderGroup('🔴 HIGH IMPACT NEWS — Avoid trading near these', high, 'var(--red)') +
-    renderGroup('🟠 MEDIUM IMPACT NEWS — Trade with caution', medium, 'var(--amber)') +
-    renderGroup('🟢 LOW IMPACT NEWS — OK to monitor', low, 'var(--green)');
 }
 
-function buildNewsCard(n, i) {
-  const tag = getTradeLabel(n.impact);
-  const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  return `
-  <div class="ncard ${n.impact}" style="animation-delay:${Math.min(i*20,400)}ms" onclick="window.open('${esc(n.url||'#')}','_blank')">
-    <div class="ncard-top">
-      <span class="nsource">${esc(n.source||'News')}</span>
-      <div class="nbadges">
-        <span class="nipact ${n.impact}">${n.impact}</span>
-        <span class="navoid ${tag.cls}">${tag.text}</span>
-      </div>
-    </div>
-    <div class="ntitle">${esc(n.headline||'')}</div>
-    ${n.futuresTag ? `<div class="nfutures">${esc(n.futuresTag)}</div>` : ''}
-    <div class="nsumm">${esc(n.summary||'')}</div>
-    <div class="nfoot">
-      <span>${timeAgo(n.datetime)}</span>
-      <span>Read full story →</span>
-    </div>
-  </div>`;
+// ══ TAB SWITCH ══
+function switchTab(id, el) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.getElementById('panel-'+id).classList.add('active');
+  if (id==='news' && !newsLoaded) loadNews();
+  if (id==='briefing') document.getElementById('briefingDate').textContent =
+    new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
 }
 
-// ══════════════════════════════════════════════════════
-//  INIT
-// ══════════════════════════════════════════════════════
-buildTodaySnapshot(); // async — fetches real news to count today's events
-setTimeout(() => { newsLoaded = false; }, 100);
+// ══ CLOCKS ══
+const ZONES=[{id:'ny',flag:'🇺🇸',label:'NY EST',tz:'America/New_York',open:13.5,close:20},{id:'london',flag:'🇬🇧',label:'LDN GMT',tz:'Europe/London',open:8,close:16.5},{id:'frankfurt',flag:'🇪🇺',label:'FRA CET',tz:'Europe/Berlin',open:7,close:15.5},{id:'tokyo',flag:'🇯🇵',label:'TKY JST',tz:'Asia/Tokyo',open:0,close:6},{id:'sydney',flag:'🇦🇺',label:'SYD AEST',tz:'Australia/Sydney',open:22,close:7},{id:'utc',flag:'🌐',label:'UTC',tz:'UTC',open:-1,close:-1}];
+function isOpen(z){if(z.open<0)return false;const h=new Date().getUTCHours()+new Date().getUTCMinutes()/60;return z.open<z.close?(h>=z.open&&h<z.close):(h>=z.open||h<z.close);}
+function buildClocks(){document.getElementById('clockZones').innerHTML=ZONES.map(z=>`<div class="ck-zone" id="ckz-${z.id}"><span class="ck-flag">${z.flag}</span><div><div class="ck-time" id="ckt-${z.id}">--:--</div><div class="ck-name"><span class="sdot" id="cks-${z.id}"></span>${z.label}</div></div></div>`).join('');}
+function updateClocks(){const now=new Date();let oc=0;ZONES.forEach(z=>{const el=document.getElementById('ckt-'+z.id);if(!el)return;el.textContent=now.toLocaleTimeString('en-US',{timeZone:z.tz,hour:'2-digit',minute:'2-digit',hour12:false});const op=isOpen(z);if(op)oc++;document.getElementById('cks-'+z.id).className='sdot'+(op?' open':'');document.getElementById('ckz-'+z.id).className='ck-zone'+(op?' open':'');});document.getElementById('hSessions').textContent=oc;}
+buildClocks();setInterval(updateClocks,1000);updateClocks();
+
+// ══ TODAY SNAPSHOT ══
+const HKW=['nonfarm','nfp','payroll','fomc','federal reserve rate','interest rate decision','cpi','core cpi','consumer price index','inflation report','ppi','producer price index','gdp','gross domestic product','unemployment rate','jobs report','employment report','boe rate','ecb rate'];
+const MKW=['jobless claims','initial claims','ism manufacturing','ism services','pmi','retail sales','housing starts','building permits','consumer confidence','powell speaks','lagarde','eia crude','oil inventories','industrial production','durable goods','trade balance'];
+function classImpact(txt){const t=txt.toLowerCase();if(HKW.some(k=>t.includes(k)))return'HIGH';if(MKW.some(k=>t.includes(k)))return'MEDIUM';return'LOW';}
+async function buildSnapshot(){
+  ['tRed','tAmber','tLow','tTotal','hRed'].forEach(id=>document.getElementById(id).textContent='…');
+  document.getElementById('tradeAdvice').textContent='Checking...';
+  const s=Math.floor(new Date().setHours(0,0,0,0)/1000),e=Math.floor(new Date().setHours(23,59,59,999)/1000);
+  let red=0,amb=0,low=0;const seen=new Set();
+  try{for(const cat of['forex','general']){const res=await fetch(`${FINNHUB_BASE}/news?category=${cat}&token=${FINNHUB_KEY}`);if(!res.ok)continue;const data=await res.json();if(!Array.isArray(data))continue;data.forEach(n=>{if(n.datetime<s||n.datetime>e)return;const k=(n.headline||'').substring(0,40).toLowerCase();if(seen.has(k))return;seen.add(k);const imp=classImpact(`${n.headline||''} ${n.summary||''}`);if(imp==='HIGH')red++;else if(imp==='MEDIUM')amb++;else low++;});}}catch(e){}
+  const tot=red+amb+low;
+  if(!tot){['tRed','tAmber','tLow','tTotal','hRed'].forEach(id=>document.getElementById(id).textContent='0');const a=document.getElementById('tradeAdvice');a.textContent='📭 No news yet today';a.className='advice clear';buildCharts(0,0,0);return;}
+  document.getElementById('tRed').textContent=red;document.getElementById('tAmber').textContent=amb;document.getElementById('tLow').textContent=low;document.getElementById('tTotal').textContent=tot;document.getElementById('hRed').textContent=red;
+  const adv=document.getElementById('tradeAdvice');
+  if(red>=2){adv.textContent=`🔴 HIGH RISK — ${red} red events`;adv.className='advice danger';}
+  else if(red===1){adv.textContent='🟠 CAUTION — 1 high-impact event';adv.className='advice caution';}
+  else if(amb>=2){adv.textContent=`🟡 MODERATE — ${amb} medium events`;adv.className='advice caution';}
+  else{adv.textContent='🟢 CLEAR DAY — Good conditions to trade';adv.className='advice clear';}
+  buildCharts(red,amb,low);
+}
+
+// ══ CHARTS ══
+function buildCharts(r,a,l){
+  new Chart(document.getElementById('chartToday'),{type:'doughnut',data:{labels:['High','Medium','Low'],datasets:[{data:[r||.1,a||.1,l||.1],backgroundColor:['#ef4444','#f59e0b','#10b981'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11},padding:8}}},cutout:'65%'}});
+  new Chart(document.getElementById('chartWeek'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri'],datasets:[{label:'High',data:[0,0,0,0,2],backgroundColor:'#ef4444',borderRadius:4},{label:'Medium',data:[1,1,2,2,1],backgroundColor:'#f59e0b',borderRadius:4},{label:'Low',data:[2,3,2,1,1],backgroundColor:'#10b981',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:6}}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,ticks:{stepSize:1},grid:{color:'#e2e8f0'}}}}});
+  new Chart(document.getElementById('chartCurrency'),{type:'pie',data:{labels:['USD','EUR','GBP','JPY','Other'],datasets:[{data:[45,20,15,10,10],backgroundColor:['#3b82f6','#667eea','#8b5cf6','#ef4444','#94a3b8'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:6}}}}});
+}
+
+// ══ NEWS FEED ══
+let newsLoaded=false;
+const NEWSKW=['inflation','fed','fomc','cpi','ppi','gdp','nfp','nonfarm','jobs','unemployment','rate','oil','crude','gold','futures','nasdaq','dow','s&p','treasury','ecb','boe','boj','interest','reserve','recession','payroll','ism','pmi','retail','housing','jobless','powell','lagarde','yield','bond'];
+
+function classNewsImpact(txt){const t=txt.toLowerCase();const h=['fomc','federal reserve','cpi','inflation data','nonfarm','nfp','interest rate decision','gdp report','ppi','recession','emergency rate'];const m=['unemployment','jobless claims','retail sales','ism','pmi','oil inventories','eia','ecb','boe','boj','powell','lagarde','yield curve'];if(h.some(k=>t.includes(k)))return'HIGH';if(m.some(k=>t.includes(k)))return'MEDIUM';return'LOW';}
+
+function getFutures(txt){const t=txt.toLowerCase();if(t.includes('nonfarm')||t.includes('nfp')||t.includes('payroll'))return['NQ','ES','YM','GC','ZB'];if(t.includes('cpi')||t.includes('inflation'))return['NQ','ES','GC','ZB','CL'];if(t.includes('fomc')||t.includes('federal reserve')||t.includes('rate'))return['NQ','ES','YM','GC','ZB','DXY'];if(t.includes('gdp'))return['ES','NQ','YM','ZB'];if(t.includes('ppi'))return['NQ','ES','GC'];if(t.includes('oil')||t.includes('crude')||t.includes('eia'))return['CL','RB'];if(t.includes('gold'))return['GC','SI'];if(t.includes('unemployment')||t.includes('jobless'))return['NQ','ES'];if(t.includes('retail sales'))return['ES','YM'];if(t.includes('ecb')||t.includes('boe')||t.includes('boj'))return['6E','6B','ES'];if(t.includes('nasdaq')||t.includes('tech'))return['NQ'];return['ES','NQ'];}
+
+function timeAgo(ts){const d=Math.floor((Date.now()-ts*1000)/60000);if(d<1)return'Just now';if(d<60)return`${d}m ago`;if(d<1440)return`${Math.floor(d/60)}h ago`;return`${Math.floor(d/1440)}d ago`;}
+
+function tradeLabel(imp){if(imp==='HIGH')return{cls:'avoid',txt:'🔴 AVOID'};if(imp==='MEDIUM')return{cls:'watch',txt:'🟡 WATCH'};return{cls:'trade',txt:'🟢 TRADE'};}
+
+async function loadNews(){
+  newsLoaded=true;
+  const out=document.getElementById('newsOutput');
+  out.innerHTML='<div class="loading-box"><div class="spinner"></div>Fetching live news from Finnhub...</div>';
+  const seen=new Set();let items=[];
+  for(const cat of['forex','general','merger']){
+    try{const res=await fetch(`${FINNHUB_BASE}/news?category=${cat}&token=${FINNHUB_KEY}`);if(!res.ok)continue;const data=await res.json();if(!Array.isArray(data))continue;
+    data.forEach(n=>{const txt=`${n.headline||''} ${n.summary||''}`;if(seen.has(n.headline))return;if(!NEWSKW.some(kw=>txt.toLowerCase().includes(kw)))return;seen.add(n.headline);items.push({...n,impact:classNewsImpact(txt),futures:getFutures(txt)});});}catch(e){}
+  }
+  items.sort((a,b)=>b.datetime-a.datetime);items=items.slice(0,42);
+  document.getElementById('hNews').textContent=items.length;
+  document.getElementById('newsBadge').textContent=`${items.length} stories`;
+  if(!items.length){out.innerHTML='<div class="loading-box" style="color:var(--red)">⚠️ No relevant news found. Try refreshing.</div>';return;}
+  newsLog=items.filter(n=>n.impact==='HIGH'||n.impact==='MEDIUM');
+  renderLog();
+  const high=items.filter(n=>n.impact==='HIGH'),med=items.filter(n=>n.impact==='MEDIUM'),low=items.filter(n=>n.impact==='LOW');
+  function grp(title,arr,col){if(!arr.length)return'';return`<div class="sdiv" style="margin-bottom:.875rem"><h3 style="color:${col}">${title}</h3><div class="sdiv-line"></div><div class="sdiv-count">${arr.length} stories</div></div><div class="news-grid">${arr.map((n,i)=>buildCard(n,i)).join('')}</div>`;}
+  out.innerHTML=grp('🔴 HIGH IMPACT — Avoid trading near these',high,'var(--red)')+grp('🟠 MEDIUM IMPACT — Trade with caution',med,'var(--amber)')+grp('🟢 LOW IMPACT — OK to monitor',low,'var(--green)');
+}
+
+function buildCard(n,i){
+  const lbl=tradeLabel(n.impact);
+  const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const id='nai_'+Date.now()+'_'+i;
+  const futs=(n.futures||[]).map(f=>`<span class="ft2">${f}</span>`).join('');
+  return`<div class="ncard ${n.impact}" style="animation-delay:${Math.min(i*20,400)}ms">
+  <div class="ncard-top"><span class="nsource">${esc(n.source||'')}</span><div class="nbadges"><span class="nipact ${n.impact}">${n.impact}</span><span class="navoid ${lbl.cls}">${lbl.txt}</span></div></div>
+  <div class="ntitle" onclick="window.open('${esc(n.url||'#')}','_blank')">${esc(n.headline||'')}</div>
+  ${futs?`<div class="nfutures-tags">${futs}</div>`:''}
+  <div class="nsumm">${esc(n.summary||'')}</div>
+  <div class="nai-section"><button class="nai-btn" onclick="analyseCard('${id}','${esc(n.headline).replace(/'/g,"\\'")}','${esc((n.summary||'').substring(0,200)).replace(/'/g,"\\'")}','${n.impact}')">🤖 AI Analyse This</button><div class="nai-result" id="${id}"></div></div>
+  <div class="nfoot"><span>${timeAgo(n.datetime)}</span><span onclick="window.open('${esc(n.url||'#')}','_blank')" style="cursor:pointer">Read →</span></div></div>`;
+}
+
+async function analyseCard(elId,headline,summary,impact){
+  const el=document.getElementById(elId);if(!el)return;
+  el.style.display='block';el.className='nai-result show';el.textContent='🤖 Analysing with Claude AI...';
+  const prompt=`News: "${headline}"\nSummary: "${summary}"\nImpact: ${impact}\n\nFor a prop futures trader, give me:\n1. Which futures move most and how much?\n2. Bullish or bearish for NQ/ES? Why?\n3. Avoid / Watch / Trade — for how long?\n4. Re-entry signal after this resolves?\n\n4 bullet points max, be direct.`;
+  el.textContent=await callClaude(prompt,400);
+}
+
+async function analyseAllHigh(){
+  const cards=document.querySelectorAll('.ncard.HIGH');
+  if(!cards.length){alert('Load News Feed first, then click this.');return;}
+  let i=0;
+  for(const card of cards){const btn=card.querySelector('.nai-btn');if(btn)btn.click();i++;if(i<cards.length)await new Promise(r=>setTimeout(r,1500));}
+}
+
+// ══ LOG ══
+function renderLog(){
+  const body=document.getElementById('logBody');
+  document.getElementById('logCount').textContent=newsLog.length+' entries';
+  if(!newsLog.length){body.innerHTML='<tr><td colspan="7" class="log-empty">📭 Load News Feed tab to populate the log</td></tr>';return;}
+  const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  body.innerHTML=newsLog.map((n,i)=>{
+    const bc=n.impact==='HIGH'?'badge-h':'badge-m';
+    const act=n.impact==='HIGH'?'🔴 AVOID ±15min':'🟡 Reduce size';
+    const fts=(n.futures||[]).map(f=>`<span class="ft2">${f}</span>`).join('');
+    const lid='lai_'+i;
+    return`<tr>
+    <td style="white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:.6875rem">${timeAgo(n.datetime)}</td>
+    <td><span class="${bc}">${n.impact}</span></td>
+    <td style="font-size:.6875rem;color:var(--blue);font-weight:700">${esc(n.source||'')}</td>
+    <td style="max-width:260px"><a href="${esc(n.url||'#')}" target="_blank" style="color:var(--t1);font-weight:600;font-size:.75rem;line-height:1.4;text-decoration:none">${esc(n.headline||'')}</a></td>
+    <td><div class="futs-cell">${fts}</div></td>
+    <td class="ai-cell" id="${lid}"><button style="font-size:.625rem;padding:.2rem .5rem;background:linear-gradient(135deg,var(--ai1),var(--ai2));color:#fff;border:none;border-radius:5px;cursor:pointer;font-family:inherit" onclick="analyseLogRow('${lid}','${esc(n.headline).replace(/'/g,"\\'")}','${n.impact}')">🤖 Analyse</button></td>
+    <td style="font-size:.6875rem;font-weight:700;white-space:nowrap">${act}</td></tr>`;
+  }).join('');
+}
+
+async function analyseLogRow(elId,headline,impact){
+  const el=document.getElementById(elId);if(!el)return;
+  el.className='ai-cell loading';el.textContent='Analysing...';
+  const result=await callClaude(`News: "${headline}" (${impact})\n\nIn 2-3 sentences: What does this mean for NQ/ES? Bullish or bearish? Trade or avoid?`,200);
+  el.className='ai-cell';el.textContent=result;
+}
+
+function exportLog(){
+  if(!newsLog.length){alert('No data. Load News Feed first.');return;}
+  const rows=[['Time','Impact','Source','Headline','Futures','Action']];
+  newsLog.forEach(n=>rows.push([timeAgo(n.datetime),n.impact,n.source||'',`"${(n.headline||'').replace(/"/g,'""')}"`,( n.futures||[]).join('/'),n.impact==='HIGH'?'AVOID ±15min':'Reduce size']));
+  const a=document.createElement('a');a.href='data:text/csv,'+encodeURIComponent(rows.map(r=>r.join(',')).join('\n'));a.download=`PropFarm_Log_${new Date().toISOString().slice(0,10)}.csv`;a.click();
+}
+
+function clearLog(){if(confirm('Clear the news log?')){newsLog=[];renderLog();}}
+
+// ══ AI BRIEFING ══
+async function generateBriefing(){
+  const btn=document.getElementById('briefingBtn'),out=document.getElementById('briefingOutput');
+  btn.disabled=true;btn.textContent='⏳ Generating...';
+  out.innerHTML='<div class="briefing-loading"><div class="ai-spinner"></div>Claude AI is generating your pre-market briefing...</div>';
+  const day=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  const rc=document.getElementById('tRed').textContent,ac=document.getElementById('tAmber').textContent,adv=document.getElementById('tradeAdvice').textContent;
+  const prompt=`Today is ${day}.\nNews snapshot: ${rc} HIGH impact events, ${ac} MEDIUM events.\nRisk level: ${adv}\n\nGenerate a complete pre-market briefing for a prop futures trader targeting $250-$300/day on NQ and ES:\n\n1. 🎯 DAILY RISK RATING (Red/Amber/Green) — one sentence why\n2. ⏰ KEY TIMES TO AVOID (specific EST times)\n3. ✅ BEST WINDOWS TO TRADE (specific EST times)\n4. 📊 CLEANEST FUTURES TODAY (NQ/ES/CL/GC)\n5. 🎯 HOW TO HIT $250-$300 TODAY safely\n6. ⚡ ONE KEY THING TO WATCH\n\nBe direct and practical. Format with clear headers.`;
+  const result=await callClaude(prompt,700);
+  btn.disabled=false;btn.textContent='↻ Regenerate Briefing';
+  const fmt=result.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+  out.innerHTML=`<div class="briefing-content">${fmt}</div>`;
+}
+
+// ══ AI CHAT ══
+function handleChatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}}
+async function sendChat(){
+  const inp=document.getElementById('chatInput'),msg=inp.value.trim();
+  if(!msg)return;inp.value='';
+  addMsg('user',msg);
+  chatHistory.push({role:'user',content:msg});
+  if(chatHistory.length>20)chatHistory=chatHistory.slice(-20);
+  const btn=document.getElementById('chatSendBtn');btn.disabled=true;
+  addMsg('ai','⏳ Thinking...',true);
+  const reply=await callClaude(msg,600,chatHistory);
+  chatHistory.push({role:'assistant',content:reply});
+  if(chatHistory.length>20)chatHistory=chatHistory.slice(-20);
+  replaceLastMsg('ai',reply);
+  btn.disabled=false;
+}
+
+function askQuick(q){document.getElementById('chatInput').value=q;sendChat();}
+
+function addMsg(role,text,loading=false){
+  const msgs=document.getElementById('chatMessages');
+  const d=document.createElement('div');d.className=`msg ${role}${loading?' loading':''}`;
+  const t=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false});
+  d.innerHTML=`<div class="msg-bubble">${text}</div><div class="msg-time">${role==='user'?'You':'Prop Farm AI'} · ${t}</div>`;
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+}
+
+function replaceLastMsg(role,text){
+  const msgs=document.getElementById('chatMessages');
+  const all=msgs.querySelectorAll(`.msg.${role}`);
+  if(!all.length){addMsg(role,text);return;}
+  const last=all[all.length-1];last.classList.remove('loading');last.querySelector('.msg-bubble').textContent=text;
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+// ══ INIT ══
+buildSnapshot();
+renderLog();
+setTimeout(()=>{newsLoaded=false;},100);
+initProxy(); // check proxy status on load
+if (window.location.protocol === 'file:') {
+  document.getElementById('corsWarning').style.display = 'block';
+}
 </script>
 </body>
 </html>
