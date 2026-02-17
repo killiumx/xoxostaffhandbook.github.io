@@ -1316,10 +1316,10 @@
                     <span class="nav-icon">🗑️</span>
                     <span>Delete Data</span>
                 </div>
-                <div class="nav-item" onclick="window.open('pamm_calculator_dashboard.html', '_blank')">
-                    <span class="nav-icon">📊</span>
-                    <span>PAMM Calculator</span>
-                </div>
+                <div class="nav-item" data-external="pamm_calculator_dashboard.html">
+    <span class="nav-icon">📊</span>
+    <span>PAMM Calculator</span>
+</div>
             </nav>
 
             <nav class="nav-section">
@@ -2547,11 +2547,16 @@
 
         function setupEventListeners() {
             document.querySelectorAll('.nav-item[data-page]').forEach(item => {
-                item.addEventListener('click', () => {
-                    navigateTo(item.dataset.page);
-                });
-            });
+    item.addEventListener('click', () => {
+        navigateTo(item.dataset.page);
+    });
+});
 
+document.querySelectorAll('.nav-item[data-external]').forEach(item => {
+    item.addEventListener('click', () => {
+        window.open(item.dataset.external, '_blank');
+    });
+});
             document.getElementById('menuToggle').addEventListener('click', () => {
                 document.getElementById('sidebar').classList.toggle('show');
             });
