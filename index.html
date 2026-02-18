@@ -328,7 +328,7 @@
 <!-- ══════════════════════════════════════════════ -->
 <!--  SETUP SCREEN                                  -->
 <!-- ══════════════════════════════════════════════ -->
-<div class="setup-screen hidden" id="setupScreen">
+<div class="setup-screen hidden" id="setupScreen" style="display:none!important;">
     <div class="setup-box">
         <div style="font-size:2.5rem;margin-bottom:1rem;">🔧</div>
         <h2>Supabase Setup Required</h2>
@@ -712,7 +712,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label">P&L ($) *</label>
-                                <input type="number" step="0.01" class="form-input" id="tradePnL" placeholder="0.00">
+                                <input type="number" step="0.01" class="form-input" id="tradePnL" placeholder="0.00" required>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Contracts</label>
@@ -1172,22 +1172,13 @@ function saveSupabaseConfig() {
 }
 
 function initSupabase() {
-    const HARDCODED_URL = 'https://zxwdfvdbbawynddwwfri.supabase.co';
-    const storedKey = localStorage.getItem('sb_key');
-    const url = HARDCODED_URL;
-    const key = storedKey;
-    if (!key) {
-        document.getElementById('setupScreen').classList.remove('hidden');
-        document.getElementById('authScreen').classList.add('hidden');
-        return false;
-    }
+    const url = 'https://zxwdfvdbbawynddwwfri.supabase.co';
+    const key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4d2RmdmRiYmF3eW5kZHd3ZnJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0MzAxNDIsImV4cCI6MjA4NzAwNjE0Mn0.NQ6jypfrevL9pzV7l6jCjOajZLCwdZVYh0CHxDzBflI';
     try {
         sbClient = window.supabase.createClient(url, key);
         return true;
     } catch (e) {
         console.error('Supabase init error:', e);
-        document.getElementById('setupScreen').classList.remove('hidden');
-        document.getElementById('authScreen').classList.add('hidden');
         return false;
     }
 }
@@ -1394,16 +1385,17 @@ async function refreshData() {
 // ═══════════════════════════════════════════════════════
 async function handleTradeSubmit(e) {
     e.preventDefault();
-    const submitBtnId = 'tradeSubmit';
-    setBtnLoadingCustom(submitBtnId, true);
+    setBtnLoadingCustom('tradeSubmit', true);
 
     const isNoTrade = document.getElementById('noTradeDay').checked;
     const isCopier = document.getElementById('copierMode').checked;
-    const cycle = parseInt(document.getElementById('tradeCycle').value);
+    const cycle = parseInt(document.getElementById('tradeCycle').value) || 1;
     const date = document.getElementById('tradeDate').value;
-    const notes = document.getElementById('tradeNotes').value;
+    const notes = document.getElementById('tradeNotes').value || '';
     const ts = new Date().toISOString();
     const userId = currentUser.id;
+
+    if (!date) { showAlert('Please select a trade date', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
 
     let trades = [];
 
@@ -1411,41 +1403,64 @@ async function handleTradeSubmit(e) {
         trades.push({
             user_id: userId, account: 'N/A', account_type: 'no_trade',
             market_condition: 'No Trade', risk_template: '0',
-            trade_date: date, cycle: cycle || 1, pnl: 0, contracts: 0,
-            notes: '📅 ' + (notes || 'No-trade day'), no_trade_day: true, timestamp: ts
+            trade_date: date, cycle: cycle, pnl: 0, contracts: 0,
+            notes: notes || 'No-trade day', no_trade_day: true, timestamp: ts
         });
+
     } else if (isCopier) {
         const lead = document.getElementById('leadAccount').value;
         const followers = [...document.querySelectorAll('.follower-checkbox:checked')].map(c => c.value);
-        const pnl = parseFloat(document.getElementById('tradePnL').value);
+        const pnlRaw = document.getElementById('tradePnL').value;
         const condition = document.getElementById('tradeCondition').value;
         const risk = document.getElementById('tradeRisk').value;
+
+        if (!lead) { showAlert('Select a lead account', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
+        if (!followers.length) { showAlert('Select at least one follower account', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
+        if (!condition) { showAlert('Select a market condition', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
+        if (!risk) { showAlert('Select a risk template', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
+        if (pnlRaw === '') { showAlert('Enter a P&L amount', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
+
+        const pnl = parseFloat(pnlRaw);
         const contracts = parseInt(risk) / 100;
-        const grp = ts;
-        if (!lead) { showAlert('Select a lead account', 'error'); setBtnLoadingCustom(submitBtnId, false); return; }
-        if (followers.length === 0) { showAlert('Select at least one follower account', 'error'); setBtnLoadingCustom(submitBtnId, false); return; }
         [lead, ...followers].forEach((acc, i) => {
-            trades.push({ user_id: userId, account: acc, account_type: i === 0 ? 'lead' : 'follower', copy_group: grp, market_condition: condition, risk_template: risk, trade_date: date, cycle, pnl, contracts, notes, no_trade_day: false, timestamp: ts });
+            trades.push({ user_id: userId, account: String(acc), account_type: i === 0 ? 'lead' : 'follower',
+                copy_group: ts, market_condition: condition, risk_template: risk,
+                trade_date: date, cycle, pnl, contracts, notes, no_trade_day: false, timestamp: ts });
         });
+
     } else {
         const acc = document.getElementById('tradeAccount').value;
-        const pnl = parseFloat(document.getElementById('tradePnL').value);
+        const pnlRaw = document.getElementById('tradePnL').value;
         const condition = document.getElementById('tradeCondition').value;
         const risk = document.getElementById('tradeRisk').value;
+
+        if (!acc) { showAlert('Select an account', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
+        if (!condition) { showAlert('Select a market condition', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
+        if (!risk) { showAlert('Select a risk template', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
+        if (pnlRaw === '') { showAlert('Enter a P&L amount', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
+
+        const pnl = parseFloat(pnlRaw);
+        if (isNaN(pnl)) { showAlert('P&L must be a number', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
         const contracts = parseInt(risk) / 100;
-        if (!acc) { showAlert('Select an account', 'error'); setBtnLoadingCustom(submitBtnId, false); return; }
-        if (isNaN(pnl)) { showAlert('Enter a valid P&L amount', 'error'); setBtnLoadingCustom(submitBtnId, false); return; }
-        trades.push({ user_id: userId, account: acc, account_type: 'single', market_condition: condition, risk_template: risk, trade_date: date, cycle, pnl, contracts, notes, no_trade_day: false, timestamp: ts });
+
+        trades.push({ user_id: userId, account: String(acc), account_type: 'single',
+            market_condition: condition, risk_template: risk,
+            trade_date: date, cycle, pnl, contracts, notes, no_trade_day: false, timestamp: ts });
     }
 
-    const { error } = await sbClient.from('trades').insert(trades);
-    setBtnLoadingCustom(submitBtnId, false);
-
-    if (error) { showAlert('✗ Submission failed: ' + error.message, 'error'); return; }
-    showAlert(`✓ ${trades.length} trade(s) logged!`, 'success');
-    resetTradeForm();
-    await loadDashboardData();
-    setTimeout(() => navigateTo('overview'), 1200);
+    try {
+        const { error } = await sbClient.from('trades').insert(trades);
+        if (error) throw error;
+        showAlert('✓ ' + trades.length + ' trade(s) logged successfully!', 'success');
+        resetTradeForm();
+        await loadDashboardData();
+        setTimeout(() => navigateTo('overview'), 1200);
+    } catch (err) {
+        console.error('Trade submit error:', err);
+        showAlert('Failed: ' + (err.message || 'Unknown error'), 'error');
+    } finally {
+        setBtnLoadingCustom('tradeSubmit', false);
+    }
 }
 
 function setBtnLoadingCustom(id, loading) {
