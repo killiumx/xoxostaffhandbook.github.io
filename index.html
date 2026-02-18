@@ -350,10 +350,10 @@
             <strong>Step 3 — Enter Credentials</strong>
         </div>
 
-        <div class="form-group">
-            <label class="form-label">Supabase Project URL</label>
-            <input type="text" class="form-input" id="setupUrl" placeholder="https://xxxxxxxxxxxxxxxxxxxx.supabase.co">
-        </div>
+        <p style="background:rgba(59,126,248,0.1);border:1px solid rgba(59,126,248,0.3);border-radius:8px;padding:0.75rem;font-size:0.85rem;color:#7ab4ff;margin-bottom:1rem;">
+            ✅ Project URL is pre-configured. Just paste your <strong>anon/public key</strong> below.<br>
+            Find it in Supabase → Settings → API → <em>anon public</em>
+        </p>
         <div class="form-group">
             <label class="form-label">Anon / Public Key</label>
             <input type="text" class="form-input" id="setupKey" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
@@ -1164,19 +1164,19 @@ function copySetupSQL() {
 }
 
 function saveSupabaseConfig() {
-    const url = document.getElementById('setupUrl').value.trim();
     const key = document.getElementById('setupKey').value.trim();
-    if (!url || !key) { alert('Please fill in both the URL and Key fields.'); return; }
-    if (!url.startsWith('https://')) { alert('URL should start with https://'); return; }
-    localStorage.setItem('sb_url', url);
+    if (!key) { alert('Please paste your Supabase anon/public key.'); return; }
+    if (!key.startsWith('eyJ')) { alert('That does not look like a valid key. It should start with eyJ...'); return; }
     localStorage.setItem('sb_key', key);
     location.reload();
 }
 
 function initSupabase() {
-    const url = localStorage.getItem('sb_url');
-    const key = localStorage.getItem('sb_key');
-    if (!url || !key || url === 'YOUR_SUPABASE_URL') {
+    const HARDCODED_URL = 'https://zxwdfvdbbawynddwwfri.supabase.co';
+    const storedKey = localStorage.getItem('sb_key');
+    const url = HARDCODED_URL;
+    const key = storedKey;
+    if (!key) {
         document.getElementById('setupScreen').classList.remove('hidden');
         document.getElementById('authScreen').classList.add('hidden');
         return false;
@@ -1305,7 +1305,7 @@ async function handlePasswordReset(e) {
     setBtnLoading('reset', true);
     const email = document.getElementById('resetEmail').value.trim();
     const { error } = await sbClient.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.href
+        redirectTo: 'https://killiumx.github.io/xoxostaffhandbook.github.io/'
     });
     setBtnLoading('reset', false);
     if (error) showAuthError(error.message);
@@ -1315,7 +1315,7 @@ async function handlePasswordReset(e) {
 async function handleGoogleAuth() {
     const { error } = await sbClient.auth.signInWithOAuth({
         provider: 'google',
-        options: { redirectTo: window.location.href }
+        options: { redirectTo: 'https://killiumx.github.io/xoxostaffhandbook.github.io/' }
     });
     if (error) showAuthError(error.message);
 }
@@ -1680,7 +1680,7 @@ async function adminResetUserPassword() {
     if (!email) { showAlert('Enter a user email', 'error'); return; }
     document.getElementById('adminResetText').style.display = 'none';
     document.getElementById('adminResetSpinner').style.display = 'inline-block';
-    const { error } = await sbClient.auth.resetPasswordForEmail(email, { redirectTo: window.location.href });
+    const { error } = await sbClient.auth.resetPasswordForEmail(email, { redirectTo: 'https://killiumx.github.io/xoxostaffhandbook.github.io/' });
     document.getElementById('adminResetText').style.display = 'inline';
     document.getElementById('adminResetSpinner').style.display = 'none';
     if (error) { showAlert('Failed: ' + error.message, 'error'); return; }
