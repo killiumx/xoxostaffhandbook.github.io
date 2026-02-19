@@ -1531,43 +1531,53 @@ function initSupabase() {
 
 async function checkSession() {
     if (!initSupabase()) return;
+
     // Check for public journal view
     const params = new URLSearchParams(window.location.search);
     const journalUserId = params.get('journal');
     if (journalUserId) { loadPublicJournal(journalUserId); return; }
 
-    try {
-        const { data: { session } } = await sbClient.auth.getSession();
-        if (session) { currentUser = session.user; await loadProfile(); showDashboard(); }
-    } catch (e) { console.error('Session check error:', e); }
-
+    // Listen for auth changes FIRST (handles Google OAuth redirect coming back to page)
     sbClient.auth.onAuthStateChange(async (event, session) => {
         if (event === 'SIGNED_IN' && session) {
             currentUser = session.user;
             await loadProfile();
-            // Save profile for new signups
-            const pending = window._pendingUsername;
-            const googleName = session.user.user_metadata?.full_name?.split(' ')[0]
-                || session.user.user_metadata?.name?.split(' ')[0];
-            if (pending || (!currentProfile?.username && googleName)) {
-                const uname = pending || googleName?.replace(/[^a-zA-Z0-9_]/g,'') || 'Trader';
+
+            // For brand new users (no profile yet), create one
+            if (!currentProfile) {
+                const pending = window._pendingUsername;
+                const googleName = (session.user.user_metadata?.full_name || session.user.user_metadata?.name || '').split(' ')[0].replace(/[^a-zA-Z0-9_]/g,'');
+                const uname = pending || googleName || session.user.email?.split('@')[0]?.replace(/[^a-zA-Z0-9_]/g,'') || 'Trader';
                 try {
-                    await sbClient.from('profiles').upsert({
+                    const { data } = await sbClient.from('profiles').upsert({
                         id: currentUser.id,
                         email: session.user.email || null,
                         username: uname,
                         role: 'user',
                         account_goal: 20
-                    });
-                    if (!currentProfile) currentProfile = {};
-                    currentProfile.username = uname;
-                } catch(e) { console.error('Profile save error:', e); }
+                    }).select().single();
+                    currentProfile = data;
+                } catch(e) { console.error('Profile create error:', e); }
                 window._pendingUsername = null;
             }
             showDashboard();
         }
-        else if (event === 'SIGNED_OUT') { currentUser = null; currentProfile = null; hideDashboard(); }
+        else if (event === 'SIGNED_OUT') {
+            currentUser = null;
+            currentProfile = null;
+            hideDashboard();
+        }
     });
+
+    // Then check for existing session (returning user / page refresh)
+    try {
+        const { data: { session } } = await sbClient.auth.getSession();
+        if (session) {
+            currentUser = session.user;
+            await loadProfile();
+            showDashboard();
+        }
+    } catch (e) { console.error('Session check error:', e); }
 }
 
 async function loadProfile() {
@@ -1843,19 +1853,37 @@ async function handleLogin(e) {
     setBtnLoading('login', true);
     const username = document.getElementById('loginUsername').value.trim();
     const password = document.getElementById('loginPassword').value;
-    if (!username || !password) { setBtnLoading('login', false); showAuthError('Please enter your username and password.'); return; }
+    if (!username || !password) {
+        setBtnLoading('login', false);
+        showAuthError('Please enter your username and password.');
+        return;
+    }
     try {
-        // Look up internal email from username
-        const { data: profile } = await sbClient.from('profiles').select('email').ilike('username', username).single();
-        const email = profile?.email || `${username.toLowerCase()}@propfarmpro.app`;
+        // Try to find email from username in profiles table
+        const { data: profile } = await sbClient
+            .from('profiles')
+            .select('email')
+            .ilike('username', username)
+            .maybeSingle();
+
+        // Use real email if found, otherwise fall back to internal @propfarmpro.app address
+        const email = (profile?.email && !profile.email.includes('@propfarmpro.app'))
+            ? profile.email
+            : (profile?.email || `${username.toLowerCase()}@propfarmpro.app`);
+
         const { error } = await sbClient.auth.signInWithPassword({ email, password });
         setBtnLoading('login', false);
         if (error) {
             if (error.message.includes('Invalid login credentials')) {
-                showAuthError('❌ Wrong username or password. Check your credentials.');
-            } else { showAuthError(error.message); }
+                showAuthError('❌ Wrong username or password. Check your details and try again.');
+            } else {
+                showAuthError(error.message);
+            }
         }
-    } catch(err) { setBtnLoading('login', false); showAuthError('Login error: ' + err.message); }
+    } catch(err) {
+        setBtnLoading('login', false);
+        showAuthError('Sign in error: ' + err.message);
+    }
 }
 
 async function handleSignup(e) {
@@ -1902,12 +1930,17 @@ async function handlePasswordReset(e) {
 
 async function handleGoogleAuth() {
     clearAuthMessages();
-    const isHosted = window.location.protocol === 'https:' || window.location.protocol === 'http:';
-    const { error } = await sbClient.auth.signInWithOAuth({
-        provider: 'google',
-        options: isHosted ? { redirectTo: window.location.href } : {}
-    });
-    if (error) showAuthError('Google error: ' + error.message);
+    try {
+        const { error } = await sbClient.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: window.location.href.split('?')[0].split('#')[0]
+            }
+        });
+        if (error) showAuthError('Google sign-in failed: ' + error.message);
+    } catch(e) {
+        showAuthError('Google sign-in error: ' + e.message);
+    }
 }
 
 async function handleLogout() {
@@ -1924,9 +1957,10 @@ function showDashboard() {
     document.getElementById('dashboard').classList.add('show');
 
     const displayName = currentProfile?.username
+        || currentProfile?.display_name
         || currentUser?.user_metadata?.full_name?.split(' ')[0]
         || currentUser?.user_metadata?.name?.split(' ')[0]
-        || currentUser?.email?.split('@')[0]
+        || currentUser?.email?.split('@')[0]?.replace(/@propfarmpro\.app$/, '')
         || 'Trader';
 
     const initials = displayName.substring(0, 2).toUpperCase();
@@ -1944,9 +1978,9 @@ function showDashboard() {
     buildContractEditor();
     loadDashboardData();
 
-    // Show onboarding for new users who haven't set up their profile
+    // Show onboarding only for brand new users with no username set
     if (!currentProfile?.username) {
-        setTimeout(() => startOnboarding(), 600);
+        setTimeout(() => startOnboarding(), 800);
     }
 }
 
