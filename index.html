@@ -1537,13 +1537,16 @@ async function checkSession() {
     const journalUserId = params.get('journal');
     if (journalUserId) { loadPublicJournal(journalUserId); return; }
 
-    // Listen for auth changes FIRST (handles Google OAuth redirect coming back to page)
+    // onAuthStateChange handles Google OAuth redirects and sign-in/sign-out events
+    // We use a flag so getSession() and onAuthStateChange don't both call showDashboard
+    let sessionHandled = false;
+
     sbClient.auth.onAuthStateChange(async (event, session) => {
-        if (event === 'SIGNED_IN' && session) {
+        if (event === 'SIGNED_IN' && session && !sessionHandled) {
+            sessionHandled = true;
             currentUser = session.user;
             await loadProfile();
-
-            // For brand new users (no profile yet), create one
+            // Create profile row for brand new users (Google OAuth first login)
             if (!currentProfile) {
                 const pending = window._pendingUsername;
                 const googleName = (session.user.user_metadata?.full_name || session.user.user_metadata?.name || '').split(' ')[0].replace(/[^a-zA-Z0-9_]/g,'');
@@ -1563,16 +1566,18 @@ async function checkSession() {
             showDashboard();
         }
         else if (event === 'SIGNED_OUT') {
+            sessionHandled = false;
             currentUser = null;
             currentProfile = null;
             hideDashboard();
         }
     });
 
-    // Then check for existing session (returning user / page refresh)
+    // Check for existing session on page load / refresh
     try {
         const { data: { session } } = await sbClient.auth.getSession();
         if (session) {
+            sessionHandled = true;
             currentUser = session.user;
             await loadProfile();
             showDashboard();
@@ -1946,13 +1951,19 @@ async function handleGoogleAuth() {
 async function handleLogout() {
     adminViewingUserId = null;
     adminViewingEmail = null;
+    _dashboardShown = false;
     await sbClient.auth.signOut();
 }
 
 // ═══════════════════════════════════════════════════════
 //  DASHBOARD
 // ═══════════════════════════════════════════════════════
+let _dashboardShown = false;
+
 function showDashboard() {
+    const isFirstShow = !_dashboardShown;
+    _dashboardShown = true;
+
     document.getElementById('authScreen').classList.add('hidden');
     document.getElementById('dashboard').classList.add('show');
 
@@ -1978,8 +1989,8 @@ function showDashboard() {
     buildContractEditor();
     loadDashboardData();
 
-    // Show onboarding only for brand new users with no username set
-    if (!currentProfile?.username) {
+    // Only show onboarding on first login ever (no username set) — never on refresh
+    if (isFirstShow && !currentProfile?.username) {
         setTimeout(() => startOnboarding(), 800);
     }
 }
