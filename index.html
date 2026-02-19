@@ -44,21 +44,9 @@
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: var(--border-glow); border-radius: 3px; }
 
-        /* ── SETUP SCREEN ── */
-        .setup-screen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 99999; }
-        .setup-screen.hidden { display: none; }
-        .setup-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; padding: 3rem; width: 540px; max-width: 95vw; box-shadow: var(--shadow); }
-        .setup-box h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
-        .setup-box > p { color: var(--text-muted); margin-bottom: 2rem; font-size: 0.9rem; }
-        .setup-step { background: var(--bg-elevated); border-radius: var(--radius-sm); padding: 1rem 1.25rem; margin-bottom: 0.75rem; font-size: 0.85rem; }
-        .setup-step strong { display: block; margin-bottom: 0.4rem; }
-        .code-block { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--cyan); overflow-x: auto; margin: 0.5rem 0 1rem; white-space: pre; max-height: 200px; overflow-y: auto; }
-        .copy-sql-btn { background: rgba(6,214,214,0.1); border: 1px solid rgba(6,214,214,0.3); color: var(--cyan); padding: 0.4rem 1rem; border-radius: 6px; cursor: pointer; font-family: inherit; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; transition: all 0.2s; }
-        .copy-sql-btn:hover { background: rgba(6,214,214,0.2); }
-
         /* ── AUTH SCREEN ── */
         .auth-screen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.4s ease; }
-        .auth-screen.hidden { opacity: 0; pointer-events: none; }
+        .auth-screen.hidden { opacity: 0; pointer-events: none; display: none !important; }
         .auth-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% -20%, rgba(59,126,248,0.15) 0%, transparent 70%), radial-gradient(ellipse 60% 40% at 80% 80%, rgba(155,111,250,0.1) 0%, transparent 60%); }
         .auth-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(99,179,237,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(99,179,237,0.04) 1px, transparent 1px); background-size: 40px 40px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%); }
         .auth-box { position: relative; z-index: 1; background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; padding: 3rem; width: 460px; max-width: 95vw; box-shadow: var(--shadow), 0 0 60px rgba(59,126,248,0.08); }
@@ -104,6 +92,8 @@
         .btn-danger:hover { background: rgba(240,92,106,0.3); }
         .btn-oauth { width: 100%; background: var(--bg-elevated); color: var(--text); border: 1px solid var(--border); margin-bottom: 0.75rem; }
         .btn-oauth:hover { border-color: var(--border-glow); background: var(--bg-hover); }
+        .btn-success { background: rgba(34,211,160,0.15); color: var(--success); border: 1px solid rgba(34,211,160,0.3); }
+        .btn-success:hover { background: rgba(34,211,160,0.25); }
 
         /* ── MESSAGES ── */
         .auth-error { background: var(--danger-glow); border: 1px solid rgba(240,92,106,0.3); color: var(--danger); padding: 0.75rem 1rem; border-radius: var(--radius-sm); font-size: 0.875rem; margin-bottom: 1rem; display: none; }
@@ -213,6 +203,7 @@
         .action-icon.green { background: rgba(34,211,160,0.15); }
         .action-icon.purple { background: rgba(155,111,250,0.15); }
         .action-icon.gold { background: rgba(255,209,102,0.15); }
+        .action-icon.teal { background: rgba(6,214,214,0.15); }
         .action-info h4 { font-size: 0.875rem; font-weight: 700; margin-bottom: 0.2rem; }
         .action-info p { font-size: 0.75rem; color: var(--text-muted); }
 
@@ -224,6 +215,7 @@
         .acc-card.warning-card { border-color: rgba(245,166,35,0.4); }
         .acc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
         .acc-num { font-size: 1.1rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+        .acc-nickname { font-size: 0.75rem; color: var(--cyan); font-weight: 500; margin-top: 2px; }
         .badge { padding: 0.3rem 0.65rem; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
         .badge-success { background: rgba(34,211,160,0.15); color: var(--success); }
         .badge-active { background: rgba(59,126,248,0.15); color: var(--accent); }
@@ -239,6 +231,9 @@
         .acc-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
         .acc-stat-lbl { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.2rem; }
         .acc-stat-val { font-size: 1rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+        .acc-name-edit { display: flex; align-items: center; gap: 0.4rem; margin-top: 0.5rem; }
+        .acc-name-input { flex: 1; padding: 0.3rem 0.6rem; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 5px; color: var(--text); font-size: 0.8rem; font-family: inherit; }
+        .acc-name-input:focus { outline: none; border-color: var(--accent); }
 
         /* ── TEMPLATE CARDS ── */
         .templates-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
@@ -299,6 +294,86 @@
         .loading-state { display: flex; align-items: center; justify-content: center; padding: 4rem; color: var(--text-muted); flex-direction: column; gap: 1rem; }
         .loading-state .spinner { border-top-color: var(--accent); border-color: rgba(59,126,248,0.3); width: 32px; height: 32px; border-width: 3px; }
 
+        /* ══════════════════════════════════════════ */
+        /* ── PSYCHOLOGY PAGE STYLES ── */
+        /* ══════════════════════════════════════════ */
+        .psych-hero { background: linear-gradient(135deg, rgba(155,111,250,0.15), rgba(59,126,248,0.1)); border: 1px solid rgba(155,111,250,0.25); border-radius: 20px; padding: 2.5rem; margin-bottom: 1.5rem; text-align: center; position: relative; overflow: hidden; }
+        .psych-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 60% at 50% 0%, rgba(155,111,250,0.15) 0%, transparent 70%); }
+        .psych-hero-emoji { font-size: 3.5rem; display: block; margin-bottom: 1rem; filter: drop-shadow(0 0 20px rgba(155,111,250,0.5)); position: relative; }
+        .psych-hero-title { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 0.5rem; position: relative; }
+        .psych-hero-subtitle { color: var(--text-muted); font-size: 0.9rem; position: relative; }
+        .daily-quote-card { background: linear-gradient(135deg, rgba(59,126,248,0.1), rgba(155,111,250,0.08)); border: 1px solid rgba(155,111,250,0.3); border-radius: 20px; padding: 2rem; margin-bottom: 1.5rem; text-align: center; position: relative; }
+        .daily-quote-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--purple); margin-bottom: 1rem; }
+        .daily-quote-text { font-size: 1.25rem; font-weight: 500; line-height: 1.6; color: var(--text); margin-bottom: 1rem; font-style: italic; }
+        .daily-quote-author { font-size: 0.85rem; color: var(--text-muted); }
+        .quote-nav { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1rem; }
+        .quote-nav-btn { width: 36px; height: 36px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: all 0.15s; color: var(--text-muted); }
+        .quote-nav-btn:hover { border-color: var(--purple); color: var(--purple); }
+        .quote-counter { font-size: 0.8rem; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
+        .psych-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+        .psych-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
+        .psych-card-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; }
+        .psych-card-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+        .psych-card-title { font-size: 1rem; font-weight: 700; }
+        .rule-list { display: flex; flex-direction: column; gap: 0.75rem; }
+        .rule-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem; background: var(--bg-elevated); border-radius: var(--radius-sm); }
+        .rule-num { width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--purple)); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; color: white; }
+        .rule-text { font-size: 0.875rem; color: var(--text-muted); line-height: 1.5; }
+        .mood-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+        .mood-btn { padding: 0.75rem; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; text-align: center; font-size: 1.5rem; transition: all 0.15s; }
+        .mood-btn:hover { border-color: var(--accent); transform: scale(1.05); }
+        .mood-btn.selected { border-color: var(--accent); background: rgba(59,126,248,0.15); }
+        .mood-label { font-size: 0.65rem; color: var(--text-muted); display: block; margin-top: 0.3rem; font-family: inherit; }
+        .affirmation-list { display: flex; flex-direction: column; gap: 0.625rem; }
+        .affirmation-item { padding: 0.75rem 1rem; background: var(--bg-elevated); border-left: 3px solid var(--purple); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-size: 0.875rem; color: var(--text-muted); }
+        .checklist-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: var(--bg-elevated); border-radius: var(--radius-sm); margin-bottom: 0.5rem; cursor: pointer; transition: all 0.15s; }
+        .checklist-item:hover { background: var(--bg-hover); }
+        .checklist-item.done { opacity: 0.5; }
+        .checklist-item.done .checklist-text { text-decoration: line-through; }
+        .checklist-checkbox { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border-glow); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+        .checklist-item.done .checklist-checkbox { background: var(--success); border-color: var(--success); }
+        .checklist-text { font-size: 0.875rem; color: var(--text-muted); }
+        .journal-textarea { width: 100%; min-height: 120px; padding: 1rem; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-family: inherit; font-size: 0.9rem; resize: vertical; }
+        .journal-textarea:focus { outline: none; border-color: var(--purple); box-shadow: 0 0 0 3px rgba(155,111,250,0.15); }
+        .streak-display { text-align: center; padding: 1.5rem; }
+        .streak-number { font-size: 3.5rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; background: linear-gradient(135deg, var(--gold), var(--warning)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .streak-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+        .trading-tips { display: grid; gap: 0.75rem; }
+        .tip-item { padding: 1rem; background: var(--bg-elevated); border-radius: var(--radius-sm); border-left: 3px solid var(--cyan); }
+        .tip-title { font-size: 0.8rem; font-weight: 700; color: var(--cyan); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+        .tip-text { font-size: 0.85rem; color: var(--text-muted); }
+        .mantra-banner { background: linear-gradient(135deg, rgba(255,209,102,0.1), rgba(245,166,35,0.08)); border: 1px solid rgba(255,209,102,0.25); border-radius: 16px; padding: 1.5rem 2rem; text-align: center; margin-bottom: 1.5rem; }
+        .mantra-text { font-size: 1.4rem; font-weight: 700; color: var(--gold); letter-spacing: -0.01em; }
+        .mantra-sub { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.4rem; }
+
+        /* ── PUBLIC JOURNAL STYLES ── */
+        .share-banner { background: linear-gradient(135deg, rgba(6,214,214,0.1), rgba(59,126,248,0.08)); border: 1px solid rgba(6,214,214,0.25); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+        .share-banner-left { display: flex; align-items: center; gap: 1rem; }
+        .share-icon { font-size: 1.5rem; }
+        .share-info strong { display: block; color: var(--cyan); font-size: 0.9rem; }
+        .share-info span { color: var(--text-muted); font-size: 0.8rem; }
+        .share-link-input { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+        .share-link-box { padding: 0.5rem 0.875rem; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; min-width: 200px; max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .share-toggle { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; }
+        .toggle-switch { position: relative; width: 44px; height: 24px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; cursor: pointer; transition: all 0.2s; }
+        .toggle-switch.on { background: var(--cyan); border-color: var(--cyan); }
+        .toggle-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; background: white; border-radius: 50%; transition: all 0.2s; }
+        .toggle-switch.on::after { left: 23px; }
+
+        /* ── PUBLIC VIEW ── */
+        .public-view { position: fixed; inset: 0; background: var(--bg); z-index: 99999; overflow-y: auto; display: none; }
+        .public-view.show { display: block; }
+        .public-topbar { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .public-brand { display: flex; align-items: center; gap: 0.75rem; }
+        .public-brand .logo { font-size: 1.5rem; }
+        .public-brand h2 { font-size: 1.1rem; font-weight: 700; }
+        .public-badge { padding: 0.3rem 0.75rem; background: rgba(6,214,214,0.15); border: 1px solid rgba(6,214,214,0.3); border-radius: 20px; font-size: 0.75rem; font-weight: 700; color: var(--cyan); }
+        .public-container { padding: 2rem; max-width: 1200px; margin: 0 auto; }
+        .public-header { background: linear-gradient(135deg, rgba(59,126,248,0.1), rgba(155,111,250,0.08)); border: 1px solid var(--border); border-radius: 20px; padding: 2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1.5rem; }
+        .public-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--purple)); display: flex; align-items: center; justify-content: center; font-size: 1.75rem; font-weight: 700; flex-shrink: 0; }
+        .public-user-info h2 { font-size: 1.5rem; font-weight: 700; }
+        .public-user-info p { color: var(--text-muted); font-size: 0.875rem; }
+
         /* ── RESPONSIVE ── */
         @media (max-width: 1024px) {
             .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); }
@@ -320,55 +395,38 @@
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════════ -->
-<!--  OVERLAY (mobile sidebar close)               -->
-<!-- ══════════════════════════════════════════════ -->
-<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
-
-<!-- ══════════════════════════════════════════════ -->
-<!--  SETUP SCREEN                                  -->
-<!-- ══════════════════════════════════════════════ -->
-<div class="setup-screen hidden" id="setupScreen" style="display:none!important;">
-    <div class="setup-box">
-        <div style="font-size:2.5rem;margin-bottom:1rem;">🔧</div>
-        <h2>Supabase Setup Required</h2>
-        <p>Configure your Supabase project to unlock multi-user authentication with isolated trade data. Takes about 5 minutes.</p>
-
-        <div class="setup-step">
-            <strong>Step 1 — Create Project</strong>
-            Go to <a href="https://supabase.com" target="_blank" style="color:var(--cyan);">supabase.com</a>, create a new project, then copy your <strong>Project URL</strong> and <strong>anon/public key</strong> from Settings → API.
+<!-- PUBLIC JOURNAL VIEW (shown when ?journal=userId) -->
+<div class="public-view" id="publicView">
+    <div class="public-topbar">
+        <div class="public-brand">
+            <span class="logo">🌾</span>
+            <h2>Prop Farm Pro</h2>
         </div>
-
-        <div class="setup-step">
-            <strong>Step 2 — Run SQL</strong>
-            Click the button below to copy the setup SQL, then paste it into your Supabase <strong>SQL Editor</strong> and click Run.
+        <div style="display:flex;align-items:center;gap:0.75rem;">
+            <span class="public-badge">📖 Public Journal</span>
+            <button class="btn btn-secondary" style="padding:0.4rem 0.875rem;font-size:0.8rem;" onclick="document.getElementById('publicView').classList.remove('show')">✕ Close</button>
         </div>
-
-        <button class="copy-sql-btn" onclick="copySetupSQL()">📋 Copy Setup SQL to Clipboard</button>
-
-        <div class="setup-step">
-            <strong>Step 3 — Enter Credentials</strong>
+    </div>
+    <div class="public-container">
+        <div class="public-header">
+            <div class="public-avatar" id="publicAvatar">T</div>
+            <div class="public-user-info">
+                <h2 id="publicUserName">Trader</h2>
+                <p id="publicUserSub">Public trading journal • Updated live</p>
+            </div>
         </div>
-
-        <p style="background:rgba(59,126,248,0.1);border:1px solid rgba(59,126,248,0.3);border-radius:8px;padding:0.75rem;font-size:0.85rem;color:#7ab4ff;margin-bottom:1rem;">
-            ✅ Project URL is pre-configured. Just paste your <strong>anon/public key</strong> below.<br>
-            Find it in Supabase → Settings → API → <em>anon public</em>
-        </p>
-        <div class="form-group">
-            <label class="form-label">Anon / Public Key</label>
-            <input type="text" class="form-input" id="setupKey" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+        <div class="metrics-grid" id="publicMetrics"></div>
+        <div style="margin-bottom:1.5rem;" class="table-card">
+            <div class="table-header"><span class="card-title">Trade History</span><span id="publicTradeCount" style="color:var(--text-muted);font-size:0.85rem;"></span></div>
+            <div class="table-wrap"><table><thead><tr><th>Date</th><th>Account</th><th>Condition</th><th>Risk</th><th>P&L</th><th>Cycle</th></tr></thead><tbody id="publicTradeBody"></tbody></table></div>
         </div>
-        <button class="btn btn-primary" style="width:100%;" onclick="saveSupabaseConfig()">💾 Save & Connect</button>
-        <p style="margin-top:1rem;color:var(--text-dim);font-size:0.75rem;text-align:center;">
-            After connecting, make yourself an admin by running:<br>
-            <code style="color:var(--cyan);">UPDATE profiles SET role = 'admin' WHERE email = 'your@email.com';</code>
-        </p>
     </div>
 </div>
 
-<!-- ══════════════════════════════════════════════ -->
-<!--  AUTH SCREEN                                   -->
-<!-- ══════════════════════════════════════════════ -->
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<!-- AUTH SCREEN -->
 <div class="auth-screen" id="authScreen">
     <div class="auth-bg"></div>
     <div class="auth-grid"></div>
@@ -408,15 +466,21 @@
                 <span id="loginBtnText">Sign In</span>
                 <span id="loginSpinner" class="spinner" style="display:none;"></span>
             </button>
+            <div style="margin-top:1rem;padding:0.875rem;background:rgba(59,126,248,0.08);border:1px solid rgba(59,126,248,0.2);border-radius:8px;font-size:0.82rem;color:var(--text-muted);">
+                💡 <strong style="color:var(--accent);">Note:</strong> If you created your account with email, make sure you confirmed your email first. Check your spam folder. You can also use <strong>Google Sign In</strong> above for instant access.
+            </div>
         </form>
 
         <!-- SIGN UP -->
         <form class="auth-form" id="signupForm" onsubmit="handleSignup(event)">
             <button type="button" class="btn btn-oauth" onclick="handleGoogleAuth()">
                 <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#EA4335" d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z"/><path fill="#4285F4" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/><path fill="#FBBC05" d="M3.88 10.78A5.54 5.54 0 013.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9.008 9.008 0 000 9c0 1.45.35 2.82.96 4.04l2.92-2.26z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.97 13.04C2.45 15.98 5.48 18 9 18z"/></svg>
-                Continue with Google
+                Continue with Google (Recommended)
             </button>
             <div class="divider">or create with email</div>
+            <div style="margin-bottom:1rem;padding:0.875rem;background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.2);border-radius:8px;font-size:0.82rem;color:var(--warning);">
+                ⚠️ Email sign-up requires <strong>email confirmation</strong>. After signing up, check your inbox (and spam) for a confirmation link. Once confirmed, come back and sign in.
+            </div>
             <div class="form-group">
                 <label class="form-label">Email</label>
                 <input type="email" class="form-input" id="signupEmail" placeholder="trader@example.com" required autocomplete="email">
@@ -451,9 +515,7 @@
     </div>
 </div>
 
-<!-- ══════════════════════════════════════════════ -->
-<!--  DASHBOARD                                     -->
-<!-- ══════════════════════════════════════════════ -->
+<!-- DASHBOARD -->
 <div class="dashboard" id="dashboard">
 
     <!-- SIDEBAR -->
@@ -479,6 +541,7 @@
             <div class="nav-item" data-page="accounts"><span class="nav-icon">💼</span>Accounts</div>
             <div class="nav-item" data-page="analytics"><span class="nav-icon">📈</span>Analytics</div>
             <div class="nav-item" data-page="riskMonitor"><span class="nav-icon">⚠️</span>Risk Monitor</div>
+            <div class="nav-item" data-page="psychology"><span class="nav-icon">🧠</span>Psychology</div>
         </nav>
 
         <nav class="nav-section">
@@ -486,15 +549,10 @@
             <div class="nav-item" data-page="addTrade"><span class="nav-icon">➕</span>Add Trade</div>
             <div class="nav-item" data-page="logPayout"><span class="nav-icon">💰</span>Log Payout</div>
             <div class="nav-item" data-page="tradeLog"><span class="nav-icon">📝</span>Trade Log</div>
+            <div class="nav-item" data-page="shareJournal"><span class="nav-icon">🔗</span>Share Journal</div>
             <div class="nav-item" data-page="deleteData"><span class="nav-icon">🗑️</span>Delete Data</div>
-            <div class="nav-item" onclick="window.location.href='pamm_calculator_dashboard.html'">
-                    <span class="nav-icon">📊</span>
-                    <span>PAMM Calculator</span>
-                </div>
-                <div class="nav-item" onclick="window.location.href='economic-calendar.html'">
-                    <span class="nav-icon">📅</span>
-                    <span>Economic Calendar</span>
-                </div>
+            <div class="nav-item" onclick="window.location.href='pamm_calculator_dashboard.html'"><span class="nav-icon">📊</span><span>PAMM Calculator</span></div>
+            <div class="nav-item" onclick="window.location.href='economic-calendar.html'"><span class="nav-icon">📅</span><span>Economic Calendar</span></div>
         </nav>
 
         <nav class="nav-section">
@@ -504,9 +562,7 @@
         </nav>
 
         <div class="sidebar-footer">
-            <button class="logout-btn" onclick="handleLogout()">
-                <span>🚪</span> Sign Out
-            </button>
+            <button class="logout-btn" onclick="handleLogout()"><span>🚪</span> Sign Out</button>
         </div>
     </aside>
 
@@ -546,8 +602,8 @@
                 <div class="quick-actions">
                     <div class="action-card" onclick="navigateTo('addTrade')"><div class="action-icon blue">➕</div><div class="action-info"><h4>Add Trade</h4><p>Log new position</p></div></div>
                     <div class="action-card" onclick="refreshData()"><div class="action-icon green">🔄</div><div class="action-info"><h4>Refresh</h4><p>Sync from database</p></div></div>
-                    <div class="action-card" onclick="exportCSV()"><div class="action-icon purple">📥</div><div class="action-info"><h4>Export CSV</h4><p>Download trades</p></div></div>
-                    <div class="action-card" onclick="navigateTo('settings')"><div class="action-icon gold">⚙️</div><div class="action-info"><h4>Settings</h4><p>Configure portfolio</p></div></div>
+                    <div class="action-card" onclick="navigateTo('shareJournal')"><div class="action-icon teal">🔗</div><div class="action-info"><h4>Share Journal</h4><p>Public trade link</p></div></div>
+                    <div class="action-card" onclick="navigateTo('psychology')"><div class="action-icon purple">🧠</div><div class="action-info"><h4>Psychology</h4><p>Mindset & motivation</p></div></div>
                 </div>
 
                 <div class="metrics-grid">
@@ -586,6 +642,207 @@
                 <div class="templates-grid" id="topTemplatesGrid"></div>
             </div>
 
+            <!-- ──────────────────── PSYCHOLOGY ──────────────────── -->
+            <div class="page" id="psychologyPage">
+                <div class="psych-hero">
+                    <span class="psych-hero-emoji">🧠</span>
+                    <div class="psych-hero-title">Trading Psychology</div>
+                    <div class="psych-hero-subtitle">Your mindset is your greatest edge. Protect it daily.</div>
+                </div>
+
+                <div class="mantra-banner">
+                    <div class="mantra-text" id="mantraText">"Plant the seed. Trust the process. Harvest the reward."</div>
+                    <div class="mantra-sub">🌾 The Farmer's Mantra</div>
+                </div>
+
+                <!-- Daily Quote -->
+                <div class="daily-quote-card">
+                    <div class="daily-quote-label">✨ Daily Motivation</div>
+                    <div class="daily-quote-text" id="dailyQuoteText">Loading...</div>
+                    <div class="daily-quote-author" id="dailyQuoteAuthor">—</div>
+                    <div class="quote-nav">
+                        <button class="quote-nav-btn" onclick="prevQuote()">←</button>
+                        <span class="quote-counter" id="quoteCounter">1 / 20</span>
+                        <button class="quote-nav-btn" onclick="nextQuote()">→</button>
+                    </div>
+                </div>
+
+                <div class="psych-grid">
+                    <!-- Mood tracker -->
+                    <div class="psych-card">
+                        <div class="psych-card-header">
+                            <div class="psych-card-icon" style="background:rgba(59,126,248,0.15);">😊</div>
+                            <div class="psych-card-title">Today's Trading Mindset</div>
+                        </div>
+                        <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1rem;">How are you feeling before the session?</p>
+                        <div class="mood-grid">
+                            <button class="mood-btn" onclick="selectMood(this,'🔥','In the zone')"><span class="mood-label">🔥</span><span class="mood-label">In the Zone</span></button>
+                            <button class="mood-btn" onclick="selectMood(this,'😎','Calm & ready')"><span class="mood-label">😎</span><span class="mood-label">Calm & Ready</span></button>
+                            <button class="mood-btn" onclick="selectMood(this,'😌','Neutral')"><span class="mood-label">😌</span><span class="mood-label">Neutral</span></button>
+                            <button class="mood-btn" onclick="selectMood(this,'😤','A little tense')"><span class="mood-label">😤</span><span class="mood-label">A little Tense</span></button>
+                            <button class="mood-btn" onclick="selectMood(this,'😰','Anxious')"><span class="mood-label">😰</span><span class="mood-label">Anxious</span></button>
+                            <button class="mood-btn" onclick="selectMood(this,'🚫','Sit this out')"><span class="mood-label">🚫</span><span class="mood-label">Sit This Out</span></button>
+                        </div>
+                        <div id="moodAdvice" style="margin-top:1rem;padding:0.875rem;background:var(--bg-elevated);border-radius:var(--radius-sm);font-size:0.85rem;color:var(--text-muted);display:none;"></div>
+                    </div>
+
+                    <!-- Pre-trade checklist -->
+                    <div class="psych-card">
+                        <div class="psych-card-header">
+                            <div class="psych-card-icon" style="background:rgba(34,211,160,0.15);">✅</div>
+                            <div class="psych-card-title">Pre-Trade Checklist</div>
+                        </div>
+                        <div id="checklistItems">
+                            <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-checkbox"></div><span class="checklist-text">Checked economic calendar for news events</span></div>
+                            <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-checkbox"></div><span class="checklist-text">Reviewed yesterday's trades and lessons</span></div>
+                            <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-checkbox"></div><span class="checklist-text">Know my max loss for today</span></div>
+                            <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-checkbox"></div><span class="checklist-text">Risk is within my template rules</span></div>
+                            <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-checkbox"></div><span class="checklist-text">I'm trading from logic, not emotion</span></div>
+                            <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-checkbox"></div><span class="checklist-text">I accept that I might lose today</span></div>
+                        </div>
+                        <div id="checklistStatus" style="margin-top:0.75rem;font-size:0.8rem;color:var(--text-muted);text-align:center;"></div>
+                        <button class="btn btn-secondary" style="width:100%;margin-top:0.75rem;padding:0.5rem;" onclick="resetChecklist()">Reset Checklist</button>
+                    </div>
+
+                    <!-- The Farmer's Rules -->
+                    <div class="psych-card">
+                        <div class="psych-card-header">
+                            <div class="psych-card-icon" style="background:rgba(255,209,102,0.15);">📜</div>
+                            <div class="psych-card-title">The Farmer's Golden Rules</div>
+                        </div>
+                        <div class="rule-list">
+                            <div class="rule-item"><div class="rule-num">1</div><div class="rule-text">Protect the field first. Small consistent days beat revenge trading every time.</div></div>
+                            <div class="rule-item"><div class="rule-num">2</div><div class="rule-text">$250–$300/day is a great harvest. Don't get greedy with the crops.</div></div>
+                            <div class="rule-item"><div class="rule-num">3</div><div class="rule-text">Bad weather days happen. A losing day is data, not failure.</div></div>
+                            <div class="rule-item"><div class="rule-num">4</div><div class="rule-text">The 45-day first cycle is your planting season. Be patient.</div></div>
+                            <div class="rule-item"><div class="rule-num">5</div><div class="rule-text">One red day cannot destroy 44 green ones. Stay focused on the season.</div></div>
+                        </div>
+                    </div>
+
+                    <!-- Daily affirmations -->
+                    <div class="psych-card">
+                        <div class="psych-card-header">
+                            <div class="psych-card-icon" style="background:rgba(155,111,250,0.15);">💪</div>
+                            <div class="psych-card-title">Daily Affirmations</div>
+                        </div>
+                        <div class="affirmation-list">
+                            <div class="affirmation-item">I am a disciplined trader who follows my system.</div>
+                            <div class="affirmation-item">I control risk, not results.</div>
+                            <div class="affirmation-item">I trade the process, not the profit.</div>
+                            <div class="affirmation-item">Every day I show up, I grow stronger.</div>
+                            <div class="affirmation-item">My account is protected because I protect it.</div>
+                            <div class="affirmation-item">I am building generational wealth one trade at a time.</div>
+                        </div>
+                    </div>
+
+                    <!-- Trading tips -->
+                    <div class="psych-card">
+                        <div class="psych-card-header">
+                            <div class="psych-card-icon" style="background:rgba(6,214,214,0.15);">💡</div>
+                            <div class="psych-card-title">Prop Farm Mindset Tips</div>
+                        </div>
+                        <div class="trading-tips">
+                            <div class="tip-item"><div class="tip-title">On Losing Days</div><div class="tip-text">A loss is tuition. The lesson is in your notes. Review, don't revenge trade.</div></div>
+                            <div class="tip-item"><div class="tip-title">On Consecutive Wins</div><div class="tip-text">When on a hot streak, size down not up. The market humbles overconfidence.</div></div>
+                            <div class="tip-item"><div class="tip-title">On Waiting</div><div class="tip-text">The best trade is often no trade. Patience is a position.</div></div>
+                            <div class="tip-item"><div class="tip-title">On the Fail Line</div><div class="tip-text">Every $50 you keep above the fail line is $50 you earned. Treat it like gold.</div></div>
+                        </div>
+                    </div>
+
+                    <!-- Win streak + journal -->
+                    <div class="psych-card">
+                        <div class="psych-card-header">
+                            <div class="psych-card-icon" style="background:rgba(255,209,102,0.15);">🔥</div>
+                            <div class="psych-card-title">Your Win Streak</div>
+                        </div>
+                        <div class="streak-display">
+                            <div class="streak-number" id="psychStreakNum">0</div>
+                            <div class="streak-label">Consecutive Wins</div>
+                        </div>
+                        <div style="margin-top:1.25rem;">
+                            <label class="form-label">Today's Trading Journal Note</label>
+                            <textarea class="journal-textarea" id="journalNote" placeholder="What happened today? What did you learn? What will you do differently?..." oninput="saveJournalNote()"></textarea>
+                            <div style="display:flex;justify-content:space-between;margin-top:0.5rem;font-size:0.75rem;color:var(--text-dim);">
+                                <span id="journalSaveStatus">Auto-saves as you type</span>
+                                <span id="journalCharCount">0 chars</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ──────────────────── SHARE JOURNAL ──────────────────── -->
+            <div class="page" id="shareJournalPage">
+                <div class="share-banner">
+                    <div class="share-banner-left">
+                        <span class="share-icon">🔗</span>
+                        <div class="share-info">
+                            <strong>Public Journal Sharing</strong>
+                            <span>Share your trading progress with anyone — no login required</span>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+                        <div class="share-toggle">
+                            <span style="color:var(--text-muted);font-size:0.85rem;" id="shareStatusLabel">Sharing Off</span>
+                            <div class="toggle-switch" id="shareToggle" onclick="toggleSharing()"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-card" style="margin-bottom:1.5rem;">
+                    <h3 style="margin-bottom:1rem;font-size:1.05rem;font-weight:700;">📎 Your Journal Share Link</h3>
+                    <p style="color:var(--text-muted);font-size:0.875rem;margin-bottom:1.25rem;">Anyone with this link can view your trade journal in read-only mode. Enable sharing above to make it live.</p>
+                    <div style="display:flex;gap:0.75rem;margin-bottom:1.25rem;flex-wrap:wrap;">
+                        <div class="share-link-box" id="shareLinkDisplay" style="flex:1;max-width:none;padding:0.875rem;">
+                            Enable sharing to generate your link
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+                        <button class="btn btn-primary" style="padding:0.5rem 1.25rem;font-size:0.875rem;" onclick="copyShareLink()">📋 Copy Link</button>
+                        <button class="btn btn-secondary" style="padding:0.5rem 1.25rem;font-size:0.875rem;" onclick="previewJournal()">👁️ Preview Journal</button>
+                    </div>
+                </div>
+
+                <div class="form-card" style="margin-bottom:1.5rem;">
+                    <h3 style="margin-bottom:1rem;font-size:1.05rem;font-weight:700;">🎨 Journal Customization</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Display Name (shown publicly)</label>
+                            <input type="text" class="form-input" id="journalDisplayName" placeholder="e.g. FX Farmer, The Prop King...">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Journal Bio / Tagline</label>
+                            <input type="text" class="form-input" id="journalBio" placeholder="e.g. Prop trader farming consistent profits 🌾">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">What data to show publicly</label>
+                        <div style="display:grid;gap:0.5rem;">
+                            <label class="checkbox-label"><input type="checkbox" id="showPnL" checked> Show P&L amounts</label>
+                            <label class="checkbox-label"><input type="checkbox" id="showWinRate" checked> Show win rate</label>
+                            <label class="checkbox-label"><input type="checkbox" id="showTrades" checked> Show individual trades</label>
+                            <label class="checkbox-label"><input type="checkbox" id="showAccounts"> Show account numbers (PA #1, etc.)</label>
+                        </div>
+                    </div>
+                    <div class="form-footer">
+                        <button class="btn btn-primary" style="width:auto;" onclick="saveJournalSettings()">💾 Save Settings</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Journal Preview</div>
+                        <div class="card-sub">This is what visitors will see</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="metrics-grid" id="journalPreviewMetrics"></div>
+                        <div class="table-card" style="margin-top:1rem;">
+                            <div class="table-wrap"><table><thead><tr><th>Date</th><th>P&L</th><th>Condition</th><th>Cycle</th></tr></thead><tbody id="journalPreviewBody"></tbody></table></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- ──────────────────── CYCLE PERFORMANCE ──────────────────── -->
             <div class="page" id="cyclePerformancePage">
                 <p style="color:var(--text-muted);margin-bottom:1.5rem;">Track your farming journey across your <strong id="cycleAccText">active accounts</strong>. First cycle target: $4,600 profit per account in 45 days. After first payout: monthly $2,000 per account in 8–20 days.</p>
@@ -621,6 +878,9 @@
                 <div class="section-header">
                     <div class="section-title" id="accountsTitle">Portfolio Accounts</div>
                     <button class="btn btn-secondary" onclick="exportCSV()" style="padding:0.5rem 1rem;font-size:0.85rem;">Export CSV</button>
+                </div>
+                <div style="background:rgba(6,214,214,0.08);border:1px solid rgba(6,214,214,0.2);border-radius:var(--radius-sm);padding:0.875rem 1.25rem;margin-bottom:1.25rem;font-size:0.875rem;color:var(--cyan);">
+                    💡 Click the pencil icon on any account to give it a custom name (e.g. "Main Warrior", "Backup Farm")
                 </div>
                 <div class="filter-pills">
                     <div class="pill active" onclick="filterAccounts('all',event)">All</div>
@@ -896,7 +1156,7 @@
                 </div>
                 <div class="table-card" style="margin-top:1.5rem;">
                     <div class="table-header"><span class="card-title">All Configured Accounts</span></div>
-                    <div class="table-wrap"><table><thead><tr><th>Account</th><th>Status</th><th>P&L</th><th>Progress</th><th>Trades</th><th>Win Rate</th><th>To Goal</th></tr></thead><tbody id="settingsAccBody"></tbody></table></div>
+                    <div class="table-wrap"><table><thead><tr><th>Account</th><th>Nickname</th><th>Status</th><th>P&L</th><th>Progress</th><th>Trades</th><th>Win Rate</th><th>To Goal</th></tr></thead><tbody id="settingsAccBody"></tbody></table></div>
                 </div>
             </div>
 
@@ -906,7 +1166,7 @@
                     <span class="admin-banner-icon">👑</span>
                     <div class="admin-banner-text">
                         <strong>Admin Panel — Full Visibility</strong>
-                        <span>View all users, manage roles, view any user's trades, remove users. Handle with care.</span>
+                        <span>View all users, manage roles, view any user's trades, remove users.</span>
                     </div>
                 </div>
 
@@ -926,14 +1186,10 @@
                         </div>
                     </div>
                     <div class="table-wrap">
-                        <table>
-                            <thead><tr><th>Email</th><th>Role</th><th>Trades</th><th>Total P&L</th><th>Joined</th><th>Actions</th></tr></thead>
-                            <tbody id="adminUsersBody"></tbody>
-                        </table>
+                        <table><thead><tr><th>Email</th><th>Role</th><th>Trades</th><th>Total P&L</th><th>Joined</th><th>Actions</th></tr></thead><tbody id="adminUsersBody"></tbody></table>
                     </div>
                 </div>
 
-                <!-- View selected user's trades -->
                 <div id="adminUserTradesWrap" style="display:none;margin-bottom:1.5rem;">
                     <div class="section-header">
                         <div class="section-title">Trades for: <span id="adminViewingUserLabel" style="color:var(--accent);">—</span></div>
@@ -947,10 +1203,9 @@
                     </div>
                 </div>
 
-                <!-- Role Management -->
                 <div class="form-card" style="margin-bottom:1.5rem;">
                     <h3 style="margin-bottom:0.5rem;font-size:1rem;">🔑 Manage User Role</h3>
-                    <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1.25rem;">Promote or demote any registered user. The user must have signed up first before you can assign a role.</p>
+                    <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1.25rem;">Promote or demote any registered user.</p>
                     <div class="form-grid">
                         <div class="form-group">
                             <label class="form-label">User Email</label>
@@ -964,30 +1219,22 @@
                             </select>
                         </div>
                     </div>
-                    <button class="btn btn-primary" style="width:auto;" onclick="updateUserRole()">
-                        <span id="roleUpdateText">Update Role</span>
-                        <span id="roleUpdateSpinner" class="spinner" style="display:none;"></span>
-                    </button>
+                    <button class="btn btn-primary" style="width:auto;" onclick="updateUserRole()">Update Role</button>
                 </div>
 
-                <!-- Reset Password -->
                 <div class="form-card" style="margin-bottom:1.5rem;">
                     <h3 style="margin-bottom:0.5rem;font-size:1rem;">🔒 Reset User Password</h3>
-                    <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1.25rem;">Send a password reset email to any user. They will receive a link to set a new password.</p>
+                    <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1.25rem;">Send a password reset email to any user.</p>
                     <div class="form-group" style="max-width:400px;">
                         <label class="form-label">User Email</label>
                         <input type="email" class="form-input" id="resetUserEmail" placeholder="trader@example.com">
                     </div>
-                    <button class="btn btn-secondary" style="width:auto;" onclick="adminResetUserPassword()">
-                        <span id="adminResetText">📧 Send Reset Email</span>
-                        <span id="adminResetSpinner" class="spinner" style="display:none;border-top-color:var(--accent);border-color:rgba(59,126,248,0.3);"></span>
-                    </button>
+                    <button class="btn btn-secondary" style="width:auto;" onclick="adminResetUserPassword()">📧 Send Reset Email</button>
                 </div>
 
-                <!-- Remove User -->
                 <div class="form-card" style="border-color:rgba(240,92,106,0.2);background:rgba(240,92,106,0.02);">
                     <h3 style="margin-bottom:0.5rem;font-size:1rem;color:var(--danger);">🗑️ Remove User Data</h3>
-                    <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1.25rem;">⚠️ Permanently deletes all trades and payouts for a user. The account itself remains (they can still log in). This cannot be undone.</p>
+                    <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1.25rem;">⚠️ Permanently deletes all trades and payouts for a user. Cannot be undone.</p>
                     <div class="form-group" style="max-width:400px;">
                         <label class="form-label">User Email</label>
                         <input type="email" class="form-input" id="removeUserEmail" placeholder="trader@example.com">
@@ -1002,147 +1249,13 @@
 
 <script>
 // ═══════════════════════════════════════════════════════
-//  CONFIG — loaded from localStorage or prompt on setup
+//  CONFIG
 // ═══════════════════════════════════════════════════════
-const SETUP_SQL = `-- ══════════════════════════════════════
--- Prop Farm Pro — Supabase Setup SQL
--- Run this in Supabase SQL Editor
--- ══════════════════════════════════════
-
--- 1. Enable UUID extension
-create extension if not exists "uuid-ossp";
-
--- 2. Profiles table (extends auth.users)
-create table if not exists public.profiles (
-  id uuid references auth.users on delete cascade primary key,
-  email text,
-  role text default 'user' check (role in ('user','admin')),
-  account_goal int default 20,
-  created_at timestamptz default now()
-);
-
--- 3. Trades table
-create table if not exists public.trades (
-  id uuid default uuid_generate_v4() primary key,
-  user_id uuid references auth.users on delete cascade not null,
-  account text,
-  account_type text,
-  copy_group text,
-  market_condition text,
-  risk_template text,
-  trade_date date,
-  cycle int,
-  pnl numeric default 0,
-  contracts numeric default 0,
-  notes text,
-  no_trade_day boolean default false,
-  timestamp timestamptz default now()
-);
-
--- 4. Payouts table
-create table if not exists public.payouts (
-  id uuid default uuid_generate_v4() primary key,
-  user_id uuid references auth.users on delete cascade not null,
-  payout_type text,
-  amount numeric default 0,
-  payout_date date,
-  account text,
-  cycle_completed int,
-  new_cycle int,
-  payment_method text,
-  notes text,
-  created_at timestamptz default now()
-);
-
--- 5. Enable Row Level Security
-alter table public.profiles enable row level security;
-alter table public.trades enable row level security;
-alter table public.payouts enable row level security;
-
--- 6. RLS Policies — users only see their own data
-drop policy if exists "Users own profile" on profiles;
-create policy "Users own profile" on profiles
-  for all using (auth.uid() = id);
-
-drop policy if exists "Users own trades" on trades;
-create policy "Users own trades" on trades
-  for all using (auth.uid() = user_id);
-
-drop policy if exists "Users own payouts" on payouts;
-create policy "Users own payouts" on payouts
-  for all using (auth.uid() = user_id);
-
--- 7. Admin RLS policies (admins can see all data)
-drop policy if exists "Admin see all profiles" on profiles;
-create policy "Admin see all profiles" on profiles
-  for select using (
-    exists (select 1 from profiles where id = auth.uid() and role = 'admin')
-  );
-
-drop policy if exists "Admin see all trades" on trades;
-create policy "Admin see all trades" on trades
-  for select using (
-    exists (select 1 from profiles where id = auth.uid() and role = 'admin')
-  );
-
-drop policy if exists "Admin see all payouts" on payouts;
-create policy "Admin see all payouts" on payouts
-  for select using (
-    exists (select 1 from profiles where id = auth.uid() and role = 'admin')
-  );
-
-drop policy if exists "Admin update all profiles" on profiles;
-create policy "Admin update all profiles" on profiles
-  for update using (
-    exists (select 1 from profiles where id = auth.uid() and role = 'admin')
-  );
-
-drop policy if exists "Admin delete user trades" on trades;
-create policy "Admin delete user trades" on trades
-  for delete using (
-    exists (select 1 from profiles where id = auth.uid() and role = 'admin')
-  );
-
-drop policy if exists "Admin delete user payouts" on payouts;
-create policy "Admin delete user payouts" on payouts
-  for delete using (
-    exists (select 1 from profiles where id = auth.uid() and role = 'admin')
-  );
-
--- 8. Auto-create profile on signup
-create or replace function handle_new_user()
-returns trigger as $$
-begin
-  insert into public.profiles (id, email)
-  values (new.id, new.email)
-  on conflict (id) do nothing;
-  return new;
-end;
-$$ language plpgsql security definer;
-
-drop trigger if exists on_auth_user_created on auth.users;
-create trigger on_auth_user_created
-  after insert on auth.users
-  for each row execute procedure handle_new_user();
-
--- 9. Indexes for performance
-create index if not exists trades_user_id_idx on trades(user_id);
-create index if not exists trades_date_idx on trades(trade_date);
-create index if not exists payouts_user_id_idx on payouts(user_id);
-
--- ══════════════════════════════════════
--- After running, make yourself admin:
--- UPDATE profiles SET role = 'admin' WHERE email = 'your@email.com';
--- ══════════════════════════════════════`;
-
-// ─── Constants ───
 const STARTING_BALANCE = 50000;
 const MAX_DRAWDOWN = 2500;
 const SAFETY_NET = 52600;
 const GOAL_PER_ACCOUNT = 4600;
 const PAYOUT_PER_ACCOUNT = 2000;
-const FIRST_PAYOUT_MIN = 2600;
-const MONTHLY_PAYOUT_GOAL = 2000;
 const DAILY_TARGET_MIN = 250;
 const DAILY_TARGET_MAX = 300;
 
@@ -1159,62 +1272,83 @@ let adminViewingUserId = null;
 let adminViewingEmail = null;
 let adminAllProfiles = [];
 let adminAllTrades = [];
+let journalSharing = false;
 
-// ═══════════════════════════════════════════════════════
-//  SUPABASE INIT & SETUP
-// ═══════════════════════════════════════════════════════
-function copySetupSQL() {
-    navigator.clipboard.writeText(SETUP_SQL).then(() => {
-        const btn = document.querySelector('.copy-sql-btn');
-        btn.textContent = '✅ Copied!';
-        setTimeout(() => btn.textContent = '📋 Copy Setup SQL to Clipboard', 2500);
-    });
+// Account nicknames stored in localStorage
+function getNicknames() {
+    try { return JSON.parse(localStorage.getItem('acc_nicknames') || '{}'); } catch { return {}; }
+}
+function saveNickname(accNum, name) {
+    const n = getNicknames();
+    if (name.trim()) n[accNum] = name.trim();
+    else delete n[accNum];
+    localStorage.setItem('acc_nicknames', JSON.stringify(n));
+}
+function getNickname(accNum) { return getNicknames()[accNum] || ''; }
+function getAccLabel(accNum) {
+    const n = getNickname(accNum);
+    return n ? `PA #${accNum} — ${n}` : `PA Account #${accNum}`;
 }
 
-function saveSupabaseConfig() {
-    const key = document.getElementById('setupKey').value.trim();
-    if (!key) { alert('Please paste your Supabase anon/public key.'); return; }
-    if (!key.startsWith('eyJ')) { alert('That does not look like a valid key. It should start with eyJ...'); return; }
-    localStorage.setItem('sb_key', key);
-    location.reload();
-}
+// ─── Quotes ───
+const QUOTES = [
+    { text: "The stock market is a device for transferring money from the impatient to the patient.", author: "Warren Buffett" },
+    { text: "In trading, the one who wins is not who is right most often, but who loses least when wrong.", author: "Unknown" },
+    { text: "Risk comes from not knowing what you're doing.", author: "Warren Buffett" },
+    { text: "The goal of a successful trader is to make the best trades. Money is secondary.", author: "Alexander Elder" },
+    { text: "Every battle is won before it is fought.", author: "Sun Tzu" },
+    { text: "The market pays you to be disciplined.", author: "Unknown" },
+    { text: "Don't think about what the market's going to do; you have absolutely no control over that. Think about what you're going to do if it gets there.", author: "William O'Neil" },
+    { text: "Amateurs think about how much money they can make. Professionals think about how much money they could lose.", author: "Unknown" },
+    { text: "It's not whether you're right or wrong that's important, but how much money you make when you're right and how much you lose when you're wrong.", author: "George Soros" },
+    { text: "The key to trading success is emotional discipline. If intelligence were the key, there would be a lot more people making money trading.", author: "Victor Sperandeo" },
+    { text: "Trade what you see, not what you think.", author: "Unknown" },
+    { text: "A plan without action is just a dream. Action without a plan is just a disaster.", author: "Unknown" },
+    { text: "The farmer does not plant seeds and dig them up every day to check. He trusts the process.", author: "Prop Farm Wisdom" },
+    { text: "Consistency over perfection. Show up every day.", author: "Prop Farm Wisdom" },
+    { text: "Protect the account. The account protects the dream.", author: "Prop Farm Wisdom" },
+    { text: "Small daily wins compound into life-changing wealth.", author: "Prop Farm Wisdom" },
+    { text: "Discipline is choosing between what you want now and what you want most.", author: "Abraham Lincoln" },
+    { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
+    { text: "Do not pray for easy lives. Pray to be stronger men.", author: "John F. Kennedy" },
+    { text: "The secret of getting ahead is getting started.", author: "Mark Twain" }
+];
+let quoteIdx = 0;
 
+const MOOD_ADVICE = {
+    '🔥': { text: "You're in the zone! Stick to your rules — hot streaks can turn into overtrading fast. Stay disciplined.", color: 'var(--success)' },
+    '😎': { text: "Calm and ready is the perfect trading state. Execute your plan with confidence.", color: 'var(--success)' },
+    '😌': { text: "Neutral is fine. Don't force trades. Wait for your setup. One good trade beats five mediocre ones.", color: 'var(--accent)' },
+    '😤': { text: "⚠️ Tension detected. Size down today. A smaller win builds confidence. Don't let tension become mistakes.", color: 'var(--warning)' },
+    '😰': { text: "🚨 Anxious traders make bad decisions. Consider sitting out or trading with 50% size. Protect the account.", color: 'var(--danger)' },
+    '🚫': { text: "Smart move recognizing you're not ready. A no-trade day is a zero — which beats a red day every time. Rest up.", color: 'var(--purple)' }
+};
+
+// ═══════════════════════════════════════════════════════
+//  SUPABASE INIT
+// ═══════════════════════════════════════════════════════
 function initSupabase() {
     const url = 'https://zxwdfvdbbawynddwwfri.supabase.co';
     const key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4d2RmdmRiYmF3eW5kZHd3ZnJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0MzAxNDIsImV4cCI6MjA4NzAwNjE0Mn0.NQ6jypfrevL9pzV7l6jCjOajZLCwdZVYh0CHxDzBflI';
-    try {
-        sbClient = window.supabase.createClient(url, key);
-        return true;
-    } catch (e) {
-        console.error('Supabase init error:', e);
-        return false;
-    }
+    try { sbClient = window.supabase.createClient(url, key); return true; }
+    catch (e) { console.error('Supabase init error:', e); return false; }
 }
 
 async function checkSession() {
     if (!initSupabase()) return;
+    // Check for public journal view
+    const params = new URLSearchParams(window.location.search);
+    const journalUserId = params.get('journal');
+    if (journalUserId) { loadPublicJournal(journalUserId); return; }
 
     try {
         const { data: { session } } = await sbClient.auth.getSession();
-        if (session) {
-            currentUser = session.user;
-            await loadProfile();
-            showDashboard();
-        }
-    } catch (e) {
-        console.error('Session check error:', e);
-    }
+        if (session) { currentUser = session.user; await loadProfile(); showDashboard(); }
+    } catch (e) { console.error('Session check error:', e); }
 
     sbClient.auth.onAuthStateChange(async (event, session) => {
-        if (event === 'SIGNED_IN' && session) {
-            currentUser = session.user;
-            await loadProfile();
-            showDashboard();
-        } else if (event === 'SIGNED_OUT') {
-            currentUser = null;
-            currentProfile = null;
-            hideDashboard();
-        }
+        if (event === 'SIGNED_IN' && session) { currentUser = session.user; await loadProfile(); showDashboard(); }
+        else if (event === 'SIGNED_OUT') { currentUser = null; currentProfile = null; hideDashboard(); }
     });
 }
 
@@ -1222,16 +1356,230 @@ async function loadProfile() {
     if (!currentUser) return;
     try {
         const { data, error } = await sbClient.from('profiles').select('*').eq('id', currentUser.id).single();
-        if (!error && data) {
-            currentProfile = data;
-            USER_ACCOUNT_GOAL = data.account_goal || 20;
-        }
-    } catch (e) {
-        console.error('Load profile error:', e);
-    }
+        if (!error && data) { currentProfile = data; USER_ACCOUNT_GOAL = data.account_goal || 20; }
+    } catch (e) { console.error('Load profile error:', e); }
 }
 
 checkSession();
+
+// ═══════════════════════════════════════════════════════
+//  PUBLIC JOURNAL
+// ═══════════════════════════════════════════════════════
+async function loadPublicJournal(userId) {
+    document.getElementById('authScreen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('publicView').classList.add('show');
+
+    try {
+        const [{ data: profile }, { data: trades }] = await Promise.all([
+            sbClient.from('profiles').select('email, account_goal').eq('id', userId).single(),
+            sbClient.from('trades').select('*').eq('user_id', userId).order('trade_date', { ascending: false }).limit(200)
+        ]);
+
+        const displayName = profile?.email?.split('@')[0] || 'Trader';
+        const initials = displayName.substring(0, 2).toUpperCase();
+        document.getElementById('publicAvatar').textContent = initials;
+        document.getElementById('publicUserName').textContent = displayName + "'s Trading Journal";
+        document.getElementById('publicUserSub').textContent = `${trades?.length || 0} trades • Public Journal`;
+        document.getElementById('publicTradeCount').textContent = (trades?.length || 0) + ' trades';
+
+        const validTrades = (trades || []).filter(t => !t.no_trade_day);
+        const pnl = validTrades.reduce((s, t) => s + parseFloat(t.pnl || 0), 0);
+        const wins = validTrades.filter(t => parseFloat(t.pnl || 0) > 0);
+        const winRate = validTrades.length > 0 ? Math.round(wins.length / validTrades.length * 100) : 0;
+        const streak = calcStreak(validTrades);
+
+        document.getElementById('publicMetrics').innerHTML = `
+            <div class="metric-card"><div class="metric-header"><span class="metric-label">Total P&L</span><span class="metric-icon">💰</span></div><div class="metric-value" style="color:${pnl >= 0 ? 'var(--success)' : 'var(--danger)'}">${fmtCurrency(pnl)}</div><div class="metric-sub">${validTrades.length} trades</div></div>
+            <div class="metric-card"><div class="metric-header"><span class="metric-label">Win Rate</span><span class="metric-icon">🎯</span></div><div class="metric-value">${winRate}%</div><div class="metric-sub">${wins.length} wins / ${validTrades.length} trades</div></div>
+            <div class="metric-card"><div class="metric-header"><span class="metric-label">Win Streak</span><span class="metric-icon">🔥</span></div><div class="metric-value">${streak.current}</div><div class="metric-sub">Longest: ${streak.longest}</div></div>
+            <div class="metric-card"><div class="metric-header"><span class="metric-label">Best Trade</span><span class="metric-icon">⭐</span></div><div class="metric-value">${fmtCurrency(validTrades.length ? Math.max(...validTrades.map(t => parseFloat(t.pnl || 0))) : 0)}</div><div class="metric-sub">All time</div></div>
+        `;
+
+        const tbody = document.getElementById('publicTradeBody');
+        tbody.innerHTML = '';
+        (trades || []).slice(0, 100).forEach(t => {
+            if (t.no_trade_day) return;
+            const pnl = parseFloat(t.pnl || 0);
+            const row = tbody.insertRow();
+            row.innerHTML = `<td>${t.trade_date}</td><td>PA #${t.account}</td><td>${t.market_condition || '—'}</td><td>$${t.risk_template}</td><td style="color:${pnl >= 0 ? 'var(--success)' : 'var(--danger)'}">${fmtCurrency(pnl)}</td><td>${t.cycle}</td>`;
+        });
+    } catch (err) {
+        document.getElementById('publicUserName').textContent = 'Journal Not Found';
+        document.getElementById('publicUserSub').textContent = 'This journal is not available or sharing is disabled.';
+    }
+}
+
+function getShareLink() {
+    return `${window.location.origin}${window.location.pathname}?journal=${currentUser?.id}`;
+}
+
+function toggleSharing() {
+    journalSharing = !journalSharing;
+    const toggle = document.getElementById('shareToggle');
+    const label = document.getElementById('shareStatusLabel');
+    const linkBox = document.getElementById('shareLinkDisplay');
+    toggle.classList.toggle('on', journalSharing);
+    label.textContent = journalSharing ? 'Sharing On ✓' : 'Sharing Off';
+    label.style.color = journalSharing ? 'var(--success)' : 'var(--text-muted)';
+    linkBox.textContent = journalSharing ? getShareLink() : 'Enable sharing to generate your link';
+    localStorage.setItem('journal_sharing', journalSharing ? '1' : '0');
+    showAlert(journalSharing ? '✓ Journal sharing enabled! Your link is ready.' : '✓ Sharing disabled.', journalSharing ? 'success' : 'info');
+}
+
+function copyShareLink() {
+    if (!journalSharing) { showAlert('Enable sharing first!', 'error'); return; }
+    const link = getShareLink();
+    navigator.clipboard.writeText(link).then(() => showAlert('✓ Link copied to clipboard!', 'success'));
+}
+
+function previewJournal() {
+    if (currentUser) {
+        window.open(getShareLink(), '_blank');
+    }
+}
+
+function saveJournalSettings() {
+    const settings = {
+        displayName: document.getElementById('journalDisplayName').value,
+        bio: document.getElementById('journalBio').value,
+        showPnL: document.getElementById('showPnL').checked,
+        showWinRate: document.getElementById('showWinRate').checked,
+        showTrades: document.getElementById('showTrades').checked,
+        showAccounts: document.getElementById('showAccounts').checked
+    };
+    localStorage.setItem('journal_settings', JSON.stringify(settings));
+    showAlert('✓ Journal settings saved!', 'success');
+    updateShareJournalPage();
+}
+
+function updateShareJournalPage() {
+    // Restore sharing state
+    journalSharing = localStorage.getItem('journal_sharing') === '1';
+    const toggle = document.getElementById('shareToggle');
+    const label = document.getElementById('shareStatusLabel');
+    const linkBox = document.getElementById('shareLinkDisplay');
+    toggle.classList.toggle('on', journalSharing);
+    label.textContent = journalSharing ? 'Sharing On ✓' : 'Sharing Off';
+    label.style.color = journalSharing ? 'var(--success)' : 'var(--text-muted)';
+    if (currentUser) linkBox.textContent = journalSharing ? getShareLink() : 'Enable sharing to generate your link';
+
+    // Restore settings
+    try {
+        const s = JSON.parse(localStorage.getItem('journal_settings') || '{}');
+        if (s.displayName) document.getElementById('journalDisplayName').value = s.displayName;
+        if (s.bio) document.getElementById('journalBio').value = s.bio;
+        if (s.showPnL !== undefined) document.getElementById('showPnL').checked = s.showPnL;
+        if (s.showWinRate !== undefined) document.getElementById('showWinRate').checked = s.showWinRate;
+        if (s.showTrades !== undefined) document.getElementById('showTrades').checked = s.showTrades;
+        if (s.showAccounts !== undefined) document.getElementById('showAccounts').checked = s.showAccounts;
+    } catch {}
+
+    // Preview
+    const trades = allData.filter(t => !t.no_trade_day);
+    const pnl = sumPnL(trades);
+    const wins = trades.filter(t => parseFloat(t.pnl || 0) > 0);
+    const wr = trades.length > 0 ? Math.round(wins.length / trades.length * 100) : 0;
+    document.getElementById('journalPreviewMetrics').innerHTML = `
+        <div class="metric-card"><div class="metric-header"><span class="metric-label">Total P&L</span><span class="metric-icon">💰</span></div><div class="metric-value" style="color:${pnl>=0?'var(--success)':'var(--danger)'}">${fmtCurrency(pnl)}</div><div class="metric-sub">${trades.length} trades</div></div>
+        <div class="metric-card"><div class="metric-header"><span class="metric-label">Win Rate</span><span class="metric-icon">🎯</span></div><div class="metric-value">${wr}%</div><div class="metric-sub">${wins.length} / ${trades.length}</div></div>
+    `;
+    const tbody = document.getElementById('journalPreviewBody');
+    tbody.innerHTML = '';
+    [...allData].filter(t=>!t.no_trade_day).sort((a,b)=>new Date(b.trade_date)-new Date(a.trade_date)).slice(0,10).forEach(t => {
+        const p = parseFloat(t.pnl||0);
+        const row = tbody.insertRow();
+        row.innerHTML = `<td>${t.trade_date}</td><td style="color:${p>=0?'var(--success)':'var(--danger)'}">${fmtCurrency(p)}</td><td>${t.market_condition||'—'}</td><td>${t.cycle}</td>`;
+    });
+}
+
+// ═══════════════════════════════════════════════════════
+//  PSYCHOLOGY
+// ═══════════════════════════════════════════════════════
+function showQuote(idx) {
+    const q = QUOTES[idx];
+    document.getElementById('dailyQuoteText').textContent = '"' + q.text + '"';
+    document.getElementById('dailyQuoteAuthor').textContent = '— ' + q.author;
+    document.getElementById('quoteCounter').textContent = (idx + 1) + ' / ' + QUOTES.length;
+}
+function nextQuote() { quoteIdx = (quoteIdx + 1) % QUOTES.length; showQuote(quoteIdx); }
+function prevQuote() { quoteIdx = (quoteIdx - 1 + QUOTES.length) % QUOTES.length; showQuote(quoteIdx); }
+
+function selectMood(btn, emoji, label) {
+    document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    const advice = MOOD_ADVICE[emoji];
+    const el = document.getElementById('moodAdvice');
+    if (advice) {
+        el.textContent = advice.text;
+        el.style.color = advice.color;
+        el.style.borderLeft = '3px solid ' + advice.color;
+        el.style.display = 'block';
+    }
+    localStorage.setItem('today_mood', emoji);
+}
+
+function toggleCheck(item) {
+    item.classList.toggle('done');
+    if (item.classList.contains('done')) {
+        item.querySelector('.checklist-checkbox').textContent = '✓';
+        item.querySelector('.checklist-checkbox').style.color = 'white';
+    } else {
+        item.querySelector('.checklist-checkbox').textContent = '';
+    }
+    const total = document.querySelectorAll('.checklist-item').length;
+    const done = document.querySelectorAll('.checklist-item.done').length;
+    const status = document.getElementById('checklistStatus');
+    if (done === total) { status.textContent = '✅ All checks passed! You\'re ready to trade.'; status.style.color = 'var(--success)'; }
+    else { status.textContent = `${done} / ${total} completed`; status.style.color = 'var(--text-muted)'; }
+}
+
+function resetChecklist() {
+    document.querySelectorAll('.checklist-item').forEach(item => {
+        item.classList.remove('done');
+        item.querySelector('.checklist-checkbox').textContent = '';
+    });
+    document.getElementById('checklistStatus').textContent = '';
+}
+
+let journalSaveTimer;
+function saveJournalNote() {
+    const text = document.getElementById('journalNote').value;
+    document.getElementById('journalCharCount').textContent = text.length + ' chars';
+    clearTimeout(journalSaveTimer);
+    journalSaveTimer = setTimeout(() => {
+        const today = new Date().toISOString().split('T')[0];
+        localStorage.setItem('journal_' + today, text);
+        document.getElementById('journalSaveStatus').textContent = '✓ Saved ' + new Date().toLocaleTimeString();
+    }, 800);
+}
+
+function loadTodayJournal() {
+    const today = new Date().toISOString().split('T')[0];
+    const saved = localStorage.getItem('journal_' + today) || '';
+    document.getElementById('journalNote').value = saved;
+    document.getElementById('journalCharCount').textContent = saved.length + ' chars';
+}
+
+function updatePsychPage() {
+    // today's quote (based on day of year)
+    const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+    quoteIdx = dayOfYear % QUOTES.length;
+    showQuote(quoteIdx);
+    // streak
+    const trades = allData.filter(t => !t.no_trade_day);
+    const streak = calcStreak(trades);
+    document.getElementById('psychStreakNum').textContent = streak.current;
+    // restore mood
+    const savedMood = localStorage.getItem('today_mood');
+    if (savedMood) {
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            if (btn.querySelector('.mood-label')?.textContent === savedMood) btn.classList.add('selected');
+        });
+    }
+    // load journal
+    loadTodayJournal();
+}
 
 // ═══════════════════════════════════════════════════════
 //  AUTH HANDLERS
@@ -1259,15 +1607,13 @@ function setBtnLoading(prefix, loading) {
 function showAuthError(msg) {
     const el = document.getElementById('authError');
     el.textContent = msg; el.classList.add('show');
-    setTimeout(() => el.classList.remove('show'), 6000);
+    setTimeout(() => el.classList.remove('show'), 8000);
 }
-
 function showAuthSuccess(msg) {
     const el = document.getElementById('authSuccess');
     el.textContent = msg; el.classList.add('show');
-    setTimeout(() => el.classList.remove('show'), 8000);
+    setTimeout(() => el.classList.remove('show'), 10000);
 }
-
 function clearAuthMessages() {
     document.getElementById('authError').classList.remove('show');
     document.getElementById('authSuccess').classList.remove('show');
@@ -1281,7 +1627,15 @@ async function handleLogin(e) {
     const password = document.getElementById('loginPassword').value;
     const { error } = await sbClient.auth.signInWithPassword({ email, password });
     setBtnLoading('login', false);
-    if (error) showAuthError(error.message);
+    if (error) {
+        if (error.message.includes('Email not confirmed')) {
+            showAuthError('📧 Your email is not confirmed yet. Check your inbox (and spam folder) for a confirmation email from Supabase/Prop Farm Pro. Click the link to confirm, then try logging in again.');
+        } else if (error.message.includes('Invalid login credentials')) {
+            showAuthError('❌ Wrong email or password. Double-check your credentials. If you signed up with Google, use the Google button above.');
+        } else {
+            showAuthError(error.message);
+        }
+    }
 }
 
 async function handleSignup(e) {
@@ -1294,8 +1648,8 @@ async function handleSignup(e) {
     const email = document.getElementById('signupEmail').value.trim();
     const { error } = await sbClient.auth.signUp({ email, password: pass });
     setBtnLoading('signup', false);
-    if (error) showAuthError(error.message);
-    else showAuthSuccess('✅ Account created! Check your email to confirm your account, then sign in.');
+    if (error) { showAuthError(error.message); return; }
+    showAuthSuccess('✅ Account created! A confirmation email has been sent to ' + email + '. Check your inbox AND spam folder. After confirming, come back and sign in with your email and password.');
 }
 
 async function handlePasswordReset(e) {
@@ -1303,18 +1657,16 @@ async function handlePasswordReset(e) {
     clearAuthMessages();
     setBtnLoading('reset', true);
     const email = document.getElementById('resetEmail').value.trim();
-    const { error } = await sbClient.auth.resetPasswordForEmail(email, {
-        redirectTo: 'https://killiumx.github.io/xoxostaffhandbook.github.io/'
-    });
+    const { error } = await sbClient.auth.resetPasswordForEmail(email, { redirectTo: window.location.href });
     setBtnLoading('reset', false);
-    if (error) showAuthError(error.message);
-    else showAuthSuccess('✅ Reset link sent! Check your email (including spam folder).');
+    if (error) { showAuthError(error.message); return; }
+    showAuthSuccess('✅ Reset link sent to ' + email + '! Check your inbox and spam folder. The link expires in 1 hour.');
 }
 
 async function handleGoogleAuth() {
     const { error } = await sbClient.auth.signInWithOAuth({
         provider: 'google',
-        options: { redirectTo: 'https://killiumx.github.io/xoxostaffhandbook.github.io/' }
+        options: { redirectTo: window.location.href }
     });
     if (error) showAuthError(error.message);
 }
@@ -1326,7 +1678,7 @@ async function handleLogout() {
 }
 
 // ═══════════════════════════════════════════════════════
-//  DASHBOARD SHOW/HIDE
+//  DASHBOARD
 // ═══════════════════════════════════════════════════════
 function showDashboard() {
     document.getElementById('authScreen').classList.add('hidden');
@@ -1342,8 +1694,6 @@ function showDashboard() {
     document.getElementById('userRole').textContent = isAdmin ? '👑 Admin' : 'Member';
     document.getElementById('userRole').className = 'user-role' + (isAdmin ? ' admin' : '');
     document.getElementById('heroName').textContent = displayName;
-
-    // Show admin nav
     document.getElementById('adminNavItem').style.display = isAdmin ? 'flex' : 'none';
 
     populateDropdowns();
@@ -1365,7 +1715,6 @@ function hideDashboard() {
 async function loadDashboardData() {
     const uid = adminViewingUserId || currentUser?.id;
     if (!uid) return;
-
     try {
         const [{ data: trades, error: te }, { data: payouts, error: pe }] = await Promise.all([
             sbClient.from('trades').select('*').eq('user_id', uid).order('trade_date', { ascending: true }),
@@ -1408,73 +1757,50 @@ async function handleTradeSubmit(e) {
     let trades = [];
 
     if (isNoTrade) {
-        trades.push({
-            user_id: userId, account: 'N/A', account_type: 'no_trade',
-            market_condition: 'No Trade', risk_template: '0',
-            trade_date: date, cycle: cycle, pnl: 0, contracts: 0,
-            notes: notes || 'No-trade day', no_trade_day: true, timestamp: ts
-        });
-
+        trades.push({ user_id: userId, account: 'N/A', account_type: 'no_trade', market_condition: 'No Trade', risk_template: '0', trade_date: date, cycle, pnl: 0, contracts: 0, notes: notes || 'No-trade day', no_trade_day: true, timestamp: ts });
     } else if (isCopier) {
         const lead = document.getElementById('leadAccount').value;
         const followers = [...document.querySelectorAll('.follower-checkbox:checked')].map(c => c.value);
         const pnlRaw = document.getElementById('tradePnL').value;
         const condition = document.getElementById('tradeCondition').value;
         const risk = document.getElementById('tradeRisk').value;
-
-        if (!lead) { showAlert('Select a lead account', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
-        if (!followers.length) { showAlert('Select at least one follower account', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
-        if (!condition) { showAlert('Select a market condition', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
-        if (!risk) { showAlert('Select a risk template', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
-        if (pnlRaw === '') { showAlert('Enter a P&L amount', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
-
+        if (!lead || !followers.length || !condition || !risk || pnlRaw === '') { showAlert('Fill all required fields', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
         const pnl = parseFloat(pnlRaw);
         const contracts = parseInt(risk) / 100;
         [lead, ...followers].forEach((acc, i) => {
-            trades.push({ user_id: userId, account: String(acc), account_type: i === 0 ? 'lead' : 'follower',
-                copy_group: ts, market_condition: condition, risk_template: risk,
-                trade_date: date, cycle, pnl, contracts, notes, no_trade_day: false, timestamp: ts });
+            trades.push({ user_id: userId, account: String(acc), account_type: i === 0 ? 'lead' : 'follower', copy_group: ts, market_condition: condition, risk_template: risk, trade_date: date, cycle, pnl, contracts, notes, no_trade_day: false, timestamp: ts });
         });
-
     } else {
         const acc = document.getElementById('tradeAccount').value;
         const pnlRaw = document.getElementById('tradePnL').value;
         const condition = document.getElementById('tradeCondition').value;
         const risk = document.getElementById('tradeRisk').value;
-
-        if (!acc) { showAlert('Select an account', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
-        if (!condition) { showAlert('Select a market condition', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
-        if (!risk) { showAlert('Select a risk template', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
-        if (pnlRaw === '') { showAlert('Enter a P&L amount', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
-
+        if (!acc || !condition || !risk || pnlRaw === '') { showAlert('Fill all required fields', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
         const pnl = parseFloat(pnlRaw);
         if (isNaN(pnl)) { showAlert('P&L must be a number', 'error'); setBtnLoadingCustom('tradeSubmit', false); return; }
         const contracts = parseInt(risk) / 100;
-
-        trades.push({ user_id: userId, account: String(acc), account_type: 'single',
-            market_condition: condition, risk_template: risk,
-            trade_date: date, cycle, pnl, contracts, notes, no_trade_day: false, timestamp: ts });
+        trades.push({ user_id: userId, account: String(acc), account_type: 'single', market_condition: condition, risk_template: risk, trade_date: date, cycle, pnl, contracts, notes, no_trade_day: false, timestamp: ts });
     }
 
     try {
         const { error } = await sbClient.from('trades').insert(trades);
         if (error) throw error;
-        showAlert('✓ ' + trades.length + ' trade(s) logged successfully!', 'success');
+        showAlert('✓ ' + trades.length + ' trade(s) logged!', 'success');
         resetTradeForm();
         await loadDashboardData();
         setTimeout(() => navigateTo('overview'), 1200);
     } catch (err) {
-        console.error('Trade submit error:', err);
         showAlert('Failed: ' + (err.message || 'Unknown error'), 'error');
-    } finally {
-        setBtnLoadingCustom('tradeSubmit', false);
-    }
+    } finally { setBtnLoadingCustom('tradeSubmit', false); }
 }
 
 function setBtnLoadingCustom(id, loading) {
-    document.getElementById(id + 'Btn').disabled = loading;
-    document.getElementById(id + 'Text').style.display = loading ? 'none' : 'inline';
-    document.getElementById(id + 'Spinner').style.display = loading ? 'inline-block' : 'none';
+    const btn = document.getElementById(id + 'Btn');
+    const text = document.getElementById(id + 'Text');
+    const spin = document.getElementById(id + 'Spinner');
+    if (btn) btn.disabled = loading;
+    if (text) text.style.display = loading ? 'none' : 'inline';
+    if (spin) spin.style.display = loading ? 'inline-block' : 'none';
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1502,12 +1828,12 @@ async function handlePayoutSubmit(e) {
 }
 
 // ═══════════════════════════════════════════════════════
-//  DELETE FUNCTIONS
+//  DELETE
 // ═══════════════════════════════════════════════════════
 async function deleteByCycle() {
     const cycle = document.getElementById('deleteCycleSelect').value;
     if (!cycle) { showAlert('Select a cycle first', 'error'); return; }
-    if (!confirm(`Delete ALL trades from Cycle ${cycle}? This cannot be undone.`)) return;
+    if (!confirm(`Delete ALL trades from Cycle ${cycle}?`)) return;
     const { error } = await sbClient.from('trades').delete().eq('user_id', currentUser.id).eq('cycle', parseInt(cycle));
     if (error) { showAlert('Delete failed: ' + error.message, 'error'); return; }
     showAlert(`✓ Cycle ${cycle} trades deleted`, 'success');
@@ -1517,7 +1843,7 @@ async function deleteByCycle() {
 async function deleteByAccount() {
     const acc = document.getElementById('deleteAccSelect').value;
     if (!acc) { showAlert('Select an account first', 'error'); return; }
-    if (!confirm(`Delete ALL trades from PA Account #${acc}? This cannot be undone.`)) return;
+    if (!confirm(`Delete ALL trades from PA Account #${acc}?`)) return;
     const { error } = await sbClient.from('trades').delete().eq('user_id', currentUser.id).eq('account', acc);
     if (error) { showAlert('Delete failed: ' + error.message, 'error'); return; }
     showAlert(`✓ Account #${acc} trades deleted`, 'success');
@@ -1525,14 +1851,14 @@ async function deleteByAccount() {
 }
 
 async function confirmDeleteAll() {
-    if (!confirm('⚠️ Delete ALL your trades AND payouts? This is IRREVERSIBLE!')) return;
+    if (!confirm('⚠️ Delete ALL your trades AND payouts? IRREVERSIBLE!')) return;
     const confirmed = prompt('Type "DELETE ALL" to confirm:');
-    if (confirmed !== 'DELETE ALL') { showAlert('Cancelled — no data deleted', 'info'); return; }
+    if (confirmed !== 'DELETE ALL') { showAlert('Cancelled', 'info'); return; }
     await Promise.all([
         sbClient.from('trades').delete().eq('user_id', currentUser.id),
         sbClient.from('payouts').delete().eq('user_id', currentUser.id)
     ]);
-    showAlert('✓ All data permanently deleted', 'success');
+    showAlert('✓ All data deleted', 'success');
     await loadDashboardData();
 }
 
@@ -1556,10 +1882,16 @@ async function handleSettingsSave(e) {
 function handleGoalSelectChange(val) {
     document.getElementById('customGoalWrap').style.display = val === 'custom' ? 'block' : 'none';
 }
+function resetSettings() { document.getElementById('accountGoalSelect').value = '20'; document.getElementById('customGoalWrap').style.display = 'none'; }
 
-function resetSettings() {
-    document.getElementById('accountGoalSelect').value = '20';
-    document.getElementById('customGoalWrap').style.display = 'none';
+// ═══════════════════════════════════════════════════════
+//  ACCOUNT NAMING
+// ═══════════════════════════════════════════════════════
+function saveAccNickname(accNum, inputEl) {
+    saveNickname(accNum, inputEl.value);
+    populateDropdowns();
+    updateAllViews();
+    showAlert(`✓ Account #${accNum} named "${inputEl.value || '(cleared'}"`, 'success');
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1567,18 +1899,14 @@ function resetSettings() {
 // ═══════════════════════════════════════════════════════
 async function loadAdminData() {
     if (currentProfile?.role !== 'admin') return;
-
     document.getElementById('adminUsersBody').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-muted);">Loading...</td></tr>';
-
     try {
         const [{ data: profiles }, { data: allTrades }] = await Promise.all([
             sbClient.from('profiles').select('*').order('created_at', { ascending: false }),
             sbClient.from('trades').select('*')
         ]);
-
         adminAllProfiles = profiles || [];
         adminAllTrades = allTrades || [];
-
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('adminTotalUsers').textContent = adminAllProfiles.length;
         document.getElementById('adminTotalTrades').textContent = adminAllTrades.length;
@@ -1586,20 +1914,14 @@ async function loadAdminData() {
         document.getElementById('adminTotalPnL').textContent = fmtCurrency(combinedPnL);
         const activeToday = new Set(adminAllTrades.filter(t => t.trade_date === today).map(t => t.user_id)).size;
         document.getElementById('adminActiveToday').textContent = activeToday;
-
         renderAdminUsers(adminAllProfiles);
-    } catch (err) {
-        showAlert('Failed to load admin data: ' + err.message, 'error');
-    }
+    } catch (err) { showAlert('Failed to load admin data: ' + err.message, 'error'); }
 }
 
 function renderAdminUsers(profiles) {
     const tbody = document.getElementById('adminUsersBody');
     tbody.innerHTML = '';
-    if (!profiles.length) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-muted);">No users found</td></tr>';
-        return;
-    }
+    if (!profiles.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-muted);">No users found</td></tr>'; return; }
     profiles.forEach(profile => {
         const userTrades = adminAllTrades.filter(t => t.user_id === profile.id);
         const userPnL = userTrades.reduce((s, t) => s + parseFloat(t.pnl || 0), 0);
@@ -1611,23 +1933,18 @@ function renderAdminUsers(profiles) {
             <td>${userTrades.length}</td>
             <td style="color:${userPnL >= 0 ? 'var(--success)' : 'var(--danger)'}">${fmtCurrency(userPnL)}</td>
             <td>${profile.created_at ? new Date(profile.created_at).toLocaleDateString() : '—'}</td>
-            <td>
-                <div style="display:flex;gap:0.35rem;flex-wrap:wrap;">
-                    <button class="btn btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.75rem;" onclick="viewUserTrades('${profile.id}','${profile.email}')">👁 Trades</button>
-                    <button class="btn btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.75rem;" onclick="viewUserDashboardById('${profile.id}','${profile.email}')">📊 Dashboard</button>
-                    <button class="btn btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.75rem;" onclick="quickToggleRole('${profile.id}','${profile.role || 'user'}','${profile.email}')">${profile.role === 'admin' ? '↓ Demote' : '↑ Promote'}</button>
-                    <button class="btn btn-danger" style="padding:0.3rem 0.6rem;font-size:0.75rem;" onclick="adminRemoveUserDataById('${profile.id}','${profile.email}')">🗑</button>
-                </div>
-            </td>
-        `;
+            <td><div style="display:flex;gap:0.35rem;flex-wrap:wrap;">
+                <button class="btn btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.75rem;" onclick="viewUserTrades('${profile.id}','${profile.email}')">👁 Trades</button>
+                <button class="btn btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.75rem;" onclick="viewUserDashboardById('${profile.id}','${profile.email}')">📊 Dashboard</button>
+                <button class="btn btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.75rem;" onclick="quickToggleRole('${profile.id}','${profile.role || 'user'}','${profile.email}')">${profile.role === 'admin' ? '↓ Demote' : '↑ Promote'}</button>
+                <button class="btn btn-danger" style="padding:0.3rem 0.6rem;font-size:0.75rem;" onclick="adminRemoveUserDataById('${profile.id}','${profile.email}')">🗑</button>
+            </div></td>`;
     });
 }
 
 function filterAdminUsers() {
     const q = document.getElementById('adminUserSearch').value.toLowerCase();
-    document.querySelectorAll('#adminUsersBody tr').forEach(row => {
-        row.style.display = !q || (row.dataset.email || '').includes(q) ? '' : 'none';
-    });
+    document.querySelectorAll('#adminUsersBody tr').forEach(row => { row.style.display = !q || (row.dataset.email || '').includes(q) ? '' : 'none'; });
 }
 
 async function viewUserTrades(userId, email) {
@@ -1636,23 +1953,16 @@ async function viewUserTrades(userId, email) {
     document.getElementById('adminUserTradesWrap').style.display = 'block';
     const tbody = document.getElementById('adminUserTradesBody');
     tbody.innerHTML = '';
-    if (!trades?.length) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-muted);">No trades</td></tr>';
-        return;
-    }
+    if (!trades?.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-muted);">No trades</td></tr>'; return; }
     trades.forEach(t => {
         const pnl = parseFloat(t.pnl || 0);
         const row = tbody.insertRow();
-        row.innerHTML = `<td>${t.trade_date}</td><td>PA #${t.account}</td><td>${t.market_condition || '—'}</td><td>$${t.risk_template || '—'}</td><td style="color:${pnl >= 0 ? 'var(--success)' : 'var(--danger)'}">${fmtCurrency(pnl)}</td><td>${t.cycle}</td><td>${t.notes || '—'}</td>`;
+        row.innerHTML = `<td>${t.trade_date}</td><td>PA #${t.account}</td><td>${t.market_condition||'—'}</td><td>$${t.risk_template||'—'}</td><td style="color:${pnl>=0?'var(--success)':'var(--danger)'}">${fmtCurrency(pnl)}</td><td>${t.cycle}</td><td>${t.notes||'—'}</td>`;
     });
     document.getElementById('adminUserTradesWrap').scrollIntoView({ behavior: 'smooth' });
 }
+function closeUserTrades() { document.getElementById('adminUserTradesWrap').style.display = 'none'; }
 
-function closeUserTrades() {
-    document.getElementById('adminUserTradesWrap').style.display = 'none';
-}
-
-// View another user's full dashboard (admin impersonation — read only)
 async function viewUserDashboardById(userId, email) {
     adminViewingUserId = userId;
     adminViewingEmail = email;
@@ -1661,15 +1971,9 @@ async function viewUserDashboardById(userId, email) {
     await loadDashboardData();
     navigateTo('overview');
 }
-
-function viewUserDashboard() {
-    if (!adminViewingUserId) return;
-    viewUserDashboardById(adminViewingUserId, adminViewingEmail);
-}
-
+function viewUserDashboard() { if (adminViewingUserId) viewUserDashboardById(adminViewingUserId, adminViewingEmail); }
 function exitAdminView() {
-    adminViewingUserId = null;
-    adminViewingEmail = null;
+    adminViewingUserId = null; adminViewingEmail = null;
     document.getElementById('adminViewingBanner').style.display = 'none';
     loadDashboardData();
 }
@@ -1687,11 +1991,9 @@ async function updateUserRole() {
     const email = document.getElementById('roleUserEmail').value.trim();
     const role = document.getElementById('roleUserRole').value;
     if (!email) { showAlert('Enter a user email', 'error'); return; }
-    document.getElementById('roleUpdateBtn') && (document.getElementById('roleUpdateBtn').disabled = true);
     const { data: profile, error: fe } = await sbClient.from('profiles').select('id').eq('email', email).single();
-    if (fe || !profile) { showAlert('User not found. They must sign up first.', 'error'); document.getElementById('roleUpdateBtn') && (document.getElementById('roleUpdateBtn').disabled = false); return; }
+    if (fe || !profile) { showAlert('User not found. They must sign up first.', 'error'); return; }
     const { error } = await sbClient.from('profiles').update({ role }).eq('id', profile.id);
-    document.getElementById('roleUpdateBtn') && (document.getElementById('roleUpdateBtn').disabled = false);
     if (error) { showAlert('Failed: ' + error.message, 'error'); return; }
     showAlert(`✓ ${email} role updated to ${role}`, 'success');
     document.getElementById('roleUserEmail').value = '';
@@ -1701,11 +2003,7 @@ async function updateUserRole() {
 async function adminResetUserPassword() {
     const email = document.getElementById('resetUserEmail').value.trim();
     if (!email) { showAlert('Enter a user email', 'error'); return; }
-    document.getElementById('adminResetText').style.display = 'none';
-    document.getElementById('adminResetSpinner').style.display = 'inline-block';
-    const { error } = await sbClient.auth.resetPasswordForEmail(email, { redirectTo: 'https://killiumx.github.io/xoxostaffhandbook.github.io/' });
-    document.getElementById('adminResetText').style.display = 'inline';
-    document.getElementById('adminResetSpinner').style.display = 'none';
+    const { error } = await sbClient.auth.resetPasswordForEmail(email, { redirectTo: window.location.href });
     if (error) { showAlert('Failed: ' + error.message, 'error'); return; }
     showAlert(`✓ Reset email sent to ${email}`, 'success');
     document.getElementById('resetUserEmail').value = '';
@@ -1721,7 +2019,7 @@ async function adminRemoveUserData() {
 }
 
 async function adminRemoveUserDataById(userId, email) {
-    if (!confirm(`Delete ALL trades and payouts for ${email}? This cannot be undone.`)) return;
+    if (!confirm(`Delete ALL trades and payouts for ${email}? Cannot be undone.`)) return;
     const [{ error: e1 }, { error: e2 }] = await Promise.all([
         sbClient.from('trades').delete().eq('user_id', userId),
         sbClient.from('payouts').delete().eq('user_id', userId)
@@ -1747,6 +2045,8 @@ function updateAllViews() {
     updateCyclePerformance();
     updatePayoutPage();
     updateSettingsPage();
+    updatePsychPage();
+    updateShareJournalPage();
 }
 
 function updateHero() {
@@ -1813,7 +2113,6 @@ function updateCharts() {
     const grid = 'rgba(99,179,237,0.07)';
     const baseOpts = { responsive: true, maintainAspectRatio: false, animation: { duration: 400 }, plugins: { legend: { display: false } } };
 
-    // Growth
     const dates = [...new Set(trades.map(t => t.trade_date))].sort();
     let sum = 0;
     const cumulative = dates.map(d => { sum += trades.filter(t => t.trade_date === d).reduce((s, t) => s + parseFloat(t.pnl || 0), 0); return sum; });
@@ -1823,7 +2122,6 @@ function updateCharts() {
         options: { ...baseOpts, scales: { y: { ticks: { callback: v => '$' + v.toLocaleString(), color: '#7a8bb5', font: { size: 10 } }, grid: { color: grid }, border: { display: false } }, x: { grid: { display: false }, ticks: { color: '#7a8bb5', maxTicksLimit: 8, font: { size: 10 } }, border: { display: false } } } }
     });
 
-    // Win rate by condition
     const condStats = {};
     trades.forEach(t => { const c = t.market_condition || 'Other'; if (!condStats[c]) condStats[c] = { w: 0, t: 0 }; condStats[c].t++; if (parseFloat(t.pnl || 0) > 0) condStats[c].w++; });
     const condLabels = Object.keys(condStats);
@@ -1833,7 +2131,6 @@ function updateCharts() {
         options: { ...baseOpts, cutout: '72%', plugins: { legend: { display: true, position: 'bottom', labels: { color: '#7a8bb5', font: { size: 10 }, padding: 8, boxWidth: 10 } } } }
     });
 
-    // Daily bars (last 14)
     const daily = {};
     trades.forEach(t => { daily[t.trade_date] = (daily[t.trade_date] || 0) + parseFloat(t.pnl || 0); });
     const dKeys = Object.keys(daily).sort().slice(-14);
@@ -1843,7 +2140,6 @@ function updateCharts() {
         options: { ...baseOpts, scales: { y: { ticks: { callback: v => '$' + v.toLocaleString(), color: '#7a8bb5', font: { size: 10 } }, grid: { color: grid }, border: { display: false } }, x: { grid: { display: false }, ticks: { color: '#7a8bb5', font: { size: 10 } }, border: { display: false } } } }
     });
 
-    // Risk distribution
     const riskC = {};
     trades.forEach(t => { const r = '$' + (t.risk_template || '?'); riskC[r] = (riskC[r] || 0) + 1; });
     charts.risk = new Chart(document.getElementById('riskChart'), {
@@ -1852,7 +2148,6 @@ function updateCharts() {
         options: { ...baseOpts, plugins: { legend: { display: true, position: 'bottom', labels: { color: '#7a8bb5', font: { size: 10 }, padding: 6, boxWidth: 10 } } } }
     });
 
-    // Account status
     const atGoal = getAccountsAtGoal();
     const active = getActiveAccountCount() - atGoal;
     const inactive = Math.max(0, USER_ACCOUNT_GOAL - getActiveAccountCount());
@@ -1877,7 +2172,7 @@ function updateTemplates() {
     const topGrid = document.getElementById('topTemplatesGrid');
     topGrid.innerHTML = '';
     const sorted = Object.entries(tpls).filter(([, d]) => d.trades > 0).sort((a, b) => b[1].totalPnL - a[1].totalPnL).slice(0, 3);
-    if (!sorted.length) { topGrid.innerHTML = '<p style="color:var(--text-muted);">No trades yet. Add your first trade to see stats here!</p>'; return; }
+    if (!sorted.length) { topGrid.innerHTML = '<p style="color:var(--text-muted);">No trades yet. Add your first trade!</p>'; return; }
     sorted.forEach(([name, data]) => topGrid.appendChild(createTemplateCard(name, data)));
 }
 
@@ -1915,11 +2210,15 @@ function updateAccounts() {
         if (accountFilter === 'goal' && acc.pnl < GOAL_PER_ACCOUNT) continue;
         if (accountFilter === 'profitable' && acc.pnl <= 0) continue;
         const atGoal = acc.pnl >= GOAL_PER_ACCOUNT;
+        const nickname = getNickname(i);
         const card = document.createElement('div');
         card.className = 'acc-card';
         card.innerHTML = `
             <div class="acc-header">
-                <div class="acc-num">PA #${i}</div>
+                <div>
+                    <div class="acc-num">PA #${i}</div>
+                    ${nickname ? `<div class="acc-nickname">✏️ ${nickname}</div>` : ''}
+                </div>
                 <span class="badge ${atGoal ? 'badge-success' : acc.trades > 0 ? 'badge-active' : 'badge-muted'}">${atGoal ? '✓ GOAL' : acc.trades > 0 ? 'ACTIVE' : 'EMPTY'}</span>
             </div>
             <div class="acc-progress">
@@ -1931,6 +2230,10 @@ function updateAccounts() {
                 <div><div class="acc-stat-lbl">Win Rate</div><div class="acc-stat-val">${acc.trades > 0 ? Math.round(acc.winRate) : 0}%</div></div>
                 <div><div class="acc-stat-lbl">To Goal</div><div class="acc-stat-val">${fmtCurrency(Math.max(GOAL_PER_ACCOUNT - acc.pnl, 0))}</div></div>
                 <div><div class="acc-stat-lbl">Balance</div><div class="acc-stat-val">${fmtCurrency(50000 + acc.pnl)}</div></div>
+            </div>
+            <div class="acc-name-edit">
+                <input type="text" class="acc-name-input" value="${nickname}" placeholder="✏️ Give this account a name..." maxlength="30" id="accName${i}">
+                <button class="btn btn-secondary" style="padding:0.3rem 0.75rem;font-size:0.8rem;" onclick="saveAccNickname(${i}, document.getElementById('accName${i}'))">Save</button>
             </div>`;
         grid.appendChild(card);
         shown++;
@@ -1957,7 +2260,7 @@ function updateAnalytics() {
         const tl = Math.abs(d.avgLoss * (d.trades * (100 - d.winRate) / 100));
         const pf = tl > 0 ? (tw / tl).toFixed(2) : '∞';
         const row = tbody.insertRow();
-        row.innerHTML = `<td><strong>${name}</strong></td><td style="color:${d.totalPnL >= 0 ? 'var(--success)' : 'var(--danger)'}">${fmtCurrency(d.totalPnL)}</td><td>${d.trades}</td><td>${Math.round(d.winRate)}%</td><td>${fmtCurrency(d.avgWin)}</td><td>${fmtCurrency(d.avgLoss)}</td><td>${fmtCurrency(d.bestTrade)}</td><td>${pf}</td>`;
+        row.innerHTML = `<td><strong>${name}</strong></td><td style="color:${d.totalPnL>=0?'var(--success)':'var(--danger)'}">${fmtCurrency(d.totalPnL)}</td><td>${d.trades}</td><td>${Math.round(d.winRate)}%</td><td>${fmtCurrency(d.avgWin)}</td><td>${fmtCurrency(d.avgLoss)}</td><td>${fmtCurrency(d.bestTrade)}</td><td>${pf}</td>`;
     });
 }
 
@@ -1969,21 +2272,20 @@ function updateTradeLog() {
     sorted.forEach(t => {
         const pnl = parseFloat(t.pnl || 0);
         const row = tbody.insertRow();
-        row.dataset.search = `${t.trade_date} ${t.account} ${t.market_condition || ''} ${t.notes || ''}`.toLowerCase();
+        const accLabel = t.account !== 'N/A' ? getAccLabel(t.account) : 'N/A';
+        row.dataset.search = `${t.trade_date} ${t.account} ${accLabel} ${t.market_condition || ''} ${t.notes || ''}`.toLowerCase();
         if (t.no_trade_day) {
             row.style.opacity = '0.55';
             row.innerHTML = `<td>${t.trade_date}</td><td colspan="7" style="color:var(--text-muted);font-style:italic;">📅 No-Trade Day — ${t.notes || ''}</td>`;
         } else {
-            row.innerHTML = `<td>${t.trade_date}</td><td>PA #${t.account}</td><td>${t.market_condition || '—'}</td><td>$${t.risk_template}</td><td style="color:${pnl >= 0 ? 'var(--success)' : 'var(--danger)'}">${fmtCurrency(pnl)}</td><td>${t.contracts}</td><td>${t.cycle}</td><td>${t.notes || '—'}</td>`;
+            row.innerHTML = `<td>${t.trade_date}</td><td>${accLabel}</td><td>${t.market_condition || '—'}</td><td>$${t.risk_template}</td><td style="color:${pnl >= 0 ? 'var(--success)' : 'var(--danger)'}">${fmtCurrency(pnl)}</td><td>${t.contracts}</td><td>${t.cycle}</td><td>${t.notes || '—'}</td>`;
         }
     });
 }
 
 function filterTradeLog() {
     const q = document.getElementById('tradeLogSearch').value.toLowerCase();
-    document.querySelectorAll('#tradeLogBody tr').forEach(row => {
-        row.style.display = !q || (row.dataset.search || '').includes(q) ? '' : 'none';
-    });
+    document.querySelectorAll('#tradeLogBody tr').forEach(row => { row.style.display = !q || (row.dataset.search || '').includes(q) ? '' : 'none'; });
 }
 
 function updateRiskMonitor() {
@@ -1998,11 +2300,12 @@ function updateRiskMonitor() {
         const cushion = bal - failLine;
         const cushionPct = Math.max(0, Math.min(100, (cushion / MAX_DRAWDOWN) * 100));
         const level = cushion <= 0 ? 'danger' : cushion <= 500 ? 'warning' : 'safe';
+        const nickname = getNickname(i);
         const card = document.createElement('div');
         card.className = `acc-card${level === 'danger' ? ' at-risk' : level === 'warning' ? ' warning-card' : ''}`;
         card.innerHTML = `
             <div class="acc-header">
-                <div class="acc-num">PA #${i}</div>
+                <div><div class="acc-num">PA #${i}</div>${nickname ? `<div class="acc-nickname">✏️ ${nickname}</div>` : ''}</div>
                 <span class="badge ${level === 'danger' ? 'badge-danger' : level === 'warning' ? 'badge-warning' : 'badge-success'}">${level === 'danger' ? 'AT RISK' : level === 'warning' ? 'WARNING' : 'SAFE'}</span>
             </div>
             <div class="acc-progress">
@@ -2010,13 +2313,13 @@ function updateRiskMonitor() {
                 <div class="prog-bar"><div class="prog-fill ${level === 'danger' ? 'red' : ''}" style="width:${cushionPct}%"></div></div>
             </div>
             <div class="acc-stats">
-                <div><div class="acc-stat-lbl">P&L</div><div class="acc-stat-val" style="color:${acc.pnl >= 0 ? 'var(--success)' : 'var(--danger)'}">${fmtCurrency(acc.pnl)}</div></div>
+                <div><div class="acc-stat-lbl">P&L</div><div class="acc-stat-val" style="color:${acc.pnl>=0?'var(--success)':'var(--danger)'}">${fmtCurrency(acc.pnl)}</div></div>
                 <div><div class="acc-stat-lbl">Fail Line</div><div class="acc-stat-val">${fmtCurrency(failLine)}</div></div>
-                <div><div class="acc-stat-lbl">Cushion</div><div class="acc-stat-val" style="color:var(--${level === 'safe' ? 'success' : level === 'warning' ? 'warning' : 'danger'})">${fmtCurrency(cushion)}</div></div>
+                <div><div class="acc-stat-lbl">Cushion</div><div class="acc-stat-val" style="color:var(--${level==='safe'?'success':level==='warning'?'warning':'danger'})">${fmtCurrency(cushion)}</div></div>
                 <div><div class="acc-stat-lbl">Peak Balance</div><div class="acc-stat-val">${fmtCurrency(high)}</div></div>
             </div>
             <div class="risk-info ${level}">
-                ${level === 'danger' ? '⚠️ CRITICAL: At or below fail line!' : level === 'warning' ? '⚠️ Less than $500 from fail line' : high >= SAFETY_NET ? '✅ Safety net locked — fail line at $50,100 forever' : `✅ Safe — ${fmtCurrency(SAFETY_NET - high)} to safety net`}
+                ${level==='danger'?'⚠️ CRITICAL: At or below fail line!':level==='warning'?'⚠️ Less than $500 from fail line':high>=SAFETY_NET?'✅ Safety net locked — fail line at $50,100 forever':`✅ Safe — ${fmtCurrency(SAFETY_NET-high)} to safety net`}
             </div>`;
         grid.appendChild(card);
     }
@@ -2027,41 +2330,31 @@ function updateCyclePerformance() {
     const totalPnL = sumPnL(trades);
     const activeAcc = getActiveAccountCount();
     document.getElementById('cycleAccText').textContent = `${activeAcc} active account${activeAcc !== 1 ? 's' : ''}`;
-
     const activeGoal = activeAcc * GOAL_PER_ACCOUNT;
     const prog = activeAcc > 0 ? Math.min((totalPnL / activeGoal) * 100, 100) : 0;
     document.getElementById('firstPayoutProg').textContent = Math.round(prog) + '%';
-    document.getElementById('firstPayoutSub').textContent = totalPnL >= activeGoal ? `✅ Qualified — ${activeAcc} account${activeAcc !== 1 ? 's' : ''} ready` : `${fmtCurrency(Math.max(0, activeGoal - totalPnL))} remaining`;
-
+    document.getElementById('firstPayoutSub').textContent = totalPnL >= activeGoal ? `✅ Qualified` : `${fmtCurrency(Math.max(0, activeGoal - totalPnL))} remaining`;
     const tradingDays = [...new Set(trades.map(t => t.trade_date))].length;
     const dAvg = tradingDays > 0 ? totalPnL / tradingDays : 0;
     document.getElementById('dailyAvg').textContent = fmtCurrency(dAvg);
     document.getElementById('dailyTarget').textContent = activeAcc > 0 ? `Target: $${activeAcc * DAILY_TARGET_MIN}–$${activeAcc * DAILY_TARGET_MAX}/day` : 'No active accounts';
-
     const totalWithdrawn = payoutData.reduce((s, p) => s + parseFloat(p.amount || 0), 0);
     document.getElementById('totalPayoutsAmt').textContent = fmtCurrency(totalWithdrawn);
     document.getElementById('payoutCountSub').textContent = payoutData.length === 0 ? 'No payouts yet' : `${payoutData.length} payout(s) recorded`;
-
     const cycleData = groupByCycle(trades);
     const cycleNums = Object.keys(cycleData).map(Number).sort((a, b) => a - b);
     const curCycle = cycleNums.length ? Math.max(...cycleNums) : 1;
     document.getElementById('currentCycleStatus').textContent = `Cycle ${curCycle}`;
     document.getElementById('cycleInfoSub').textContent = totalPnL < activeGoal ? `${fmtCurrency(Math.max(0, activeGoal - totalPnL))} to first payout` : 'Monthly farming cycle active';
-
-    // Cycle comparison table
     const tbody = document.getElementById('cycleCompBody');
     tbody.innerHTML = '';
-    if (!cycleNums.length) { tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--text-muted);padding:2rem;">No cycle data yet</td></tr>'; }
-    else {
-        cycleNums.forEach(cn => {
-            const d = cycleData[cn];
-            const status = d.totalPnL >= activeGoal ? '✅ Payout Ready' : d.totalPnL >= activeGoal * 0.75 ? '🟡 Near Goal' : '🔵 In Progress';
-            const row = tbody.insertRow();
-            row.innerHTML = `<td><strong>Cycle ${cn}</strong></td><td style="color:${d.totalPnL >= 0 ? 'var(--success)' : 'var(--danger)'}">${fmtCurrency(d.totalPnL)}</td><td>${d.trades}</td><td>${d.tradingDays}</td><td>${fmtCurrency(d.dailyAvg)}</td><td>${Math.round(d.winRate)}%</td><td>${fmtCurrency(d.bestDay)}</td><td>${fmtCurrency(d.worstDay)}</td><td>${status}</td>`;
-        });
-    }
-
-    // Cycle charts
+    if (!cycleNums.length) tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--text-muted);padding:2rem;">No cycle data yet</td></tr>';
+    else cycleNums.forEach(cn => {
+        const d = cycleData[cn];
+        const status = d.totalPnL >= activeGoal ? '✅ Payout Ready' : d.totalPnL >= activeGoal * 0.75 ? '🟡 Near Goal' : '🔵 In Progress';
+        const row = tbody.insertRow();
+        row.innerHTML = `<td><strong>Cycle ${cn}</strong></td><td style="color:${d.totalPnL>=0?'var(--success)':'var(--danger)'}">${fmtCurrency(d.totalPnL)}</td><td>${d.trades}</td><td>${d.tradingDays}</td><td>${fmtCurrency(d.dailyAvg)}</td><td>${Math.round(d.winRate)}%</td><td>${fmtCurrency(d.bestDay)}</td><td>${fmtCurrency(d.worstDay)}</td><td>${status}</td>`;
+    });
     if (charts.cyclePnL) { charts.cyclePnL.destroy(); delete charts.cyclePnL; }
     if (charts.cycleDailyAvg) { charts.cycleDailyAvg.destroy(); delete charts.cycleDailyAvg; }
     if (cycleNums.length) {
@@ -2078,8 +2371,6 @@ function updateCyclePerformance() {
             options: { responsive: true, maintainAspectRatio: false, animation: { duration: 400 }, plugins: { legend: { display: false } }, scales: { y: { ticks: { callback: v => '$' + v.toLocaleString(), color: '#7a8bb5', font: { size: 10 } }, grid: { color: 'rgba(99,179,237,0.07)' }, border: { display: false } }, x: { grid: { display: false }, ticks: { color: '#7a8bb5', font: { size: 10 } }, border: { display: false } } } }
         });
     }
-
-    // Cycle detail cards
     const detGrid = document.getElementById('cycleDetailsGrid');
     detGrid.innerHTML = '';
     [...cycleNums].reverse().forEach(cn => {
@@ -2088,11 +2379,11 @@ function updateCyclePerformance() {
         card.className = 'tmpl-card';
         card.innerHTML = `
             <div class="tmpl-header">
-                <div class="tmpl-icon" style="background:${d.totalPnL >= activeGoal ? 'linear-gradient(135deg,#22d3a0,#059669)' : 'linear-gradient(135deg,#3b7ef8,#9b6ffa)'}">🌾</div>
+                <div class="tmpl-icon" style="background:${d.totalPnL>=activeGoal?'linear-gradient(135deg,#22d3a0,#059669)':'linear-gradient(135deg,#3b7ef8,#9b6ffa)'}">🌾</div>
                 <div><div class="tmpl-name">Cycle ${cn}</div><div class="tmpl-desc">${d.tradingDays} trading days • ${d.trades} trades</div></div>
             </div>
             <div class="tmpl-stats">
-                <div><div class="tmpl-stat-val" style="color:${d.totalPnL >= 0 ? 'var(--success)' : 'var(--danger)'}">${fmtCurrency(d.totalPnL)}</div><div class="tmpl-stat-lbl">P&L</div></div>
+                <div><div class="tmpl-stat-val" style="color:${d.totalPnL>=0?'var(--success)':'var(--danger)'}">${fmtCurrency(d.totalPnL)}</div><div class="tmpl-stat-lbl">P&L</div></div>
                 <div><div class="tmpl-stat-val">${d.trades}</div><div class="tmpl-stat-lbl">Trades</div></div>
                 <div><div class="tmpl-stat-val">${Math.round(d.winRate)}%</div><div class="tmpl-stat-lbl">Win Rate</div></div>
             </div>
@@ -2111,23 +2402,20 @@ function updatePayoutPage() {
     const totalWithdrawn = payoutData.reduce((s, p) => s + parseFloat(p.amount || 0), 0);
     document.getElementById('totalWithdrawn').textContent = fmtCurrency(totalWithdrawn);
     document.getElementById('withdrawnCount').textContent = `${payoutData.length} payout(s)`;
-
     const activeAcc = getActiveAccountCount();
     const activeGoal = activeAcc * GOAL_PER_ACCOUNT;
     const available = totalPnL >= activeGoal ? activeAcc * PAYOUT_PER_ACCOUNT : 0;
     document.getElementById('availableWithdrawal').textContent = fmtCurrency(available);
-    document.getElementById('withdrawalStatus').textContent = available > 0 ? '✅ Qualified for withdrawal' : `${fmtCurrency(Math.max(0, activeGoal - totalPnL))} to qualify`;
-
+    document.getElementById('withdrawalStatus').textContent = available > 0 ? '✅ Qualified' : `${fmtCurrency(Math.max(0, activeGoal - totalPnL))} to qualify`;
     const lastPayout = payoutData.length > 0 ? payoutData[payoutData.length - 1] : null;
     document.getElementById('cyclePhase').textContent = lastPayout ? `Cycle ${lastPayout.new_cycle}` : 'Cycle 1';
     document.getElementById('phaseInfo').textContent = lastPayout ? 'Monthly farming cycle active' : 'Building to first payout';
-
     const tbody = document.getElementById('payoutHistBody');
     tbody.innerHTML = '';
     if (!payoutData.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:2rem;">No payouts recorded yet</td></tr>'; return; }
     [...payoutData].sort((a, b) => new Date(b.payout_date) - new Date(a.payout_date)).forEach(p => {
         const row = tbody.insertRow();
-        row.innerHTML = `<td>${p.payout_date}</td><td><strong>${p.payout_type || '—'}</strong></td><td style="color:var(--success)">${fmtCurrency(parseFloat(p.amount || 0))}</td><td>PA #${p.account}</td><td>Cycle ${p.cycle_completed}</td><td>Cycle ${p.new_cycle}</td><td>${p.notes || '—'}</td>`;
+        row.innerHTML = `<td>${p.payout_date}</td><td><strong>${p.payout_type||'—'}</strong></td><td style="color:var(--success)">${fmtCurrency(parseFloat(p.amount||0))}</td><td>PA #${p.account}</td><td>Cycle ${p.cycle_completed}</td><td>Cycle ${p.new_cycle}</td><td>${p.notes||'—'}</td>`;
     });
 }
 
@@ -2142,15 +2430,15 @@ function updateSettingsPage() {
     const goalVal = [1, 5, 10, 20, 50, 100].includes(USER_ACCOUNT_GOAL) ? USER_ACCOUNT_GOAL.toString() : 'custom';
     document.getElementById('accountGoalSelect').value = goalVal;
     if (goalVal === 'custom') { document.getElementById('customGoalWrap').style.display = 'block'; document.getElementById('customGoalInput').value = USER_ACCOUNT_GOAL; }
-
     const tbody = document.getElementById('settingsAccBody');
     tbody.innerHTML = '';
     const byAcc = groupByAccount(allData);
     for (let i = 1; i <= USER_ACCOUNT_GOAL; i++) {
         const acc = byAcc[i];
+        const nickname = getNickname(i);
         const status = acc.trades === 0 ? '<span style="color:var(--text-muted)">Not Started</span>' : acc.pnl >= GOAL_PER_ACCOUNT ? '<span style="color:var(--success)">✅ Goal Reached</span>' : '<span style="color:var(--accent)">In Progress</span>';
         const row = tbody.insertRow();
-        row.innerHTML = `<td><strong>PA #${i}</strong></td><td>${status}</td><td style="color:${acc.pnl >= 0 ? 'var(--success)' : 'var(--danger)'}">${fmtCurrency(acc.pnl)}</td><td>${Math.round(acc.progress)}%</td><td>${acc.trades}</td><td>${acc.trades > 0 ? Math.round(acc.winRate) : 0}%</td><td>${fmtCurrency(Math.max(0, GOAL_PER_ACCOUNT - acc.pnl))}</td>`;
+        row.innerHTML = `<td><strong>PA #${i}</strong></td><td style="color:var(--cyan)">${nickname || '<span style="color:var(--text-dim)">—</span>'}</td><td>${status}</td><td style="color:${acc.pnl>=0?'var(--success)':'var(--danger)'}">${fmtCurrency(acc.pnl)}</td><td>${Math.round(acc.progress)}%</td><td>${acc.trades}</td><td>${acc.trades > 0 ? Math.round(acc.winRate) : 0}%</td><td>${fmtCurrency(Math.max(0, GOAL_PER_ACCOUNT - acc.pnl))}</td>`;
     }
 }
 
@@ -2160,8 +2448,9 @@ function updateSettingsPage() {
 const PAGE_TITLES = {
     overview: 'Overview', cyclePerformance: 'Cycle Performance', templates: 'Templates',
     accounts: 'Accounts', analytics: 'Analytics', riskMonitor: 'Risk Monitor',
-    addTrade: 'Add Trade', logPayout: 'Log Payout', tradeLog: 'Trade Log',
-    deleteData: 'Delete Data', settings: 'Settings', adminPanel: 'Admin Panel'
+    psychology: '🧠 Trading Psychology', addTrade: 'Add Trade', logPayout: 'Log Payout',
+    tradeLog: 'Trade Log', shareJournal: '🔗 Share Journal', deleteData: 'Delete Data',
+    settings: 'Settings', adminPanel: 'Admin Panel'
 };
 
 function navigateTo(page) {
@@ -2172,6 +2461,8 @@ function navigateTo(page) {
     if (el) el.classList.add('active');
     document.getElementById('pageTitle').textContent = PAGE_TITLES[page] || page;
     if (page === 'adminPanel') loadAdminData();
+    if (page === 'shareJournal') updateShareJournalPage();
+    if (page === 'psychology') updatePsychPage();
     if (window.innerWidth <= 1024) closeSidebar();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -2185,7 +2476,6 @@ function toggleSidebar() {
     const open = sidebar.classList.toggle('open');
     document.getElementById('overlay').classList.toggle('show', open);
 }
-
 function closeSidebar() {
     document.getElementById('sidebar').classList.remove('open');
     document.getElementById('overlay').classList.remove('show');
@@ -2201,13 +2491,16 @@ function populateDropdowns() {
         const isPayoutAcc = id === 'payoutAccount';
         el.innerHTML = `<option value="">Select account</option>`;
         if (isPayoutAcc) el.innerHTML += '<option value="all">All Accounts</option>';
-        for (let i = 1; i <= USER_ACCOUNT_GOAL; i++) el.innerHTML += `<option value="${i}">PA Account #${i}</option>`;
+        for (let i = 1; i <= USER_ACCOUNT_GOAL; i++) {
+            const nick = getNickname(i);
+            el.innerHTML += `<option value="${i}">${nick ? `PA #${i} — ${nick}` : `PA Account #${i}`}</option>`;
+        }
     });
-
     const followers = document.getElementById('followerCheckboxes');
     followers.innerHTML = '';
     for (let i = 1; i <= USER_ACCOUNT_GOAL; i++) {
-        followers.innerHTML += `<label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;padding:0.4rem;border-radius:5px;background:var(--bg-elevated);font-size:0.8rem;"><input type="checkbox" class="follower-checkbox" value="${i}" style="accent-color:var(--accent);cursor:pointer;"> PA #${i}</label>`;
+        const nick = getNickname(i);
+        followers.innerHTML += `<label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;padding:0.4rem;border-radius:5px;background:var(--bg-elevated);font-size:0.8rem;"><input type="checkbox" class="follower-checkbox" value="${i}" style="accent-color:var(--accent);cursor:pointer;"> ${nick ? `PA #${i} — ${nick}` : `PA #${i}`}</label>`;
     }
 }
 
@@ -2256,8 +2549,11 @@ function resetPayoutForm() {
 // ═══════════════════════════════════════════════════════
 function exportCSV() {
     if (!allData.length) { showAlert('No data to export', 'error'); return; }
-    const headers = ['Date', 'Account', 'Condition', 'Risk', 'P&L', 'Contracts', 'Cycle', 'Notes', 'No-Trade Day'];
-    const rows = allData.map(t => [t.trade_date, t.account, t.market_condition, t.risk_template, t.pnl, t.contracts, t.cycle, (t.notes || '').replace(/"/g, '""'), t.no_trade_day ? 'Yes' : 'No']);
+    const headers = ['Date', 'Account', 'Nickname', 'Condition', 'Risk', 'P&L', 'Contracts', 'Cycle', 'Notes', 'No-Trade Day'];
+    const rows = allData.map(t => {
+        const nick = getNickname(t.account) || '';
+        return [t.trade_date, t.account, nick, t.market_condition, t.risk_template, t.pnl, t.contracts, t.cycle, (t.notes || '').replace(/"/g, '""'), t.no_trade_day ? 'Yes' : 'No'];
+    });
     const csv = [headers, ...rows].map(r => r.map(c => `"${c}"`).join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const a = document.createElement('a');
@@ -2268,7 +2564,7 @@ function exportCSV() {
 }
 
 // ═══════════════════════════════════════════════════════
-//  UTILITY HELPERS
+//  UTILITIES
 // ═══════════════════════════════════════════════════════
 function showAlert(msg, type) {
     const el = document.getElementById('alert');
@@ -2333,13 +2629,7 @@ function groupByCycle(data) {
         const daily = {};
         ct.forEach(t => { daily[t.trade_date] = (daily[t.trade_date] || 0) + parseFloat(t.pnl || 0); });
         const dVals = Object.values(daily);
-        res[c] = {
-            totalPnL: pnl, trades: ct.length, tradingDays: days.length,
-            dailyAvg: days.length > 0 ? pnl / days.length : 0,
-            winRate: ct.length > 0 ? (wins.length / ct.length) * 100 : 0,
-            bestDay: dVals.length ? Math.max(...dVals) : 0,
-            worstDay: dVals.length ? Math.min(...dVals) : 0
-        };
+        res[c] = { totalPnL: pnl, trades: ct.length, tradingDays: days.length, dailyAvg: days.length > 0 ? pnl / days.length : 0, winRate: ct.length > 0 ? (wins.length / ct.length) * 100 : 0, bestDay: dVals.length ? Math.max(...dVals) : 0, worstDay: dVals.length ? Math.min(...dVals) : 0 };
     }
     return res;
 }
@@ -2369,7 +2659,6 @@ function tmplIcon(name) {
     const r = parseInt(name.replace(/\D/g, ''));
     if (r <= 200) return '🟢'; if (r <= 400) return '🟡'; return '🔴';
 }
-
 function tmplDesc(name) {
     if (name.includes('High')) return 'High volatility news sessions';
     if (name.includes('No Impact')) return 'Low volatility, calmer markets';
