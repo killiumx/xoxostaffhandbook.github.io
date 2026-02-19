@@ -391,6 +391,37 @@
         @media (max-width: 480px) {
             .metrics-grid { grid-template-columns: 1fr; }
         }
+
+        /* ── ONBOARDING ── */
+        .onboard-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:10000; display:flex; align-items:center; justify-content:center; padding:1rem; }
+        .onboard-overlay.hidden { display:none; }
+        .onboard-card { background:var(--bg-card); border:1px solid var(--border-glow); border-radius:24px; padding:2.5rem; max-width:520px; width:100%; max-height:90vh; overflow-y:auto; box-shadow:0 0 60px rgba(59,126,248,0.2); position:relative; }
+        .onboard-step { display:none; }
+        .onboard-step.active { display:block; }
+        .onboard-emoji { font-size:3rem; text-align:center; margin-bottom:1rem; }
+        .onboard-title { font-size:1.5rem; font-weight:700; text-align:center; margin-bottom:0.5rem; }
+        .onboard-sub { color:var(--text-muted); text-align:center; margin-bottom:1.5rem; font-size:0.95rem; }
+        .onboard-progress { display:flex; gap:0.4rem; justify-content:center; margin-bottom:1.5rem; }
+        .onboard-dot { width:8px; height:8px; border-radius:50%; background:var(--border-glow); transition:0.3s; }
+        .onboard-dot.active { background:var(--accent); transform:scale(1.3); }
+        .onboard-dot.done { background:var(--success); }
+        .onboard-feature-list { display:grid; gap:0.75rem; margin:1rem 0; }
+        .onboard-feature { display:flex; align-items:flex-start; gap:0.75rem; padding:0.875rem; background:var(--bg-elevated); border-radius:var(--radius-sm); }
+        .onboard-feature-icon { font-size:1.4rem; flex-shrink:0; }
+        .onboard-feature-text strong { display:block; font-size:0.9rem; margin-bottom:0.2rem; }
+        .onboard-feature-text span { font-size:0.82rem; color:var(--text-muted); }
+        .onboard-nav { display:flex; gap:0.75rem; margin-top:1.5rem; }
+        .onboard-nav .btn { flex:1; }
+        .profile-setup-form .form-group { margin-bottom:1.1rem; }
+        
+        /* ── SETTINGS PAGE SECTIONS ── */
+        .settings-section { background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--radius); padding:1.5rem; margin-bottom:1.25rem; }
+        .settings-section h4 { font-size:0.95rem; font-weight:600; margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; }
+        .settings-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+        @media(max-width:640px){ .settings-grid { grid-template-columns:1fr; } }
+        .input-prefix { display:flex; align-items:center; background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--radius-sm); overflow:hidden; }
+        .input-prefix-label { padding:0.6rem 0.75rem; color:var(--text-muted); font-size:0.85rem; white-space:nowrap; border-right:1px solid var(--border); }
+        .input-prefix input { border:none !important; border-radius:0 !important; flex:1; background:transparent; padding:0.6rem 0.75rem; color:var(--text); font-family:inherit; font-size:0.9rem; outline:none; }
     </style>
 </head>
 <body>
@@ -423,6 +454,133 @@
     </div>
 </div>
 
+
+<!-- ONBOARDING OVERLAY -->
+<div class="onboard-overlay hidden" id="onboardOverlay">
+  <div class="onboard-card">
+    <div class="onboard-progress" id="onboardProgress"></div>
+
+    <!-- Step 0: Welcome + Username setup -->
+    <div class="onboard-step active" id="onboardStep0">
+      <div class="onboard-emoji">🌾</div>
+      <div class="onboard-title">Welcome to Prop Farm Pro!</div>
+      <div class="onboard-sub">Let's set up your personal trading journal in just a few steps.</div>
+      <div class="profile-setup-form">
+        <div class="form-group">
+          <label class="form-label">Your Username <span style="color:var(--text-muted);font-size:0.8rem;">(shown on your journal)</span></label>
+          <input type="text" class="form-input" id="obUsername" placeholder="FarmKing47" maxlength="30" oninput="this.value=this.value.replace(/[^a-zA-Z0-9_]/g,'')">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Journal Title <span style="color:var(--text-muted);font-size:0.8rem;">(optional)</span></label>
+          <input type="text" class="form-input" id="obJournalTitle" placeholder="My Prop Trading Journey" maxlength="60">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Short Bio <span style="color:var(--text-muted);font-size:0.8rem;">(optional — shown on public journal)</span></label>
+          <input type="text" class="form-input" id="obBio" placeholder="Futures trader. Building the farm one day at a time." maxlength="120">
+        </div>
+        <div class="form-group">
+          <label class="form-label">🔗 Google / YouTube / Social Link <span style="color:var(--text-muted);font-size:0.8rem;">(optional)</span></label>
+          <input type="url" class="form-input" id="obGoogleLink" placeholder="https://youtube.com/@yourhandle">
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 1: Set your goals -->
+    <div class="onboard-step" id="onboardStep1">
+      <div class="onboard-emoji">🎯</div>
+      <div class="onboard-title">Set Your Farming Goals</div>
+      <div class="onboard-sub">These are your personal targets — you can change them anytime in Settings.</div>
+      <div class="settings-grid">
+        <div class="form-group">
+          <label class="form-label">Account Goal <span style="color:var(--text-muted);font-size:0.78rem;">(# of PA accounts)</span></label>
+          <input type="number" class="form-input" id="obAccountGoal" value="20" min="1" max="200">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Starting Balance per Account</label>
+          <div class="input-prefix"><span class="input-prefix-label">$</span><input type="number" id="obStartBal" value="50000" min="1000"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Daily Target (Min)</label>
+          <div class="input-prefix"><span class="input-prefix-label">$</span><input type="number" id="obDailyMin" value="250" min="0"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Daily Target (Max)</label>
+          <div class="input-prefix"><span class="input-prefix-label">$</span><input type="number" id="obDailyMax" value="300" min="0"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Goal per Account (Profit)</label>
+          <div class="input-prefix"><span class="input-prefix-label">$</span><input type="number" id="obGoalAcc" value="4600" min="0"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Payout per Account</label>
+          <div class="input-prefix"><span class="input-prefix-label">$</span><input type="number" id="obPayoutAcc" value="2000" min="0"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Max Daily Drawdown</label>
+          <div class="input-prefix"><span class="input-prefix-label">$</span><input type="number" id="obMaxDD" value="2500" min="0"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Firm Name</label>
+          <input type="text" class="form-input" id="obFirmName" placeholder="e.g. Topstep, Apex, FTMO" maxlength="40">
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Feature tour -->
+    <div class="onboard-step" id="onboardStep2">
+      <div class="onboard-emoji">🗺️</div>
+      <div class="onboard-title">Here's What's Inside</div>
+      <div class="onboard-sub">Your complete prop trading command center.</div>
+      <div class="onboard-feature-list">
+        <div class="onboard-feature">
+          <div class="onboard-feature-icon">📊</div>
+          <div class="onboard-feature-text"><strong>Overview Dashboard</strong><span>Live P&L, win rate, streak, and account progress all at a glance.</span></div>
+        </div>
+        <div class="onboard-feature">
+          <div class="onboard-feature-icon">📓</div>
+          <div class="onboard-feature-text"><strong>Trade Journal</strong><span>Log every trade with notes, market conditions, and risk templates. Share your journal publicly.</span></div>
+        </div>
+        <div class="onboard-feature">
+          <div class="onboard-feature-icon">🏦</div>
+          <div class="onboard-feature-text"><strong>Account Manager</strong><span>Track each PA account separately — nicknames, progress, cycle status.</span></div>
+        </div>
+        <div class="onboard-feature">
+          <div class="onboard-feature-icon">💸</div>
+          <div class="onboard-feature-text"><strong>Payout Tracker</strong><span>Record payouts, watch your cumulative harvest grow over time.</span></div>
+        </div>
+        <div class="onboard-feature">
+          <div class="onboard-feature-icon">🧠</div>
+          <div class="onboard-feature-text"><strong>Psychology Section</strong><span>Daily quotes, mood tracker, pre-trade checklist, and daily notes.</span></div>
+        </div>
+        <div class="onboard-feature">
+          <div class="onboard-feature-icon">⚙️</div>
+          <div class="onboard-feature-text"><strong>Settings — Everything Editable</strong><span>Change your username, goals, targets, firm name, and social links anytime.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: All set! -->
+    <div class="onboard-step" id="onboardStep3">
+      <div class="onboard-emoji">🚀</div>
+      <div class="onboard-title">You're Ready to Farm!</div>
+      <div class="onboard-sub">Your journal is set up and your goals are saved. Time to start building.</div>
+      <div style="background:var(--bg-elevated);border-radius:var(--radius);padding:1.25rem;margin:1rem 0;">
+        <div style="font-size:0.9rem;color:var(--text-muted);margin-bottom:0.5rem;">Quick tip:</div>
+        <div style="font-size:0.95rem;">Start by logging your <strong>first trade</strong> using the Trade Journal. You can also set up your PA account <strong>nicknames</strong> on the Accounts page.</div>
+      </div>
+      <div style="background:rgba(34,211,160,0.07);border:1px solid rgba(34,211,160,0.2);border-radius:var(--radius);padding:1rem;font-size:0.88rem;color:var(--success);">
+        ✅ You can always update your username, goals, and social links in <strong>Settings → My Profile</strong>.
+      </div>
+    </div>
+
+    <!-- Nav buttons -->
+    <div class="onboard-nav">
+      <button class="btn btn-secondary" id="onboardBackBtn" onclick="onboardBack()" style="display:none;">← Back</button>
+      <button class="btn btn-primary" id="onboardNextBtn" onclick="onboardNext()">Next →</button>
+    </div>
+  </div>
+</div>
+
 <!-- OVERLAY -->
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
@@ -452,10 +610,10 @@
                 <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#EA4335" d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z"/><path fill="#4285F4" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/><path fill="#FBBC05" d="M3.88 10.78A5.54 5.54 0 013.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9.008 9.008 0 000 9c0 1.45.35 2.82.96 4.04l2.92-2.26z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.97 13.04C2.45 15.98 5.48 18 9 18z"/></svg>
                 Continue with Google
             </button>
-            <div class="divider">or sign in with email</div>
+            <div class="divider">or sign in with username</div>
             <div class="form-group">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-input" id="loginEmail" placeholder="trader@example.com" required autocomplete="email">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-input" id="loginUsername" placeholder="FarmKing47" required autocomplete="username" oninput="this.value=this.value.replace(/[^a-zA-Z0-9_]/g,'')">
             </div>
             <div class="form-group">
                 <label class="form-label">Password</label>
@@ -466,45 +624,43 @@
                 <span id="loginBtnText">Sign In</span>
                 <span id="loginSpinner" class="spinner" style="display:none;"></span>
             </button>
-            <div style="margin-top:1rem;padding:0.875rem;background:rgba(59,126,248,0.08);border:1px solid rgba(59,126,248,0.2);border-radius:8px;font-size:0.82rem;color:var(--text-muted);">
-                💡 <strong style="color:var(--accent);">Can't sign in with email?</strong> Either: (1) Use Google login above — instant, no email needed. Or (2) Ask admin to disable email confirmation in Supabase dashboard (Auth → Settings → turn off "Enable email confirmations").
-            </div>
         </form>
 
         <!-- SIGN UP -->
         <form class="auth-form" id="signupForm" onsubmit="handleSignup(event)">
             <button type="button" class="btn btn-oauth" onclick="handleGoogleAuth()">
                 <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#EA4335" d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z"/><path fill="#4285F4" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/><path fill="#FBBC05" d="M3.88 10.78A5.54 5.54 0 013.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9.008 9.008 0 000 9c0 1.45.35 2.82.96 4.04l2.92-2.26z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.97 13.04C2.45 15.98 5.48 18 9 18z"/></svg>
-                ✅ Continue with Google — No email needed!
+                Continue with Google — Instant access!
             </button>
-            <div class="divider">or create with email</div>
-            <div id="emailConfirmStatus" style="margin-bottom:1rem;padding:0.875rem;background:rgba(59,126,248,0.08);border:1px solid rgba(59,126,248,0.2);border-radius:8px;font-size:0.82rem;color:#7ab4ff;">
-                💡 <strong>If email sign-up doesn't work:</strong> Go to your Supabase dashboard → Authentication → Settings → turn OFF <em>"Enable email confirmations"</em>. Then users can sign in instantly after signing up.
+            <div class="divider">or create with username</div>
+            <div class="form-group">
+                <label class="form-label">Username <span style="color:var(--text-muted);font-size:0.8rem;">(your public trading name)</span></label>
+                <input type="text" class="form-input" id="signupUsername" placeholder="FarmKing47" required minlength="3" maxlength="30" autocomplete="username" oninput="this.value=this.value.replace(/[^a-zA-Z0-9_]/g,'')">
+                <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.3rem;">Letters, numbers, underscores only. This is how others will see you.</div>
             </div>
             <div class="form-group">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-input" id="signupEmail" placeholder="trader@example.com" required autocomplete="email">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Password (min 6 characters)</label>
+                <label class="form-label">Password <span style="color:var(--text-muted);font-size:0.8rem;">(min 6 characters)</span></label>
                 <input type="password" class="form-input" id="signupPassword" placeholder="••••••••" required minlength="6" autocomplete="new-password">
             </div>
             <div class="form-group">
                 <label class="form-label">Confirm Password</label>
                 <input type="password" class="form-input" id="signupConfirm" placeholder="••••••••" required autocomplete="new-password">
             </div>
+            <div style="background:rgba(59,126,248,0.07);border:1px solid rgba(59,126,248,0.2);border-radius:8px;padding:0.875rem;margin-bottom:1.25rem;font-size:0.82rem;color:var(--text-muted);">
+                💡 No email required to sign up! You can link your email or Google account later in <strong style="color:var(--accent);">Settings → My Profile</strong> for password recovery.
+            </div>
             <button type="submit" class="btn btn-primary" style="width:100%;" id="signupBtn">
-                <span id="signupBtnText">Create Account</span>
+                <span id="signupBtnText">Create Account →</span>
                 <span id="signupSpinner" class="spinner" style="display:none;"></span>
             </button>
         </form>
 
         <!-- RESET PASSWORD -->
         <form class="auth-form" id="resetForm" onsubmit="handlePasswordReset(event)">
-            <p style="color:var(--text-muted);font-size:0.875rem;margin-bottom:1.5rem;">Enter your email and we'll send you a link to reset your password.</p>
+            <p style="color:var(--text-muted);font-size:0.875rem;margin-bottom:1.5rem;">Enter your username or the email linked to your account. If you linked an email, we'll send a reset link.</p>
             <div class="form-group">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-input" id="resetEmail" placeholder="trader@example.com" required autocomplete="email">
+                <label class="form-label">Username or Email</label>
+                <input type="text" class="form-input" id="resetEmail" placeholder="FarmKing47 or trader@example.com" required autocomplete="username email">
             </div>
             <button type="submit" class="btn btn-primary" style="width:100%;" id="resetBtn">
                 <span id="resetBtnText">Send Reset Link</span>
@@ -1123,37 +1279,104 @@
 
             <!-- ──────────────────── SETTINGS ──────────────────── -->
             <div class="page" id="settingsPage">
+                <!-- Summary cards -->
                 <div class="metrics-grid" style="margin-bottom:1.5rem;">
                     <div class="metric-card"><div class="metric-header"><span class="metric-label">Account Goal</span><span class="metric-icon">🎯</span></div><div class="metric-value" id="settingsGoal">20</div><div class="metric-sub">Total accounts</div></div>
                     <div class="metric-card"><div class="metric-header"><span class="metric-label">Active Accounts</span><span class="metric-icon">💼</span></div><div class="metric-value" id="settingsActive">0</div><div class="metric-sub">With trades</div></div>
                     <div class="metric-card"><div class="metric-header"><span class="metric-label">Portfolio Goal</span><span class="metric-icon">💰</span></div><div class="metric-value" id="settingsPortGoal">$92K</div><div class="metric-sub" id="settingsPortCalc">$4,600 × 20 accounts</div></div>
                     <div class="metric-card"><div class="metric-header"><span class="metric-label">Potential Payout</span><span class="metric-icon">🌾</span></div><div class="metric-value" id="settingsPayout">$40K</div><div class="metric-sub" id="settingsPayCalc">$2,000 × 20 accounts</div></div>
                 </div>
-                <div class="form-card">
-                    <h3 style="margin-bottom:1.5rem;">Portfolio Configuration</h3>
-                    <form id="settingsForm" onsubmit="handleSettingsSave(event)">
+
+                <form id="settingsForm" onsubmit="handleSettingsSave(event)">
+
+                <!-- 🧑 Profile Section -->
+                <div class="settings-section">
+                    <h4>🧑 My Profile</h4>
+                    <div class="settings-grid">
                         <div class="form-group">
-                            <label class="form-label">Account Goal</label>
-                            <select class="form-select" id="accountGoalSelect" onchange="handleGoalSelectChange(this.value)">
-                                <option value="1">1 Account</option>
-                                <option value="5">5 Accounts</option>
-                                <option value="10">10 Accounts</option>
-                                <option value="20" selected>20 Accounts</option>
-                                <option value="50">50 Accounts</option>
-                                <option value="100">100 Accounts</option>
-                                <option value="custom">Custom...</option>
-                            </select>
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-input" id="stgUsername" placeholder="FarmKing47" maxlength="30" oninput="this.value=this.value.replace(/[^a-zA-Z0-9_]/g,'')">
+                            <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.3rem;">Letters, numbers, underscores only.</div>
                         </div>
-                        <div class="form-group" id="customGoalWrap" style="display:none;">
-                            <label class="form-label">Custom Account Count</label>
-                            <input type="number" class="form-input" id="customGoalInput" min="1" max="200" placeholder="1–200">
+                        <div class="form-group">
+                            <label class="form-label">Journal Title</label>
+                            <input type="text" class="form-input" id="stgJournalTitle" placeholder="My Prop Trading Journey" maxlength="60">
                         </div>
-                        <div class="form-footer">
-                            <button type="submit" class="btn btn-primary" style="width:auto;">💾 Save Settings</button>
-                            <button type="button" class="btn btn-secondary" onclick="resetSettings()">Reset to Default</button>
+                        <div class="form-group" style="grid-column:1/-1;">
+                            <label class="form-label">Bio <span style="color:var(--text-muted);font-size:0.8rem;">(shown on public journal)</span></label>
+                            <input type="text" class="form-input" id="stgBio" placeholder="Futures trader. Building the farm one day at a time." maxlength="160">
                         </div>
-                    </form>
+                        <div class="form-group" style="grid-column:1/-1;">
+                            <label class="form-label">🔗 Google / YouTube / Social Link <span style="color:var(--text-muted);font-size:0.8rem;">(optional — shown on your journal)</span></label>
+                            <input type="url" class="form-input" id="stgGoogleLink" placeholder="https://youtube.com/@yourhandle or https://x.com/yourhandle">
+                        </div>
+                    </div>
                 </div>
+
+                <!-- 🎯 Goals Section -->
+                <div class="settings-section">
+                    <h4>🎯 Trading Goals & Targets</h4>
+                    <div class="settings-grid">
+                        <div class="form-group">
+                            <label class="form-label">Account Goal <span style="color:var(--text-muted);font-size:0.78rem;">(# of PA accounts)</span></label>
+                            <input type="number" class="form-input" id="stgAccountGoal" min="1" max="200" placeholder="20">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Daily Target Min</label>
+                            <div class="input-prefix"><span class="input-prefix-label">$</span><input type="number" id="stgDailyMin" min="0" placeholder="250"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Daily Target Max</label>
+                            <div class="input-prefix"><span class="input-prefix-label">$</span><input type="number" id="stgDailyMax" min="0" placeholder="300"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Goal per Account</label>
+                            <div class="input-prefix"><span class="input-prefix-label">$</span><input type="number" id="stgGoalAcc" min="0" placeholder="4600"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Payout per Account</label>
+                            <div class="input-prefix"><span class="input-prefix-label">$</span><input type="number" id="stgPayoutAcc" min="0" placeholder="2000"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Starting Balance (per account)</label>
+                            <div class="input-prefix"><span class="input-prefix-label">$</span><input type="number" id="stgStartBal" min="1000" placeholder="50000"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 🏦 Firm & Risk Section -->
+                <div class="settings-section">
+                    <h4>🏦 Firm & Risk Rules</h4>
+                    <div class="settings-grid">
+                        <div class="form-group">
+                            <label class="form-label">Firm Name</label>
+                            <input type="text" class="form-input" id="stgFirmName" placeholder="Topstep, Apex, FTMO..." maxlength="40">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Trading Instrument</label>
+                            <input type="text" class="form-input" id="stgInstrument" placeholder="Futures (MNQ/MES)" maxlength="40">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Max Daily Drawdown</label>
+                            <div class="input-prefix"><span class="input-prefix-label">$</span><input type="number" id="stgMaxDD" min="0" placeholder="2500"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Safety Net Trigger</label>
+                            <div class="input-prefix"><span class="input-prefix-label">$</span><input type="number" id="stgSafetyNet" min="0" placeholder="52600"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">First Cycle Days</label>
+                            <input type="number" class="form-input" id="stgCycleDays" min="1" max="365" placeholder="45">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary">💾 Save All Settings</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetSettingsToDefault()">↺ Reset to Defaults</button>
+                </div>
+                </form>
+
                 <div class="table-card" style="margin-top:1.5rem;">
                     <div class="table-header"><span class="card-title">All Configured Accounts</span></div>
                     <div class="table-wrap"><table><thead><tr><th>Account</th><th>Nickname</th><th>Status</th><th>P&L</th><th>Progress</th><th>Trades</th><th>Win Rate</th><th>To Goal</th></tr></thead><tbody id="settingsAccBody"></tbody></table></div>
@@ -1251,13 +1474,31 @@
 // ═══════════════════════════════════════════════════════
 //  CONFIG
 // ═══════════════════════════════════════════════════════
-const STARTING_BALANCE = 50000;
-const MAX_DRAWDOWN = 2500;
-const SAFETY_NET = 52600;
-const GOAL_PER_ACCOUNT = 4600;
-const PAYOUT_PER_ACCOUNT = 2000;
-const DAILY_TARGET_MIN = 250;
-const DAILY_TARGET_MAX = 300;
+// ─── User-editable config system ───
+const DEFAULTS = {
+    account_goal: 20,
+    starting_balance: 50000,
+    max_drawdown: 2500,
+    safety_net: 52600,
+    goal_per_account: 4600,
+    payout_per_account: 2000,
+    daily_target_min: 250,
+    daily_target_max: 300,
+    first_cycle_days: 45,
+    firm_name: 'My Prop Firm',
+    trading_instrument: 'Futures (MNQ/MES)',
+    journal_title: 'My Trading Journal',
+    journal_bio: '',
+    username: '',
+    google_link: ''
+};
+let CFG = { ...DEFAULTS };
+function getS(key) { return CFG[key] ?? DEFAULTS[key]; }
+function applyProfileToConfig(p) {
+    if (!p) return;
+    Object.keys(DEFAULTS).forEach(k => { if (p[k] !== undefined && p[k] !== null && p[k] !== '') CFG[k] = p[k]; });
+    USER_ACCOUNT_GOAL = parseInt(CFG.account_goal) || 20;
+}
 
 // ─── State ───
 let sbClient = null;
@@ -1273,6 +1514,9 @@ let adminViewingEmail = null;
 let adminAllProfiles = [];
 let adminAllTrades = [];
 let journalSharing = false;
+let isNewUser = false;
+let onboardingActive = false;
+let onboardingStep = 0;
 
 // Account nicknames stored in localStorage
 function getNicknames() {
@@ -1347,7 +1591,40 @@ async function checkSession() {
     } catch (e) { console.error('Session check error:', e); }
 
     sbClient.auth.onAuthStateChange(async (event, session) => {
-        if (event === 'SIGNED_IN' && session) { currentUser = session.user; await loadProfile(); showDashboard(); }
+        if (event === 'SIGNED_IN' && session) {
+            currentUser = session.user;
+            await loadProfile();
+
+            // Save username to profile — handles both email signup and Google OAuth
+            const pendingUsername = window._pendingUsername;
+            const googleName = session.user.user_metadata?.full_name?.split(' ')[0]
+                || session.user.user_metadata?.name?.split(' ')[0];
+
+            if (pendingUsername || (!currentProfile?.username && googleName)) {
+                const usernameToSave = pendingUsername
+                    || googleName?.replace(/[^a-zA-Z0-9_]/g, '') 
+                    || session.user.email?.split('@')[0]?.replace(/[^a-zA-Z0-9_]/g,'')
+                    || 'Trader';
+
+                const emailToSave = session.user.email || null;
+
+                try {
+                    await sbClient.from('profiles').upsert({
+                        id: currentUser.id,
+                        email: emailToSave,
+                        username: usernameToSave,
+                        role: 'user',
+                        account_goal: 20
+                    });
+                    if (!currentProfile) currentProfile = {};
+                    currentProfile.username = usernameToSave;
+                    currentProfile.email = emailToSave;
+                } catch(e) { console.error('Save profile error:', e); }
+                window._pendingUsername = null;
+            }
+
+            showDashboard();
+        }
         else if (event === 'SIGNED_OUT') { currentUser = null; currentProfile = null; hideDashboard(); }
     });
 }
@@ -1372,15 +1649,26 @@ async function loadPublicJournal(userId) {
 
     try {
         const [{ data: profile }, { data: trades }] = await Promise.all([
-            sbClient.from('profiles').select('email, account_goal').eq('id', userId).single(),
+            sbClient.from('profiles').select('email, username, account_goal, journal_title, journal_bio, google_link').eq('id', userId).single(),
             sbClient.from('trades').select('*').eq('user_id', userId).order('trade_date', { ascending: false }).limit(200)
         ]);
 
-        const displayName = profile?.email?.split('@')[0] || 'Trader';
+        const displayName = profile?.username || profile?.email?.split('@')[0] || 'Trader';
+        const journalTitle = profile?.journal_title || (displayName + "'s Trading Journal");
+        const bio = profile?.journal_bio || 'Public trading journal';
+        const googleLink = profile?.google_link || null;
         const initials = displayName.substring(0, 2).toUpperCase();
         document.getElementById('publicAvatar').textContent = initials;
-        document.getElementById('publicUserName').textContent = displayName + "'s Trading Journal";
-        document.getElementById('publicUserSub').textContent = `${trades?.length || 0} trades • Public Journal`;
+        document.getElementById('publicUserName').textContent = journalTitle;
+        document.getElementById('publicUserSub').textContent = bio + ' • ' + (trades?.length || 0) + ' trades';
+        if (googleLink) {
+            const linkEl = document.createElement('a');
+            linkEl.href = googleLink; linkEl.target = '_blank'; linkEl.rel = 'noopener noreferrer';
+            linkEl.style.cssText = 'display:inline-flex;align-items:center;gap:0.4rem;margin-top:0.5rem;color:var(--accent);font-size:0.85rem;text-decoration:none;';
+            const domain = new URL(googleLink).hostname.replace('www.','');
+            linkEl.innerHTML = '🔗 ' + domain;
+            document.getElementById('publicUserName').after(linkEl);
+        }
         document.getElementById('publicTradeCount').textContent = (trades?.length || 0) + ' trades';
 
         const validTrades = (trades || []).filter(t => !t.no_trade_day);
@@ -1623,61 +1911,116 @@ async function handleLogin(e) {
     e.preventDefault();
     clearAuthMessages();
     setBtnLoading('login', true);
-    const email = document.getElementById('loginEmail').value.trim();
+    const username = document.getElementById('loginUsername').value.trim();
     const password = document.getElementById('loginPassword').value;
-    const { error } = await sbClient.auth.signInWithPassword({ email, password });
-    setBtnLoading('login', false);
-    if (error) {
-        if (error.message.includes('Email not confirmed')) {
-            showAuthError('📧 Your email is not confirmed yet. Check your inbox (and spam folder) for a confirmation email from Supabase/Prop Farm Pro. Click the link to confirm, then try logging in again.');
-        } else if (error.message.includes('Invalid login credentials')) {
-            showAuthError('❌ Wrong email or password. Double-check your credentials. If you signed up with Google, use the Google button above.');
-        } else {
-            showAuthError(error.message);
+
+    // Look up the email associated with this username from profiles
+    try {
+        const { data: profile, error: profileErr } = await sbClient
+            .from('profiles')
+            .select('email')
+            .eq('username', username)
+            .single();
+
+        if (profileErr || !profile?.email) {
+            setBtnLoading('login', false);
+            showAuthError('❌ Username not found. Check your username or create an account.');
+            return;
         }
+
+        const { error } = await sbClient.auth.signInWithPassword({ email: profile.email, password });
+        setBtnLoading('login', false);
+        if (error) {
+            if (error.message.includes('Invalid login credentials')) {
+                showAuthError('❌ Wrong password. Try again or use "Forgot password?" to reset.');
+            } else {
+                showAuthError(error.message);
+            }
+        }
+    } catch(err) {
+        setBtnLoading('login', false);
+        showAuthError('Login failed: ' + err.message);
     }
 }
 
 async function handleSignup(e) {
     e.preventDefault();
     clearAuthMessages();
+    const username = document.getElementById('signupUsername').value.trim();
     const pass = document.getElementById('signupPassword').value;
     const confirm = document.getElementById('signupConfirm').value;
     if (pass !== confirm) { showAuthError('Passwords do not match.'); return; }
-    setBtnLoading('signup', true);
-    const email = document.getElementById('signupEmail').value.trim();
-    const { data, error } = await sbClient.auth.signUp({ email, password: pass });
-    setBtnLoading('signup', false);
-    if (error) { showAuthError(error.message); return; }
+    if (!username || username.length < 3) { showAuthError('Username must be at least 3 characters.'); return; }
 
-    // If session is immediately available, email confirmation is disabled — auto login works!
-    if (data?.session) {
-        showAuthSuccess('✅ Account created and signed in! Welcome to Prop Farm Pro.');
-        // onAuthStateChange will handle the redirect automatically
+    setBtnLoading('signup', true);
+
+    // Check if username is already taken
+    const { data: existing } = await sbClient.from('profiles').select('id').eq('username', username).single();
+    if (existing) {
+        setBtnLoading('signup', false);
+        showAuthError('❌ That username is already taken. Please choose a different one.');
         return;
     }
 
-    // Otherwise confirmation email was sent
-    showAuthSuccess('✅ Account created! Check your email (' + email + ') for a confirmation link. Check spam too. Once confirmed, come back and sign in.\n\n💡 TIP: Ask your admin to disable email confirmation in Supabase so you can log in instantly next time.');
+    // Generate an internal email from the username (user never sees this)
+    const internalEmail = `${username.toLowerCase()}@propfarmpro.app`;
+    window._pendingUsername = username;
+
+    const { data, error } = await sbClient.auth.signUp({
+        email: internalEmail,
+        password: pass,
+        options: {
+            data: { username }
+        }
+    });
+    setBtnLoading('signup', false);
+    if (error) { showAuthError(error.message); window._pendingUsername = null; return; }
+
+    if (data?.session) {
+        showAuthSuccess('✅ Account created! Welcome to Prop Farm Pro.');
+        return;
+    }
+
+    // Supabase auto-confirms since the email is internal — this branch usually won't be hit
+    showAuthSuccess('✅ Account created! Signing you in...');
 }
 
 async function handlePasswordReset(e) {
     e.preventDefault();
     clearAuthMessages();
     setBtnLoading('reset', true);
-    const email = document.getElementById('resetEmail').value.trim();
-    const { error } = await sbClient.auth.resetPasswordForEmail(email, { redirectTo: window.location.href });
+    const input = document.getElementById('resetEmail').value.trim();
+
+    let emailToReset = input;
+
+    // If it doesn't look like an email, treat it as a username and look up the internal email
+    if (!input.includes('@')) {
+        const { data: profile } = await sbClient.from('profiles').select('email').eq('username', input).single();
+        if (!profile?.email) {
+            setBtnLoading('reset', false);
+            showAuthError('Username not found. Make sure you linked an email to your account in Settings, or contact your admin.');
+            return;
+        }
+        emailToReset = profile.email;
+    }
+
+    const { error } = await sbClient.auth.resetPasswordForEmail(emailToReset, { redirectTo: window.location.href });
     setBtnLoading('reset', false);
     if (error) { showAuthError(error.message); return; }
-    showAuthSuccess('✅ Reset link sent to ' + email + '! Check your inbox and spam folder. The link expires in 1 hour.');
+    showAuthSuccess('✅ If that account has an email linked, a reset link was sent. Check your inbox and spam folder.');
 }
 
 async function handleGoogleAuth() {
+    // Build redirect URL — works whether hosted or local
+    const redirectTo = window.location.origin !== 'null'
+        ? window.location.href
+        : 'https://zxwdfvdbbawynddwwfri.supabase.co/auth/v1/callback';
+
     const { error } = await sbClient.auth.signInWithOAuth({
         provider: 'google',
-        options: { redirectTo: window.location.href }
+        options: { redirectTo }
     });
-    if (error) showAuthError(error.message);
+    if (error) showAuthError('Google sign-in failed: ' + error.message + '. Make sure Google OAuth is enabled in your Supabase dashboard and this URL is in the allowed redirect list.');
 }
 
 async function handleLogout() {
@@ -1693,10 +2036,15 @@ function showDashboard() {
     document.getElementById('authScreen').classList.add('hidden');
     document.getElementById('dashboard').classList.add('show');
 
-    const email = currentUser.email || currentUser.user_metadata?.email || '';
-    const initials = email ? email.substring(0, 2).toUpperCase() : 'T';
+    // Prefer profile username, then Google display name, then fallback
+    const displayName = currentProfile?.username
+        || currentUser?.user_metadata?.full_name?.split(' ')[0]
+        || currentUser?.user_metadata?.name?.split(' ')[0]
+        || currentUser?.email?.split('@')[0]?.replace('@propfarmpro.app','')
+        || 'Trader';
+
+    const initials = displayName.substring(0, 2).toUpperCase();
     const isAdmin = currentProfile?.role === 'admin';
-    const displayName = email.split('@')[0] || 'Trader';
 
     document.getElementById('userAvatar').textContent = initials;
     document.getElementById('userName').textContent = displayName;
@@ -2060,7 +2408,7 @@ function updateAllViews() {
 
 function updateHero() {
     const totalPnL = sumPnL(allData);
-    const goal = USER_ACCOUNT_GOAL * GOAL_PER_ACCOUNT;
+    const goal = USER_ACCOUNT_GOAL * getS('goal_per_account');
     const progress = Math.min((totalPnL / goal) * 100, 100);
     const atGoal = getAccountsAtGoal();
     document.getElementById('heroTotalPnL').textContent = fmtCurrency(totalPnL);
@@ -2080,7 +2428,7 @@ function updateMetrics() {
     const pf = totalLossAmt > 0 ? totalWinsAmt / totalLossAmt : 0;
     const avg = trades.length > 0 ? pnl / trades.length : 0;
     const streak = calcStreak(trades);
-    const progress = Math.min((pnl / (USER_ACCOUNT_GOAL * GOAL_PER_ACCOUNT)) * 100, 100);
+    const progress = Math.min((pnl / (USER_ACCOUNT_GOAL * getS('goal_per_account'))) * 100, 100);
 
     document.getElementById('totalPnL').textContent = fmtCurrency(pnl);
     document.getElementById('pnlSub').textContent = `All time • ${allData.length} entries`;
@@ -2216,9 +2564,9 @@ function updateAccounts() {
     for (let i = 1; i <= USER_ACCOUNT_GOAL; i++) {
         const acc = byAcc[i];
         if (accountFilter === 'active' && acc.trades === 0) continue;
-        if (accountFilter === 'goal' && acc.pnl < GOAL_PER_ACCOUNT) continue;
+        if (accountFilter === 'goal' && acc.pnl < getS('goal_per_account')) continue;
         if (accountFilter === 'profitable' && acc.pnl <= 0) continue;
-        const atGoal = acc.pnl >= GOAL_PER_ACCOUNT;
+        const atGoal = acc.pnl >= getS('goal_per_account');
         const nickname = getNickname(i);
         const card = document.createElement('div');
         card.className = 'acc-card';
@@ -2237,7 +2585,7 @@ function updateAccounts() {
             <div class="acc-stats">
                 <div><div class="acc-stat-lbl">Trades</div><div class="acc-stat-val">${acc.trades}</div></div>
                 <div><div class="acc-stat-lbl">Win Rate</div><div class="acc-stat-val">${acc.trades > 0 ? Math.round(acc.winRate) : 0}%</div></div>
-                <div><div class="acc-stat-lbl">To Goal</div><div class="acc-stat-val">${fmtCurrency(Math.max(GOAL_PER_ACCOUNT - acc.pnl, 0))}</div></div>
+                <div><div class="acc-stat-lbl">To Goal</div><div class="acc-stat-val">${fmtCurrency(Math.max(getS('goal_per_account') - acc.pnl, 0))}</div></div>
                 <div><div class="acc-stat-lbl">Balance</div><div class="acc-stat-val">${fmtCurrency(50000 + acc.pnl)}</div></div>
             </div>
             <div class="acc-name-edit">
@@ -2305,9 +2653,9 @@ function updateRiskMonitor() {
         const acc = byAcc[i];
         const bal = 50000 + acc.pnl;
         const high = acc.highestBalance;
-        const failLine = high >= SAFETY_NET ? 50100 : high - MAX_DRAWDOWN;
+        const failLine = high >= getS('safety_net_trigger') ? 50100 : high - getS('max_drawdown');
         const cushion = bal - failLine;
-        const cushionPct = Math.max(0, Math.min(100, (cushion / MAX_DRAWDOWN) * 100));
+        const cushionPct = Math.max(0, Math.min(100, (cushion / getS('max_drawdown')) * 100));
         const level = cushion <= 0 ? 'danger' : cushion <= 500 ? 'warning' : 'safe';
         const nickname = getNickname(i);
         const card = document.createElement('div');
@@ -2328,7 +2676,7 @@ function updateRiskMonitor() {
                 <div><div class="acc-stat-lbl">Peak Balance</div><div class="acc-stat-val">${fmtCurrency(high)}</div></div>
             </div>
             <div class="risk-info ${level}">
-                ${level==='danger'?'⚠️ CRITICAL: At or below fail line!':level==='warning'?'⚠️ Less than $500 from fail line':high>=SAFETY_NET?'✅ Safety net locked — fail line at $50,100 forever':`✅ Safe — ${fmtCurrency(SAFETY_NET-high)} to safety net`}
+                ${level==='danger'?'⚠️ CRITICAL: At or below fail line!':level==='warning'?'⚠️ Less than $500 from fail line':high>=getS('safety_net_trigger')?'✅ Safety net locked — fail line at $50,100 forever':`✅ Safe — ${fmtCurrency(getS('safety_net_trigger')-high)} to safety net`}
             </div>`;
         grid.appendChild(card);
     }
@@ -2339,14 +2687,14 @@ function updateCyclePerformance() {
     const totalPnL = sumPnL(trades);
     const activeAcc = getActiveAccountCount();
     document.getElementById('cycleAccText').textContent = `${activeAcc} active account${activeAcc !== 1 ? 's' : ''}`;
-    const activeGoal = activeAcc * GOAL_PER_ACCOUNT;
+    const activeGoal = activeAcc * getS('goal_per_account');
     const prog = activeAcc > 0 ? Math.min((totalPnL / activeGoal) * 100, 100) : 0;
     document.getElementById('firstPayoutProg').textContent = Math.round(prog) + '%';
     document.getElementById('firstPayoutSub').textContent = totalPnL >= activeGoal ? `✅ Qualified` : `${fmtCurrency(Math.max(0, activeGoal - totalPnL))} remaining`;
     const tradingDays = [...new Set(trades.map(t => t.trade_date))].length;
     const dAvg = tradingDays > 0 ? totalPnL / tradingDays : 0;
     document.getElementById('dailyAvg').textContent = fmtCurrency(dAvg);
-    document.getElementById('dailyTarget').textContent = activeAcc > 0 ? `Target: $${activeAcc * DAILY_TARGET_MIN}–$${activeAcc * DAILY_TARGET_MAX}/day` : 'No active accounts';
+    document.getElementById('dailyTarget').textContent = activeAcc > 0 ? `Target: $${activeAcc * getS('daily_target_min')}–$${activeAcc * getS('daily_target_max')}/day` : 'No active accounts';
     const totalWithdrawn = payoutData.reduce((s, p) => s + parseFloat(p.amount || 0), 0);
     document.getElementById('totalPayoutsAmt').textContent = fmtCurrency(totalWithdrawn);
     document.getElementById('payoutCountSub').textContent = payoutData.length === 0 ? 'No payouts yet' : `${payoutData.length} payout(s) recorded`;
@@ -2412,8 +2760,8 @@ function updatePayoutPage() {
     document.getElementById('totalWithdrawn').textContent = fmtCurrency(totalWithdrawn);
     document.getElementById('withdrawnCount').textContent = `${payoutData.length} payout(s)`;
     const activeAcc = getActiveAccountCount();
-    const activeGoal = activeAcc * GOAL_PER_ACCOUNT;
-    const available = totalPnL >= activeGoal ? activeAcc * PAYOUT_PER_ACCOUNT : 0;
+    const activeGoal = activeAcc * getS('goal_per_account');
+    const available = totalPnL >= activeGoal ? activeAcc * getS('payout_per_account') : 0;
     document.getElementById('availableWithdrawal').textContent = fmtCurrency(available);
     document.getElementById('withdrawalStatus').textContent = available > 0 ? '✅ Qualified' : `${fmtCurrency(Math.max(0, activeGoal - totalPnL))} to qualify`;
     const lastPayout = payoutData.length > 0 ? payoutData[payoutData.length - 1] : null;
@@ -2432,10 +2780,10 @@ function updateSettingsPage() {
     const active = getActiveAccountCount();
     document.getElementById('settingsGoal').textContent = USER_ACCOUNT_GOAL;
     document.getElementById('settingsActive').textContent = active;
-    document.getElementById('settingsPortGoal').textContent = fmtCurrency(USER_ACCOUNT_GOAL * GOAL_PER_ACCOUNT);
-    document.getElementById('settingsPortCalc').textContent = `$${GOAL_PER_ACCOUNT.toLocaleString()} × ${USER_ACCOUNT_GOAL} accounts`;
-    document.getElementById('settingsPayout').textContent = fmtCurrency(USER_ACCOUNT_GOAL * PAYOUT_PER_ACCOUNT);
-    document.getElementById('settingsPayCalc').textContent = `$${PAYOUT_PER_ACCOUNT.toLocaleString()} × ${USER_ACCOUNT_GOAL} accounts`;
+    document.getElementById('settingsPortGoal').textContent = fmtCurrency(USER_ACCOUNT_GOAL * getS('goal_per_account'));
+    document.getElementById('settingsPortCalc').textContent = `$${getS('goal_per_account').toLocaleString()} × ${USER_ACCOUNT_GOAL} accounts`;
+    document.getElementById('settingsPayout').textContent = fmtCurrency(USER_ACCOUNT_GOAL * getS('payout_per_account'));
+    document.getElementById('settingsPayCalc').textContent = `$${getS('payout_per_account').toLocaleString()} × ${USER_ACCOUNT_GOAL} accounts`;
     const goalVal = [1, 5, 10, 20, 50, 100].includes(USER_ACCOUNT_GOAL) ? USER_ACCOUNT_GOAL.toString() : 'custom';
     document.getElementById('accountGoalSelect').value = goalVal;
     if (goalVal === 'custom') { document.getElementById('customGoalWrap').style.display = 'block'; document.getElementById('customGoalInput').value = USER_ACCOUNT_GOAL; }
@@ -2445,9 +2793,9 @@ function updateSettingsPage() {
     for (let i = 1; i <= USER_ACCOUNT_GOAL; i++) {
         const acc = byAcc[i];
         const nickname = getNickname(i);
-        const status = acc.trades === 0 ? '<span style="color:var(--text-muted)">Not Started</span>' : acc.pnl >= GOAL_PER_ACCOUNT ? '<span style="color:var(--success)">✅ Goal Reached</span>' : '<span style="color:var(--accent)">In Progress</span>';
+        const status = acc.trades === 0 ? '<span style="color:var(--text-muted)">Not Started</span>' : acc.pnl >= getS('goal_per_account') ? '<span style="color:var(--success)">✅ Goal Reached</span>' : '<span style="color:var(--accent)">In Progress</span>';
         const row = tbody.insertRow();
-        row.innerHTML = `<td><strong>PA #${i}</strong></td><td style="color:var(--cyan)">${nickname || '<span style="color:var(--text-dim)">—</span>'}</td><td>${status}</td><td style="color:${acc.pnl>=0?'var(--success)':'var(--danger)'}">${fmtCurrency(acc.pnl)}</td><td>${Math.round(acc.progress)}%</td><td>${acc.trades}</td><td>${acc.trades > 0 ? Math.round(acc.winRate) : 0}%</td><td>${fmtCurrency(Math.max(0, GOAL_PER_ACCOUNT - acc.pnl))}</td>`;
+        row.innerHTML = `<td><strong>PA #${i}</strong></td><td style="color:var(--cyan)">${nickname || '<span style="color:var(--text-dim)">—</span>'}</td><td>${status}</td><td style="color:${acc.pnl>=0?'var(--success)':'var(--danger)'}">${fmtCurrency(acc.pnl)}</td><td>${Math.round(acc.progress)}%</td><td>${acc.trades}</td><td>${acc.trades > 0 ? Math.round(acc.winRate) : 0}%</td><td>${fmtCurrency(Math.max(0, getS('goal_per_account') - acc.pnl))}</td>`;
     }
 }
 
@@ -2472,6 +2820,7 @@ function navigateTo(page) {
     if (page === 'adminPanel') loadAdminData();
     if (page === 'shareJournal') updateShareJournalPage();
     if (page === 'psychology') updatePsychPage();
+    if (page === 'settings') updateSettingsPage();
     if (window.innerWidth <= 1024) closeSidebar();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -2605,7 +2954,7 @@ function getAccountsAtGoal() {
     let count = 0;
     for (let i = 1; i <= USER_ACCOUNT_GOAL; i++) {
         const pnl = allData.filter(t => t.account == i).reduce((s, t) => s + parseFloat(t.pnl || 0), 0);
-        if (pnl >= GOAL_PER_ACCOUNT) count++;
+        if (pnl >= getS('goal_per_account')) count++;
     }
     return count;
 }
@@ -2622,7 +2971,7 @@ function groupByAccount(data) {
         const wins = trades.filter(t => parseFloat(t.pnl || 0) > 0).length;
         let bal = 50000, high = 50000;
         [...trades].sort((a, b) => new Date(a.trade_date) - new Date(b.trade_date)).forEach(t => { bal += parseFloat(t.pnl || 0); high = Math.max(high, bal); });
-        res[i] = { pnl, trades: trades.length, winRate: trades.length > 0 ? (wins / trades.length) * 100 : 0, progress: Math.min(Math.max((pnl / GOAL_PER_ACCOUNT) * 100, 0), 100), highestBalance: high };
+        res[i] = { pnl, trades: trades.length, winRate: trades.length > 0 ? (wins / trades.length) * 100 : 0, progress: Math.min(Math.max((pnl / getS('goal_per_account')) * 100, 0), 100), highestBalance: high };
     }
     return res;
 }
@@ -2674,6 +3023,133 @@ function tmplDesc(name) {
     const r = parseInt(name.replace(/\D/g, ''));
     return r ? `$${r} risk — ${r / 100} contract${r > 100 ? 's' : ''}` : 'Custom template';
 }
+
+
+// ═══════════════════════════════════════════════════════
+//  ONBOARDING
+// ═══════════════════════════════════════════════════════
+const ONBOARD_STEPS = 4;
+
+function startOnboarding() {
+    // Pre-fill username if available
+    const existing = currentProfile?.username || currentUser?.user_metadata?.username || '';
+    const el = document.getElementById('obUsername');
+    if (el && existing) el.value = existing;
+    const jt = document.getElementById('obJournalTitle');
+    if (jt) jt.value = currentProfile?.journal_title || '';
+    const bio = document.getElementById('obBio');
+    if (bio) bio.value = currentProfile?.journal_bio || '';
+    const gl = document.getElementById('obGoogleLink');
+    if (gl) gl.value = currentProfile?.google_link || '';
+
+    // Goals
+    const g = currentProfile;
+    if (g) {
+        setVal('obAccountGoal', g.account_goal || 20);
+        setVal('obStartBal', g.starting_balance || 50000);
+        setVal('obDailyMin', g.daily_target_min || 250);
+        setVal('obDailyMax', g.daily_target_max || 300);
+        setVal('obGoalAcc', g.goal_per_account || 4600);
+        setVal('obPayoutAcc', g.payout_per_account || 2000);
+        setVal('obMaxDD', g.max_drawdown || 2500);
+        setVal('obFirmName', g.firm_name || '');
+    }
+
+    onboardingStep = 0;
+    onboardingActive = true;
+    renderOnboardStep();
+    document.getElementById('onboardOverlay').classList.remove('hidden');
+}
+
+function setVal(id, val) { const el = document.getElementById(id); if (el) el.value = val; }
+
+function renderOnboardStep() {
+    for (let i = 0; i < ONBOARD_STEPS; i++) {
+        const s = document.getElementById('onboardStep' + i);
+        if (s) s.classList.toggle('active', i === onboardingStep);
+    }
+    // Progress dots
+    const prog = document.getElementById('onboardProgress');
+    prog.innerHTML = '';
+    for (let i = 0; i < ONBOARD_STEPS; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'onboard-dot' + (i === onboardingStep ? ' active' : i < onboardingStep ? ' done' : '');
+        prog.appendChild(dot);
+    }
+    // Back button
+    const back = document.getElementById('onboardBackBtn');
+    back.style.display = onboardingStep > 0 ? 'block' : 'none';
+    // Next button label
+    const next = document.getElementById('onboardNextBtn');
+    next.textContent = onboardingStep === ONBOARD_STEPS - 1 ? "🌾 Let's Farm!" : 'Next →';
+}
+
+function onboardBack() {
+    if (onboardingStep > 0) { onboardingStep--; renderOnboardStep(); }
+}
+
+async function onboardNext() {
+    if (onboardingStep === 0) {
+        // Validate username
+        const uname = document.getElementById('obUsername')?.value.trim();
+        if (!uname || uname.length < 3) {
+            showAlert('Please enter a username (at least 3 characters).', 'error');
+            return;
+        }
+    }
+
+    if (onboardingStep === ONBOARD_STEPS - 1) {
+        // Save and close
+        await saveOnboardingData();
+        document.getElementById('onboardOverlay').classList.add('hidden');
+        onboardingActive = false;
+        isNewUser = false;
+        showAlert('🌾 Welcome! Your journal is ready. Happy farming!', 'success');
+        return;
+    }
+    onboardingStep++;
+    renderOnboardStep();
+}
+
+async function saveOnboardingData() {
+    try {
+        const updates = {
+            id: currentUser.id,
+            username: document.getElementById('obUsername')?.value.trim() || null,
+            journal_title: document.getElementById('obJournalTitle')?.value.trim() || null,
+            journal_bio: document.getElementById('obBio')?.value.trim() || null,
+            google_link: document.getElementById('obGoogleLink')?.value.trim() || null,
+            account_goal: parseInt(document.getElementById('obAccountGoal')?.value) || 20,
+            starting_balance: parseFloat(document.getElementById('obStartBal')?.value) || 50000,
+            daily_target_min: parseFloat(document.getElementById('obDailyMin')?.value) || 250,
+            daily_target_max: parseFloat(document.getElementById('obDailyMax')?.value) || 300,
+            goal_per_account: parseFloat(document.getElementById('obGoalAcc')?.value) || 4600,
+            payout_per_account: parseFloat(document.getElementById('obPayoutAcc')?.value) || 2000,
+            max_drawdown: parseFloat(document.getElementById('obMaxDD')?.value) || 2500,
+            firm_name: document.getElementById('obFirmName')?.value.trim() || null
+        };
+
+        const { error } = await sbClient.from('profiles').upsert(updates);
+        if (error) throw error;
+
+        // Apply to live CFG
+        applyProfileToConfig(updates);
+        currentProfile = { ...currentProfile, ...updates };
+
+        // Update sidebar display name
+        const username = updates.username || 'Trader';
+        document.getElementById('userAvatar').textContent = username.substring(0, 2).toUpperCase();
+        document.getElementById('userName').textContent = username;
+        document.getElementById('heroName').textContent = username;
+        USER_ACCOUNT_GOAL = updates.account_goal;
+        updateAllViews();
+    } catch(e) {
+        console.error('Save onboarding error:', e);
+        showAlert('Could not save settings: ' + e.message, 'error');
+    }
+}
+
+
 </script>
 </body>
 </html>
