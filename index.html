@@ -45,11 +45,11 @@
         ::-webkit-scrollbar-thumb { background: var(--border-glow); border-radius: 3px; }
 
         /* ── AUTH SCREEN ── */
-        .auth-screen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.4s ease; }
+        .auth-screen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: flex-start; justify-content: center; z-index: 9999; transition: opacity 0.4s ease; overflow-y: auto; padding: 1.5rem 1rem; }
         .auth-screen.hidden { opacity: 0; pointer-events: none; display: none !important; }
-        .auth-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% -20%, rgba(59,126,248,0.15) 0%, transparent 70%), radial-gradient(ellipse 60% 40% at 80% 80%, rgba(155,111,250,0.1) 0%, transparent 60%); }
-        .auth-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(99,179,237,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(99,179,237,0.04) 1px, transparent 1px); background-size: 40px 40px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%); }
-        .auth-box { position: relative; z-index: 1; background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; padding: 3rem; width: 460px; max-width: 95vw; box-shadow: var(--shadow), 0 0 60px rgba(59,126,248,0.08); }
+        .auth-bg { position: fixed; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% -20%, rgba(59,126,248,0.15) 0%, transparent 70%), radial-gradient(ellipse 60% 40% at 80% 80%, rgba(155,111,250,0.1) 0%, transparent 60%); pointer-events: none; }
+        .auth-grid { position: fixed; inset: 0; background-image: linear-gradient(rgba(99,179,237,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(99,179,237,0.04) 1px, transparent 1px); background-size: 40px 40px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%); pointer-events: none; }
+        .auth-box { position: relative; z-index: 1; background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; padding: 3rem; width: 460px; max-width: 95vw; box-shadow: var(--shadow), 0 0 60px rgba(59,126,248,0.08); margin: auto; align-self: flex-start; }
         .auth-logo { text-align: center; margin-bottom: 2rem; }
         .auth-logo .logo-icon { font-size: 3rem; display: block; margin-bottom: 0.75rem; filter: drop-shadow(0 0 20px rgba(59,126,248,0.6)); }
         .auth-logo h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.03em; background: linear-gradient(135deg, #e8f0ff 0%, #7ab4ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -467,7 +467,7 @@
                 <span id="loginSpinner" class="spinner" style="display:none;"></span>
             </button>
             <div style="margin-top:1rem;padding:0.875rem;background:rgba(59,126,248,0.08);border:1px solid rgba(59,126,248,0.2);border-radius:8px;font-size:0.82rem;color:var(--text-muted);">
-                💡 <strong style="color:var(--accent);">Note:</strong> If you created your account with email, make sure you confirmed your email first. Check your spam folder. You can also use <strong>Google Sign In</strong> above for instant access.
+                💡 <strong style="color:var(--accent);">Can't sign in with email?</strong> Either: (1) Use Google login above — instant, no email needed. Or (2) Ask admin to disable email confirmation in Supabase dashboard (Auth → Settings → turn off "Enable email confirmations").
             </div>
         </form>
 
@@ -475,11 +475,11 @@
         <form class="auth-form" id="signupForm" onsubmit="handleSignup(event)">
             <button type="button" class="btn btn-oauth" onclick="handleGoogleAuth()">
                 <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#EA4335" d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z"/><path fill="#4285F4" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/><path fill="#FBBC05" d="M3.88 10.78A5.54 5.54 0 013.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9.008 9.008 0 000 9c0 1.45.35 2.82.96 4.04l2.92-2.26z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.97 13.04C2.45 15.98 5.48 18 9 18z"/></svg>
-                Continue with Google (Recommended)
+                ✅ Continue with Google — No email needed!
             </button>
             <div class="divider">or create with email</div>
-            <div style="margin-bottom:1rem;padding:0.875rem;background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.2);border-radius:8px;font-size:0.82rem;color:var(--warning);">
-                ⚠️ Email sign-up requires <strong>email confirmation</strong>. After signing up, check your inbox (and spam) for a confirmation link. Once confirmed, come back and sign in.
+            <div id="emailConfirmStatus" style="margin-bottom:1rem;padding:0.875rem;background:rgba(59,126,248,0.08);border:1px solid rgba(59,126,248,0.2);border-radius:8px;font-size:0.82rem;color:#7ab4ff;">
+                💡 <strong>If email sign-up doesn't work:</strong> Go to your Supabase dashboard → Authentication → Settings → turn OFF <em>"Enable email confirmations"</em>. Then users can sign in instantly after signing up.
             </div>
             <div class="form-group">
                 <label class="form-label">Email</label>
@@ -1646,10 +1646,19 @@ async function handleSignup(e) {
     if (pass !== confirm) { showAuthError('Passwords do not match.'); return; }
     setBtnLoading('signup', true);
     const email = document.getElementById('signupEmail').value.trim();
-    const { error } = await sbClient.auth.signUp({ email, password: pass });
+    const { data, error } = await sbClient.auth.signUp({ email, password: pass });
     setBtnLoading('signup', false);
     if (error) { showAuthError(error.message); return; }
-    showAuthSuccess('✅ Account created! A confirmation email has been sent to ' + email + '. Check your inbox AND spam folder. After confirming, come back and sign in with your email and password.');
+
+    // If session is immediately available, email confirmation is disabled — auto login works!
+    if (data?.session) {
+        showAuthSuccess('✅ Account created and signed in! Welcome to Prop Farm Pro.');
+        // onAuthStateChange will handle the redirect automatically
+        return;
+    }
+
+    // Otherwise confirmation email was sent
+    showAuthSuccess('✅ Account created! Check your email (' + email + ') for a confirmation link. Check spam too. Once confirmed, come back and sign in.\n\n💡 TIP: Ask your admin to disable email confirmation in Supabase so you can log in instantly next time.');
 }
 
 async function handlePasswordReset(e) {
