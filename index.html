@@ -516,23 +516,6 @@
 </div>
 
 <!-- ONBOARDING OVERLAY -->
-<!-- INVESTOR CHOICE MODAL (first login only) -->
-<div class="onboard-overlay hidden" id="investorChoiceModal" style="z-index:10001;">
-  <div class="onboard-card" style="max-width:460px;text-align:center;">
-    <div class="onboard-emoji">💼</div>
-    <div class="onboard-title">Welcome to Prop Farm Pro!</div>
-    <div class="onboard-sub" style="margin-bottom:2rem;">You have investor access. What would you like to view?</div>
-    <div style="display:flex;flex-direction:column;gap:1rem;">
-      <button class="btn btn-primary" style="padding:1.2rem;font-size:1rem;" onclick="investorChoose('portal')">
-        💼 Investor Portal<br><span style="font-size:0.8rem;font-weight:400;opacity:0.8;">View your account value & milestones</span>
-      </button>
-      <button class="btn btn-secondary" style="padding:1.2rem;font-size:1rem;" onclick="investorChoose('dashboard')">
-        📊 Full Dashboard<br><span style="font-size:0.8rem;font-weight:400;opacity:0.8;">View trades & analytics</span>
-      </button>
-    </div>
-  </div>
-</div>
-
 <div class="onboard-overlay hidden" id="onboardOverlay">
   <div class="onboard-card" id="onboardCard">
 
@@ -1728,8 +1711,8 @@ const MOOD_ADVICE = {
 //  SUPABASE INIT
 // ═══════════════════════════════════════════════════════
 function initSupabase() {
-    const url = 'https://gmhmtdgultwlleskvpao.supabase.co';
-    const key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdtaG10ZGd1bHR3bGxlc2t2cGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1MzgyOTIsImV4cCI6MjA4NzExNDI5Mn0.D6MyCDPvW05CiVm6DOa0YX1z-lwmTRWDC9a8-gg9gA0';
+    const url = 'https://zxwdfvdbbawynddwwfri.supabase.co';
+    const key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4d2RmdmRiYmF3eW5kZHd3ZnJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0MzAxNDIsImV4cCI6MjA4NzAwNjE0Mn0.NQ6jypfrevL9pzV7l6jCjOajZLCwdZVYh0CHxDzBflI';
     try { sbClient = window.supabase.createClient(url, key); return true; }
     catch (e) { console.error('Supabase init error:', e); return false; }
 }
@@ -2246,8 +2229,7 @@ function showDashboard() {
 
     document.getElementById('userAvatar').textContent = initials;
     document.getElementById('userName').textContent = displayName;
-    const isInvestorRole = currentProfile?.role === 'investor';
-    document.getElementById('userRole').textContent = isAdmin ? '👑 Admin' : isInvestorRole ? '💼 Investor' : 'Member';
+    document.getElementById('userRole').textContent = isAdmin ? '👑 Admin' : 'Member';
     document.getElementById('userRole').className = 'user-role' + (isAdmin ? ' admin' : '');
     document.getElementById('heroName').textContent = displayName;
     document.getElementById('adminNavItem').style.display = isAdmin ? 'flex' : 'none';
@@ -2257,24 +2239,10 @@ function showDashboard() {
     buildContractEditor();
     loadDashboardData();
 
-    // Handle investor role — restrict nav and auto-route
-    const isInvestor = currentProfile?.role === 'investor';
-    if (isInvestor) {
-        // Hide all nav items except investor portal for investor role
-        document.querySelectorAll('.nav-item[data-page]').forEach(item => {
-            const page = item.getAttribute('data-page');
-            item.style.display = (page === 'investorPortal') ? 'flex' : 'none';
-        });
-        document.getElementById('userRole').textContent = '💼 Investor';
-        document.getElementById('userRole').className = 'user-role';
-    }
-
-    // Only show onboarding for new non-admin users who haven't completed it
+    // Only show onboarding for new non-admin users who haven't set username
+    // Show onboarding for first-time users (any role except admin) who haven't completed it
     if (isFirstShow && !isAdmin && !currentProfile?.onboarded) {
         setTimeout(() => startOnboarding(), 800);
-    } else if (isFirstShow && isInvestor && currentProfile?.onboarded) {
-        // Returning investor — go straight to investor portal
-        setTimeout(() => navigateTo('investorPortal'), 400);
     }
 }
 
@@ -3161,24 +3129,6 @@ function setTodayDates() {
 // ═══════════════════════════════════════════════════════
 //  ONBOARDING — 3 templates: trader / investor / journal
 // ═══════════════════════════════════════════════════════
-// ═══════════════════════════════════════════════════════
-//  INVESTOR CHOICE MODAL
-// ═══════════════════════════════════════════════════════
-function showInvestorChoiceModal() {
-    document.getElementById('investorChoiceModal').classList.remove('hidden');
-}
-
-function investorChoose(choice) {
-    document.getElementById('investorChoiceModal').classList.add('hidden');
-    if (choice === 'portal') {
-        showAlert('💼 Welcome to your Investor Portal!', 'success');
-        navigateTo('investorPortal');
-    } else {
-        showAlert('📊 Dashboard loaded. You can switch to Investor Portal anytime.', 'success');
-        navigateTo('overview');
-    }
-}
-
 let _onboardStep = 0;
 const ONBOARD_STEPS = 2;
 
@@ -3309,8 +3259,8 @@ async function saveInvestorOnboarding() {
         document.getElementById('onboardOverlay').classList.add('hidden');
         document.getElementById('userAvatar').textContent = (display || name).substring(0,2).toUpperCase();
         document.getElementById('userName').textContent = display || name;
-        // Show choice modal for first-time investor
-        showInvestorChoiceModal();
+        showAlert('💼 Welcome to your Investor Portal!', 'success');
+        navigateTo('investor');
     } catch(e) { showAlert('Could not save: ' + e.message, 'error'); }
 }
 
