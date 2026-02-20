@@ -27,14 +27,9 @@
             --gold: #ffd166;
         }
 
-        html, body {
-            height: 100%;
-            font-family: 'Space Grotesk', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            -webkit-font-smoothing: antialiased;
-        }
+        html, body { height: 100%; font-family: 'Space Grotesk', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
 
+        /* ── BACKGROUND ── */
         .bg-scene { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
         .bg-grid {
             position: absolute; inset: 0;
@@ -44,11 +39,11 @@
         .bg-radial-1 { position: absolute; top: -20%; right: -5%; width: 700px; height: 700px; background: radial-gradient(circle, rgba(59,126,248,0.1) 0%, transparent 65%); }
         .bg-radial-2 { position: absolute; bottom: -15%; left: -10%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(155,111,250,0.07) 0%, transparent 65%); }
 
+        /* ── SPLIT LAYOUT ── */
         .split { position: relative; z-index: 1; display: flex; width: 100%; min-height: 100vh; }
 
-        /* LEFT */
+        /* ── LEFT PANEL ── */
         .left-panel { flex: 0 0 54%; display: flex; flex-direction: column; justify-content: center; padding: 4rem 5rem; position: relative; overflow: hidden; }
-
         .stalks-container { position: absolute; right: 0; top: 0; bottom: 0; width: 45%; opacity: 0.05; overflow: hidden; pointer-events: none; }
         .stalk { position: absolute; bottom: 0; width: 2px; background: linear-gradient(to top, var(--accent), transparent); border-radius: 1px; transform-origin: bottom center; animation: sway var(--dur, 4s) ease-in-out infinite alternate; animation-delay: var(--delay, 0s); }
         @keyframes sway { from { transform: rotate(var(--tilt-from, -3deg)); } to { transform: rotate(var(--tilt-to, 3deg)); } }
@@ -60,7 +55,6 @@
 
         .headline { font-size: clamp(2.2rem, 3.8vw, 3.2rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.035em; margin-bottom: 1.25rem; animation: fadeUp 0.6s 0.1s ease both; }
         .headline em { font-style: normal; background: linear-gradient(135deg, var(--accent), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
         .sub-text { font-size: 1rem; color: var(--text-muted); max-width: 420px; line-height: 1.75; margin-bottom: 3rem; animation: fadeUp 0.6s 0.2s ease both; }
 
         .feature-list { display: flex; flex-direction: column; gap: 0.875rem; animation: fadeUp 0.6s 0.3s ease both; margin-bottom: 3rem; }
@@ -71,39 +65,69 @@
         .ticker span { white-space: nowrap; }
         .ticker span span { font-family: 'JetBrains Mono', monospace; color: var(--accent); margin-left: 0.35rem; }
 
-        /* RIGHT */
+        /* ── RIGHT PANEL ── */
         .right-panel { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; }
 
-        .auth-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; padding: 3rem 2.75rem; width: 100%; max-width: 420px; box-shadow: 0 0 80px rgba(0,0,0,0.5), 0 0 40px var(--accent-glow); animation: fadeUp 0.6s 0.15s ease both; }
+        .auth-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; padding: 3rem 2.75rem; width: 100%; max-width: 440px; box-shadow: 0 0 80px rgba(0,0,0,0.5), 0 0 40px var(--accent-glow); animation: fadeUp 0.6s 0.15s ease both; }
 
         .card-eyebrow { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
         .card-title { font-size: 1.9rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 0.4rem; }
-        .card-sub { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 2.25rem; line-height: 1.6; }
+        .card-sub { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 2rem; line-height: 1.6; }
 
-        .msg { padding: 0.875rem 1rem; border-radius: 8px; font-size: 0.875rem; font-weight: 500; display: none; margin-bottom: 1.25rem; line-height: 1.5; }
+        /* ── TABS ── */
+        .auth-tabs { display: flex; background: var(--bg-elevated); border-radius: 8px; padding: 4px; margin-bottom: 1.75rem; gap: 4px; }
+        .auth-tab { flex: 1; padding: 0.5rem; border: none; border-radius: 6px; font-family: inherit; font-size: 0.825rem; font-weight: 600; cursor: pointer; transition: all 0.2s; background: transparent; color: var(--text-muted); }
+        .auth-tab.active { background: var(--accent); color: white; box-shadow: 0 0 12px var(--accent-glow); }
+        .auth-form { display: none; }
+        .auth-form.active { display: block; }
+
+        /* ── FORM ── */
+        .form-group { margin-bottom: 1.1rem; }
+        .form-label { display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.45rem; }
+        .form-input { width: 100%; padding: 0.875rem 1rem; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 0.9375rem; transition: all 0.2s; }
+        .form-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+        .form-input::placeholder { color: var(--text-dim); }
+        .form-input:disabled { opacity: 0.5; cursor: not-allowed; }
+        .form-hint { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.3rem; }
+
+        .forgot-link { text-align: right; margin-top: -0.5rem; margin-bottom: 1rem; }
+        .forgot-link a { color: var(--accent); font-size: 0.8rem; text-decoration: none; cursor: pointer; }
+        .forgot-link a:hover { text-decoration: underline; }
+
+        /* ── BUTTONS ── */
+        .btn-submit { width: 100%; padding: 0.925rem 1.5rem; background: var(--accent); color: white; border: none; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; box-shadow: 0 0 20px var(--accent-glow); }
+        .btn-submit:hover { background: #5a95ff; transform: translateY(-1px); box-shadow: 0 0 30px rgba(59,126,248,0.4); }
+        .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .btn-google { width: 100%; padding: 0.875rem 1.25rem; background: var(--bg-elevated); border: 1px solid var(--border-glow); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 0.9375rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.75rem; transition: all 0.2s; margin-bottom: 1rem; }
+        .btn-google:hover { border-color: rgba(99,179,237,0.5); background: var(--bg-hover); transform: translateY(-1px); }
+        .btn-google:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        .divider { display: flex; align-items: center; gap: 0.875rem; margin: 0 0 1.25rem; color: var(--text-dim); font-size: 0.78rem; }
+        .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+        /* ── MESSAGES ── */
+        .msg { padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.875rem; font-weight: 500; display: none; margin-bottom: 1rem; line-height: 1.5; }
         .msg.show { display: block; }
         .msg-error { background: rgba(240,92,106,0.1); border: 1px solid rgba(240,92,106,0.3); color: var(--danger); }
         .msg-success { background: rgba(34,211,160,0.1); border: 1px solid rgba(34,211,160,0.3); color: var(--success); }
 
-        .btn-google { width: 100%; padding: 1rem 1.5rem; background: var(--bg-elevated); border: 1px solid var(--border-glow); border-radius: 8px; color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.75rem; transition: all 0.2s; position: relative; overflow: hidden; }
-        .btn-google:hover { border-color: rgba(99,179,237,0.5); transform: translateY(-1px); box-shadow: 0 6px 28px rgba(59,126,248,0.2); background: var(--bg-hover); }
-        .btn-google:active { transform: translateY(0); }
-        .btn-google:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
-
-        .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.25); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; display: none; flex-shrink: 0; }
+        /* ── SPINNER ── */
+        .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.25); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; display: none; flex-shrink: 0; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .trust-badges { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap; }
-        .trust-badge { display: flex; align-items: center; gap: 0.35rem; font-size: 0.72rem; color: var(--text-dim); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+        /* ── TRUST ── */
+        .trust-badges { display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem; flex-wrap: wrap; }
+        .trust-badge { display: flex; align-items: center; gap: 0.35rem; font-size: 0.7rem; color: var(--text-dim); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
 
-        .card-footer { text-align: center; margin-top: 1.5rem; font-size: 0.78rem; color: var(--text-dim); }
+        .card-footer { text-align: center; margin-top: 1.25rem; font-size: 0.75rem; color: var(--text-dim); }
 
         @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
         @media (max-width: 900px) {
             .left-panel { display: none; }
             .right-panel { padding: 1.5rem; }
-            .auth-card { padding: 2rem 1.75rem; }
+            .auth-card { padding: 2.25rem 1.75rem; }
         }
     </style>
 </head>
@@ -117,12 +141,12 @@
 
 <div class="split">
 
-    <!-- LEFT -->
+    <!-- LEFT PANEL -->
     <div class="left-panel">
         <div class="stalks-container" id="stalks"></div>
 
         <div class="brand">
-            <div class="brand-icon">&#127806;</div>
+            <div class="brand-icon">🌾</div>
             <div style="display:flex;align-items:baseline;gap:0.5rem;">
                 <span class="brand-name">Prop Farm Pro</span>
                 <span class="brand-tag">v2.0</span>
@@ -130,175 +154,305 @@
         </div>
 
         <h1 class="headline">Grow your<br><em>prop trading</em><br>portfolio.</h1>
-
         <p class="sub-text">The complete farming dashboard for prop traders. Track every account, harvest your payouts, and protect your fields with precision risk management.</p>
 
         <div class="feature-list">
-            <div class="feature-item"><div class="feature-dot">&#128202;</div><span>Real-time portfolio tracking across all PA accounts</span></div>
-            <div class="feature-item"><div class="feature-dot">&#9888;&#65039;</div><span>Trailing drawdown risk monitor &amp; fail-line alerts</span></div>
-            <div class="feature-item"><div class="feature-dot">&#128260;</div><span>Cycle performance &amp; payout milestone tracking</span></div>
-            <div class="feature-item"><div class="feature-dot">&#129504;</div><span>Trading psychology tools &amp; daily mindset check-ins</span></div>
-            <div class="feature-item"><div class="feature-dot">&#128279;</div><span>Shareable public journal &#8212; show your progress</span></div>
+            <div class="feature-item"><div class="feature-dot">📊</div><span>Real-time portfolio tracking across all PA accounts</span></div>
+            <div class="feature-item"><div class="feature-dot">⚠️</div><span>Trailing drawdown risk monitor &amp; fail-line alerts</span></div>
+            <div class="feature-item"><div class="feature-dot">🔄</div><span>Cycle performance &amp; payout milestone tracking</span></div>
+            <div class="feature-item"><div class="feature-dot">🧠</div><span>Trading psychology tools &amp; daily mindset check-ins</span></div>
+            <div class="feature-item"><div class="feature-dot">💼</div><span>Mirror trading investor portal — scaled account views</span></div>
         </div>
 
         <div class="ticker" id="ticker">
-            <span>WIN RATE <span id="tWin">&#8212;</span></span>
-            <span>ACCOUNTS <span id="tAcc">&#8212;</span></span>
-            <span>BEST DAY <span id="tBest">&#8212;</span></span>
-            <span>TOTAL P&amp;L <span id="tPnL">&#8212;</span></span>
+            <span>WIN RATE <span id="tWin">—</span></span>
+            <span>ACCOUNTS <span id="tAcc">—</span></span>
+            <span>BEST DAY <span id="tBest">—</span></span>
+            <span>TOTAL P&L <span id="tPnL">—</span></span>
         </div>
     </div>
 
-    <!-- RIGHT -->
+    <!-- RIGHT PANEL -->
     <div class="right-panel">
         <div class="auth-card">
-            <div class="card-eyebrow">&#127806; Prop Farm Pro</div>
+            <div class="card-eyebrow">Prop Farm Pro</div>
             <div class="card-title">Welcome back</div>
-            <div class="card-sub">Sign in to access your trading dashboard</div>
+            <div class="card-sub">Sign in to your trading dashboard</div>
 
             <div class="msg msg-error" id="msgError"></div>
             <div class="msg msg-success" id="msgSuccess"></div>
 
-            <button class="btn-google" id="googleBtn" onclick="doGoogle()">
-                <svg width="20" height="20" viewBox="0 0 18 18" style="flex-shrink:0;">
-                    <path fill="#EA4335" d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z"/>
-                    <path fill="#4285F4" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/>
-                    <path fill="#FBBC05" d="M3.88 10.78A5.54 5.54 0 013.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9.008 9.008 0 000 9c0 1.45.35 2.82.96 4.04l2.92-2.26z"/>
-                    <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.97 13.04C2.45 15.98 5.48 18 9 18z"/>
-                </svg>
-                <span id="googleTxt">Continue with Google</span>
-                <div class="spinner" id="googleSpinner"></div>
-            </button>
-
-            <div class="trust-badges">
-                <div class="trust-badge">&#128274; Secured by Supabase</div>
-                <div class="trust-badge">&#9889; Instant access</div>
-                <div class="trust-badge">&#127806; No setup needed</div>
+            <!-- TABS -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
+                <button class="auth-tab" onclick="switchTab('signup')">Create Account</button>
+                <button class="auth-tab" onclick="switchTab('reset')">Reset</button>
             </div>
 
+            <!-- ── LOGIN ── -->
+            <div class="auth-form active" id="loginForm">
+                <button class="btn-google" id="googleBtn" onclick="doGoogle()">
+                    <svg width="18" height="18" viewBox="0 0 18 18" style="flex-shrink:0;">
+                        <path fill="#EA4335" d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z"/>
+                        <path fill="#4285F4" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/>
+                        <path fill="#FBBC05" d="M3.88 10.78A5.54 5.54 0 013.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9.008 9.008 0 000 9c0 1.45.35 2.82.96 4.04l2.92-2.26z"/>
+                        <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.97 13.04C2.45 15.98 5.48 18 9 18z"/>
+                    </svg>
+                    <span id="googleTxt">Continue with Google</span>
+                    <div class="spinner" id="googleSpinner"></div>
+                </button>
+                <div class="divider">or use username &amp; password</div>
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-input" id="loginUsername" placeholder="FarmKing47" autocomplete="username" oninput="this.value=this.value.replace(/[^a-zA-Z0-9_]/g,'')">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="loginPassword" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+                </div>
+                <div class="forgot-link"><a onclick="switchTab('reset')">Forgot password?</a></div>
+                <button class="btn-submit" id="loginBtn" onclick="doLogin()">
+                    <span id="loginTxt">Sign In</span>
+                    <div class="spinner" id="loginSpinner"></div>
+                </button>
+            </div>
+
+            <!-- ── SIGN UP ── -->
+            <div class="auth-form" id="signupForm">
+                <button class="btn-google" onclick="doGoogle()">
+                    <svg width="18" height="18" viewBox="0 0 18 18" style="flex-shrink:0;">
+                        <path fill="#EA4335" d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z"/>
+                        <path fill="#4285F4" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/>
+                        <path fill="#FBBC05" d="M3.88 10.78A5.54 5.54 0 013.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9.008 9.008 0 000 9c0 1.45.35 2.82.96 4.04l2.92-2.26z"/>
+                        <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.97 13.04C2.45 15.98 5.48 18 9 18z"/>
+                    </svg>
+                    Sign Up with Google — Instant!
+                </button>
+                <div class="divider">or create with username &amp; password</div>
+                <div class="form-group">
+                    <label class="form-label">Username <span style="font-weight:400;text-transform:none;letter-spacing:0;">(public trading name)</span></label>
+                    <input type="text" class="form-input" id="signupUsername" placeholder="FarmKing47" minlength="3" maxlength="30" autocomplete="username" oninput="this.value=this.value.replace(/[^a-zA-Z0-9_]/g,'')">
+                    <div class="form-hint">Letters, numbers, underscores only.</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password <span style="font-weight:400;text-transform:none;letter-spacing:0;">(min 6 chars)</span></label>
+                    <input type="password" class="form-input" id="signupPassword" placeholder="••••••••" minlength="6" autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" class="form-input" id="signupConfirm" placeholder="••••••••" autocomplete="new-password" onkeydown="if(event.key==='Enter')doSignup()">
+                </div>
+                <button class="btn-submit" id="signupBtn" onclick="doSignup()">
+                    <span id="signupTxt">Create Account</span>
+                    <div class="spinner" id="signupSpinner"></div>
+                </button>
+            </div>
+
+            <!-- ── RESET ── -->
+            <div class="auth-form" id="resetForm">
+                <p style="font-size:0.875rem;color:var(--text-muted);margin-bottom:1.25rem;line-height:1.6;">Enter your username or recovery email. We'll send a reset link.</p>
+                <div class="form-group">
+                    <label class="form-label">Username or Email</label>
+                    <input type="text" class="form-input" id="resetInput" placeholder="FarmKing47 or you@email.com" onkeydown="if(event.key==='Enter')doReset()">
+                </div>
+                <button class="btn-submit" id="resetBtn" onclick="doReset()">
+                    <span id="resetTxt">Send Reset Link</span>
+                    <div class="spinner" id="resetSpinner"></div>
+                </button>
+            </div>
+
+            <div class="trust-badges">
+                <div class="trust-badge">🔒 Secured by Supabase</div>
+                <div class="trust-badge">⚡ Instant Access</div>
+                <div class="trust-badge">🌾 No Setup Needed</div>
+            </div>
             <div class="card-footer">By signing in you agree to our terms of service</div>
         </div>
     </div>
 
-</div>
+</div><!-- /split -->
 
 <script>
-var SB_URL = 'https://zxwdfvdbbawynddwwfri.supabase.co';
-var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4d2RmdmRiYmF3eW5kZHd3ZnJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0MzAxNDIsImV4cCI6MjA4NzAwNjE0Mn0.NQ6jypfrevL9pzV7l6jCjOajZLCwdZVYh0CHxDzBflI';
-var sb = null;
+const SB_URL = 'https://zxwdfvdbbawynddwwfri.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4d2RmdmRiYmF3eW5kZHd3ZnJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0MzAxNDIsImV4cCI6MjA4NzAwNjE0Mn0.NQ6jypfrevL9pzV7l6jCjOajZLCwdZVYh0CHxDzBflI';
+let sb = null;
+
+function getDashboardURL() {
+    // Simple relative path — works on any hosting
+    return 'index.html';
+}
 
 function initSB() {
-    try {
-        sb = window.supabase.createClient(SB_URL, SB_KEY);
-        return true;
-    } catch (e) {
-        console.error('Supabase init error:', e);
-        return false;
+    try { sb = window.supabase.createClient(SB_URL, SB_KEY); return true; }
+    catch(e) { console.error('SB init error', e); return false; }
+}
+
+// ── TAB SWITCHING ──
+function switchTab(tab) {
+    document.querySelectorAll('.auth-tab').forEach((t, i) => {
+        t.classList.toggle('active', ['login','signup','reset'][i] === tab);
+    });
+    document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+    document.getElementById(tab + 'Form').classList.add('active');
+    clearMsgs();
+    // Update card title
+    const titles = { login: 'Welcome back', signup: 'Create account', reset: 'Reset password' };
+    const subs = { login: 'Sign in to your trading dashboard', signup: 'Join Prop Farm Pro for free', reset: 'We\'ll get you back in' };
+    document.querySelector('.card-title').textContent = titles[tab];
+    document.querySelector('.card-sub').textContent = subs[tab];
+}
+
+function showError(msg) { const el=document.getElementById('msgError'); el.textContent=msg; el.classList.add('show'); document.getElementById('msgSuccess').classList.remove('show'); }
+function showSuccess(msg) { const el=document.getElementById('msgSuccess'); el.textContent=msg; el.classList.add('show'); document.getElementById('msgError').classList.remove('show'); }
+function clearMsgs() { document.getElementById('msgError').classList.remove('show'); document.getElementById('msgSuccess').classList.remove('show'); }
+
+function setLoading(prefix, on) {
+    const btn = document.getElementById(prefix + 'Btn');
+    const txt = document.getElementById(prefix + 'Txt');
+    const sp  = document.getElementById(prefix + 'Spinner');
+    if (btn) btn.disabled = on;
+    if (txt) txt.style.display = on ? 'none' : 'inline';
+    if (sp)  sp.style.display = on ? 'inline-block' : 'none';
+}
+
+// ── GOOGLE ──
+async function doGoogle() {
+    if (!sb) return;
+    document.getElementById('googleBtn').disabled = true;
+    document.getElementById('googleTxt').textContent = 'Redirecting...';
+    document.getElementById('googleSpinner').style.display = 'inline-block';
+    const { error } = await sb.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: getDashboardURL() }
+    });
+    if (error) {
+        showError('Google sign-in failed: ' + error.message);
+        document.getElementById('googleBtn').disabled = false;
+        document.getElementById('googleTxt').textContent = 'Continue with Google';
+        document.getElementById('googleSpinner').style.display = 'none';
     }
 }
 
-function redirectToDashboard() {
-    window.location.href = 'index.html';
-}
-
-function showError(msg) {
-    var el = document.getElementById('msgError');
-    el.textContent = msg;
-    el.classList.add('show');
-    document.getElementById('msgSuccess').classList.remove('show');
-}
-
-function showSuccess(msg) {
-    var el = document.getElementById('msgSuccess');
-    el.textContent = msg;
-    el.classList.add('show');
-    document.getElementById('msgError').classList.remove('show');
-}
-
-function setGoogleLoading(loading) {
-    var btn = document.getElementById('googleBtn');
-    var txt = document.getElementById('googleTxt');
-    var sp  = document.getElementById('googleSpinner');
-    btn.disabled = loading;
-    txt.textContent = loading ? 'Redirecting to Google...' : 'Continue with Google';
-    sp.style.display = loading ? 'inline-block' : 'none';
-}
-
-function doGoogle() {
-    if (!sb) { showError('Auth not initialised. Please refresh.'); return; }
-    setGoogleLoading(true);
-    var path = window.location.pathname.split('/');
-    path[path.length - 1] = 'index.html';
-    var redirectTo = window.location.origin + path.join('/');
-    sb.auth.signInWithOAuth({
-        provider: 'google',
-        options: { redirectTo: redirectTo }
-    }).then(function (result) {
-        if (result.error) {
-            showError('Google sign-in failed: ' + result.error.message);
-            setGoogleLoading(false);
+// ── LOGIN ──
+async function doLogin() {
+    clearMsgs();
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    if (!username || !password) { showError('Please enter your username and password.'); return; }
+    setLoading('login', true);
+    try {
+        const { data: profile } = await sb.from('profiles').select('email').ilike('username', username).maybeSingle();
+        const email = (profile?.email && !profile.email.includes('@propfarmpro.app'))
+            ? profile.email
+            : (profile?.email || `${username.toLowerCase()}@propfarmpro.app`);
+        const { error } = await sb.auth.signInWithPassword({ email, password });
+        if (error) {
+            showError(error.message.includes('Invalid login') ? '❌ Wrong username or password. Try again.' : error.message);
+            setLoading('login', false);
         }
-        // On success browser is redirected automatically
-    }).catch(function (e) {
-        showError('Error: ' + e.message);
-        setGoogleLoading(false);
-    });
+        // On success onAuthStateChange fires → redirect
+    } catch(err) {
+        showError('Sign in error: ' + err.message);
+        setLoading('login', false);
+    }
 }
 
-// Decorative stalks
-(function () {
-    var container = document.getElementById('stalks');
+// ── SIGN UP ──
+async function doSignup() {
+    clearMsgs();
+    const username = document.getElementById('signupUsername').value.trim();
+    const pass = document.getElementById('signupPassword').value;
+    const confirm = document.getElementById('signupConfirm').value;
+    if (!username || username.length < 3) { showError('Username must be at least 3 characters.'); return; }
+    if (pass !== confirm) { showError('Passwords do not match.'); return; }
+    setLoading('signup', true);
+    const { data: existing } = await sb.from('profiles').select('id').ilike('username', username).maybeSingle();
+    if (existing) { showError('❌ Username already taken. Choose a different one.'); setLoading('signup', false); return; }
+    window._pendingUsername = username;
+    const internalEmail = `${username.toLowerCase()}@propfarmpro.app`;
+    const { error } = await sb.auth.signUp({ email: internalEmail, password: pass, options: { data: { username } } });
+    setLoading('signup', false);
+    if (error) { showError(error.message); window._pendingUsername = null; return; }
+    showSuccess('✅ Account created! Signing you in...');
+}
+
+// ── RESET ──
+async function doReset() {
+    clearMsgs();
+    const input = document.getElementById('resetInput').value.trim();
+    if (!input) { showError('Enter your username or email.'); return; }
+    setLoading('reset', true);
+    let emailToReset = input;
+    if (!input.includes('@')) {
+        const { data: profile } = await sb.from('profiles').select('email').ilike('username', input).maybeSingle();
+        if (!profile?.email || profile.email.includes('@propfarmpro.app')) {
+            showError('No recovery email linked. Link one in Settings → My Profile first.');
+            setLoading('reset', false); return;
+        }
+        emailToReset = profile.email;
+    }
+    const { error } = await sb.auth.resetPasswordForEmail(emailToReset, { redirectTo: getDashboardURL() });
+    setLoading('reset', false);
+    if (error) { showError(error.message); return; }
+    showSuccess('✅ Reset link sent! Check your inbox and spam folder.');
+}
+
+// ── DECORATIVE STALKS ──
+(function() {
+    const container = document.getElementById('stalks');
     if (!container) return;
-    for (var i = 0; i < 28; i++) {
-        var stalk = document.createElement('div');
+    for (let i = 0; i < 28; i++) {
+        const stalk = document.createElement('div');
         stalk.className = 'stalk';
-        var h = 120 + Math.random() * 380;
-        var x = (i / 28) * 100 + (Math.random() - 0.5) * 4;
-        var dur = 3 + Math.random() * 3;
-        var delay = -(Math.random() * 3);
-        var from = -2 - Math.random() * 3;
-        var to = 2 + Math.random() * 3;
-        stalk.style.cssText = 'height:' + h + 'px;left:' + x + '%;--dur:' + dur + 's;--delay:' + delay + 's;--tilt-from:' + from + 'deg;--tilt-to:' + to + 'deg;width:' + (1 + Math.random() * 2) + 'px;';
-        var seed = document.createElement('div');
+        const h = 120 + Math.random() * 380;
+        const x = (i / 28) * 100 + (Math.random() - 0.5) * 4;
+        const dur = 3 + Math.random() * 3;
+        const delay = -(Math.random() * 3);
+        const from = -2 - Math.random() * 3;
+        const to = 2 + Math.random() * 3;
+        stalk.style.cssText = `height:${h}px;left:${x}%;--dur:${dur}s;--delay:${delay}s;--tilt-from:${from}deg;--tilt-to:${to}deg;width:${1 + Math.random() * 2}px;`;
+        const seed = document.createElement('div');
         seed.style.cssText = 'width:4px;height:10px;background:linear-gradient(to top,var(--accent),transparent);border-radius:2px;position:absolute;top:-10px;left:50%;transform:translateX(-50%);';
         stalk.appendChild(seed);
         container.appendChild(stalk);
     }
 })();
 
-// Ticker
-function animateTicker() {
-    var vals = [
+// ── TICKER ANIMATION ──
+(function() {
+    const vals = [
         { id: 'tWin',  target: 73,    prefix: '',  suffix: '%' },
         { id: 'tAcc',  target: 12,    prefix: '',  suffix: '/20' },
         { id: 'tBest', target: 3100,  prefix: '$', suffix: '' },
         { id: 'tPnL',  target: 41200, prefix: '$', suffix: '' }
     ];
-    vals.forEach(function (v) {
-        var el = document.getElementById(v.id);
-        if (!el) return;
-        var current = 0;
-        var step = v.target / 60;
-        var timer = setInterval(function () {
+    vals.forEach(v => {
+        const el = document.getElementById(v.id); if (!el) return;
+        let current = 0, step = v.target / 60;
+        const timer = setInterval(() => {
             current = Math.min(current + step, v.target);
             el.textContent = v.prefix + Math.round(current).toLocaleString() + v.suffix;
             if (current >= v.target) clearInterval(timer);
         }, 25);
     });
-}
+})();
 
-// Init
-window.addEventListener('DOMContentLoaded', function () {
-    if (!initSB()) {
-        showError('Failed to initialise. Please refresh the page.');
-        return;
-    }
-    sb.auth.getSession().then(function (res) {
-        if (res && res.data && res.data.session) {
-            redirectToDashboard();
+// ── INIT ──
+window.addEventListener('DOMContentLoaded', async () => {
+    if (!initSB()) { showError('Failed to initialise. Please refresh.'); return; }
+
+    // Already logged in? Redirect immediately
+    try {
+        const { data: { session } } = await sb.auth.getSession();
+        if (session) { window.location.href = getDashboardURL(); return; }
+    } catch(e) {}
+
+    // Watch for auth state (handles Google OAuth callback)
+    sb.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_IN' && session) {
+            window.location.href = getDashboardURL();
         }
-    }).catch(function () {});
-    animateTicker();
+    });
 });
 </script>
 </body>
