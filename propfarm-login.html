@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prop Farm Pro — Sign In</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0a0e1a;
+            --bg-card: #0f1629;
+            --bg-elevated: #1a2035;
+            --bg-hover: #1e2844;
+            --border: rgba(99,179,237,0.12);
+            --border-glow: rgba(99,179,237,0.3);
+            --text: #e8f0ff;
+            --text-muted: #7a8bb5;
+            --text-dim: #3d4f78;
+            --accent: #3b7ef8;
+            --accent-glow: rgba(59,126,248,0.25);
+            --success: #22d3a0;
+            --danger: #f05c6a;
+            --purple: #9b6ffa;
+            --gold: #ffd166;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .bg-scene { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image: linear-gradient(rgba(59,126,248,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(59,126,248,0.04) 1px, transparent 1px);
+            background-size: 48px 48px;
+        }
+        .bg-radial-1 { position: absolute; top: -20%; right: -5%; width: 700px; height: 700px; background: radial-gradient(circle, rgba(59,126,248,0.1) 0%, transparent 65%); }
+        .bg-radial-2 { position: absolute; bottom: -15%; left: -10%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(155,111,250,0.07) 0%, transparent 65%); }
+
+        .split { position: relative; z-index: 1; display: flex; width: 100%; min-height: 100vh; }
+
+        /* LEFT */
+        .left-panel { flex: 0 0 54%; display: flex; flex-direction: column; justify-content: center; padding: 4rem 5rem; position: relative; overflow: hidden; }
+
+        .stalks-container { position: absolute; right: 0; top: 0; bottom: 0; width: 45%; opacity: 0.05; overflow: hidden; pointer-events: none; }
+        .stalk { position: absolute; bottom: 0; width: 2px; background: linear-gradient(to top, var(--accent), transparent); border-radius: 1px; transform-origin: bottom center; animation: sway var(--dur, 4s) ease-in-out infinite alternate; animation-delay: var(--delay, 0s); }
+        @keyframes sway { from { transform: rotate(var(--tilt-from, -3deg)); } to { transform: rotate(var(--tilt-to, 3deg)); } }
+
+        .brand { display: flex; align-items: center; gap: 0.875rem; margin-bottom: 3.5rem; animation: fadeUp 0.6s ease both; }
+        .brand-icon { width: 48px; height: 48px; background: linear-gradient(135deg, var(--accent), var(--purple)); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 0 30px var(--accent-glow); }
+        .brand-name { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; background: linear-gradient(135deg, #e8f0ff, #7ab4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .brand-tag { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); background: rgba(59,126,248,0.12); border: 1px solid rgba(59,126,248,0.25); border-radius: 20px; padding: 0.2rem 0.5rem; margin-left: 0.25rem; }
+
+        .headline { font-size: clamp(2.2rem, 3.8vw, 3.2rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.035em; margin-bottom: 1.25rem; animation: fadeUp 0.6s 0.1s ease both; }
+        .headline em { font-style: normal; background: linear-gradient(135deg, var(--accent), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .sub-text { font-size: 1rem; color: var(--text-muted); max-width: 420px; line-height: 1.75; margin-bottom: 3rem; animation: fadeUp 0.6s 0.2s ease both; }
+
+        .feature-list { display: flex; flex-direction: column; gap: 0.875rem; animation: fadeUp 0.6s 0.3s ease both; margin-bottom: 3rem; }
+        .feature-item { display: flex; align-items: center; gap: 0.875rem; font-size: 0.9rem; color: var(--text-muted); }
+        .feature-dot { width: 30px; height: 30px; border-radius: 8px; background: rgba(59,126,248,0.1); border: 1px solid rgba(59,126,248,0.2); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
+
+        .ticker { display: flex; gap: 2rem; padding: 1rem 1.25rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); animation: fadeUp 0.6s 0.4s ease both; flex-wrap: wrap; }
+        .ticker span { white-space: nowrap; }
+        .ticker span span { font-family: 'JetBrains Mono', monospace; color: var(--accent); margin-left: 0.35rem; }
+
+        /* RIGHT */
+        .right-panel { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+
+        .auth-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; padding: 3rem 2.75rem; width: 100%; max-width: 420px; box-shadow: 0 0 80px rgba(0,0,0,0.5), 0 0 40px var(--accent-glow); animation: fadeUp 0.6s 0.15s ease both; }
+
+        .card-eyebrow { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
+        .card-title { font-size: 1.9rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 0.4rem; }
+        .card-sub { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 2.25rem; line-height: 1.6; }
+
+        .msg { padding: 0.875rem 1rem; border-radius: 8px; font-size: 0.875rem; font-weight: 500; display: none; margin-bottom: 1.25rem; line-height: 1.5; }
+        .msg.show { display: block; }
+        .msg-error { background: rgba(240,92,106,0.1); border: 1px solid rgba(240,92,106,0.3); color: var(--danger); }
+        .msg-success { background: rgba(34,211,160,0.1); border: 1px solid rgba(34,211,160,0.3); color: var(--success); }
+
+        .btn-google { width: 100%; padding: 1rem 1.5rem; background: var(--bg-elevated); border: 1px solid var(--border-glow); border-radius: 8px; color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.75rem; transition: all 0.2s; position: relative; overflow: hidden; }
+        .btn-google:hover { border-color: rgba(99,179,237,0.5); transform: translateY(-1px); box-shadow: 0 6px 28px rgba(59,126,248,0.2); background: var(--bg-hover); }
+        .btn-google:active { transform: translateY(0); }
+        .btn-google:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.25); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; display: none; flex-shrink: 0; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .trust-badges { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap; }
+        .trust-badge { display: flex; align-items: center; gap: 0.35rem; font-size: 0.72rem; color: var(--text-dim); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+
+        .card-footer { text-align: center; margin-top: 1.5rem; font-size: 0.78rem; color: var(--text-dim); }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 900px) {
+            .left-panel { display: none; }
+            .right-panel { padding: 1.5rem; }
+            .auth-card { padding: 2rem 1.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-scene">
+    <div class="bg-grid"></div>
+    <div class="bg-radial-1"></div>
+    <div class="bg-radial-2"></div>
+</div>
+
+<div class="split">
+
+    <!-- LEFT -->
+    <div class="left-panel">
+        <div class="stalks-container" id="stalks"></div>
+
+        <div class="brand">
+            <div class="brand-icon">&#127806;</div>
+            <div style="display:flex;align-items:baseline;gap:0.5rem;">
+                <span class="brand-name">Prop Farm Pro</span>
+                <span class="brand-tag">v2.0</span>
+            </div>
+        </div>
+
+        <h1 class="headline">Grow your<br><em>prop trading</em><br>portfolio.</h1>
+
+        <p class="sub-text">The complete farming dashboard for prop traders. Track every account, harvest your payouts, and protect your fields with precision risk management.</p>
+
+        <div class="feature-list">
+            <div class="feature-item"><div class="feature-dot">&#128202;</div><span>Real-time portfolio tracking across all PA accounts</span></div>
+            <div class="feature-item"><div class="feature-dot">&#9888;&#65039;</div><span>Trailing drawdown risk monitor &amp; fail-line alerts</span></div>
+            <div class="feature-item"><div class="feature-dot">&#128260;</div><span>Cycle performance &amp; payout milestone tracking</span></div>
+            <div class="feature-item"><div class="feature-dot">&#129504;</div><span>Trading psychology tools &amp; daily mindset check-ins</span></div>
+            <div class="feature-item"><div class="feature-dot">&#128279;</div><span>Shareable public journal &#8212; show your progress</span></div>
+        </div>
+
+        <div class="ticker" id="ticker">
+            <span>WIN RATE <span id="tWin">&#8212;</span></span>
+            <span>ACCOUNTS <span id="tAcc">&#8212;</span></span>
+            <span>BEST DAY <span id="tBest">&#8212;</span></span>
+            <span>TOTAL P&amp;L <span id="tPnL">&#8212;</span></span>
+        </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right-panel">
+        <div class="auth-card">
+            <div class="card-eyebrow">&#127806; Prop Farm Pro</div>
+            <div class="card-title">Welcome back</div>
+            <div class="card-sub">Sign in to access your trading dashboard</div>
+
+            <div class="msg msg-error" id="msgError"></div>
+            <div class="msg msg-success" id="msgSuccess"></div>
+
+            <button class="btn-google" id="googleBtn" onclick="doGoogle()">
+                <svg width="20" height="20" viewBox="0 0 18 18" style="flex-shrink:0;">
+                    <path fill="#EA4335" d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z"/>
+                    <path fill="#4285F4" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/>
+                    <path fill="#FBBC05" d="M3.88 10.78A5.54 5.54 0 013.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9.008 9.008 0 000 9c0 1.45.35 2.82.96 4.04l2.92-2.26z"/>
+                    <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.97 13.04C2.45 15.98 5.48 18 9 18z"/>
+                </svg>
+                <span id="googleTxt">Continue with Google</span>
+                <div class="spinner" id="googleSpinner"></div>
+            </button>
+
+            <div class="trust-badges">
+                <div class="trust-badge">&#128274; Secured by Supabase</div>
+                <div class="trust-badge">&#9889; Instant access</div>
+                <div class="trust-badge">&#127806; No setup needed</div>
+            </div>
+
+            <div class="card-footer">By signing in you agree to our terms of service</div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+var SB_URL = 'https://zxwdfvdbbawynddwwfri.supabase.co';
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4d2RmdmRiYmF3eW5kZHd3ZnJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0MzAxNDIsImV4cCI6MjA4NzAwNjE0Mn0.NQ6jypfrevL9pzV7l6jCjOajZLCwdZVYh0CHxDzBflI';
+var sb = null;
+
+function initSB() {
+    try {
+        sb = window.supabase.createClient(SB_URL, SB_KEY);
+        return true;
+    } catch (e) {
+        console.error('Supabase init error:', e);
+        return false;
+    }
+}
+
+function redirectToDashboard() {
+    window.location.href = 'index.html';
+}
+
+function showError(msg) {
+    var el = document.getElementById('msgError');
+    el.textContent = msg;
+    el.classList.add('show');
+    document.getElementById('msgSuccess').classList.remove('show');
+}
+
+function showSuccess(msg) {
+    var el = document.getElementById('msgSuccess');
+    el.textContent = msg;
+    el.classList.add('show');
+    document.getElementById('msgError').classList.remove('show');
+}
+
+function setGoogleLoading(loading) {
+    var btn = document.getElementById('googleBtn');
+    var txt = document.getElementById('googleTxt');
+    var sp  = document.getElementById('googleSpinner');
+    btn.disabled = loading;
+    txt.textContent = loading ? 'Redirecting to Google...' : 'Continue with Google';
+    sp.style.display = loading ? 'inline-block' : 'none';
+}
+
+function doGoogle() {
+    if (!sb) { showError('Auth not initialised. Please refresh.'); return; }
+    setGoogleLoading(true);
+    var path = window.location.pathname.split('/');
+    path[path.length - 1] = 'index.html';
+    var redirectTo = window.location.origin + path.join('/');
+    sb.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: redirectTo }
+    }).then(function (result) {
+        if (result.error) {
+            showError('Google sign-in failed: ' + result.error.message);
+            setGoogleLoading(false);
+        }
+        // On success browser is redirected automatically
+    }).catch(function (e) {
+        showError('Error: ' + e.message);
+        setGoogleLoading(false);
+    });
+}
+
+// Decorative stalks
+(function () {
+    var container = document.getElementById('stalks');
+    if (!container) return;
+    for (var i = 0; i < 28; i++) {
+        var stalk = document.createElement('div');
+        stalk.className = 'stalk';
+        var h = 120 + Math.random() * 380;
+        var x = (i / 28) * 100 + (Math.random() - 0.5) * 4;
+        var dur = 3 + Math.random() * 3;
+        var delay = -(Math.random() * 3);
+        var from = -2 - Math.random() * 3;
+        var to = 2 + Math.random() * 3;
+        stalk.style.cssText = 'height:' + h + 'px;left:' + x + '%;--dur:' + dur + 's;--delay:' + delay + 's;--tilt-from:' + from + 'deg;--tilt-to:' + to + 'deg;width:' + (1 + Math.random() * 2) + 'px;';
+        var seed = document.createElement('div');
+        seed.style.cssText = 'width:4px;height:10px;background:linear-gradient(to top,var(--accent),transparent);border-radius:2px;position:absolute;top:-10px;left:50%;transform:translateX(-50%);';
+        stalk.appendChild(seed);
+        container.appendChild(stalk);
+    }
+})();
+
+// Ticker
+function animateTicker() {
+    var vals = [
+        { id: 'tWin',  target: 73,    prefix: '',  suffix: '%' },
+        { id: 'tAcc',  target: 12,    prefix: '',  suffix: '/20' },
+        { id: 'tBest', target: 3100,  prefix: '$', suffix: '' },
+        { id: 'tPnL',  target: 41200, prefix: '$', suffix: '' }
+    ];
+    vals.forEach(function (v) {
+        var el = document.getElementById(v.id);
+        if (!el) return;
+        var current = 0;
+        var step = v.target / 60;
+        var timer = setInterval(function () {
+            current = Math.min(current + step, v.target);
+            el.textContent = v.prefix + Math.round(current).toLocaleString() + v.suffix;
+            if (current >= v.target) clearInterval(timer);
+        }, 25);
+    });
+}
+
+// Init
+window.addEventListener('DOMContentLoaded', function () {
+    if (!initSB()) {
+        showError('Failed to initialise. Please refresh the page.');
+        return;
+    }
+    sb.auth.getSession().then(function (res) {
+        if (res && res.data && res.data.session) {
+            redirectToDashboard();
+        }
+    }).catch(function () {});
+    animateTicker();
+});
+</script>
+</body>
+</html>
