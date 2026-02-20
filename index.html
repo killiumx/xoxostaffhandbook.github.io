@@ -2162,7 +2162,7 @@ async function handlePasswordReset(e) {
         }
         emailToReset = profile.email;
     }
-    const { error } = await sbClient.auth.resetPasswordForEmail(emailToReset, { redirectTo: window.location.href });
+    const { error } = await sbClient.auth.resetPasswordForEmail(emailToReset, { redirectTo: 'https://killiumx.github.io/xoxostaffhandbook.github.io/' });
     setBtnLoading('reset', false);
     if (error) { showAuthError(error.message); return; }
     showAuthSuccess('✅ Reset link sent! Check your inbox and spam folder.');
@@ -2180,7 +2180,7 @@ async function handleGoogleAuth() {
         const { error } = await sbClient.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: window.location.href.split('?')[0].split('#')[0]
+                redirectTo: 'https://killiumx.github.io/xoxostaffhandbook.github.io/'
             }
         });
         if (error) {
@@ -2594,7 +2594,7 @@ async function updateUserRole() {
 async function adminResetUserPassword() {
     const email = document.getElementById('resetUserEmail').value.trim();
     if (!email) { showAlert('Enter a user email', 'error'); return; }
-    const { error } = await sbClient.auth.resetPasswordForEmail(email, { redirectTo: window.location.href });
+    const { error } = await sbClient.auth.resetPasswordForEmail(email, { redirectTo: 'https://killiumx.github.io/xoxostaffhandbook.github.io/' });
     if (error) { showAlert('Failed: ' + error.message, 'error'); return; }
     showAlert(`✓ Reset email sent to ${email}`, 'success');
     document.getElementById('resetUserEmail').value = '';
