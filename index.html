@@ -689,16 +689,12 @@
             <div class="nav-item" data-page="addTrade"><span class="nav-icon">➕</span>Add Trade</div>
             <div class="nav-item" data-page="logPayout"><span class="nav-icon">💰</span>Log Payout</div>
             <div class="nav-item" data-page="tradeLog"><span class="nav-icon">📝</span>Trade Log</div>
-            <div class="nav-item" data-page="shareJournal"><span class="nav-icon">🔗</span>Share Journal</div>
             <div class="nav-item" data-page="deleteData"><span class="nav-icon">🗑️</span>Delete Data</div>
             <div class="nav-item" onclick="window.location.href='pamm_calculator_dashboard.html'"><span class="nav-icon">📊</span><span>PAMM Calculator</span></div>
             <div class="nav-item" onclick="window.location.href='economic-calendar.html'"><span class="nav-icon">📅</span><span>Economic Calendar</span></div>
+            <div class="nav-item" onclick="window.open('https://killiumx.github.io/xoxostaffhandbook.github.io/','_blank')"><span class="nav-icon">📚</span><span>Staff Handbook</span></div>
         </nav>
 
-        <nav class="nav-section">
-            <div class="nav-label">Investor</div>
-            <div class="nav-item" data-page="investorPortal" id="investorPortalNavItem"><span class="nav-icon">💼</span>Investor Portal</div>
-        </nav>
 
         <nav class="nav-section">
             <div class="nav-label">Config</div>
@@ -747,7 +743,6 @@
                 <div class="quick-actions">
                     <div class="action-card" onclick="navigateTo('addTrade')"><div class="action-icon blue">➕</div><div class="action-info"><h4>Add Trade</h4><p>Log new position</p></div></div>
                     <div class="action-card" onclick="refreshData()"><div class="action-icon green">🔄</div><div class="action-info"><h4>Refresh</h4><p>Sync from database</p></div></div>
-                    <div class="action-card" onclick="navigateTo('shareJournal')"><div class="action-icon teal">🔗</div><div class="action-info"><h4>Share Journal</h4><p>Public trade link</p></div></div>
                     <div class="action-card" onclick="navigateTo('psychology')"><div class="action-icon purple">🧠</div><div class="action-info"><h4>Psychology</h4><p>Mindset & motivation</p></div></div>
                 </div>
 
@@ -915,25 +910,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- ──────────────────── SHARE JOURNAL ──────────────────── -->
-            <div class="page" id="shareJournalPage">
-                <div class="share-banner">
-                    <div class="share-banner-left">
-                        <span class="share-icon">🔗</span>
-                        <div class="share-info">
-                            <strong>Public Journal Sharing</strong>
-                            <span>Share your trading progress with anyone — no login required</span>
-                        </div>
-                    </div>
-                    <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
-                        <div class="share-toggle">
-                            <span style="color:var(--text-muted);font-size:0.85rem;" id="shareStatusLabel">Sharing Off</span>
-                            <div class="toggle-switch" id="shareToggle" onclick="toggleSharing()"></div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="form-card" style="margin-bottom:1.5rem;">
                     <h3 style="margin-bottom:1rem;font-size:1.05rem;font-weight:700;">📎 Your Journal Share Link</h3>
                     <p style="color:var(--text-muted);font-size:0.875rem;margin-bottom:1.25rem;">Anyone with this link can view your trade journal in read-only mode. Enable sharing above to make it live.</p>
@@ -1443,188 +1419,6 @@
             </div>
 
             <!-- ──────────────────── INVESTOR PORTAL ──────────────────── -->
-            <div class="page" id="investorPortalPage">
-
-                <!-- ADMIN VIEW: master controls + investor list -->
-                <div id="ipAdminSection" style="display:none;">
-                    <div class="admin-banner" style="background:linear-gradient(135deg,rgba(255,209,102,0.1),rgba(245,166,35,0.06));border-color:rgba(255,209,102,0.25);">
-                        <span class="admin-banner-icon">💼</span>
-                        <div class="admin-banner-text">
-                            <strong>Mirror Trading — Admin Controls</strong>
-                            <span>Set master profit, manage investor accounts. Investors see only their scaled Display Value.</span>
-                        </div>
-                    </div>
-
-                    <div class="metrics-grid" style="margin-bottom:1.5rem;">
-                        <div class="metric-card"><div class="metric-header"><span class="metric-label">Master Balance</span><span class="metric-icon">🏦</span></div><div class="metric-value" id="ipMasterBal" style="color:var(--accent)">$50,000</div><div class="metric-sub">Starting: $50,000</div></div>
-                        <div class="metric-card"><div class="metric-header"><span class="metric-label">Current Profit</span><span class="metric-icon">📈</span></div><div class="metric-value" id="ipMasterProfit" style="color:var(--success)">$0</div><div class="metric-sub" id="ipProfitPct">0% of $4,600 goal</div></div>
-                        <div class="metric-card"><div class="metric-header"><span class="metric-label">Goal Profit</span><span class="metric-icon">🎯</span></div><div class="metric-value" style="color:var(--gold)">$4,600</div><div class="metric-sub">Triggers $800 payout</div></div>
-                        <div class="metric-card"><div class="metric-header"><span class="metric-label">Investors</span><span class="metric-icon">👥</span></div><div class="metric-value" id="ipInvestorCount" style="color:var(--purple)">0</div><div class="metric-sub">Active investor accounts</div></div>
-                    </div>
-
-                    <!-- Goal progress bar -->
-                    <div class="card" style="margin-bottom:1.5rem;">
-                        <div class="card-header">
-                            <div class="card-title">Master Account Progress</div>
-                            <div class="card-sub">$50,000 → $54,600 target</div>
-                        </div>
-                        <div class="card-body" style="padding:1.25rem 1.5rem;">
-                            <div style="display:flex;justify-content:space-between;font-size:0.78rem;font-weight:600;color:var(--text-muted);margin-bottom:0.5rem;">
-                                <span id="ipProgLabel">$0 profit</span>
-                                <span style="color:var(--gold)">$4,600 goal</span>
-                            </div>
-                            <div style="height:12px;background:var(--bg-elevated);border-radius:6px;overflow:hidden;border:1px solid var(--border);">
-                                <div id="ipProgFill" style="height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--purple));border-radius:6px;transition:width 1.5s cubic-bezier(0.4,0,0.2,1);position:relative;">
-                                    <div style="position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);animation:shimmer 2.5s ease infinite;"></div>
-                                </div>
-                            </div>
-                            <style>@keyframes shimmer{0%,100%{transform:translateX(-100%)}50%{transform:translateX(100%)}}</style>
-                            <div style="text-align:right;font-size:0.75rem;color:var(--text-muted);margin-top:0.4rem;" id="ipProgPct">0.0% to goal</div>
-                        </div>
-                    </div>
-
-                    <!-- Update profit -->
-                    <div class="form-card" style="margin-bottom:1.5rem;">
-                        <h3 style="margin-bottom:0.5rem;font-size:1rem;font-weight:700;">⚡ Update Master Profit</h3>
-                        <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1.25rem;">Enter the current profit amount on the master PA account. All investor display values update instantly.</p>
-                        <div style="display:flex;gap:0.875rem;flex-wrap:wrap;align-items:flex-end;">
-                            <div class="form-group" style="margin-bottom:0;flex:1;min-width:180px;">
-                                <label class="form-label">Current Master Profit ($)</label>
-                                <input type="number" class="form-input" id="ipProfitInput" placeholder="e.g. 2300" step="50" min="0" style="font-family:'JetBrains Mono',monospace;">
-                            </div>
-                            <button class="btn btn-primary" style="width:auto;white-space:nowrap;" onclick="ipUpdateProfit()">⚡ Update All Investors</button>
-                        </div>
-                    </div>
-
-                    <!-- Investor list -->
-                    <div class="table-card" style="margin-bottom:1.5rem;">
-                        <div class="table-header">
-                            <div>
-                                <span class="card-title">Investor Accounts</span>
-                                <div style="color:var(--text-muted);font-size:0.8rem;margin-top:0.15rem;">Each investor sees their own scaled Display Value</div>
-                            </div>
-                        </div>
-                        <div class="table-wrap">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Name / Label</th>
-                                        <th>Email</th>
-                                        <th>Entry Point</th>
-                                        <th>Multiplier</th>
-                                        <th>Display Value</th>
-                                        <th>% to $800</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="ipInvestorTableBody"></tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Add investor -->
-                    <div class="form-card" style="margin-bottom:1.5rem;">
-                        <h3 style="margin-bottom:0.5rem;font-size:1rem;font-weight:700;">➕ Register New Investor</h3>
-                        <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1.25rem;">Add an investor's email and entry point. They'll see their scaled account when they log in.</p>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label class="form-label">Name / Label</label>
-                                <input type="text" class="form-input" id="ipNewName" placeholder="e.g. Investor A">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Email Address</label>
-                                <input type="email" class="form-input" id="ipNewEmail" placeholder="investor@email.com">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Entry Point ($)</label>
-                                <input type="number" class="form-input" id="ipNewEntry" placeholder="e.g. 115" min="1" style="font-family:'JetBrains Mono',monospace;">
-                            </div>
-                        </div>
-                        <div class="form-footer">
-                            <button class="btn btn-primary" style="width:auto;" onclick="ipAddInvestor()">➕ Add Investor</button>
-                            <button class="btn btn-secondary" onclick="ipClearNewForm()">Clear</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- INVESTOR VIEW: read-only scaled dashboard -->
-                <div id="ipInvestorSection" style="display:none;">
-
-                    <!-- Goal banner -->
-                    <div id="ipGoalBanner" style="background:linear-gradient(135deg,rgba(59,126,248,0.1),rgba(155,111,250,0.07));border:1px solid rgba(59,126,248,0.2);border-radius:var(--radius);padding:1.5rem 2rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
-                        <span style="font-size:2.25rem;flex-shrink:0;" id="ipBannerEmoji">🎯</span>
-                        <div style="flex:1;min-width:200px;">
-                            <div style="font-size:1.05rem;font-weight:700;margin-bottom:0.2rem;" id="ipBannerTitle">Progress to Your $800 Target</div>
-                            <div style="color:var(--text-muted);font-size:0.85rem;" id="ipBannerSub">Your account grows as the master account hits profit milestones</div>
-                        </div>
-                        <div style="flex:2;min-width:220px;">
-                            <div style="display:flex;justify-content:space-between;font-size:0.78rem;font-weight:600;color:var(--text-muted);margin-bottom:0.5rem;">
-                                <span>Your Value</span><span style="color:var(--gold)">Target: $800</span>
-                            </div>
-                            <div style="height:10px;background:var(--bg-elevated);border-radius:5px;overflow:hidden;">
-                                <div id="ipGoalFill" style="height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--purple));border-radius:5px;transition:width 1.5s ease;"></div>
-                            </div>
-                            <div style="text-align:right;font-size:0.75rem;color:var(--text-muted);margin-top:0.35rem;" id="ipGoalPct">0% to $800 goal</div>
-                        </div>
-                    </div>
-
-                    <!-- Big display value card -->
-                    <div id="ipDisplayCard" style="background:var(--bg-card);border:1px solid rgba(59,126,248,0.25);border-radius:var(--radius);padding:2rem;margin-bottom:1.5rem;position:relative;overflow:hidden;box-shadow:0 0 60px rgba(59,126,248,0.06);">
-                        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--purple),var(--cyan));"></div>
-                        <div style="display:flex;align-items:center;gap:2rem;flex-wrap:wrap;">
-                            <div style="flex:1;min-width:180px;">
-                                <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:0.5rem;">Your Account Value</div>
-                                <div id="ipDisplayValue" style="font-family:'JetBrains Mono',monospace;font-size:clamp(2.2rem,5vw,4rem);font-weight:700;letter-spacing:-0.03em;line-height:1;color:var(--text);margin-bottom:0.5rem;">$—</div>
-                                <div style="color:var(--text-muted);font-size:0.875rem;">Entry: <strong id="ipEntryDisplay">—</strong> &nbsp;·&nbsp; Profit Share: <strong id="ipProfitShare">—</strong></div>
-                            </div>
-                            <div style="flex:2;min-width:240px;">
-                                <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.78rem;font-weight:600;color:var(--text-muted);margin-bottom:0.625rem;">
-                                    <span>Journey to Payout</span>
-                                    <span id="ipTargetLabel" style="font-family:'JetBrains Mono',monospace;color:var(--gold);font-weight:700;">$800 Goal</span>
-                                </div>
-                                <div style="height:14px;background:var(--bg-elevated);border-radius:7px;overflow:hidden;border:1px solid var(--border);">
-                                    <div id="ipJourneyFill" style="height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--purple));border-radius:7px;transition:width 2s cubic-bezier(0.4,0,0.2,1);"></div>
-                                </div>
-                                <div id="ipMilestoneRow" style="display:flex;gap:1rem;margin-top:0.875rem;flex-wrap:wrap;"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Stat cards -->
-                    <div class="metrics-grid" style="margin-bottom:1.5rem;">
-                        <div class="metric-card"><div class="metric-header"><span class="metric-label">📍 Entry Point</span><span class="metric-icon">💵</span></div><div class="metric-value" id="ipStatEntry">$—</div><div class="metric-sub">Your starting investment</div></div>
-                        <div class="metric-card"><div class="metric-header"><span class="metric-label">💰 Profit Allocated</span><span class="metric-icon">📈</span></div><div class="metric-value" id="ipStatProfit" style="color:var(--success)">$—</div><div class="metric-sub">Scaled from master profit</div></div>
-                        <div class="metric-card"><div class="metric-header"><span class="metric-label">🎯 Target Value</span><span class="metric-icon">🏆</span></div><div class="metric-value" style="color:var(--gold)">$800</div><div class="metric-sub">At $4,600 master profit</div></div>
-                        <div class="metric-card"><div class="metric-header"><span class="metric-label">📊 Multiplier</span><span class="metric-icon">✖️</span></div><div class="metric-value" id="ipStatMult" style="color:var(--purple)">—</div><div class="metric-sub">Personal scaling factor</div></div>
-                    </div>
-
-                    <!-- Milestone table -->
-                    <div class="table-card">
-                        <div class="table-header">
-                            <span class="card-title">📋 Milestone Log</span>
-                            <span style="color:var(--text-muted);font-size:0.8rem;">Key profit checkpoints in your journey</span>
-                        </div>
-                        <div class="table-wrap">
-                            <table>
-                                <thead>
-                                    <tr><th>Status</th><th>Master Profit</th><th>Your Value</th><th>Gain from Entry</th><th>Note</th></tr>
-                                </thead>
-                                <tbody id="ipMilestoneBody"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Not registered -->
-                <div id="ipNotRegistered" style="display:none;">
-                    <div style="text-align:center;padding:4rem 2rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);">
-                        <div style="font-size:3rem;margin-bottom:1rem;">💼</div>
-                        <h3 style="font-size:1.2rem;font-weight:700;margin-bottom:0.5rem;">Not Yet Registered</h3>
-                        <p style="color:var(--text-muted);font-size:0.9rem;max-width:380px;margin:0 auto;">You haven't been added to the investor portal yet. Contact your account manager to get registered.</p>
-                    </div>
-                </div>
-
-            </div><!-- /investorPortalPage -->
 
         </div><!-- /container -->
     </main>
@@ -2162,7 +1956,7 @@ async function handlePasswordReset(e) {
         }
         emailToReset = profile.email;
     }
-    const { error } = await sbClient.auth.resetPasswordForEmail(emailToReset, { redirectTo: 'https://killiumx.github.io/xoxostaffhandbook.github.io/' });
+    const { error } = await sbClient.auth.resetPasswordForEmail(emailToReset, { redirectTo: window.location.href });
     setBtnLoading('reset', false);
     if (error) { showAuthError(error.message); return; }
     showAuthSuccess('✅ Reset link sent! Check your inbox and spam folder.');
@@ -2180,7 +1974,7 @@ async function handleGoogleAuth() {
         const { error } = await sbClient.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: 'https://killiumx.github.io/xoxostaffhandbook.github.io/'
+                redirectTo: window.location.href.split('?')[0].split('#')[0]
             }
         });
         if (error) {
@@ -2594,7 +2388,7 @@ async function updateUserRole() {
 async function adminResetUserPassword() {
     const email = document.getElementById('resetUserEmail').value.trim();
     if (!email) { showAlert('Enter a user email', 'error'); return; }
-    const { error } = await sbClient.auth.resetPasswordForEmail(email, { redirectTo: 'https://killiumx.github.io/xoxostaffhandbook.github.io/' });
+    const { error } = await sbClient.auth.resetPasswordForEmail(email, { redirectTo: window.location.href });
     if (error) { showAlert('Failed: ' + error.message, 'error'); return; }
     showAlert(`✓ Reset email sent to ${email}`, 'success');
     document.getElementById('resetUserEmail').value = '';
